@@ -11,7 +11,9 @@ const Complaint = () => (
       <ComplaintForm />
     </div>
   </div>
+
 );
+
 
 const styles = {
   container: {

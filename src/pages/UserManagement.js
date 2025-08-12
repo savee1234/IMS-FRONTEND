@@ -37,7 +37,7 @@ const UserManagement = () => {
     <div>
       <Navbar />
       <div style={{
-        width: '600px',
+        width: '700px',
         maxWidth: '90%',
         margin: '40px auto 40px auto',
         backgroundColor: '#fff',

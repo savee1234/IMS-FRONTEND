@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Bar, Pie, Line } from 'react-chartjs-2';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { Chart as ChartJS, 
   CategoryScale, 
   LinearScale, 
@@ -13,6 +15,7 @@ import { Chart as ChartJS,
   LineElement 
 } from 'chart.js';
 import '../App.css';
+
 
 // Register ChartJS components
 ChartJS.register(
@@ -90,18 +93,26 @@ const Reports = () => {
 
   if (stats.loading) {
     return (
-      <div className="reports-container">
-        <h1>📊 DP Division - Reports & Dashboard</h1>
-        <div className="loading-message">Loading dashboard data...</div>
+      <div>
+        <Navbar />
+        <div className="reports-container">
+          <h1>📊 DP Division - Reports & Dashboard</h1>
+          <div className="loading-message">Loading dashboard data...</div>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (stats.error || !stats.data) {
     return (
-      <div className="reports-container">
-        <h1>📊 DP Division - Reports & Dashboard</h1>
-        <div className="error-message">{stats.error || 'No data available'}</div>
+      <div>
+        <Navbar />
+        <div className="reports-container">
+          <h1>📊 DP Division - Reports & Dashboard</h1>
+          <div className="error-message">{stats.error || 'No data available'}</div>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -180,107 +191,111 @@ const Reports = () => {
   };
 
   return (
-    <div className="reports-container">
-      <h1>📊 DP Division - Reports & Dashboard</h1>
-      
-      <div className="summary-cards">
-        <div className="card">
-          <h3>Total Issues Reported</h3>
-          <p>{totalReported}</p>
-        </div>
-        <div className="card">
-          <h3>Issues Resolved</h3>
-          <p>{totalResolved}</p>
-        </div>
-        <div className="card">
-          <h3>Working Hours (Roster)</h3>
-          <p>{workHours} hrs</p>
-        </div>
-        <div className="card">
-          <h3>After Office Hours</h3>
-          <p>{afterHours} hrs</p>
-        </div>
-        <div className="card">
-          <h3>Completion Ratio</h3>
-          <p>{completionRatio}</p>
-        </div>
-      </div>
-
-      <div className="charts-grid">
-        <div className="chart-container">
-          <h2>Issues by Type</h2>
-          <div className="chart-wrapper">
-            <Pie 
-              data={issuesByTypeChart} 
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'right',
-                  },
-                },
-              }}
-            />
+    <div>
+      <Navbar />
+      <div className="reports-container">
+        <h1>📊 DP Division - Reports & Dashboard</h1>
+        
+        <div className="summary-cards">
+          <div className="card">
+            <h3>Total Issues Reported</h3>
+            <p>{totalReported}</p>
+          </div>
+          <div className="card">
+            <h3>Issues Resolved</h3>
+            <p>{totalResolved}</p>
+          </div>
+          <div className="card">
+            <h3>Working Hours (Roster)</h3>
+            <p>{workHours} hrs</p>
+          </div>
+          <div className="card">
+            <h3>After Office Hours</h3>
+            <p>{afterHours} hrs</p>
+          </div>
+          <div className="card">
+            <h3>Completion Ratio</h3>
+            <p>{completionRatio}</p>
           </div>
         </div>
 
-        <div className="chart-container">
-          <h2>Resolution Trend (Last 6 Months)</h2>
-          <div className="chart-wrapper">
-            <Line 
-              data={resolutionTrendChart} 
-              options={{
-                responsive: true,
-                interaction: {
-                  mode: 'index',
-                  intersect: false,
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="chart-container">
-          <h2>Team Performance vs Targets</h2>
-          <div className="chart-wrapper">
-            <Bar
-              data={teamPerformanceChart}
-              options={{
-                responsive: true,
-                scales: {
-                  x: {
-                    stacked: false,
+        <div className="charts-grid">
+          <div className="chart-container">
+            <h2>Issues by Type</h2>
+            <div className="chart-wrapper">
+              <Pie 
+                data={issuesByTypeChart} 
+                options={{
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: 'right',
+                    },
                   },
-                  y: {
-                    stacked: false,
-                    beginAtZero: true
-                  },
-                },
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="chart-container">
-          <h2>Completion Ratio</h2>
-          <div className="completion-gauge">
-            <div 
-              className="gauge-fill" 
-              style={{ width: completionRatio }}
-            >
-              <span>{completionRatio}</span>
+                }}
+              />
             </div>
           </div>
-          <div className="chart-legend">
-            <span>Completion percentage of reported issues</span>
+
+          <div className="chart-container">
+            <h2>Resolution Trend (Last 6 Months)</h2>
+            <div className="chart-wrapper">
+              <Line 
+                data={resolutionTrendChart} 
+                options={{
+                  responsive: true,
+                  interaction: {
+                    mode: 'index',
+                    intersect: false,
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="chart-container">
+            <h2>Team Performance vs Targets</h2>
+            <div className="chart-wrapper">
+              <Bar
+                data={teamPerformanceChart}
+                options={{
+                  responsive: true,
+                  scales: {
+                    x: {
+                      stacked: false,
+                    },
+                    y: {
+                      stacked: false,
+                      beginAtZero: true
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="chart-container">
+            <h2>Completion Ratio</h2>
+            <div className="completion-gauge">
+              <div 
+                className="gauge-fill" 
+                style={{ width: completionRatio }}
+              >
+                <span>{completionRatio}</span>
+              </div>
+            </div>
+            <div className="chart-legend">
+              <span>Completion percentage of reported issues</span>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

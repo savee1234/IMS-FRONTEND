@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -32,21 +34,12 @@ const UserManagement = () => {
   };
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100vh',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 9999,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}>
+    <div>
+      <Navbar />
       <div style={{
         width: '600px',
-        maxHeight: '90vh',
+        maxWidth: '90%',
+        margin: '80px auto 40px auto',
         backgroundColor: '#fff',
         borderRadius: '8px',
         overflowY: 'auto',
@@ -125,6 +118,7 @@ const UserManagement = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

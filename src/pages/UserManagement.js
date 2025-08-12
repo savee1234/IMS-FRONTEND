@@ -39,7 +39,7 @@ const UserManagement = () => {
       <div style={{
         width: '600px',
         maxWidth: '90%',
-        margin: '80px auto 40px auto',
+        margin: '40px auto 40px auto',
         backgroundColor: '#fff',
         borderRadius: '8px',
         overflowY: 'auto',

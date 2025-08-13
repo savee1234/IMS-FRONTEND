@@ -6,7 +6,7 @@ import ComplaintForm from '../components/ComplaintForm';
 const Complaint = () => (
   <div>
     <Navbar /> {/* ✅ Add the Navbar here */}
-    <div className="container" style={styles.container}>
+    <div className="container" style={styles.container}> 
       <h1 style={styles.heading}>Submit a Complaint</h1>
       <ComplaintForm />
     </div>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const initialData = {
   onboardMedium: ['Hotline', 'Email', 'WhatsApp', 'SMS'],
@@ -109,115 +111,119 @@ const Configuration = () => {
   };
 
   return (
-    <div className="config-container">
-      <header className="config-header">
-        <h1><span className="icon">⚙️</span> Configuration Module</h1>
-        <p className="subtitle">Manage system settings and lookup values</p>
-      </header>
+    <div>
+      <Navbar />
+      <div className="config-container">
+        <header className="config-header">
+          <h1><span className="icon">⚙️</span> Configuration Module</h1>
+          <p className="subtitle">Manage system settings and lookup values</p>
+        </header>
 
-      <div className="config-tabs">
-        {Object.keys(categories).map((key) => (
-          <button
-            key={key}
-            onClick={() => {
-              setActiveCategory(key);
-              cancelEdit();
-            }}
-            className={`tab-btn ${activeCategory === key ? 'active' : ''}`}
-          >
-            <span className="tab-icon">{categoryIcons[key]}</span>
-            {categories[key]}
-          </button>
-        ))}
-      </div>
-
-      <div className="config-content">
-        <div className="category-header">
-          <h2>
-            <span className="category-icon">{categoryIcons[activeCategory]}</span>
-            {categories[activeCategory]}
-          </h2>
-
-          {activeCategory === 'solutionsPerProject' && (
-            <select
-              value={selectedProject}
-              onChange={(e) => {
-                setSelectedProject(e.target.value);
+        <div className="config-tabs">
+          {Object.keys(categories).map((key) => (
+            <button
+              key={key}
+              onClick={() => {
+                setActiveCategory(key);
                 cancelEdit();
               }}
-              className="project-dropdown"
+              className={`tab-btn ${activeCategory === key ? 'active' : ''}`}
             >
-              {lovs.projects.map((project, i) => (
-                <option key={i} value={project}>{project}</option>
-              ))}
-            </select>
-          )}
-
-          <div className="add-item">
-            <input
-              type="text"
-              value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={`Add new ${categories[activeCategory].toLowerCase()}`}
-              className="add-input"
-            />
-            <button onClick={handleAdd} className="add-button">
-              <span className="plus-icon">+</span> Add
+              <span className="tab-icon">{categoryIcons[key]}</span>
+              {categories[key]}
             </button>
+          ))}
+        </div>
+
+        <div className="config-content">
+          <div className="category-header">
+            <h2>
+              <span className="category-icon">{categoryIcons[activeCategory]}</span>
+              {categories[activeCategory]}
+            </h2>
+
+            {activeCategory === 'solutionsPerProject' && (
+              <select
+                value={selectedProject}
+                onChange={(e) => {
+                  setSelectedProject(e.target.value);
+                  cancelEdit();
+                }}
+                className="project-dropdown"
+              >
+                {lovs.projects.map((project, i) => (
+                  <option key={i} value={project}>{project}</option>
+                ))}
+              </select>
+            )}
+
+            <div className="add-item">
+              <input
+                type="text"
+                value={newValue}
+                onChange={(e) => setNewValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={`Add new ${categories[activeCategory].toLowerCase()}`}
+                className="add-input"
+              />
+              <button onClick={handleAdd} className="add-button">
+                <span className="plus-icon">+</span> Add
+              </button>
+            </div>
+          </div>
+
+          <div className="items-list">
+            {getActiveItems().length === 0 ? (
+              <div className="empty-state">
+                <p>No items found. Add your first {categories[activeCategory].toLowerCase()}.</p>
+              </div>
+            ) : (
+              <ul>
+                {getActiveItems().map((item, index) => (
+                  <li key={index} className="item-card">
+                    {editIndex === index ? (
+                      <div className="edit-mode">
+                        <input
+                          type="text"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="edit-input"
+                          autoFocus
+                        />
+                        <div className="edit-actions">
+                          <button onClick={saveEdit} className="save-btn">Save</button>
+                          <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="item-text">{item}</span>
+                        <div className="item-actions">
+                          <button
+                            onClick={() => startEdit(index, item)}
+                            className="edit-btn"
+                            title="Edit"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={() => handleDelete(index)}
+                            className="delete-btn"
+                            title="Delete"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
-
-        <div className="items-list">
-          {getActiveItems().length === 0 ? (
-            <div className="empty-state">
-              <p>No items found. Add your first {categories[activeCategory].toLowerCase()}.</p>
-            </div>
-          ) : (
-            <ul>
-              {getActiveItems().map((item, index) => (
-                <li key={index} className="item-card">
-                  {editIndex === index ? (
-                    <div className="edit-mode">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="edit-input"
-                        autoFocus
-                      />
-                      <div className="edit-actions">
-                        <button onClick={saveEdit} className="save-btn">Save</button>
-                        <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <span className="item-text">{item}</span>
-                      <div className="item-actions">
-                        <button
-                          onClick={() => startEdit(index, item)}
-                          className="edit-btn"
-                          title="Edit"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={() => handleDelete(index)}
-                          className="delete-btn"
-                          title="Delete"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </div>
+      <Footer />
     </div>
   );
 };

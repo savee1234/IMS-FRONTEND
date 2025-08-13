@@ -28,6 +28,41 @@ const Configuration = () => {
   const [editValue, setEditValue] = useState('');
   const [selectedProject, setSelectedProject] = useState(initialData.projects[0]);
 
+  // Organization Contact Persons state
+  const [orgFormData, setOrgFormData] = useState({
+    organization: '',
+    title: '',
+    mobileNo: '',
+    contactPersonName: '',
+    email: '',
+    officeNo: ''
+  });
+
+  const [orgContacts, setOrgContacts] = useState([
+    {
+      id: 1,
+      organization: 'ABC Ltd',
+      name: 'John Doe',
+      createdBy: 'admin',
+      createdByName: 'System Admin',
+      createdDtm: '2024-01-15 10:30:00'
+    },
+    {
+      id: 2,
+      organization: 'XYZ Corp',
+      name: 'Jane Smith',
+      createdBy: 'user1',
+      createdByName: 'John Manager',
+      createdDtm: '2024-01-14 14:20:00'
+    }
+  ]);
+
+  const [orgEditMode, setOrgEditMode] = useState(false);
+  const [orgEditId, setOrgEditId] = useState(null);
+
+  const organizations = ['ABC Ltd', 'XYZ Corp', 'Government Dept', 'Tech Solutions', 'Global Industries'];
+  const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
+
   const categories = {
     onboardMedium: 'Onboard Medium',
     organizations: 'Organizations',
@@ -46,6 +81,7 @@ const Configuration = () => {
     escalationRules: '⚠️',
   };
 
+  // Original functions for other categories
   const handleAdd = () => {
     if (!newValue.trim()) return;
     const updated = { ...lovs };
@@ -110,6 +146,87 @@ const Configuration = () => {
       : lovs[activeCategory];
   };
 
+  // Organization Contact Persons functions
+  const handleOrgInputChange = (e) => {
+    const { name, value } = e.target;
+    setOrgFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleOrgSubmit = (e) => {
+    e.preventDefault();
+    
+    if (orgEditMode) {
+      // Update existing contact
+      setOrgContacts(prev => prev.map(contact => 
+        contact.id === orgEditId 
+          ? { ...contact, ...orgFormData, name: orgFormData.contactPersonName }
+          : contact
+      ));
+      setOrgEditMode(false);
+      setOrgEditId(null);
+    } else {
+      // Add new contact
+      const newContact = {
+        id: Date.now(),
+        organization: orgFormData.organization,
+        name: orgFormData.contactPersonName,
+        createdBy: 'currentUser',
+        createdByName: 'Current User',
+        createdDtm: new Date().toLocaleString()
+      };
+      setOrgContacts(prev => [...prev, newContact]);
+    }
+    
+    // Reset form
+    setOrgFormData({
+      organization: '',
+      title: '',
+      mobileNo: '',
+      contactPersonName: '',
+      email: '',
+      officeNo: ''
+    });
+  };
+
+  const handleOrgReset = () => {
+    setOrgFormData({
+      organization: '',
+      title: '',
+      mobileNo: '',
+      contactPersonName: '',
+      email: '',
+      officeNo: ''
+    });
+    setOrgEditMode(false);
+    setOrgEditId(null);
+  };
+
+  const handleOrgEdit = (contact) => {
+    setOrgFormData({
+      organization: contact.organization,
+      title: '',
+      mobileNo: '',
+      contactPersonName: contact.name,
+      email: '',
+      officeNo: ''
+    });
+    setOrgEditMode(true);
+    setOrgEditId(contact.id);
+  };
+
+  const handleOrgDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      setOrgContacts(prev => prev.filter(contact => contact.id !== id));
+    }
+  };
+
+  const handleOrgView = (contact) => {
+    alert(`Viewing: ${contact.name} from ${contact.organization}`);
+  };
+
   return (
     <div>
       <Navbar />
@@ -136,91 +253,253 @@ const Configuration = () => {
         </div>
 
         <div className="config-content">
-          <div className="category-header">
-            <h2>
-              <span className="category-icon">{categoryIcons[activeCategory]}</span>
-              {categories[activeCategory]}
-            </h2>
+          {/* Special handling for Organizations - show the new design */}
+          {activeCategory === 'organizations' ? (
+            <div className="org-contacts-section">
+              <h2>Organization Contact Persons</h2>
+              
+              {/* Input Form */}
+              <form onSubmit={handleOrgSubmit} className="contact-form">
+                <div className="form-row">
+                  <div className="form-column">
+                    <div className="form-group">
+                      <label>Organization *</label>
+                      <select
+                        name="organization"
+                        value={orgFormData.organization}
+                        onChange={handleOrgInputChange}
+                        required
+                      >
+                        <option value="">Select Organization</option>
+                        {organizations.map(org => (
+                          <option key={org} value={org}>{org}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label>Title</label>
+                      <select
+                        name="title"
+                        value={orgFormData.title}
+                        onChange={handleOrgInputChange}
+                      >
+                        <option value="">Select Title</option>
+                        {titles.map(title => (
+                          <option key={title} value={title}>{title}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label>Mobile No</label>
+                      <input
+                        type="tel"
+                        name="mobileNo"
+                        value={orgFormData.mobileNo}
+                        onChange={handleOrgInputChange}
+                        placeholder="Enter mobile number"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="form-column">
+                    <div className="form-group">
+                      <label>Contact Person Name *</label>
+                      <input
+                        type="text"
+                        name="contactPersonName"
+                        value={orgFormData.contactPersonName}
+                        onChange={handleOrgInputChange}
+                        placeholder="Enter contact name"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label>Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={orgFormData.email}
+                        onChange={handleOrgInputChange}
+                        placeholder="Enter email address"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="form-group">
+                      <label>Office No</label>
+                      <input
+                        type="text"
+                        name="officeNo"
+                        value={orgFormData.officeNo}
+                        onChange={handleOrgInputChange}
+                        placeholder="Enter office number"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="form-actions">
+                  <button type="button" onClick={handleOrgReset} className="reset-btn">
+                    Reset
+                  </button>
+                  <button type="submit" className="submit-btn">
+                    {orgEditMode ? 'Update' : 'Submit'}
+                  </button>
+                </div>
+              </form>
 
-            {activeCategory === 'solutionsPerProject' && (
-              <select
-                value={selectedProject}
-                onChange={(e) => {
-                  setSelectedProject(e.target.value);
-                  cancelEdit();
-                }}
-                className="project-dropdown"
-              >
-                {lovs.projects.map((project, i) => (
-                  <option key={i} value={project}>{project}</option>
-                ))}
-              </select>
-            )}
-
-            <div className="add-item">
-              <input
-                type="text"
-                value={newValue}
-                onChange={(e) => setNewValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={`Add new ${categories[activeCategory].toLowerCase()}`}
-                className="add-input"
-              />
-              <button onClick={handleAdd} className="add-button">
-                <span className="plus-icon">+</span> Add
-              </button>
-            </div>
-          </div>
-
-          <div className="items-list">
-            {getActiveItems().length === 0 ? (
-              <div className="empty-state">
-                <p>No items found. Add your first {categories[activeCategory].toLowerCase()}.</p>
+              {/* Data Table */}
+              <div className="contacts-table-section">
+                <h3>Contact Persons List</h3>
+                <div className="table-container">
+                  <table className="contacts-table">
+                    <thead>
+                      <tr>
+                        <th>Organization</th>
+                        <th>Name</th>
+                        <th>Created by</th>
+                        <th>Created by name</th>
+                        <th>Created dtm</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orgContacts.length === 0 ? (
+                        <tr>
+                          <td colSpan="6" className="no-data">No contacts found</td>
+                        </tr>
+                      ) : (
+                        orgContacts.map(contact => (
+                          <tr key={contact.id}>
+                            <td>{contact.organization}</td>
+                            <td>{contact.name}</td>
+                            <td>{contact.createdBy}</td>
+                            <td>{contact.createdByName}</td>
+                            <td>{contact.createdDtm}</td>
+                            <td className="actions">
+                              <button 
+                                onClick={() => handleOrgView(contact)}
+                                className="action-btn view-btn"
+                                title="View"
+                              >
+                                👁️
+                              </button>
+                              <button 
+                                onClick={() => handleOrgEdit(contact)}
+                                className="action-btn edit-btn"
+                                title="Update"
+                              >
+                                ✏️
+                              </button>
+                              <button 
+                                onClick={() => handleOrgDelete(contact.id)}
+                                className="action-btn delete-btn"
+                                title="Delete"
+                              >
+                                🗑️
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            ) : (
-              <ul>
-                {getActiveItems().map((item, index) => (
-                  <li key={index} className="item-card">
-                    {editIndex === index ? (
-                      <div className="edit-mode">
-                        <input
-                          type="text"
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          className="edit-input"
-                          autoFocus
-                        />
-                        <div className="edit-actions">
-                          <button onClick={saveEdit} className="save-btn">Save</button>
-                          <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="item-text">{item}</span>
-                        <div className="item-actions">
-                          <button
-                            onClick={() => startEdit(index, item)}
-                            className="edit-btn"
-                            title="Edit"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            onClick={() => handleDelete(index)}
-                            className="delete-btn"
-                            title="Delete"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+            </div>
+          ) : (
+            /* Original content for other categories */
+            <>
+              <div className="category-header">
+                <h2>
+                  <span className="category-icon">{categoryIcons[activeCategory]}</span>
+                  {categories[activeCategory]}
+                </h2>
+
+                {activeCategory === 'solutionsPerProject' && (
+                  <select
+                    value={selectedProject}
+                    onChange={(e) => {
+                      setSelectedProject(e.target.value);
+                      cancelEdit();
+                    }}
+                    className="project-dropdown"
+                  >
+                    {lovs.projects.map((project, i) => (
+                      <option key={i} value={project}>{project}</option>
+                    ))}
+                  </select>
+                )}
+
+                <div className="add-item">
+                  <input
+                    type="text"
+                    value={newValue}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={`Add new ${categories[activeCategory].toLowerCase()}`}
+                    className="add-input"
+                  />
+                  <button onClick={handleAdd} className="add-button">
+                    <span className="plus-icon">+</span> Add
+                  </button>
+                </div>
+              </div>
+
+              <div className="items-list">
+                {getActiveItems().length === 0 ? (
+                  <div className="empty-state">
+                    <p>No items found. Add your first {categories[activeCategory].toLowerCase()}.</p>
+                  </div>
+                ) : (
+                  <ul>
+                    {getActiveItems().map((item, index) => (
+                      <li key={index} className="item-card">
+                        {editIndex === index ? (
+                          <div className="edit-mode">
+                            <input
+                              type="text"
+                              value={editValue}
+                              onChange={(e) => setEditValue(e.target.value)}
+                              className="edit-input"
+                              autoFocus
+                            />
+                            <div className="edit-actions">
+                              <button onClick={saveEdit} className="save-btn">Save</button>
+                              <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="item-text">{item}</span>
+                            <div className="item-actions">
+                              <button
+                                onClick={() => startEdit(index, item)}
+                                className="edit-btn"
+                                title="Edit"
+                              >
+                                ✏️
+                              </button>
+                              <button
+                                onClick={() => handleDelete(index)}
+                                className="delete-btn"
+                                title="Delete"
+                              >
+                                🗑️
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
       <Footer />

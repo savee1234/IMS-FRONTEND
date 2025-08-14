@@ -156,10 +156,7 @@ const Home = () => {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Navbar />
         <div style={styles.contentContainer}>
-          <h2 style={styles.sectionTitle}>
-            Quick Access Modules
-            <span style={styles.sectionTitleAfter}></span>
-          </h2>
+
 
           <div style={styles.moduleGrid}>
             {modules.map((mod, index) => (

@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import ComplaintForm from './pages/Complaint';
 import RosterManagement from './pages/RosterManagement';
+import RosterView from './pages/RosterView';
 import UserManagement from './pages/UserManagement';   // Main UserManagement page
 
 import Configuration from './pages/Configuration';
@@ -40,6 +41,7 @@ function App() {
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/complaint" element={<PrivateRoute><ComplaintForm /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
+        <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
 
         

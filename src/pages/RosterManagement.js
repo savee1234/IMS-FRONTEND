@@ -1,144 +1,215 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import backgroundVideo from "../assets/Background.mp4";
 
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const employees = ['John Doe', 'Jane Smith', 'Mark Taylor', 'Alice Moore'];
+const employees = [
+  "John Doe",
+  "Jane Smith",
+  "Mark Taylor",
+  "Alice Moore",
+  "David Clark",
+];
 
 const RosterManagement = () => {
-  const [shifts, setShifts] = useState([
-    { name: 'Morning', from: '00:00', to: '12:00' },
-    { name: 'Evening', from: '12:00', to: '18:00' },
-    { name: 'Night', from: '18:00', to: '23:59' },
-  ]);
+  const [month, setMonth] = useState("");
+  const [roster, setRoster] = useState([]);
+  const navigate = useNavigate();
 
-  const [roster, setRoster] = useState(
-    daysOfWeek.map((day) => ({
-      day,
-      shifts: {
-        Morning: '',
-        Evening: '',
-        Night: '',
-      },
-    }))
-  );
+  const generateMonthData = (selectedMonth) => {
+    const [year, monthNum] = selectedMonth.split("-").map(Number);
+    const daysInMonth = new Date(year, monthNum, 0).getDate();
+    const newRoster = [];
 
-  const [newShift, setNewShift] = useState({ name: '', from: '', to: '' });
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateObj = new Date(year, monthNum - 1, day);
+      const dateStr = dateObj.toISOString().split("T")[0];
+      const weekday = dateObj.toLocaleDateString("en-US", { weekday: "long" });
 
-  const handleEmployeeSelect = (dayIndex, shiftName, value) => {
+      const shifts = ["Shift 01", "Shift 02"].map((shift) => ({
+        shift,
+        employees: Array(5).fill(""),
+      }));
+
+      newRoster.push({
+        date: dateStr,
+        dayName: weekday,
+        shifts,
+      });
+    }
+    setRoster(newRoster);
+  };
+
+  const handleEmployeeSelect = (dayIndex, shiftIndex, empIndex, value) => {
     const updated = [...roster];
-    updated[dayIndex].shifts[shiftName] = value;
+    updated[dayIndex].shifts[shiftIndex].employees[empIndex] = value;
     setRoster(updated);
   };
 
-  const handleAddShift = () => {
-    if (newShift.name && newShift.from && newShift.to) {
-      setShifts([...shifts, newShift]);
-      setNewShift({ name: '', from: '', to: '' });
-    }
+  const resetRoster = () => {
+    setRoster((prev) =>
+      prev.map((day) => ({
+        ...day,
+        shifts: day.shifts.map((shift) => ({
+          ...shift,
+          employees: Array(5).fill(""),
+        })),
+      }))
+    );
   };
 
-  const saveRoster = () => {
-    console.log('Saved Roster:', roster);
-    alert('✅ System Roster Successfully Saved');
+  const submitRoster = () => {
+    console.log("Roster Data:", roster);
+    alert("✅ Roster submitted! Check console for data.");
   };
 
-  const saveShift = () => {
-    console.log('Saved Shifts:', shifts);
-    alert('✅ System Roster Shift Successfully Saved');
+  const handleRosterView = () => {
+    navigate("/roster-view");
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="container mt-4">
-        <h2 className="mb-4 text-success">
-          ✅ Weekly Roster View <small className="text-muted"></small>
-        </h2>
+    <div className="video-background-wrapper">
+      {/* Background Video */}
+      <video autoPlay loop muted className="video-background">
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-        <div className="table-responsive">
-          <table className="table table-bordered text-center align-middle">
-            <thead className="table-light">
-              <tr>
-                <th>Day / Shift</th>
-                {shifts.map((shift, index) => (
-                  <th key={index}>{shift.name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {roster.map((row, dayIndex) => (
-                <tr key={row.day}>
-                  <td>{row.day}</td>
-                  {shifts.map((shift, shiftIndex) => (
-                    <td key={shiftIndex}>
-                      <select
-                        className="form-select"
-                        value={row.shifts[shift.name] || ''}
-                        onChange={(e) =>
-                          handleEmployeeSelect(dayIndex, shift.name, e.target.value)
-                        }
-                      >
-                        <option value="">Select</option>
-                        {employees.map((emp, empIndex) => (
-                          <option key={empIndex} value={emp}>
-                            {emp}
-                          </option>
+      {/* Overlay Content */}
+      <div className="content-overlay d-flex flex-column min-vh-100">
+        <Navbar />
+        <main className="flex-grow-1 p-4">
+          <div className="container">
+            {/* Header with Roster View Button */}
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h2 className="text-primary mb-0"> Create Roster</h2>
+              <button
+                onClick={handleRosterView}
+                className="btn btn-info px-4 py-2"
+              >
+              Roster View
+              </button>
+            </div>
+
+            {/* Month Picker */}
+            <div className="mb-4">
+              <label className="form-label fw-bold">Month</label>
+              <input
+                type="month"
+                className="form-control w-25"
+                value={month}
+                onChange={(e) => {
+                  setMonth(e.target.value);
+                  generateMonthData(e.target.value);
+                }}
+              />
+            </div>
+
+            {/* Roster Table */}
+            {roster.length > 0 && (
+              <div className="table-responsive shadow-sm rounded bg-white p-2">
+                <table className="table table-bordered text-center align-middle mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th>Date</th>
+                      <th>Day</th>
+                      <th>Shift</th>
+                      <th>E1</th>
+                      <th>E2</th>
+                      <th>E3</th>
+                      <th>E4</th>
+                      <th>E5</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {roster.map((day, dayIndex) => (
+                      <React.Fragment key={day.date}>
+                        {day.shifts.map((shift, shiftIndex) => (
+                          <tr key={`${day.date}-${shift.shift}`}>
+                            {shiftIndex === 0 && (
+                              <>
+                                <td rowSpan={2}>{day.date}</td>
+                                <td rowSpan={2}>{day.dayName}</td>
+                              </>
+                            )}
+                            <td>{shift.shift}</td>
+                            {shift.employees.map((emp, empIndex) => (
+                              <td key={empIndex}>
+                                <select
+                                  className="form-select"
+                                  value={emp}
+                                  onChange={(e) =>
+                                    handleEmployeeSelect(
+                                      dayIndex,
+                                      shiftIndex,
+                                      empIndex,
+                                      e.target.value
+                                    )
+                                  }
+                                >
+                                  <option value="">Select</option>
+                                  {employees.map((employee, i) => (
+                                    <option key={i} value={employee}>
+                                      {employee}
+                                    </option>
+                                  ))}
+                                </select>
+                              </td>
+                            ))}
+                          </tr>
                         ))}
-                      </select>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-        <h4 className="mt-5">➕ Add New Shift</h4>
-        <div className="row g-3 align-items-center mb-4">
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Shift Name"
-              value={newShift.name}
-              onChange={(e) => setNewShift({ ...newShift, name: e.target.value })}
-            />
+            {/* Buttons */}
+            {roster.length > 0 && (
+              <div className="mt-4 d-flex gap-3">
+                <button className="btn btn-secondary" onClick={resetRoster}>
+                   Reset
+                </button>
+                <button className="btn btn-success" onClick={submitRoster}>
+                  Submit
+                </button>
+              </div>
+            )}
           </div>
-          <div className="col-md-3">
-            <input
-              type="time"
-              className="form-control"
-              value={newShift.from}
-              onChange={(e) => setNewShift({ ...newShift, from: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="time"
-              className="form-control"
-              value={newShift.to}
-              onChange={(e) => setNewShift({ ...newShift, to: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <button className="btn btn-outline-primary w-100" onClick={handleAddShift}>
-              Add Shift
-            </button>
-          </div>
-        </div>
-
-        <div className="d-flex gap-3">
-          <button className="btn btn-success" onClick={saveRoster}>
-            💾 Save Roster
-          </button>
-          <button className="btn btn-secondary" onClick={saveShift}>
-            💾 Save Shift
-          </button>
-        </div>
+        </main>
+        <Footer />
       </div>
-      <Footer />
+
+      {/* Video Background CSS */}
+      <style jsx>{`
+        .video-background-wrapper {
+          position: relative;
+          width: 100%;
+          min-height: 100vh;
+          overflow: hidden;
+        }
+        .video-background {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: auto;
+          height: 100%;
+          min-width: 100%;
+          min-height: 100%;
+          transform: translate(-50%, -50%);
+          object-fit: cover;
+          z-index: 0;
+          opacity: 0.4;
+        }
+        .content-overlay {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+        }
+      `}</style>
     </div>
   );
 };

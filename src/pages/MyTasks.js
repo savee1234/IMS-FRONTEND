@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import backgroundVideo from '../assets/Background.mp4';
 import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
 
 const fetchTasks = () =>
@@ -51,13 +52,41 @@ const MyTasks = () => {
     fetchTasks().then(setTasks);
   }, []);
 
-  return (
-    <div style={{
+   const styles = {
+    page: {
+      position: 'relative',
+      minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      minHeight: '100vh',
-      backgroundColor: '#f3f4f6'
-    }}>
+      overflowX: 'hidden',
+    },
+    videoBackground: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      objectFit: 'cover',
+      zIndex: -2,
+    },
+    gradientOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+      zIndex: -1,
+    },
+  };
+
+  return (
+    <div style={styles.page}>
+          <video autoPlay loop muted style={styles.videoBackground}>
+            <source src={backgroundVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div style={styles.gradientOverlay}></div>
       <Navbar />
       <main style={{
         flex: 1,
@@ -65,9 +94,9 @@ const MyTasks = () => {
       }}>
         <h1 style={{
           fontSize: '1.875rem',
-          fontWeight: 600,
+          fontWeight: 700,
           marginBottom: '24px',
-          color: '#1f2937'
+          color: '#0d0d0eff'
         }}>
           My Tasks
         </h1>
@@ -101,53 +130,53 @@ const MyTasks = () => {
             marginBottom: '12px'
           }}>
             <button style={{
-              backgroundColor: '#e5e7eb',
+              backgroundColor: '#1048b9ff',
               padding: '4px 12px',
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               transition: 'background-color 0.2s',
               ':hover': {
-                backgroundColor: '#d1d5db'
+                backgroundColor: '#1048b9ff'
               }
             }}>
               CSV
             </button>
             <button style={{
-              backgroundColor: '#e5e7eb',
+              backgroundColor: '#1048b9ff',
               padding: '4px 12px',
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               transition: 'background-color 0.2s',
               ':hover': {
-                backgroundColor: '#d1d5db'
+                backgroundColor: '#1048b9ff'
               }
             }}>
               Excel
             </button>
             <button style={{
-              backgroundColor: '#e5e7eb',
+              backgroundColor: '#1048b9ff',
               padding: '4px 12px',
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               transition: 'background-color 0.2s',
               ':hover': {
-                backgroundColor: '#d1d5db'
+                backgroundColor: '#1048b9ff'
               }
             }}>
               PDF
             </button>
             <button style={{
-              backgroundColor: '#e5e7eb',
+              backgroundColor: '#1048b9ff',
               padding: '4px 12px',
               borderRadius: '4px',
               border: 'none',
               cursor: 'pointer',
               transition: 'background-color 0.2s',
               ':hover': {
-                backgroundColor: '#d1d5db'
+                backgroundColor: '#1048b9ff'
               }
             }}>
               Print
@@ -290,14 +319,14 @@ const MyTasks = () => {
             gap: '8px'
           }}>
             <button style={{
-              padding: '4px 12px',
-              border: '1px solid #e5e7eb',
+              padding: '4px 10px',
+              border: '1px solid #151515ff',
               borderRadius: '4px',
-              color: '#374151',
-              backgroundColor: 'white',
+              color: '#f7f7fbff',
+              backgroundColor: 'black',
               cursor: 'pointer',
               ':hover': {
-                backgroundColor: '#f3f4f6'
+                backgroundColor: '#0e0e0eff'
               },
               ':disabled': {
                 opacity: 0.5
@@ -306,11 +335,11 @@ const MyTasks = () => {
               Previous
             </button>
             <button style={{
-              padding: '4px 12px',
-              border: '1px solid #e5e7eb',
+              padding: '4px 18px',
+              border: '1px solid #151515ff',
               borderRadius: '4px',
-              color: '#374151',
-              backgroundColor: 'white',
+              color: '#f7f7fbff',
+              backgroundColor: 'black',
               cursor: 'pointer',
               ':hover': {
                 backgroundColor: '#f3f4f6'

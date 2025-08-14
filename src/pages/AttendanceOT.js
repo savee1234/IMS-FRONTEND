@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import backgroundVideo from '../assets/Background.mp4';
+
 
 const mockData = [
   { id: 1, name: 'Kasun Silva', date: '2025-07-06', hours: 2, status: 'Pending', comments: 'Worked remotely on server fix' },
@@ -39,13 +41,39 @@ const AttendanceOT = () => {
 
   // Styles
   const styles = {
+     page: {
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      overflowX: 'hidden',
+    },
+    videoBackground: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      objectFit: 'cover',
+      zIndex: -2,
+    },
+    gradientOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+      zIndex: -1,
+    },
     container: {
-      padding: '2rem',
-      marginLeft: '220px', // Adjust for sidebar width if you have one, else set to 0
+      padding: '3rem',
+      marginLeft: '100px', // Adjust for sidebar width if you have one, else set to 0
       maxWidth: '1200px',
       fontFamily: 'Arial, sans-serif',
       minHeight: '80vh',
       backgroundColor: '#f4f7fa',
+       
     },
     header: {
       color: '#2c3e50',
@@ -59,7 +87,7 @@ const AttendanceOT = () => {
       display: 'flex',
       alignItems: 'center',
       gap: '1.5rem',
-      marginBottom: '1.5rem',
+      marginBottom: '2.5rem',
       flexWrap: 'wrap'
     },
     filterLabel: {
@@ -155,7 +183,12 @@ const AttendanceOT = () => {
   };
 
   return (
-    <>
+    <div style={styles.page}>
+          <video autoPlay loop muted style={styles.videoBackground}>
+            <source src={backgroundVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div style={styles.gradientOverlay}></div>
       <Navbar />
       <div style={styles.container}>
         <h2 style={styles.header}>Attendance & Overtime Management</h2>
@@ -236,7 +269,7 @@ const AttendanceOT = () => {
         </table>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

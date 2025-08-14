@@ -175,7 +175,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '32px',
-    marginRight: '20px',
+    marginRight: '10px',
+    
   },
   link: {
     color: '#ffffff',
@@ -232,7 +233,8 @@ const styles = {
     whiteSpace: 'nowrap',
   },
   userIcon: {
-    fontSize: '18px',
+    fontSize: '20px',
+    marginRight:'20px',
   },
   logoutBtn: {
     backgroundColor: '#ffcc00',

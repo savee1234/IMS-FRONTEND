@@ -33,7 +33,7 @@ const UserManagement = () => {
       background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
       zIndex: -1,
     },
-  }
+  };
   const navigate = useNavigate();
 
   const privileges = [

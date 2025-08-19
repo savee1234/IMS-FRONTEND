@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import backgroundVideo from "../assets/Background.mp4";
 
-const employees = [//dajhfjkasdfkkd
+const employees = [
   "John Doe",
   "Jane Smith",
   "Mark Taylor",

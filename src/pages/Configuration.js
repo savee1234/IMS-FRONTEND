@@ -57,39 +57,6 @@ const Configuration = () => {
   const [selectedProject, setSelectedProject] = useState(initialData.projects[0]);
   const [featureCount, setFeatureCount] = useState(0);
 
-  // Solution Responsible state
-  const [solutionFormData, setSolutionFormData] = useState({
-    employee: '',
-    solutionType: '',
-    solution: ''
-  });
-
-  const [solutionResponsibleData, setSolutionResponsibleData] = useState([
-    {
-      id: 1,
-      employee: 'John Doe',
-      solutionType: 'Network Issue',
-      solution: 'Router Configuration',
-      createdBy: 'admin',
-      createdDtm: '2024-01-15 10:30:00'
-    },
-    {
-      id: 2,
-      employee: 'Jane Smith',
-      solutionType: 'Software Bug',
-      solution: 'Login Fix',
-      createdBy: 'user1',
-      createdDtm: '2024-01-14 14:20:00'
-    }
-  ]);
-
-  const [solEditMode, setSolEditMode] = useState(false);
-  const [solEditId, setSolEditId] = useState(null);
-
-  const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'];
-  const solutionTypes = ['Network Issue', 'Software Bug', 'Hardware Problem', 'Security Issue', 'Performance Issue'];
-  const solutions = ['Router Configuration', 'Login Fix', 'Hardware Replacement', 'Security Patch', 'Performance Optimization'];
-
   // Operation Availability state
   const [operationAvailability, setOperationAvailability] = useState('');
   const [operationData, setOperationData] = useState([
@@ -141,8 +108,40 @@ const Configuration = () => {
   const [orgEditMode, setOrgEditMode] = useState(false);
   const [orgEditId, setOrgEditId] = useState(null);
 
+  // Solution Responsible state
+  const [solutionFormData, setSolutionFormData] = useState({
+    employee: '',
+    solutionType: '',
+    solution: ''
+  });
+
+  const [solutionResponsibleData, setSolutionResponsibleData] = useState([
+    {
+      id: 1,
+      employee: 'John Doe',
+      solutionType: 'Technical',
+      solution: 'Network Issue',
+      createdBy: 'admin',
+      createdDtm: '2024-01-15 10:30:00'
+    },
+    {
+      id: 2,
+      employee: 'Jane Smith',
+      solutionType: 'Customer Service',
+      solution: 'Billing Problem',
+      createdBy: 'user1',
+      createdDtm: '2024-01-14 14:20:00'
+    }
+  ]);
+
+  const [solEditMode, setSolEditMode] = useState(false);
+  const [solEditId, setSolEditId] = useState(null);
+
   const organizations = ['ABC Ltd', 'XYZ Corp', 'Government Dept', 'Tech Solutions', 'Global Industries'];
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
+  const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'];
+  const solutionTypes = ['Technical', 'Customer Service', 'Billing', 'Network', 'Hardware'];
+  const solutions = ['Network Issue', 'Billing Problem', 'Login Error', 'Hardware Failure', 'Service Outage'];
 
   const categories = {
     onboardMedium: 'Onboard Medium',
@@ -357,18 +356,6 @@ const Configuration = () => {
     }
   };
 
-  // New Feature functions
-  // eslint-disable-next-line no-unused-vars
-  const handleTryFeature = () => {
-    setFeatureCount(featureCount + 1);
-    alert(`You've tried the feature ${featureCount + 1} time(s)!`);
-  };
-
-  // eslint-disable-next-line no-unused-vars
-  const handleLearnMore = () => {
-    alert('Learn more about this amazing feature!');
-  };
-
   // Solution Responsible functions
   const handleSolutionInputChange = (e) => {
     const { name, value } = e.target;
@@ -380,11 +367,6 @@ const Configuration = () => {
 
   const handleSolutionSubmit = (e) => {
     e.preventDefault();
-    
-    if (!solutionFormData.employee || !solutionFormData.solutionType || !solutionFormData.solution) {
-      alert('Please fill all required fields');
-      return;
-    }
     
     if (solEditMode) {
       // Update existing solution
@@ -439,6 +421,8 @@ const Configuration = () => {
       setSolutionResponsibleData(prev => prev.filter(item => item.id !== id));
     }
   };
+
+  // New Feature functions (removed unused functions to fix warnings)
 
   return (
     <div style={styles.page}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
+import './Configuration.css';
 
 const initialData = {
   onboardMedium: ['Hotline', 'Email', 'WhatsApp', 'SMS'],
@@ -55,6 +56,26 @@ const Configuration = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [selectedProject, setSelectedProject] = useState(initialData.projects[0]);
+  const [featureCount, setFeatureCount] = useState(0);
+
+  // Operation Availability state
+  const [operationAvailability, setOperationAvailability] = useState('');
+  const [operationData, setOperationData] = useState([
+    {
+      id: 1,
+      operationAvailability: 'Network Maintenance',
+      createdBy: 'admin',
+      createdTime: '2024-01-15 10:30:00'
+    },
+    {
+      id: 2,
+      operationAvailability: 'System Backup',
+      createdBy: 'user1',
+      createdTime: '2024-01-14 14:20:00'
+    }
+  ]);
+  const [opEditMode, setOpEditMode] = useState(false);
+  const [opEditId, setOpEditId] = useState(null);
 
   // Organization Contact Persons state
   const [orgFormData, setOrgFormData] = useState({
@@ -98,6 +119,7 @@ const Configuration = () => {
     solutionsPerProject: 'Solutions & Projects',
     shifts: 'Roster Shift Periods',
     escalationRules: 'Escalation Rules',
+    newFeature: 'Operation Availability',
   };
 
   const categoryIcons = {
@@ -107,6 +129,7 @@ const Configuration = () => {
     solutionsPerProject: '💻',
     shifts: '⏰',
     escalationRules: '⚠️',
+    newFeature: '🔧',
   };
 
   // Original functions for other categories
@@ -253,6 +276,63 @@ const Configuration = () => {
 
   const handleOrgView = (contact) => {
     alert(`Viewing: ${contact.name} from ${contact.organization}`);
+  };
+
+  // Operation Availability functions
+  const handleOperationSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!operationAvailability.trim()) return;
+    
+    if (opEditMode) {
+      // Update existing operation
+      setOperationData(prev => prev.map(op => 
+        op.id === opEditId 
+          ? { ...op, operationAvailability: operationAvailability.trim() }
+          : op
+      ));
+      setOpEditMode(false);
+      setOpEditId(null);
+    } else {
+      // Add new operation
+      const newOperation = {
+        id: Date.now(),
+        operationAvailability: operationAvailability.trim(),
+        createdBy: 'currentUser',
+        createdTime: new Date().toLocaleString()
+      };
+      setOperationData(prev => [...prev, newOperation]);
+    }
+    
+    setOperationAvailability('');
+  };
+
+  const handleOperationReset = () => {
+    setOperationAvailability('');
+    setOpEditMode(false);
+    setOpEditId(null);
+  };
+
+  const handleOperationEdit = (operation) => {
+    setOperationAvailability(operation.operationAvailability);
+    setOpEditMode(true);
+    setOpEditId(operation.id);
+  };
+
+  const handleOperationDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this operation?')) {
+      setOperationData(prev => prev.filter(op => op.id !== id));
+    }
+  };
+
+  // New Feature functions
+  const handleTryFeature = () => {
+    setFeatureCount(featureCount + 1);
+    alert(`You've tried the feature ${featureCount + 1} time(s)!`);
+  };
+
+  const handleLearnMore = () => {
+    alert('Learn more about this amazing feature!');
   };
 
   return (
@@ -418,21 +498,96 @@ const Configuration = () => {
                                 className="action-btn view-btn"
                                 title="View"
                               >
-                                👁️
+                                View
                               </button>
                               <button 
                                 onClick={() => handleOrgEdit(contact)}
                                 className="action-btn edit-btn"
                                 title="Update"
                               >
-                                ✏️
+                                Update
                               </button>
                               <button 
                                 onClick={() => handleOrgDelete(contact.id)}
                                 className="action-btn delete-btn"
                                 title="Delete"
                               >
-                                🗑️
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ) : activeCategory === 'newFeature' ? (
+            <div className="operation-availability-section">
+              <h2>Operation Availability</h2>
+              
+              {/* Input Form */}
+              <form onSubmit={handleOperationSubmit} className="operation-form">
+                <div className="form-group-inline">
+                  <label>Operation Availability:</label>
+                  <input
+                    type="text"
+                    value={operationAvailability}
+                    onChange={(e) => setOperationAvailability(e.target.value)}
+                    placeholder="Enter operation availability"
+                    className="operation-input"
+                    required
+                  />
+                </div>
+                
+                <div className="form-actions-inline">
+                  <button type="button" onClick={handleOperationReset} className="reset-btn">
+                    Reset
+                  </button>
+                  <button type="submit" className="submit-btn">
+                    {opEditMode ? 'Update' : 'Submit'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Data Table */}
+              <div className="operation-table-section">
+                <div className="table-container">
+                  <table className="operation-table">
+                    <thead>
+                      <tr>
+                        <th>Operation Availability</th>
+                        <th>Created By</th>
+                        <th>Created Time</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {operationData.length === 0 ? (
+                        <tr>
+                          <td colSpan="4" className="no-data">No operations found</td>
+                        </tr>
+                      ) : (
+                        operationData.map(operation => (
+                          <tr key={operation.id}>
+                            <td>{operation.operationAvailability}</td>
+                            <td>{operation.createdBy}</td>
+                            <td>{operation.createdTime}</td>
+                            <td className="actions">
+                              <button 
+                                onClick={() => handleOperationEdit(operation)}
+                                className="action-btn edit-btn"
+                                title="Update"
+                              >
+                                Update
+                              </button>
+                              <button 
+                                onClick={() => handleOperationDelete(operation.id)}
+                                className="action-btn delete-btn"
+                                title="Delete"
+                              >
+                                Delete
                               </button>
                             </td>
                           </tr>
@@ -514,14 +669,14 @@ const Configuration = () => {
                                 className="edit-btn"
                                 title="Edit"
                               >
-                                ✏️
+                                Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(index)}
                                 className="delete-btn"
                                 title="Delete"
                               >
-                                🗑️
+                                Delete
                               </button>
                             </div>
                           </>

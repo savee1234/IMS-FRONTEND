@@ -15,7 +15,13 @@ const styles = {
     color: '#ffffff',
     padding: '16px 0',
     textAlign: 'center',
-    marginTop: 'auto', // Push footer to bottom in flex layout
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: '100%',
+    zIndex: 999,
+    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.15)',
   },
   text: {
     margin: 0,

@@ -736,6 +736,70 @@ label {
   border-radius: 4px;
 }
 
+/* -----------------------
+   New Feature Section
+------------------------ */
+.new-feature-section {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.new-feature-section h2 {
+  color: #1e40af;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.feature-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.feature-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card h3 {
+  color: #1e3a8a;
+  margin-bottom: 1rem;
+}
+
+.feature-card p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.feature-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.feature-button:hover {
+  background: #2563eb;
+}
+
 .edit-btn:hover {
   background: #dbeafe;
   color: #1e3a8a;
@@ -1464,5 +1528,194 @@ a:hover {
   .action-btn {
     padding: 0.25rem;
     font-size: 0.9rem;
+  }
+}
+
+/* -----------------------
+   Operation Availability Section
+------------------------ */
+.operation-availability-section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.operation-availability-section h2 {
+  color: #1e40af;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* -----------------------
+   Operation Form Styling
+------------------------ */
+.operation-form {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.form-group-inline {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-group-inline label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+  min-width: 150px;
+}
+
+.operation-input {
+  flex: 1;
+  min-width: 300px;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.operation-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.operation-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-actions-inline {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* -----------------------
+   Operation Table Styling
+------------------------ */
+.operation-table-section {
+  margin-top: 2rem;
+}
+
+.operation-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.operation-table th {
+  background: #1e3a8a;
+  color: white;
+  padding: 1rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.operation-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #4b5563;
+}
+
+.operation-table tr:hover {
+  background: #f8fafc;
+}
+
+.operation-table .actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+
+.operation-table .action-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.operation-table .edit-btn {
+  color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.operation-table .edit-btn:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+.operation-table .delete-btn {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.operation-table .delete-btn:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* -----------------------
+   Responsive Design for Operation Availability
+------------------------ */
+@media (max-width: 768px) {
+  .form-group-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-group-inline label {
+    min-width: auto;
+  }
+  
+  .operation-input {
+    min-width: 100%;
+  }
+  
+  .form-actions-inline {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .form-actions-inline button {
+    width: 100%;
+  }
+  
+  .operation-table {
+    font-size: 0.8rem;
+  }
+  
+  .operation-table th,
+  .operation-table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .operation-table .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .operation-table .action-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
   }
 }

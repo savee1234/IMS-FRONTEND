@@ -56,8 +56,6 @@ const Configuration = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [selectedProject, setSelectedProject] = useState(initialData.projects[0]);
-  const [featureCount, setFeatureCount] = useState(0);
-
   // Operation Availability state
   const [operationAvailability, setOperationAvailability] = useState('');
   const [operationData, setOperationData] = useState([
@@ -323,16 +321,6 @@ const Configuration = () => {
     if (window.confirm('Are you sure you want to delete this operation?')) {
       setOperationData(prev => prev.filter(op => op.id !== id));
     }
-  };
-
-  // New Feature functions
-  const handleTryFeature = () => {
-    setFeatureCount(featureCount + 1);
-    alert(`You've tried the feature ${featureCount + 1} time(s)!`);
-  };
-
-  const handleLearnMore = () => {
-    alert('Learn more about this amazing feature!');
   };
 
   return (

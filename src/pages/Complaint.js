@@ -1,14 +1,13 @@
 import React from 'react';
 import ComplaintForm from '../components/ComplaintForm';
-import backgroundVideo from '../assets/Background.mp4';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import bgVideo from "../assets/Background.mp4";
+import bgVideo from '../assets/Background.mp4';
 
 const Complaint = () => (
   <>
     <Navbar />
-      <div className="complaint-bg-wrapper">
+    <div className="complaint-bg-wrapper">
       <video
         autoPlay
         loop
@@ -17,15 +16,12 @@ const Complaint = () => (
         <source src={bgVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-   <div className="complaint-bg-overlay"></div>
-     
-    <div className="container">
-      
-      <ComplaintForm />
+      <div className="complaint-bg-overlay"></div>
+      <div className="container">
+        <ComplaintForm />
+      </div>
+      <Footer />
     </div>
-     <Footer />
-    </div>
-   
   </>
 );
 

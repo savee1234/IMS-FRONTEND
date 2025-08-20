@@ -345,7 +345,7 @@ const Configuration = () => {
       <Navbar />
       <div className="config-container">
         <header className="config-header">
-          <h1><span className="icon">⚙️</span> Configuration Module</h1>
+          <h1><span className="icon"></span> Configuration Module</h1>
           <p className="subtitle">Manage system settings and lookup values</p>
         </header>
 

@@ -1,31 +1,31 @@
-// src/pages/Complaint.js
 import React from 'react';
-import Navbar from '../components/Navbar'; // ✅ Import the Navbar
 import ComplaintForm from '../components/ComplaintForm';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import bgVideo from "../assets/Background.mp4";
 
 const Complaint = () => (
-  <div>
-    <Navbar /> {/* ✅ Add the Navbar here */}
-    <div className="container" style={styles.container}> 
-      <h1 style={styles.heading}>Submit a Complaint</h1>
+  <>
+    <Navbar />
+      <div className="complaint-bg-wrapper">
+      <video
+        autoPlay
+        loop
+        muted
+        className="complaint-bg-video">      
+        <source src={bgVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+   <div className="complaint-bg-overlay"></div>
+     
+    <div className="container">
+      
       <ComplaintForm />
     </div>
-  </div>
-
+     <Footer />
+    </div>
+   
+  </>
 );
-
-
-const styles = {
-  container: {
-    padding: '20px 40px',
-    maxWidth: '900px',
-    margin: '0 auto',
-  },
-  heading: {
-    fontSize: '24px',
-    color: '#002b5b',
-    marginBottom: '20px',
-  },
-};
 
 export default Complaint;

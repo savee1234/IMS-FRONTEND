@@ -81,110 +81,177 @@ const RosterManagement = () => {
       {/* Overlay Content */}
       <div className="content-overlay d-flex flex-column min-vh-100">
         <Navbar />
-        <main className="flex-grow-1 py-4">
-          <div className="container roster-container">
-            {/* Header with Roster View Button */}
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h2 className="text-primary mb-0">Create Roster</h2>
-              <button
-                onClick={handleRosterView}
-                className="btn btn-info px-4 py-2 rounded-pill shadow-sm"
-              >
-                Roster View
-              </button>
+        
+        <main className="flex-grow-1 py-5">
+          <div className="container-fluid roster-container">
+            
+            {/* Page Header Section */}
+            <div className="row mb-5">
+              <div className="col-12">
+                <div className="header-card bg-white rounded-4 shadow-lg p-4">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h1 className="text-primary mb-2 fw-bold">
+                        <i className="bi bi-calendar3 me-3"></i>
+                        Roster Management
+                      </h1>
+                      <p className="text-muted mb-0 fs-6">Create and manage employee work schedules</p>
+                    </div>
+                    <button
+                      onClick={handleRosterView}
+                      className="btn btn-info btn-lg px-4 py-2 rounded-pill shadow-sm d-flex align-items-center"
+                    >
+                      <i className="bi bi-eye me-2"></i>
+                      View Roster
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Month Picker */}
-            <div className="mb-4">
-              <label className="form-label fw-bold">Month</label>
-              <input
-                type="month"
-                className="form-control w-25 shadow-sm"
-                value={month}
-                onChange={(e) => {
-                  setMonth(e.target.value);
-                  generateMonthData(e.target.value);
-                }}
-              />
+            {/* Month Selection Section */}
+            <div className="row mb-4">
+              <div className="col-lg-4 col-md-6">
+                <div className="month-picker-card bg-white rounded-4 shadow-sm p-4">
+                  <div className="d-flex align-items-center mb-3">
+                    <i className="bi bi-calendar-month text-primary fs-4 me-2"></i>
+                    <h5 className="mb-0 fw-semibold">Select Month</h5>
+                  </div>
+                  <input
+                    type="month"
+                    className="form-control form-control-lg shadow-sm border-2"
+                    value={month}
+                    onChange={(e) => {
+                      setMonth(e.target.value);
+                      generateMonthData(e.target.value);
+                    }}
+                    placeholder="Choose month..."
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Roster Table */}
+            {/* Roster Table Section */}
             {roster.length > 0 && (
-              <div className="table-responsive shadow rounded bg-white p-3 mb-4">
-                <table className="table table-bordered text-center align-middle mb-0">
-                  <thead className="table-primary">
-                    <tr>
-                      <th className="date-col">Date</th>
-                      <th className="day-col">Day</th>
-                      <th className="shift-col">Shift</th>
-                      <th className="emp-col">E1</th>
-                      <th className="emp-col">E2</th>
-                      <th className="emp-col">E3</th>
-                      <th className="emp-col">E4</th>
-                      <th className="emp-col">E5</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {roster.map((day, dayIndex) => (
-                      <React.Fragment key={day.date}>
-                        {day.shifts.map((shift, shiftIndex) => (
-                          <tr key={`${day.date}-${shift.shift}`} className="roster-row">
-                            {shiftIndex === 0 && (
-                              <>
-                                <td rowSpan={2} className="date-cell"><strong>{day.date}</strong></td>
-                                <td rowSpan={2} className="day-cell">{day.dayName}</td>
-                              </>
-                            )}
-                            <td className="shift-cell">{shift.shift}</td>
-                            {shift.employees.map((emp, empIndex) => (
-                              <td key={empIndex} className="emp-cell">
-                                <select
-                                  className="form-select form-select-sm shadow-sm"
-                                  value={emp}
-                                  onChange={(e) =>
-                                    handleEmployeeSelect(
-                                      dayIndex,
-                                      shiftIndex,
-                                      empIndex,
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  <option value="">Select</option>
-                                  {employees.map((employee, i) => (
-                                    <option key={i} value={employee}>
-                                      {employee}
-                                    </option>
-                                  ))}
-                                </select>
-                              </td>
-                            ))}
+              <div className="row">
+                <div className="col-12">
+                  <div className="roster-table-card bg-white rounded-4 shadow-lg p-4 mb-4">
+                    <div className="d-flex align-items-center mb-4">
+                      <i className="bi bi-table text-success fs-4 me-2"></i>
+                      <h4 className="mb-0 fw-semibold text-dark">Monthly Roster Schedule</h4>
+                    </div>
+                    
+                    <div className="table-responsive">
+                      <table className="table table-hover table-bordered text-center align-middle mb-0">
+                        <thead className="table-primary">
+                          <tr>
+                            <th className="date-col py-3">
+                              <i className="bi bi-calendar-date me-1"></i>
+                              Date
+                            </th>
+                            <th className="day-col py-3">
+                              <i className="bi bi-calendar-week me-1"></i>
+                              Day
+                            </th>
+                            <th className="shift-col py-3">
+                              <i className="bi bi-clock me-1"></i>
+                              Shift
+                            </th>
+                            <th className="emp-col py-3">Employee 1</th>
+                            <th className="emp-col py-3">Employee 2</th>
+                            <th className="emp-col py-3">Employee 3</th>
+                            <th className="emp-col py-3">Employee 4</th>
+                            <th className="emp-col py-3">Employee 5</th>
                           </tr>
-                        ))}
-                      </React.Fragment>
-                    ))}
-                  </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                          {roster.map((day, dayIndex) => (
+                            <React.Fragment key={day.date}>
+                              {day.shifts.map((shift, shiftIndex) => (
+                                <tr key={`${day.date}-${shift.shift}`} className="roster-row">
+                                  {shiftIndex === 0 && (
+                                    <>
+                                      <td rowSpan={2} className="date-cell fw-bold text-primary">
+                                        {new Date(day.date).toLocaleDateString('en-GB')}
+                                      </td>
+                                      <td rowSpan={2} className="day-cell fw-semibold text-secondary">
+                                        {day.dayName}
+                                      </td>
+                                    </>
+                                  )}
+                                  <td className="shift-cell fw-semibold">
+                                    <span className={`badge ${shift.shift === 'Shift 01' ? 'bg-info' : 'bg-warning'} px-3 py-2`}>
+                                      {shift.shift}
+                                    </span>
+                                  </td>
+                                  {shift.employees.map((emp, empIndex) => (
+                                    <td key={empIndex} className="emp-cell p-2">
+                                      <select
+                                        className="form-select form-select-sm shadow-sm border-2"
+                                        value={emp}
+                                        onChange={(e) =>
+                                          handleEmployeeSelect(
+                                            dayIndex,
+                                            shiftIndex,
+                                            empIndex,
+                                            e.target.value
+                                          )
+                                        }
+                                      >
+                                        <option value="">Select Employee</option>
+                                        {employees.map((employee, i) => (
+                                          <option key={i} value={employee}>
+                                            {employee}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </React.Fragment>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Buttons */}
+            {/* Action Buttons Section */}
             {roster.length > 0 && (
-              <div className="mt-4 d-flex gap-3 justify-content-center">
-                <button className="btn btn-secondary px-4 rounded-pill shadow-sm" onClick={resetRoster}>
-                  Reset
-                </button>
-                <button className="btn btn-success px-4 rounded-pill shadow-sm" onClick={submitRoster}>
-                  Submit
-                </button>
+              <div className="row">
+                <div className="col-12">
+                  <div className="action-buttons-card bg-white rounded-4 shadow-sm p-4">
+                    <div className="d-flex justify-content-center gap-4">
+                      <button 
+                        className="btn btn-outline-secondary btn-lg px-5 py-3 rounded-pill shadow-sm d-flex align-items-center" 
+                        onClick={resetRoster}
+                      >
+                        <i className="bi bi-arrow-clockwise me-2"></i>
+                        Reset Roster
+                      </button>
+                      <button 
+                        className="btn btn-success btn-lg px-5 py-3 rounded-pill shadow-sm d-flex align-items-center" 
+                        onClick={submitRoster}
+                      >
+                        <i className="bi bi-check-circle me-2"></i>
+                        Submit Roster
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
+            
           </div>
         </main>
+        
         <Footer />
       </div>
 
-      {/* Video Background CSS */}
+      {/* Enhanced Styling */}
       <style jsx>{`
         .video-background-wrapper {
           position: relative;
@@ -207,7 +274,7 @@ const RosterManagement = () => {
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%);
+          background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(245,245,245,0.4) 100%);
           z-index: -1;
         }
         .content-overlay {
@@ -216,51 +283,164 @@ const RosterManagement = () => {
           width: 100%;
         }
         .roster-container {
-          max-width: 1600px;
+          max-width: 1800px;
           margin: 0 auto;
+          padding: 0 20px;
         }
+        
+        /* Card Styling */
+        .header-card, .month-picker-card, .roster-table-card, .action-buttons-card {
+          border: none;
+          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.95) !important;
+          transition: all 0.3s ease;
+        }
+        .header-card:hover, .month-picker-card:hover, .roster-table-card:hover, .action-buttons-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+        
+        /* Table Styling */
         .date-col, .day-col {
           width: 12%;
-          background-color: #f8f9fa;
+          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          font-weight: 600;
         }
         .shift-col {
           width: 10%;
-          background-color: #e9f0ff;
+          background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
         }
         .emp-col {
-          width: 9%;
+          width: 11%;
+          background: rgba(248, 249, 250, 0.5);
+        }
+        .roster-row {
+          transition: all 0.2s ease;
         }
         .roster-row:hover {
-          background-color: #f8f9ff;
+          background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+          transform: scale(1.01);
         }
         .date-cell, .day-cell, .shift-cell, .emp-cell {
-          padding: 12px 8px;
+          padding: 15px 10px;
+          vertical-align: middle;
         }
         .table-primary {
-          --bs-table-bg: #cfe2ff;
-          --bs-table-striped-bg: #c5d7f2;
-          --bs-table-striped-color: #000;
-          --bs-table-active-bg: #bacbe6;
-          --bs-table-active-color: #000;
+          --bs-table-bg: linear-gradient(135deg, #cfe2ff 0%, #b3d9ff 100%);
           --bs-table-hover-bg: #bfd1ec;
-          --bs-table-hover-color: #000;
           color: #000;
           border-color: #bacbe6;
+          font-weight: 600;
         }
-        .btn {
-          transition: all 0.3s ease;
+        .table-primary th {
+          border-bottom: 3px solid #0d6efd;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        .btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-        }
+        
+        /* Form Controls */
         .form-control, .form-select {
-          border: 1px solid #ced4da;
-          transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+          border: 2px solid #dee2e6;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.9);
         }
         .form-control:focus, .form-select:focus {
-          border-color: #86b7fe;
-          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+          border-color: #0d6efd;
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+          background: rgba(255, 255, 255, 1);
+          transform: scale(1.02);
+        }
+        .form-control-lg {
+          padding: 12px 16px;
+          font-size: 1.1rem;
+        }
+        
+        /* Button Styling */
+        .btn {
+          transition: all 0.3s ease;
+          border: none;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+        .btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        }
+        .btn-lg {
+          padding: 12px 30px;
+          font-size: 1.1rem;
+        }
+        .btn-info {
+          background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+          border: none;
+        }
+        .btn-success {
+          background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+          border: none;
+        }
+        .btn-outline-secondary {
+          border: 2px solid #6c757d;
+          color: #6c757d;
+          background: transparent;
+        }
+        .btn-outline-secondary:hover {
+          background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+          border-color: #6c757d;
+          color: white;
+        }
+        
+        /* Badge Styling */
+        .badge {
+          font-size: 0.85rem;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          border-radius: 20px;
+        }
+        .bg-info {
+          background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+        }
+        .bg-warning {
+          background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+          color: #000 !important;
+        }
+        
+        /* Icon Styling */
+        .bi {
+          font-size: inherit;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .roster-container {
+            padding: 0 10px;
+          }
+          .header-card .d-flex {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+          }
+          .btn-lg {
+            width: 100%;
+            margin-bottom: 10px;
+          }
+          .table-responsive {
+            font-size: 0.9rem;
+          }
+        }
+        
+        /* Animation for table loading */
+        .roster-table-card {
+          animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>

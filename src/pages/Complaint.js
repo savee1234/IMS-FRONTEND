@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar'; // ✅ Import the Navbar
 import ComplaintForm from '../components/ComplaintForm';
+import backgroundVideo from '../assets/Background.mp4';
 
 const Complaint = () => (
   <div>

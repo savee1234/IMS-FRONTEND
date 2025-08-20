@@ -108,8 +108,40 @@ const Configuration = () => {
   const [orgEditMode, setOrgEditMode] = useState(false);
   const [orgEditId, setOrgEditId] = useState(null);
 
+  // Solution Responsible state
+  const [solutionFormData, setSolutionFormData] = useState({
+    employee: '',
+    solutionType: '',
+    solution: ''
+  });
+
+  const [solutionResponsibleData, setSolutionResponsibleData] = useState([
+    {
+      id: 1,
+      employee: 'John Doe',
+      solutionType: 'Technical',
+      solution: 'Network Issue',
+      createdBy: 'admin',
+      createdDtm: '2024-01-15 10:30:00'
+    },
+    {
+      id: 2,
+      employee: 'Jane Smith',
+      solutionType: 'Customer Service',
+      solution: 'Billing Problem',
+      createdBy: 'user1',
+      createdDtm: '2024-01-14 14:20:00'
+    }
+  ]);
+
+  const [solEditMode, setSolEditMode] = useState(false);
+  const [solEditId, setSolEditId] = useState(null);
+
   const organizations = ['ABC Ltd', 'XYZ Corp', 'Government Dept', 'Tech Solutions', 'Global Industries'];
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
+  const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'];
+  const solutionTypes = ['Technical', 'Customer Service', 'Billing', 'Network', 'Hardware'];
+  const solutions = ['Network Issue', 'Billing Problem', 'Login Error', 'Hardware Failure', 'Service Outage'];
 
   const categories = {
     onboardMedium: 'Onboard Medium',
@@ -324,15 +356,73 @@ const Configuration = () => {
     }
   };
 
-  // New Feature functions
-  const handleTryFeature = () => {
-    setFeatureCount(featureCount + 1);
-    alert(`You've tried the feature ${featureCount + 1} time(s)!`);
+  // Solution Responsible functions
+  const handleSolutionInputChange = (e) => {
+    const { name, value } = e.target;
+    setSolutionFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleLearnMore = () => {
-    alert('Learn more about this amazing feature!');
+  const handleSolutionSubmit = (e) => {
+    e.preventDefault();
+    
+    if (solEditMode) {
+      // Update existing solution
+      setSolutionResponsibleData(prev => prev.map(item => 
+        item.id === solEditId 
+          ? { ...item, ...solutionFormData }
+          : item
+      ));
+      setSolEditMode(false);
+      setSolEditId(null);
+    } else {
+      // Add new solution
+      const newSolution = {
+        id: Date.now(),
+        ...solutionFormData,
+        createdBy: 'currentUser',
+        createdDtm: new Date().toLocaleString()
+      };
+      setSolutionResponsibleData(prev => [...prev, newSolution]);
+    }
+    
+    // Reset form
+    setSolutionFormData({
+      employee: '',
+      solutionType: '',
+      solution: ''
+    });
   };
+
+  const handleSolutionReset = () => {
+    setSolutionFormData({
+      employee: '',
+      solutionType: '',
+      solution: ''
+    });
+    setSolEditMode(false);
+    setSolEditId(null);
+  };
+
+  const handleSolutionEdit = (item) => {
+    setSolutionFormData({
+      employee: item.employee,
+      solutionType: item.solutionType,
+      solution: item.solution
+    });
+    setSolEditMode(true);
+    setSolEditId(item.id);
+  };
+
+  const handleSolutionDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this solution?')) {
+      setSolutionResponsibleData(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  // New Feature functions (removed unused functions to fix warnings)
 
   return (
     <div style={styles.page}>

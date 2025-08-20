@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
-import './Configuration.css';
 
 const initialData = {
   onboardMedium: ['Hotline', 'Email', 'WhatsApp', 'SMS'],
@@ -109,8 +108,40 @@ const Configuration = () => {
   const [orgEditMode, setOrgEditMode] = useState(false);
   const [orgEditId, setOrgEditId] = useState(null);
 
+  // Solution Responsible state
+  const [solutionFormData, setSolutionFormData] = useState({
+    employee: '',
+    solutionType: '',
+    solution: ''
+  });
+
+  const [solutionResponsibleData, setSolutionResponsibleData] = useState([
+    {
+      id: 1,
+      employee: 'John Doe',
+      solutionType: 'Technical',
+      solution: 'Network Issue',
+      createdBy: 'admin',
+      createdDtm: '2024-01-15 10:30:00'
+    },
+    {
+      id: 2,
+      employee: 'Jane Smith',
+      solutionType: 'Customer Service',
+      solution: 'Billing Problem',
+      createdBy: 'user1',
+      createdDtm: '2024-01-14 14:20:00'
+    }
+  ]);
+
+  const [solEditMode, setSolEditMode] = useState(false);
+  const [solEditId, setSolEditId] = useState(null);
+
   const organizations = ['ABC Ltd', 'XYZ Corp', 'Government Dept', 'Tech Solutions', 'Global Industries'];
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
+  const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson', 'David Brown'];
+  const solutionTypes = ['Technical', 'Customer Service', 'Billing', 'Network', 'Hardware'];
+  const solutions = ['Network Issue', 'Billing Problem', 'Login Error', 'Hardware Failure', 'Service Outage'];
 
   const categories = {
     onboardMedium: 'Onboard Medium',
@@ -325,15 +356,73 @@ const Configuration = () => {
     }
   };
 
-  // New Feature functions
-  const handleTryFeature = () => {
-    setFeatureCount(featureCount + 1);
-    alert(`You've tried the feature ${featureCount + 1} time(s)!`);
+  // Solution Responsible functions
+  const handleSolutionInputChange = (e) => {
+    const { name, value } = e.target;
+    setSolutionFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleLearnMore = () => {
-    alert('Learn more about this amazing feature!');
+  const handleSolutionSubmit = (e) => {
+    e.preventDefault();
+    
+    if (solEditMode) {
+      // Update existing solution
+      setSolutionResponsibleData(prev => prev.map(item => 
+        item.id === solEditId 
+          ? { ...item, ...solutionFormData }
+          : item
+      ));
+      setSolEditMode(false);
+      setSolEditId(null);
+    } else {
+      // Add new solution
+      const newSolution = {
+        id: Date.now(),
+        ...solutionFormData,
+        createdBy: 'currentUser',
+        createdDtm: new Date().toLocaleString()
+      };
+      setSolutionResponsibleData(prev => [...prev, newSolution]);
+    }
+    
+    // Reset form
+    setSolutionFormData({
+      employee: '',
+      solutionType: '',
+      solution: ''
+    });
   };
+
+  const handleSolutionReset = () => {
+    setSolutionFormData({
+      employee: '',
+      solutionType: '',
+      solution: ''
+    });
+    setSolEditMode(false);
+    setSolEditId(null);
+  };
+
+  const handleSolutionEdit = (item) => {
+    setSolutionFormData({
+      employee: item.employee,
+      solutionType: item.solutionType,
+      solution: item.solution
+    });
+    setSolEditMode(true);
+    setSolEditId(item.id);
+  };
+
+  const handleSolutionDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this solution?')) {
+      setSolutionResponsibleData(prev => prev.filter(item => item.id !== id));
+    }
+  };
+
+  // New Feature functions (removed unused functions to fix warnings)
 
   return (
     <div style={styles.page}>
@@ -345,11 +434,23 @@ const Configuration = () => {
       <Navbar />
       <div className="config-container">
         <header className="config-header">
-          <h1><span className="icon"></span> Configuration Module</h1>
+          <h1><span className="icon">⚙️</span> Configuration Module</h1>
           <p className="subtitle">Manage system settings and lookup values</p>
         </header>
 
-        <div className="config-tabs">
+        <div className="config-tabs" style={{
+          display: 'flex',
+          flexWrap: 'nowrap',
+          gap: '0.5rem',
+          padding: '1rem 0.5rem',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: 'rgba(16, 5, 80, 0.28)',
+          backdropFilter: 'blur(5px)',
+          borderRadius: '12px',
+          margin: '1rem 0 2rem 0',
+          width: '100%'
+        }}>
           {Object.keys(categories).map((key) => (
             <button
               key={key}
@@ -357,9 +458,37 @@ const Configuration = () => {
                 setActiveCategory(key);
                 cancelEdit();
               }}
-              className={`tab-btn ${activeCategory === key ? 'active' : ''}`}
+              style={{
+                padding: '0.6rem 0.8rem',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                flex: '1',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.3rem',
+                background: activeCategory === key 
+                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' 
+                  : 'rgba(255, 255, 255, 0.8)',
+                color: activeCategory === key ? 'white' : '#374151',
+                boxShadow: activeCategory === key 
+                  ? '0 4px 12px rgba(59, 130, 246, 0.3)' 
+                  : '0 2px 4px rgba(0, 0, 0, 0.1)',
+                transform: activeCategory === key ? 'translateY(-2px)' : 'translateY(0)',
+                backdropFilter: 'blur(5px)'
+              }}
             >
-              <span className="tab-icon">{categoryIcons[key]}</span>
+              <span style={{ 
+                fontSize: '1rem',
+                filter: activeCategory === key ? 'brightness(1.2)' : 'none'
+              }}>
+                {categoryIcons[key]}
+              </span>
               {categories[key]}
             </button>
           ))}
@@ -372,16 +501,44 @@ const Configuration = () => {
               <h2>Organization Contact Persons</h2>
               
               {/* Input Form */}
-              <form onSubmit={handleOrgSubmit} className="contact-form">
-                <div className="form-row">
-                  <div className="form-column">
+              <form onSubmit={handleOrgSubmit} className="contact-form" style={{
+                background: 'transparent',
+                padding: '1.5rem',
+                borderRadius: '12px',
+                border: '1px solid rgba(226, 232, 240, 0.3)',
+                marginBottom: '2rem'
+              }}>
+                <div className="form-row" style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '0.75rem'
+                }}>
+                  <div className="form-column" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem'
+                  }}>
                     <div className="form-group">
-                      <label>Organization *</label>
+                      <label>Organization </label>
                       <select
                         name="organization"
                         value={orgFormData.organization}
                         onChange={handleOrgInputChange}
                         required
+                        style={{
+                          padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '6px',
+                          fontSize: '0.9rem',
+                          background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                          width: '100%',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          color: '#374151',
+                          WebkitAppearance: 'none',
+                          MozAppearance: 'none',
+                          appearance: 'none'
+                        }}
                       >
                         <option value="">Select Organization</option>
                         {organizations.map(org => (
@@ -396,6 +553,20 @@ const Configuration = () => {
                         name="title"
                         value={orgFormData.title}
                         onChange={handleOrgInputChange}
+                        style={{
+                          padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '6px',
+                          fontSize: '0.9rem',
+                          background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                          width: '100%',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          color: '#374151',
+                          WebkitAppearance: 'none',
+                          MozAppearance: 'none',
+                          appearance: 'none'
+                        }}
                       >
                         <option value="">Select Title</option>
                         {titles.map(title => (
@@ -416,9 +587,13 @@ const Configuration = () => {
                     </div>
                   </div>
                   
-                  <div className="form-column">
+                  <div className="form-column" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem'
+                  }}>
                     <div className="form-group">
-                      <label>Contact Person Name *</label>
+                      <label>Contact Person Name </label>
                       <input
                         type="text"
                         name="contactPersonName"
@@ -430,7 +605,7 @@ const Configuration = () => {
                     </div>
                     
                     <div className="form-group">
-                      <label>Email *</label>
+                      <label>Email </label>
                       <input
                         type="email"
                         name="email"
@@ -454,11 +629,49 @@ const Configuration = () => {
                   </div>
                 </div>
                 
-                <div className="form-actions">
-                  <button type="button" onClick={handleOrgReset} className="reset-btn">
+                <div className="form-actions" style={{ 
+                  display: 'flex', 
+                  gap: '1rem', 
+                  justifyContent: 'flex-end', 
+                  marginTop: '1.5rem',
+                  flexWrap: 'nowrap',
+                  alignItems: 'center'
+                }}>
+                  <button 
+                    type="button" 
+                    onClick={handleOrgReset}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#6b7280',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
                     Reset
                   </button>
-                  <button type="submit" className="submit-btn">
+                  <button 
+                    type="submit"
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#3b82f6',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
                     {orgEditMode ? 'Update' : 'Submit'}
                   </button>
                 </div>
@@ -467,53 +680,424 @@ const Configuration = () => {
               {/* Data Table */}
               <div className="contacts-table-section">
                 <h3>Contact Persons List</h3>
-                <div className="table-container">
-                  <table className="contacts-table">
+                <div className="table-container" style={{
+                  overflowX: 'auto',
+                  border: '1px solid rgba(226, 232, 240, 0.6)',
+                  borderRadius: '12px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(5px)'
+                }}>
+                  <table style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    background: 'rgba(255, 255, 255, 0.95)'
+                  }}>
                     <thead>
                       <tr>
-                        <th>Organization</th>
-                        <th>Name</th>
-                        <th>Created by</th>
-                        <th>Created by name</th>
-                        <th>Created dtm</th>
-                        <th>Actions</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Organization</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Name</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created by</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created by name</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created dtm</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {orgContacts.length === 0 ? (
                         <tr>
-                          <td colSpan="6" className="no-data">No contacts found</td>
+                          <td colSpan="6" style={{
+                            padding: '2rem',
+                            textAlign: 'center',
+                            color: '#6b7280',
+                            fontStyle: 'italic'
+                          }}>No contacts found</td>
                         </tr>
                       ) : (
                         orgContacts.map(contact => (
-                          <tr key={contact.id}>
-                            <td>{contact.organization}</td>
-                            <td>{contact.name}</td>
-                            <td>{contact.createdBy}</td>
-                            <td>{contact.createdByName}</td>
-                            <td>{contact.createdDtm}</td>
-                            <td className="actions">
-                              <button 
-                                onClick={() => handleOrgView(contact)}
-                                className="action-btn view-btn"
-                                title="View"
-                              >
-                                View
-                              </button>
-                              <button 
-                                onClick={() => handleOrgEdit(contact)}
-                                className="action-btn edit-btn"
-                                title="Update"
-                              >
-                                Update
-                              </button>
-                              <button 
-                                onClick={() => handleOrgDelete(contact.id)}
-                                className="action-btn delete-btn"
-                                title="Delete"
-                              >
-                                Delete
-                              </button>
+                          <tr key={contact.id} style={{
+                            borderBottom: '1px solid #e5e7eb'
+                          }}>
+                            <td style={{ padding: '0.75rem' }}>{contact.organization}</td>
+                            <td style={{ padding: '0.75rem' }}>{contact.name}</td>
+                            <td style={{ padding: '0.75rem' }}>{contact.createdBy}</td>
+                            <td style={{ padding: '0.75rem' }}>{contact.createdByName}</td>
+                            <td style={{ padding: '0.75rem' }}>{contact.createdDtm}</td>
+                            <td style={{ padding: '0.75rem' }}>
+                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <button 
+                                  onClick={() => handleOrgView(contact)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#10b981',
+                                    color: 'white'
+                                  }}
+                                  title="View"
+                                >
+                                  View
+                                </button>
+                                <button 
+                                  onClick={() => handleOrgEdit(contact)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#3b82f6',
+                                    color: 'white'
+                                  }}
+                                  title="Update"
+                                >
+                                  Update
+                                </button>
+                                <button 
+                                  onClick={() => handleOrgDelete(contact.id)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#dc2626',
+                                    color: 'white'
+                                  }}
+                                  title="Delete"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ) : activeCategory === 'solutionsPerProject' ? (
+            <div className="solution-responsible-section">
+              <h2>Solution Responsible</h2>
+              <p className="section-subtitle">Employees Responsible for Solutions</p>
+              
+              {/* Input Form */}
+              <form onSubmit={handleSolutionSubmit} className="solution-form">
+                <div className="form-row" style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                  gap: '0.75rem'
+                }}>
+                  <div className="form-group">
+                    <label>Employee </label>
+                    <select
+                      name="employee"
+                      value={solutionFormData.employee}
+                      onChange={handleSolutionInputChange}
+                      required
+                      style={{
+                        padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                        width: '100%',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        color: '#374151',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none',
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value="">Select Employee</option>
+                      {employees.map(emp => (
+                        <option key={emp} value={emp}>{emp}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Solution Type </label>
+                    <select
+                      name="solutionType"
+                      value={solutionFormData.solutionType}
+                      onChange={handleSolutionInputChange}
+                      required
+                      style={{
+                        padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                        width: '100%',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        color: '#374151',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none',
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value="">Select Solution Type</option>
+                      {solutionTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Solution </label>
+                    <select
+                      name="solution"
+                      value={solutionFormData.solution}
+                      onChange={handleSolutionInputChange}
+                      required
+                      style={{
+                        padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                        width: '100%',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        color: '#374151',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none',
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value="">Select Solution</option>
+                      {solutions.map(sol => (
+                        <option key={sol} value={sol}>{sol}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="form-actions" style={{ 
+                  display: 'flex', 
+                  gap: '1rem', 
+                  justifyContent: 'flex-end', 
+                  marginTop: '1.5rem',
+                  flexWrap: 'nowrap',
+                  alignItems: 'center'
+                }}>
+                  <button 
+                    type="button" 
+                    onClick={handleSolutionReset} 
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#6b7280',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Reset
+                  </button>
+                  <button 
+                    type="submit" 
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#3b82f6',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {solEditMode ? 'Update' : 'Submit'}
+                  </button>
+                </div>
+              </form>
+
+              {/* Data Table */}
+              <div className="solution-table-section" style={{ marginTop: '2rem' }}>
+                <div className="table-container" style={{
+                  overflowX: 'auto',
+                  border: '1px solid rgba(226, 232, 240, 0.6)',
+                  borderRadius: '12px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(5px)'
+                }}>
+                  <table style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    background: 'rgba(255, 255, 255, 0.95)'
+                  }}>
+                    <thead>
+                      <tr>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Employee</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Solution Type</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Solution</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created by</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created dtm</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {solutionResponsibleData.length === 0 ? (
+                        <tr>
+                          <td colSpan="6" style={{
+                            padding: '2rem',
+                            textAlign: 'center',
+                            color: '#6b7280',
+                            fontStyle: 'italic'
+                          }}>No solutions found</td>
+                        </tr>
+                      ) : (
+                        solutionResponsibleData.map(item => (
+                          <tr key={item.id} style={{
+                            borderBottom: '1px solid #e5e7eb'
+                          }}>
+                            <td style={{ padding: '0.75rem' }}>{item.employee}</td>
+                            <td style={{ padding: '0.75rem' }}>{item.solutionType}</td>
+                            <td style={{ padding: '0.75rem' }}>{item.solution}</td>
+                            <td style={{ padding: '0.75rem' }}>{item.createdBy}</td>
+                            <td style={{ padding: '0.75rem' }}>{item.createdDtm}</td>
+                            <td style={{ padding: '0.75rem' }}>
+                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <button 
+                                  onClick={() => handleSolutionEdit(item)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#3b82f6',
+                                    color: 'white'
+                                  }}
+                                  title="Update"
+                                >
+                                  Update
+                                </button>
+                                <button 
+                                  onClick={() => handleSolutionDelete(item.id)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#dc2626',
+                                    color: 'white'
+                                  }}
+                                  title="Delete"
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -526,26 +1110,87 @@ const Configuration = () => {
           ) : activeCategory === 'newFeature' ? (
             <div className="operation-availability-section">
               <h2>Operation Availability</h2>
+              <p className="section-subtitle">Manage System Operation Availability Settings</p>
               
               {/* Input Form */}
-              <form onSubmit={handleOperationSubmit} className="operation-form">
-                <div className="form-group-inline">
-                  <label>Operation Availability:</label>
-                  <input
-                    type="text"
-                    value={operationAvailability}
-                    onChange={(e) => setOperationAvailability(e.target.value)}
-                    placeholder="Enter operation availability"
-                    className="operation-input"
-                    required
-                  />
+              <form onSubmit={handleOperationSubmit} className="operation-form" style={{
+                background: 'rgba(248, 250, 252, 0.8)',
+                backdropFilter: 'blur(5px)',
+                padding: '1.5rem',
+                borderRadius: '12px',
+                border: '1px solid rgba(226, 232, 240, 0.6)',
+                marginBottom: '2rem'
+              }}>
+                <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <div className="form-group" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}>Operation Availability *</label>
+                    <input
+                      type="text"
+                      value={operationAvailability}
+                      onChange={(e) => setOperationAvailability(e.target.value)}
+                      placeholder="Enter operation availability details"
+                      required
+                      style={{
+                        padding: '0.75rem',
+                        border: '1px solid rgba(209, 213, 219, 0.6)',
+                        borderRadius: '8px',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s ease',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(5px)',
+                        width: '100%'
+                      }}
+                    />
+                  </div>
                 </div>
                 
-                <div className="form-actions-inline">
-                  <button type="button" onClick={handleOperationReset} className="reset-btn">
+                <div className="form-actions" style={{ 
+                  display: 'flex', 
+                  gap: '1rem', 
+                  justifyContent: 'flex-end',
+                  flexWrap: 'nowrap',
+                  alignItems: 'center'
+                }}>
+                  <button 
+                    type="button" 
+                    onClick={handleOperationReset}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#6b7280',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
                     Reset
                   </button>
-                  <button type="submit" className="submit-btn">
+                  <button 
+                    type="submit"
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#3b82f6',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
                     {opEditMode ? 'Update' : 'Submit'}
                   </button>
                 </div>
@@ -553,42 +1198,114 @@ const Configuration = () => {
 
               {/* Data Table */}
               <div className="operation-table-section">
-                <div className="table-container">
-                  <table className="operation-table">
+                <h3 style={{
+                  color: '#374151',
+                  fontSize: '1.25rem',
+                  margin: '1.5rem 0 1rem 0'
+                }}>Operation Availability List</h3>
+                <div className="table-container" style={{
+                  overflowX: 'auto',
+                  border: '1px solid rgba(226, 232, 240, 0.6)',
+                  borderRadius: '12px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(5px)'
+                }}>
+                  <table style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    background: 'rgba(255, 255, 255, 0.95)'
+                  }}>
                     <thead>
                       <tr>
-                        <th>Operation Availability</th>
-                        <th>Created By</th>
-                        <th>Created Time</th>
-                        <th>Actions</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Operation Availability</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created By</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Created Time</th>
+                        <th style={{
+                          padding: '1rem',
+                          backgroundColor: '#1e40af',
+                          color: 'white',
+                          fontWeight: '600',
+                          textAlign: 'left',
+                          borderBottom: '1px solid #e5e7eb'
+                        }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {operationData.length === 0 ? (
                         <tr>
-                          <td colSpan="4" className="no-data">No operations found</td>
+                          <td colSpan="4" style={{
+                            padding: '2rem',
+                            textAlign: 'center',
+                            color: '#6b7280',
+                            fontStyle: 'italic'
+                          }}>No operations found</td>
                         </tr>
                       ) : (
                         operationData.map(operation => (
-                          <tr key={operation.id}>
-                            <td>{operation.operationAvailability}</td>
-                            <td>{operation.createdBy}</td>
-                            <td>{operation.createdTime}</td>
-                            <td className="actions">
-                              <button 
-                                onClick={() => handleOperationEdit(operation)}
-                                className="action-btn edit-btn"
-                                title="Update"
-                              >
-                                Update
-                              </button>
-                              <button 
-                                onClick={() => handleOperationDelete(operation.id)}
-                                className="action-btn delete-btn"
-                                title="Delete"
-                              >
-                                Delete
-                              </button>
+                          <tr key={operation.id} style={{
+                            borderBottom: '1px solid #e5e7eb'
+                          }}>
+                            <td style={{ padding: '0.75rem' }}>{operation.operationAvailability}</td>
+                            <td style={{ padding: '0.75rem' }}>{operation.createdBy}</td>
+                            <td style={{ padding: '0.75rem' }}>{operation.createdTime}</td>
+                            <td style={{ padding: '0.75rem' }}>
+                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <button 
+                                  onClick={() => handleOperationEdit(operation)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#3b82f6',
+                                    color: 'white'
+                                  }}
+                                  title="Update"
+                                >
+                                  Update
+                                </button>
+                                <button 
+                                  onClick={() => handleOperationDelete(operation.id)}
+                                  style={{
+                                    padding: '0.4rem 0.8rem',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    background: '#dc2626',
+                                    color: 'white'
+                                  }}
+                                  title="Delete"
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -614,7 +1331,19 @@ const Configuration = () => {
                       setSelectedProject(e.target.value);
                       cancelEdit();
                     }}
-                    className="project-dropdown"
+                    style={{
+                      padding: '0.5rem 2.5rem 0.5rem 1rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      fontSize: '0.9rem',
+                      background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                      outline: 'none',
+                      cursor: 'pointer',
+                      color: '#374151',
+                      WebkitAppearance: 'none',
+                      MozAppearance: 'none',
+                      appearance: 'none'
+                    }}
                   >
                     {lovs.projects.map((project, i) => (
                       <option key={i} value={project}>{project}</option>
@@ -631,8 +1360,26 @@ const Configuration = () => {
                     placeholder={`Add new ${categories[activeCategory].toLowerCase()}`}
                     className="add-input"
                   />
-                  <button onClick={handleAdd} className="add-button">
-                    <span className="plus-icon">+</span> Add
+                  <button 
+                    onClick={handleAdd} 
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      background: '#3b82f6',
+                      color: 'white',
+                      minWidth: '80px',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}
+                  >
+                    <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>+</span> Add
                   </button>
                 </div>
               </div>
@@ -655,26 +1402,94 @@ const Configuration = () => {
                               className="edit-input"
                               autoFocus
                             />
-                            <div className="edit-actions">
-                              <button onClick={saveEdit} className="save-btn">Save</button>
-                              <button onClick={cancelEdit} className="cancel-btn">Cancel</button>
+                            <div className="edit-actions" style={{
+                              display: 'flex',
+                              gap: '0.5rem',
+                              flexWrap: 'nowrap',
+                              alignItems: 'center'
+                            }}>
+                              <button 
+                                onClick={saveEdit} 
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: '500',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                  background: '#10b981',
+                                  color: 'white',
+                                  minWidth: '60px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button 
+                                onClick={cancelEdit} 
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: '500',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                  background: '#6b7280',
+                                  color: 'white',
+                                  minWidth: '60px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                Cancel
+                              </button>
                             </div>
                           </div>
                         ) : (
                           <>
                             <span className="item-text">{item}</span>
-                            <div className="item-actions">
+                            <div className="item-actions" style={{
+                              display: 'flex',
+                              gap: '0.5rem',
+                              flexWrap: 'nowrap',
+                              alignItems: 'center'
+                            }}>
                               <button
                                 onClick={() => startEdit(index, item)}
-                                className="edit-btn"
                                 title="Edit"
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: '500',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                  background: '#3b82f6',
+                                  color: 'white',
+                                  minWidth: '60px',
+                                  whiteSpace: 'nowrap'
+                                }}
                               >
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(index)}
-                                className="delete-btn"
                                 title="Delete"
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  border: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: '500',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                  background: '#dc2626',
+                                  color: 'white',
+                                  minWidth: '60px',
+                                  whiteSpace: 'nowrap'
+                                }}
                               >
                                 Delete
                               </button>

@@ -7,6 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import backgroundVideo from '../assets/Background.mp4';
 
 
+
+
 const GlobalFix = () => (
   <style>{`
     html, body, #root {

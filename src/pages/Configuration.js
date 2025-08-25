@@ -432,10 +432,19 @@ const Configuration = () => {
           </video>
           <div style={styles.gradientOverlay}></div>
       <Navbar />
-      <div className="config-container">
-        <header className="config-header">
+      <div className="config-container" style={{
+        maxWidth: '1400px',
+        width: '100%',
+        margin: '0 auto',
+        padding: '0 2rem'
+      }}>
+        <header className="config-header" style={{
+          marginTop: '2rem',
+          marginBottom: '1.5rem',
+          textAlign: 'center'
+        }}>
           <h1><span className="icon">⚙️</span> Configuration Module</h1>
-          <p className="subtitle">Manage system settings and lookup values</p>
+          <p className="subtitle" style={{ color: 'black', fontWeight: '400', marginTop: '0.5rem' }}>Manage system settings and lookup values</p>
         </header>
 
         <div className="config-tabs" style={{
@@ -510,122 +519,189 @@ const Configuration = () => {
               }}>
                 <div className="form-row" style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateColumns: '1fr 1fr 1fr',
                   gap: '0.75rem'
                 }}>
-                  <div className="form-column" style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.5rem'
-                  }}>
-                    <div className="form-group">
-                      <label>Organization </label>
-                      <select
-                        name="organization"
-                        value={orgFormData.organization}
-                        onChange={handleOrgInputChange}
-                        required
-                        style={{
-                          padding: '0.75rem 2.5rem 0.75rem 0.75rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '6px',
-                          fontSize: '0.9rem',
-                          background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
-                          width: '100%',
-                          outline: 'none',
-                          cursor: 'pointer',
-                          color: '#374151',
-                          WebkitAppearance: 'none',
-                          MozAppearance: 'none',
-                          appearance: 'none'
-                        }}
-                      >
-                        <option value="">Select Organization</option>
-                        {organizations.map(org => (
-                          <option key={org} value={org}>{org}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>Title</label>
-                      <select
-                        name="title"
-                        value={orgFormData.title}
-                        onChange={handleOrgInputChange}
-                        style={{
-                          padding: '0.75rem 2.5rem 0.75rem 0.75rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '6px',
-                          fontSize: '0.9rem',
-                          background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
-                          width: '100%',
-                          outline: 'none',
-                          cursor: 'pointer',
-                          color: '#374151',
-                          WebkitAppearance: 'none',
-                          MozAppearance: 'none',
-                          appearance: 'none'
-                        }}
-                      >
-                        <option value="">Select Title</option>
-                        {titles.map(title => (
-                          <option key={title} value={title}>{title}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>Mobile No</label>
-                      <input
-                        type="tel"
-                        name="mobileNo"
-                        value={orgFormData.mobileNo}
-                        onChange={handleOrgInputChange}
-                        placeholder="Enter mobile number"
-                      />
-                    </div>
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Organization </label>
+                    <select
+                      name="organization"
+                      value={orgFormData.organization}
+                      onChange={handleOrgInputChange}
+                      required
+                      style={{
+                        padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                        width: '100%',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        color: '#374151',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none',
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value="">Select Organization</option>
+                      {organizations.map(org => (
+                        <option key={org} value={org}>{org}</option>
+                      ))}
+                    </select>
                   </div>
                   
-                  <div className="form-column" style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.5rem'
-                  }}>
-                    <div className="form-group">
-                      <label>Contact Person Name </label>
-                      <input
-                        type="text"
-                        name="contactPersonName"
-                        value={orgFormData.contactPersonName}
-                        onChange={handleOrgInputChange}
-                        placeholder="Enter contact name"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>Email </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={orgFormData.email}
-                        onChange={handleOrgInputChange}
-                        placeholder="Enter email address"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="form-group">
-                      <label>Office No</label>
-                      <input
-                        type="text"
-                        name="officeNo"
-                        value={orgFormData.officeNo}
-                        onChange={handleOrgInputChange}
-                        placeholder="Enter office number"
-                      />
-                    </div>
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Title</label>
+                    <select
+                      name="title"
+                      value={orgFormData.title}
+                      onChange={handleOrgInputChange}
+                      style={{
+                        padding: '0.75rem 2.5rem 0.75rem 0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
+                        width: '100%',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        color: '#374151',
+                        WebkitAppearance: 'none',
+                        MozAppearance: 'none',
+                        appearance: 'none'
+                      }}
+                    >
+                      <option value="">Select Title</option>
+                      {titles.map(title => (
+                        <option key={title} value={title}>{title}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Contact Person Name </label>
+                    <input
+                      type="text"
+                      name="contactPersonName"
+                      value={orgFormData.contactPersonName}
+                      onChange={handleOrgInputChange}
+                      placeholder="Enter contact name"
+                      required
+                      style={{
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                        outline: 'none',
+                        color: '#374151'
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                <div className="form-row" style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                  gap: '0.75rem',
+                  marginTop: '0.75rem'
+                }}>
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Email </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={orgFormData.email}
+                      onChange={handleOrgInputChange}
+                      placeholder="Enter email address"
+                      required
+                      style={{
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                        outline: 'none',
+                        color: '#374151'
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Mobile No</label>
+                    <input
+                      type="tel"
+                      name="mobileNo"
+                      value={orgFormData.mobileNo}
+                      onChange={handleOrgInputChange}
+                      placeholder="Enter mobile number"
+                      style={{
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                        outline: 'none',
+                        color: '#374151'
+                      }}
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label style={{
+                      fontWeight: '600',
+                      color: '#374151',
+                      marginBottom: '0.5rem',
+                      fontSize: '0.9rem',
+                      display: 'block'
+                    }}>Office No</label>
+                    <input
+                      type="text"
+                      name="officeNo"
+                      value={orgFormData.officeNo}
+                      onChange={handleOrgInputChange}
+                      placeholder="Enter office number"
+                      style={{
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '6px',
+                        fontSize: '0.9rem',
+                        width: '100%',
+                        outline: 'none',
+                        color: '#374151'
+                      }}
+                    />
                   </div>
                 </div>
                 

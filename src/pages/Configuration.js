@@ -772,7 +772,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -781,7 +781,7 @@ const Configuration = () => {
                                   }}
                                   title="View"
                                 >
-                                  View
+                                  👁️
                                 </button>
                                 <button 
                                   onClick={() => handleOrgEdit(contact)}
@@ -789,7 +789,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -798,7 +798,7 @@ const Configuration = () => {
                                   }}
                                   title="Update"
                                 >
-                                  Update
+                                  ✏️
                                 </button>
                                 <button 
                                   onClick={() => handleOrgDelete(contact.id)}
@@ -806,7 +806,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -815,7 +815,7 @@ const Configuration = () => {
                                   }}
                                   title="Delete"
                                 >
-                                  Delete
+                                  🗑️
                                 </button>
                               </div>
                             </td>
@@ -1069,7 +1069,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -1078,7 +1078,7 @@ const Configuration = () => {
                                   }}
                                   title="Update"
                                 >
-                                  Update
+                                  ✏️
                                 </button>
                                 <button 
                                   onClick={() => handleSolutionDelete(item.id)}
@@ -1086,7 +1086,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -1095,7 +1095,7 @@ const Configuration = () => {
                                   }}
                                   title="Delete"
                                 >
-                                  Delete
+                                  🗑️
                                 </button>
                               </div>
                             </td>
@@ -1277,7 +1277,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -1286,7 +1286,7 @@ const Configuration = () => {
                                   }}
                                   title="Update"
                                 >
-                                  Update
+                                  ✏️
                                 </button>
                                 <button 
                                   onClick={() => handleOperationDelete(operation.id)}
@@ -1294,7 +1294,7 @@ const Configuration = () => {
                                     padding: '0.4rem 0.8rem',
                                     border: 'none',
                                     borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    fontSize: '1rem',
                                     fontWeight: '500',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s ease',
@@ -1303,7 +1303,7 @@ const Configuration = () => {
                                   }}
                                   title="Delete"
                                 >
-                                  Delete
+                                  🗑️
                                 </button>
                               </div>
                             </td>
@@ -1462,17 +1462,17 @@ const Configuration = () => {
                                   padding: '0.4rem 0.8rem',
                                   border: 'none',
                                   borderRadius: '4px',
-                                  fontSize: '0.75rem',
+                                  fontSize: '1rem',
                                   fontWeight: '500',
                                   cursor: 'pointer',
                                   transition: 'all 0.2s ease',
                                   background: '#3b82f6',
                                   color: 'white',
-                                  minWidth: '60px',
+                                  minWidth: '40px',
                                   whiteSpace: 'nowrap'
                                 }}
                               >
-                                Edit
+                                ✏️
                               </button>
                               <button
                                 onClick={() => handleDelete(index)}
@@ -1481,17 +1481,17 @@ const Configuration = () => {
                                   padding: '0.4rem 0.8rem',
                                   border: 'none',
                                   borderRadius: '4px',
-                                  fontSize: '0.75rem',
+                                  fontSize: '1rem',
                                   fontWeight: '500',
                                   cursor: 'pointer',
                                   transition: 'all 0.2s ease',
                                   background: '#dc2626',
                                   color: 'white',
-                                  minWidth: '60px',
+                                  minWidth: '40px',
                                   whiteSpace: 'nowrap'
                                 }}
                               >
-                                Delete
+                                🗑️
                               </button>
                             </div>
                           </>

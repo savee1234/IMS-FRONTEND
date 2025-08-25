@@ -54,7 +54,7 @@ const ComplaintManagement = () => {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '20px',
-      marginTop: '64px',
+      marginTop: '8px',
       marginBottom: '64px',
     },
     formContainer: {

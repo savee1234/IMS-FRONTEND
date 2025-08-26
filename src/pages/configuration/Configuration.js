@@ -81,7 +81,7 @@ const Configuration = () => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
         zIndex: -1,
       }}></div>
       
@@ -90,36 +90,51 @@ const Configuration = () => {
       <div className="content-wrapper" style={{
         position: 'relative',
         zIndex: 1,
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        padding: '2rem',
-        marginTop: '4rem'
+        padding: '1rem',
+        marginTop: '1rem',
+        maxWidth: '1400px',
+        margin: '1rem auto 0 auto'
       }}>
+        {/* Page Header */}
         <header className="page-header" style={{
           textAlign: 'center',
-          marginBottom: '2rem',
-          color: 'white',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+          marginBottom: '1rem',
+          padding: '1.5rem',
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb'
         }}>
-          <h1><span className="icon">⚙️</span> Configuration Module</h1>
-          <p className="subtitle" style={{ color: 'black', fontWeight: '400', marginTop: '0.5rem' }}>Manage system settings and lookup values</p>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            color: '#1f2937',
+            margin: '0 0 0.5rem 0',
+            textAlign: 'center'
+          }}>
+            Configuration Module
+          </h1>
+          <p style={{ 
+            color: '#6b7280', 
+            fontSize: '1.1rem',
+            margin: 0,
+            fontWeight: '400'
+          }}>
+            Manage system settings and lookup values
+          </p>
         </header>
 
+        {/* Navigation Tabs */}
         <div className="config-tabs" style={{
           display: 'flex',
           flexWrap: 'nowrap',
           gap: '0.5rem',
-          padding: '1rem 0.5rem',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          background: 'rgba(16, 5, 80, 0.28)',
-          backdropFilter: 'blur(5px)',
+          marginBottom: '1rem',
+          padding: '1rem',
+          background: 'white',
           borderRadius: '12px',
-          margin: '1rem 0 2rem 0',
-          width: '100%'
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb'
         }}>
           {Object.keys(categories).map((key) => (
             <button
@@ -127,41 +142,81 @@ const Configuration = () => {
               onClick={() => setActiveCategory(key)}
               style={{
                 padding: '0.6rem 0.8rem',
-                border: 'none',
+                border: activeCategory === key ? '2px solid #3b82f6' : '2px solid #e5e7eb',
                 borderRadius: '8px',
-                fontSize: '0.75rem',
+                fontSize: '0.8rem',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                flex: '1',
-                whiteSpace: 'nowrap',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.3rem',
-                background: activeCategory === key 
-                  ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' 
-                  : 'rgba(255, 255, 255, 0.8)',
-                color: activeCategory === key ? 'white' : '#374151',
+                gap: '0.4rem',
+                background: activeCategory === key ? '#eff6ff' : 'white',
+                color: activeCategory === key ? '#1d4ed8' : '#374151',
                 boxShadow: activeCategory === key 
-                  ? '0 4px 12px rgba(59, 130, 246, 0.3)' 
-                  : '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  ? '0 4px 12px rgba(59, 130, 246, 0.15)' 
+                  : '0 2px 4px rgba(0, 0, 0, 0.05)',
                 transform: activeCategory === key ? 'translateY(-2px)' : 'translateY(0)',
-                backdropFilter: 'blur(5px)'
+                flex: '1',
+                whiteSpace: 'nowrap'
+              }}
+              onMouseEnter={(e) => {
+                if (activeCategory !== key) {
+                  e.target.style.borderColor = '#9ca3af';
+                  e.target.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeCategory !== key) {
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.transform = 'translateY(0)';
+                }
               }}
             >
               <span style={{ 
-                fontSize: '1rem',
-                filter: activeCategory === key ? 'brightness(1.2)' : 'none'
+                fontSize: '1.2rem'
               }}>
                 {categoryIcons[key]}
               </span>
-              {categories[key]}
+              <span>
+                {categories[key]}
+              </span>
             </button>
           ))}
         </div>
 
-        <div className="config-content">
+        {/* Active Category Indicator */}
+        <div style={{
+          marginBottom: '1rem',
+          padding: '0.75rem',
+          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+          borderRadius: '8px',
+          color: 'white',
+          textAlign: 'center'
+        }}>
+          <h2 style={{
+            margin: 0,
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem'
+          }}>
+            <span>{categoryIcons[activeCategory]}</span>
+            {categories[activeCategory]}
+          </h2>
+        </div>
+
+        {/* Content Area */}
+        <div className="config-content" style={{
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb',
+          overflow: 'hidden'
+        }}>
           {renderActiveComponent()}
         </div>
       </div>

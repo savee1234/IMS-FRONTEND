@@ -51,7 +51,8 @@ const styles = {
     left: 0,
     width: '100vw',
     height: '100vh',
-    background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+    background: 'rgba(255, 255, 255, 0.05)',
+    backdropFilter: 'blur(5px)',
     zIndex: -1,
   },
   contentContainer: {
@@ -146,10 +147,20 @@ const Home = () => {
 
   return (
     <div style={styles.container}>
-      <video autoPlay loop muted style={styles.videoBackground}>
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline
+        preload="auto"
+        style={styles.videoBackground}
+        key={backgroundVideo}
+      >
         <source src={backgroundVideo} type="video/mp4" />
+        <source src={backgroundVideo} type="video/webm" />
         Your browser does not support the video tag.
       </video>
+      
 
       <div style={styles.gradientOverlay}></div>
 

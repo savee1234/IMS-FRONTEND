@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import backgroundVideo from '../../assets/Background.mp4';
 
 const EscalationRules = () => {
   const [items, setItems] = useState([]);

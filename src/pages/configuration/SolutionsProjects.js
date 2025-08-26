@@ -43,7 +43,6 @@ const SolutionsProjects = () => {
     }
   ]);
   const [solEditMode, setSolEditMode] = useState(false);
-  const [editingSolutionId, setEditingSolutionId] = useState(null);
 
   const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
   const solutionTypes = ['Web Development', 'Mobile App', 'Database', 'API Integration'];
@@ -88,7 +87,6 @@ const SolutionsProjects = () => {
       solution: ''
     });
     setSolEditMode(false);
-    setEditingSolutionId(null);
   };
 
   const handleSolutionDelete = (id) => {
@@ -102,7 +100,6 @@ const SolutionsProjects = () => {
       solution: item.solution
     });
     setSolEditMode(true);
-    setEditingSolutionId(item.id);
   };
 
   return (

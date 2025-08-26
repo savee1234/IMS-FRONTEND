@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserShield, FaLock, FaSignInAlt } from 'react-icons/fa';
-import backgroundImage from '../assets/Login.jpg';
 import backgroundVideo from '../assets/Background.mp4';
 import logo from '../assets/slt-logo.png';
 

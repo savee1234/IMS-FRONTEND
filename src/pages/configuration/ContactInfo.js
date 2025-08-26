@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import backgroundVideo from '../../assets/Background.mp4';
-
 const ContactInfo = () => {
   const [items, setItems] = useState([]);
   const [newValue, setNewValue] = useState('');

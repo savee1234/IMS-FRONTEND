@@ -6,11 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import ComplaintForm from './pages/Complaint';
-import RosterManagement from './pages/RosterManagement';
-import RosterView from './pages/RosterView';
+import RosterManagement from './pages/rostermanagement/RosterManagement';
+import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/UserManagement';   // Main UserManagement page
 
-import Configuration from './pages/Configuration';
+import Configuration from './pages/configuration/Configuration';
 import Reports from './pages/Reports';
 import Attendance from './pages/AttendanceOT';
 import About from './pages/About';

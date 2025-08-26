@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -6,8 +6,31 @@ import backgroundVideo from '../assets/Background.mp4';
 
 const UserManagement = () => {
   const navigate = useNavigate();
+  const [showPrivilegeModal, setShowPrivilegeModal] = useState(false);
+  const [selectedSection, setSelectedSection] = useState('citizenManagement');
+  const [userPrivileges, setUserPrivileges] = useState({
+    citizenManagement: {
+      addCitizen: true,
+      updateCitizen: true,
+      deleteCitizen: true,
+      viewCitizen: true,
+      subsidyManagement: false,
+      citizenPayment: false,
+      administration: false,
+      smeManagement: false
+    },
+    serviceManagement: {},
+    storesManagement: {},
+    fileManagement: {},
+    recordRoomManagement: {},
+    postalManagement: {},
+    userManagement: {},
+    planningManagement: {},
+    trainingManagement: {},
+    certificateManagement: {}
+  });
 
-  const privileges = [
+  const privilegeModules = [
     'Complaint Management',
     'User Management',
     'Reporting',
@@ -17,11 +40,99 @@ const UserManagement = () => {
   ];
 
   const handlePrivilegeClick = (priv) => {
-    if (priv === 'Complaint Management') {
+    if (priv === 'User Management') {
+      setShowPrivilegeModal(true);
+    } else if (priv === 'Complaint Management') {
       navigate('/complaint-management');
     } else {
       alert(`Clicked: ${priv}`);
     }
+  };
+
+  const handleTogglePrivilege = (module, privilege) => {
+    setUserPrivileges(prev => ({
+      ...prev,
+      [module]: {
+        ...prev[module],
+        [privilege]: !prev[module][privilege]
+      }
+    }));
+  };
+
+  const getDisplayName = (key) => {
+    const nameMap = {
+      addCitizen: 'Add Citizen',
+      updateCitizen: 'Update Citizen',
+      deleteCitizen: 'Delete Citizen',
+      viewCitizen: 'View Citizen',
+      subsidyManagement: 'Subsidy Management',
+      citizenPayment: 'Citizen Payment',
+      administration: 'Administration',
+      smeManagement: 'SME Management',
+      addService: 'Add Service',
+      updateService: 'Update Service',
+      deleteService: 'Delete Service',
+      viewService: 'View Service',
+      addStore: 'Add Store',
+      updateStore: 'Update Store',
+      deleteStore: 'Delete Store',
+      viewStore: 'View Store',
+      uploadFile: 'Upload File',
+      downloadFile: 'Download File',
+      deleteFile: 'Delete File',
+      viewFile: 'View File',
+      addRecord: 'Add Record',
+      updateRecord: 'Update Record',
+      deleteRecord: 'Delete Record',
+      viewRecord: 'View Record',
+      sendMail: 'Send Mail',
+      receiveMail: 'Receive Mail',
+      trackMail: 'Track Mail',
+      manageMail: 'Manage Mail',
+      addUser: 'Add User',
+      updateUser: 'Update User',
+      deleteUser: 'Delete User',
+      viewUser: 'View User',
+      createPlan: 'Create Plan',
+      updatePlan: 'Update Plan',
+      deletePlan: 'Delete Plan',
+      viewPlan: 'View Plan',
+      scheduleTraining: 'Schedule Training',
+      conductTraining: 'Conduct Training',
+      viewTraining: 'View Training',
+      manageTraining: 'Manage Training',
+      issueCertificate: 'Issue Certificate',
+      verifyCertificate: 'Verify Certificate',
+      revokeCertificate: 'Revoke Certificate',
+      viewCertificate: 'View Certificate'
+    };
+    return nameMap[key] || key;
+  };
+
+  const getSectionDisplayName = (section) => {
+    const sectionMap = {
+      citizenManagement: 'Citizen Management',
+      serviceManagement: 'Service Management',
+      storesManagement: 'Stores Management',
+      fileManagement: 'File Management',
+      recordRoomManagement: 'Record Room Management',
+      postalManagement: 'Postal Management',
+      userManagement: 'User Management',
+      planningManagement: 'Planning Management',
+      trainingManagement: 'Training Management',
+      certificateManagement: 'Certificate Management'
+    };
+    return sectionMap[section] || section;
+  };
+
+  const handleCloseModal = () => {
+    setShowPrivilegeModal(false);
+  };
+
+  const handleSubmitPrivileges = () => {
+    console.log('Privileges saved:', userPrivileges);
+    setShowPrivilegeModal(false);
+    alert('Privileges updated successfully!');
   };
 
   // Navigate to User Management page when button clicked
@@ -64,7 +175,7 @@ const UserManagement = () => {
             </p>
 
             <div style={styles.privilegesGrid}>
-              {privileges.map((priv, index) => (
+              {privilegeModules.map((priv, index) => (
                 <button
                   key={index}
                   style={styles.privilegeButton}
@@ -106,6 +217,87 @@ const UserManagement = () => {
           </div>
         </div>
       </div>
+
+      {/* Privilege Details Modal */}
+      {showPrivilegeModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>Privilege Details</h2>
+              <button onClick={handleCloseModal} style={styles.modalCloseButton}>
+                ×
+              </button>
+            </div>
+            
+            <div style={styles.modalContent}>
+              {/* Left Sidebar - Management Sections */}
+              <div style={styles.modalSidebar}>
+                {Object.keys(userPrivileges).map((sectionKey) => (
+                  <div
+                    key={sectionKey}
+                    style={{
+                      ...styles.sidebarItem,
+                      ...(selectedSection === sectionKey ? styles.sidebarItemActive : {})
+                    }}
+                    onClick={() => setSelectedSection(sectionKey)}
+                  >
+                    {getSectionDisplayName(sectionKey)}
+                  </div>
+                ))}
+              </div>
+
+              {/* Right Content - Selected Section Details */}
+              <div style={styles.modalMainContent}>
+                <h3 style={styles.managementTitle}>{getSectionDisplayName(selectedSection)}</h3>
+                {selectedSection === 'citizenManagement' ? (
+                  <div style={styles.privilegeTable}>
+                    <div style={styles.tableHeader}>
+                      <div style={styles.tableHeaderCell}>Location</div>
+                      <div style={styles.tableHeaderCell}>Privilege</div>
+                      <div style={styles.tableHeaderCell}>Active</div>
+                    </div>
+                    
+                    {Object.entries(userPrivileges[selectedSection]).map(([key, value]) => (
+                      <div key={key} style={styles.tableRow}>
+                        <div style={styles.tableCell}>{getSectionDisplayName(selectedSection)}</div>
+                        <div style={styles.tableCell}>{getDisplayName(key)}</div>
+                        <div style={styles.tableCell}>
+                          <label style={styles.toggleSwitch}>
+                            <input
+                              type="checkbox"
+                              checked={value}
+                              onChange={() => handleTogglePrivilege(selectedSection, key)}
+                              style={styles.toggleInput}
+                            />
+                            <span style={{...styles.toggleSlider, ...(value ? styles.toggleSliderActive : {})}}>
+                              <span style={{...styles.toggleCircle, ...(value ? styles.toggleCircleActive : {})}}></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={styles.emptySection}>
+                    <p style={styles.emptySectionText}>
+                      No privileges configured for {getSectionDisplayName(selectedSection)} yet.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div style={styles.modalActions}>
+              <button onClick={handleCloseModal} style={styles.cancelButton}>
+                Cancel
+              </button>
+              <button onClick={handleSubmitPrivileges} style={styles.submitModalButton}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Footer />
     </div>
@@ -144,7 +336,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '20px',
-    marginTop: '64px',
+    marginTop: '16px',
     marginBottom: '64px',
   },
   card: {
@@ -250,6 +442,205 @@ const styles = {
     backgroundColor: '#007bff',
     transform: 'translateY(-2px)',
     boxShadow: '0 6px 16px rgba(0, 123, 255, 0.3)',
+  },
+
+  // Modal styles
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+    padding: '20px',
+  },
+  modal: {
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    width: '85%',
+    maxWidth: '900px',
+    height: '76vh',
+    overflow: 'hidden',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+  },
+  modalHeader: {
+    backgroundColor: 'rgba(6, 26, 66, 0.96)',
+    color: 'white',
+    padding: '10px 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    margin: 3,
+    fontSize: '1.40rem',
+    fontWeight: 500,
+    color:'white'
+  },
+  modalCloseButton: {
+    background: 'none',
+    border: 'none',
+    color: 'white',
+    fontSize: '24px',
+    cursor: 'pointer',
+    padding: '0',
+    width: '30px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalContent: {
+    display: 'flex',
+    height: 'calc(70vh - 95px)',
+    overflow: 'hidden',
+  },
+  modalSidebar: {
+    width: '250px',
+    backgroundColor: '#f8f9fa',
+    borderRight: '1px solid #e0e0e0',
+    overflowY: 'auto',
+  },
+  sidebarItem: {
+    padding: '12px 16px',
+    cursor: 'pointer',
+    borderBottom: '1px solid #e0e0e0',
+    fontSize: '0.9rem',
+    transition: 'all 0.2s ease',
+  },
+  sidebarItemActive: {
+    backgroundColor: '#1e40af',
+    color: 'white',
+    fontWeight: 500,
+  },
+  modalMainContent: {
+    flex: 1,
+    padding: '20px',
+    overflowY: 'auto',
+  },
+  managementSection: {
+    marginBottom: '20px',
+  },
+  managementTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 600,
+    color: '#333',
+    marginBottom: '10px',
+    padding: '8px 0',
+    borderBottom: '1px solid #e0e0e0',
+  },
+  privilegeTable: {
+    border: '1px solid #e0e0e0',
+    borderRadius: '4px',
+    overflow: 'hidden',
+  },
+  tableHeader: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 100px',
+    backgroundColor: '#1e40af',
+    color: 'white',
+  },
+  tableHeaderCell: {
+    padding: '12px 16px',
+    fontWeight: 600,
+    fontSize: '0.9rem',
+  },
+  tableRow: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 100px',
+    borderBottom: '1px solid #e0e0e0',
+  },
+  tableCell: {
+    padding: '12px 16px',
+    fontSize: '0.9rem',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  toggleSwitch: {
+    position: 'relative',
+    display: 'inline-block',
+    width: '50px',
+    height: '24px',
+    cursor: 'pointer',
+  },
+  toggleInput: {
+    opacity: 0,
+    width: 0,
+    height: 0,
+  },
+  toggleSlider: {
+    position: 'absolute',
+    cursor: 'pointer',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#ccc',
+    borderRadius: '24px',
+    transition: '0.3s',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  toggleSliderActive: {
+    backgroundColor: '#22c55e',
+  },
+  toggleCircle: {
+    position: 'absolute',
+    height: '18px',
+    width: '18px',
+    left: '3px',
+    backgroundColor: 'white',
+    borderRadius: '50%',
+    transition: '0.3s',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+  },
+  toggleCircleActive: {
+    transform: 'translateX(26px)',
+  },
+  modalActions: {
+    padding: '16px 20px',
+    borderTop: '1px solid #e0e0e0',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '12px',
+  },
+  cancelButton: {
+    padding: '8px 20px',
+    backgroundColor: 'transparent',
+    color: '#666',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+  },
+  submitModalButton: {
+    padding: '8px 20px',
+    backgroundColor: '#1e40af',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    fontWeight: 500,
+  },
+  emptySection: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '200px',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
+    border: '1px solid #e0e0e0',
+  },
+  emptySectionText: {
+    color: '#666',
+    fontSize: '1rem',
+    fontStyle: 'italic',
+    margin: 0,
   },
 
   // Responsive styles

@@ -14,7 +14,6 @@ import Configuration from './pages/configuration/Configuration';
 import Reports from './pages/Reports';
 import Attendance from './pages/AttendanceOT';
 import About from './pages/About';
-import Contact from './pages/Contact';
 import Notification from './pages/Notification';
 import Workflow from './pages/Workflow';
 
@@ -59,7 +58,6 @@ function App() {
 
         {/* Public pages */}
         <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
 
         {/* Catch-all fallback redirects to /complaint */}
         <Route path="*" element={<Navigate to="/complaint" replace />} />

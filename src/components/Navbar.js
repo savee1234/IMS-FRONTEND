@@ -110,17 +110,6 @@ const Navbar = () => {
               About
             </Link>
 
-            {/* Contact */}
-            <Link
-              to="/contact"
-              style={
-                location.pathname === '/contact'
-                  ? { ...styles.link, ...styles.activeLink }
-                  : styles.link
-              }
-            >
-              Contact
-            </Link>
           </div>
 
           <div style={styles.actions}>

@@ -5,6 +5,7 @@ import backgroundVideo from '../../assets/Background.mp4';
 
 // Import sub-components
 import OnboardMedium from './OnboardMedium';
+import Organization from './Organization';
 import Organizations from './Organizations';
 import ContactInfo from './ContactInfo';
 import SolutionsProjects from './SolutionsProjects';
@@ -17,7 +18,8 @@ const Configuration = () => {
 
   const categories = {
     onboardMedium: 'Onboard Medium',
-    organizations: 'Organizations',
+    organization: 'Organization',
+    organizations: 'Organizations Contact Persons',
     contactInfo: 'Customer Contact Info',
     solutionsPerProject: 'Solutions & Projects',
     shifts: 'Roster Shift Periods',
@@ -27,6 +29,7 @@ const Configuration = () => {
 
   const categoryIcons = {
     onboardMedium: '📱',
+    organization: '🏛️',
     organizations: '🏢',
     contactInfo: '👥',
     solutionsPerProject: '🔧',
@@ -39,6 +42,8 @@ const Configuration = () => {
     switch (activeCategory) {
       case 'onboardMedium':
         return <OnboardMedium />;
+      case 'organization':
+        return <Organization />;
       case 'organizations':
         return <Organizations />;
       case 'contactInfo':
@@ -124,62 +129,72 @@ const Configuration = () => {
           </p>
         </header>
 
-        {/* Navigation Tabs */}
+                {/* Navigation Tabs */}
         <div className="config-tabs" style={{
           display: 'flex',
-          flexWrap: 'nowrap',
-          gap: '0.5rem',
-          marginBottom: '1rem',
-          padding: '1rem',
+          flexWrap: 'wrap',
+          gap: '0.75rem',
+          marginBottom: '1.5rem',
+          padding: '1.5rem',
           background: 'white',
-          borderRadius: '12px',
+          borderRadius: '16px',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
+          justifyContent: 'center'
         }}>
           {Object.keys(categories).map((key) => (
             <button
               key={key}
               onClick={() => setActiveCategory(key)}
               style={{
-                padding: '0.6rem 0.8rem',
+                padding: '0.75rem 1.25rem',
                 border: activeCategory === key ? '2px solid #3b82f6' : '2px solid #e5e7eb',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.4rem',
+                gap: '0.5rem',
                 background: activeCategory === key ? '#eff6ff' : 'white',
                 color: activeCategory === key ? '#1d4ed8' : '#374151',
                 boxShadow: activeCategory === key 
                   ? '0 4px 12px rgba(59, 130, 246, 0.15)' 
                   : '0 2px 4px rgba(0, 0, 0, 0.05)',
                 transform: activeCategory === key ? 'translateY(-2px)' : 'translateY(0)',
-                flex: '1',
-                whiteSpace: 'nowrap'
+                minWidth: 'fit-content',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+                overflow: 'hidden'
               }}
               onMouseEnter={(e) => {
                 if (activeCategory !== key) {
                   e.target.style.borderColor = '#9ca3af';
                   e.target.style.transform = 'translateY(-1px)';
+                  e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeCategory !== key) {
                   e.target.style.borderColor = '#e5e7eb';
                   e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
                 }
               }}
             >
-              <span style={{ 
-                fontSize: '1.2rem'
+              <span style={{
+                fontSize: '1.25rem',
+                display: 'flex',
+                alignItems: 'center'
               }}>
                 {categoryIcons[key]}
               </span>
-              <span>
+              <span style={{
+                fontWeight: '500',
+                letterSpacing: '0.025em'
+              }}>
                 {categories[key]}
               </span>
             </button>
@@ -188,23 +203,30 @@ const Configuration = () => {
 
         {/* Active Category Indicator */}
         <div style={{
-          marginBottom: '1rem',
-          padding: '0.75rem',
+          marginBottom: '1.5rem',
+          padding: '1rem 1.5rem',
           background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          borderRadius: '8px',
+          borderRadius: '12px',
           color: 'white',
-          textAlign: 'center'
+          textAlign: 'center',
+          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)'
         }}>
           <h2 style={{
             margin: 0,
-            fontSize: '1.25rem',
+            fontSize: '1.375rem',
             fontWeight: '600',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.5rem'
+            gap: '0.75rem',
+            letterSpacing: '0.025em'
           }}>
-            <span>{categoryIcons[activeCategory]}</span>
+            <span style={{
+              fontSize: '1.5rem',
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
+            }}>
+              {categoryIcons[activeCategory]}
+            </span>
             {categories[activeCategory]}
           </h2>
         </div>

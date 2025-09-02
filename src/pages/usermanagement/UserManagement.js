@@ -1,64 +1,60 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import backgroundVideo from '../../assets/Background.mp4';
 
 // Import sub-components
-import OnboardMedium from './OnboardMedium';
-import Organization from './Organization';
-import Organizations from './Organizations';
-import ContactInfo from './ContactInfo';
-import SolutionsProjects from './SolutionsProjects';
-import Shifts from './Shifts';
-import EscalationRules from './EscalationRules';
-import OperationAvailability from './OperationAvailability';
+import ComplaintManagement from './ComplaintManagement';
+import UserManagementSection from './UserManagementSection';
+import Reporting from './Reporting';
+import DataAnalysis from './DataAnalysis';
+import AccessLogs from './AccessLogs';
+import AuditTrails from './AuditTrails';
 
-const Configuration = () => {
-  const [activeCategory, setActiveCategory] = useState('onboardMedium');
+const UserManagement = () => {
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState('complaintManagement');
 
   const categories = {
-    onboardMedium: 'Onboard Medium',
-    organization: 'Organization',
-    organizations: 'Organizations Contact Persons',
-    contactInfo: 'Customer Contact Info',
-    solutionsPerProject: 'Solutions & Projects',
-    shifts: 'Roster Shift Periods',
-    escalationRules: 'Escalation Rules',
-    newFeature: 'Operation Availability',
+    complaintManagement: 'Complaint Management',
+    userManagement: 'User Management',
+    reporting: 'Reporting',
+    dataAnalysis: 'Data Analysis',
+    accessLogs: 'Access Logs',
+    auditTrails: 'Audit Trails',
   };
 
   const categoryIcons = {
-    onboardMedium: '📱',
-    organization: '🏛️',
-    organizations: '🏢',
-    contactInfo: '👥',
-    solutionsPerProject: '🔧',
-    shifts: '⏰',
-    escalationRules: '🚨',
-    newFeature: '⚙️',
+    complaintManagement: '📋',
+    userManagement: '👥',
+    reporting: '📊',
+    dataAnalysis: '📈',
+    accessLogs: '🔍',
+    auditTrails: '📝',
   };
 
   const renderActiveComponent = () => {
     switch (activeCategory) {
-      case 'onboardMedium':
-        return <OnboardMedium />;
-      case 'organization':
-        return <Organization />;
-      case 'organizations':
-        return <Organizations />;
-      case 'contactInfo':
-        return <ContactInfo />;
-      case 'solutionsPerProject':
-        return <SolutionsProjects />;
-      case 'shifts':
-        return <Shifts />;
-      case 'escalationRules':
-        return <EscalationRules />;
-      case 'newFeature':
-        return <OperationAvailability />;
+      case 'complaintManagement':
+        return <ComplaintManagement />;
+      case 'userManagement':
+        return <UserManagementSection />;
+      case 'reporting':
+        return <Reporting />;
+      case 'dataAnalysis':
+        return <DataAnalysis />;
+      case 'accessLogs':
+        return <AccessLogs />;
+      case 'auditTrails':
+        return <AuditTrails />;
       default:
-        return <OnboardMedium />;
+        return <ComplaintManagement />;
     }
+  };
+
+  const handleClose = () => {
+    navigate('/');
   };
 
   return (
@@ -104,97 +100,123 @@ const Configuration = () => {
         <header className="page-header" style={{
           textAlign: 'center',
           marginBottom: '1rem',
-          padding: '1.5rem',
+          padding: '1rem',
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb',
+          position: 'relative'
+        }}>
+          <h1 style={{
+            fontSize: '1.8rem',
+            fontWeight: '700',
+            color: '#000000',
+            margin: '0 0 0.4rem 0',
+            textAlign: 'center'
+          }}>
+            User Management Module
+          </h1>
+          <p style={{ 
+            color: '#60a5fa', 
+            fontSize: '1rem',
+            margin: 0,
+            fontWeight: '400'
+          }}>
+            Manage user privileges and system access
+          </p>
+          
+          {/* Close Button */}
+          <button
+            onClick={handleClose}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              background: 'none',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              color: '#000000',
+              padding: '0',
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#f0f0f0';
+              e.target.style.color = '#000000';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'transparent';
+              e.target.style.color = '#000000';
+            }}
+            aria-label="Close"
+            title="Close"
+          >
+            &times;
+          </button>
+        </header>
+
+        {/* Navigation Tabs */}
+        <div className="config-tabs" style={{
+          display: 'flex',
+          flexWrap: 'nowrap',
+          gap: '0.5rem',
+          marginBottom: '1rem',
+          padding: '1rem',
           background: 'white',
           borderRadius: '12px',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
           border: '1px solid #e5e7eb'
-        }}>
-          <h1 style={{
-            fontSize: '2.5rem',
-            fontWeight: '700',
-            color: '#1f2937',
-            margin: '0 0 0.5rem 0',
-            textAlign: 'center'
-          }}>
-            Configuration Module
-          </h1>
-          <p style={{ 
-            color: '#6b7280', 
-            fontSize: '1.1rem',
-            margin: 0,
-            fontWeight: '400'
-          }}>
-            Manage system settings and lookup values
-          </p>
-        </header>
-
-                {/* Navigation Tabs */}
-        <div className="config-tabs" style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.75rem',
-          marginBottom: '1.5rem',
-          padding: '1.5rem',
-          background: 'white',
-          borderRadius: '16px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb',
-          justifyContent: 'center'
         }}>
           {Object.keys(categories).map((key) => (
             <button
               key={key}
               onClick={() => setActiveCategory(key)}
               style={{
-                padding: '0.75rem 1.25rem',
+                padding: '0.6rem 0.8rem',
                 border: activeCategory === key ? '2px solid #3b82f6' : '2px solid #e5e7eb',
-                borderRadius: '12px',
-                fontSize: '0.875rem',
+                borderRadius: '8px',
+                fontSize: '0.8rem',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem',
+                gap: '0.4rem',
                 background: activeCategory === key ? '#eff6ff' : 'white',
                 color: activeCategory === key ? '#1d4ed8' : '#374151',
                 boxShadow: activeCategory === key 
                   ? '0 4px 12px rgba(59, 130, 246, 0.15)' 
                   : '0 2px 4px rgba(0, 0, 0, 0.05)',
                 transform: activeCategory === key ? 'translateY(-2px)' : 'translateY(0)',
-                minWidth: 'fit-content',
-                whiteSpace: 'nowrap',
-                position: 'relative',
-                overflow: 'hidden'
+                flex: '1',
+                whiteSpace: 'nowrap'
               }}
               onMouseEnter={(e) => {
                 if (activeCategory !== key) {
                   e.target.style.borderColor = '#9ca3af';
                   e.target.style.transform = 'translateY(-1px)';
-                  e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeCategory !== key) {
                   e.target.style.borderColor = '#e5e7eb';
                   e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
                 }
               }}
             >
-              <span style={{
-                fontSize: '1.25rem',
-                display: 'flex',
-                alignItems: 'center'
+              <span style={{ 
+                fontSize: '1.2rem'
               }}>
                 {categoryIcons[key]}
               </span>
-              <span style={{
-                fontWeight: '500',
-                letterSpacing: '0.025em'
-              }}>
+              <span>
                 {categories[key]}
               </span>
             </button>
@@ -203,30 +225,23 @@ const Configuration = () => {
 
         {/* Active Category Indicator */}
         <div style={{
-          marginBottom: '1.5rem',
-          padding: '1rem 1.5rem',
+          marginBottom: '1rem',
+          padding: '0.75rem',
           background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          borderRadius: '12px',
+          borderRadius: '8px',
           color: 'white',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)'
+          textAlign: 'center'
         }}>
           <h2 style={{
             margin: 0,
-            fontSize: '1.375rem',
+            fontSize: '1.25rem',
             fontWeight: '600',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '0.75rem',
-            letterSpacing: '0.025em'
+            gap: '0.5rem'
           }}>
-            <span style={{
-              fontSize: '1.5rem',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))'
-            }}>
-              {categoryIcons[activeCategory]}
-            </span>
+            <span>{categoryIcons[activeCategory]}</span>
             {categories[activeCategory]}
           </h2>
         </div>
@@ -247,4 +262,5 @@ const Configuration = () => {
   );
 };
 
-export default Configuration;
+export default UserManagement;
+

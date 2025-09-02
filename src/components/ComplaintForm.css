@@ -19,7 +19,7 @@ body { background: radial-gradient(1200px 800px at 20% -10%, #142243 0, #0b1020 
 /* Square card look */
 .card {
   position: relative;
-  background: #fff;
+  background: rgba(14, 22, 48, 0.95);
   border: 2px solid var(--stroke);
   border-radius: 22px;
   padding: 18px 18px 22px;
@@ -118,10 +118,9 @@ body { background: radial-gradient(1200px 800px at 20% -10%, #142243 0, #0b1020 
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.3);
   z-index: 1;
   pointer-events: none;
-  backdrop-filter: blur(1.5px);
 }
 
 .container {

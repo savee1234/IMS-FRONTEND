@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# Incident Management System (IMS)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive system for managing incidents, organizations, and system configurations.
 
-## Available Scripts
+## 🏗️ Project Structure
 
-In the project directory, you can run:
+This project is organized into two main directories:
 
-### `npm start`
+```
+IMS-FRONTEND/
+├── frontend/           # React.js frontend application
+│   ├── src/           # Source code
+│   ├── public/        # Public assets
+│   └── package.json   # Frontend dependencies
+├── backend/           # Node.js/Express backend API
+│   ├── config/        # Configuration files
+│   ├── models/        # Database models
+│   ├── routes/        # API routes
+│   ├── scripts/       # Database scripts
+│   └── package.json   # Backend dependencies
+└── README.md          # This file
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Quick Start
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+Frontend will run on: http://localhost:3000
 
-### `npm test`
+### Backend
+```bash
+cd backend
+npm install
+npm run init-db    # Initialize database
+npm run dev        # Start development server
+```
+Backend will run on: http://localhost:44354
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📱 Frontend Features
 
-### `npm run build`
+- **Configuration Module** with multiple tabs:
+  - Onboard Medium
+  - Organization (NEW!)
+  - Organizations Contact Persons
+  - Customer Contact Info
+  - Solutions & Projects
+  - Roster Shift Periods
+  - Escalation Rules
+  - Operation Availability
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Organization Management**:
+  - Add new organizations
+  - View organization list
+  - Edit/Delete organizations
+  - Form validation and error handling
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🔧 Backend Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **RESTful API** with Express.js
+- **Database Integration** with Sequelize ORM
+- **Security** with Helmet, CORS, and Rate Limiting
+- **Master Data Endpoints**:
+  - GET `/MasterData/GetSystemOrganization`
+  - POST `/MasterData/SaveSystemOrganization`
+  - PUT `/MasterData/UpdateSystemOrganization/:id`
+  - DELETE `/MasterData/DeleteSystemOrganization/:id`
 
-### `npm run eject`
+## 🗄️ Database
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **SQLite** database for development
+- **Sequelize ORM** for data modeling
+- **Sample data** included for testing
+- **Soft delete** functionality
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🔒 Security
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- CORS enabled for frontend-backend communication
+- Rate limiting to prevent abuse
+- Input validation and sanitization
+- Comprehensive error handling
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📝 Development Notes
 
-## Learn More
+- Frontend and backend are completely separated
+- API endpoints match the frontend requirements
+- Sample data is provided for immediate testing
+- Both applications can run independently
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🤝 Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Follow the existing code structure
+2. Test both frontend and backend changes
+3. Update documentation for new features
+4. Ensure API compatibility between frontend and backend
 
-### Code Splitting
+## 📞 Support
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For technical issues or questions, please contact the development team.

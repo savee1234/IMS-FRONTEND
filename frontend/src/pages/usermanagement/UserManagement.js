@@ -14,43 +14,22 @@ import AuditTrails from './AuditTrails';
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState('complaintManagement');
+  const [expandedSections, setExpandedSections] = useState({});
 
-  const categories = {
-    complaintManagement: 'Complaint Management',
-    userManagement: 'User Management',
-    reporting: 'Reporting',
-    dataAnalysis: 'Data Analysis',
-    accessLogs: 'Access Logs',
-    auditTrails: 'Audit Trails',
-  };
+  const sections = [
+    { key: 'complaintManagement', title: 'Complaint Management', component: ComplaintManagement },
+    { key: 'userManagement', title: 'User Management', component: UserManagementSection },
+    { key: 'reporting', title: 'Reporting', component: Reporting },
+    { key: 'dataAnalysis', title: 'Data Analysis', component: DataAnalysis },
+    { key: 'accessLogs', title: 'Access Logs', component: AccessLogs },
+    { key: 'auditTrails', title: 'Audit Trails', component: AuditTrails },
+  ];
 
-  const categoryIcons = {
-    complaintManagement: '📋',
-    userManagement: '👥',
-    reporting: '📊',
-    dataAnalysis: '📈',
-    accessLogs: '🔍',
-    auditTrails: '📝',
-  };
-
-  const renderActiveComponent = () => {
-    switch (activeCategory) {
-      case 'complaintManagement':
-        return <ComplaintManagement />;
-      case 'userManagement':
-        return <UserManagementSection />;
-      case 'reporting':
-        return <Reporting />;
-      case 'dataAnalysis':
-        return <DataAnalysis />;
-      case 'accessLogs':
-        return <AccessLogs />;
-      case 'auditTrails':
-        return <AuditTrails />;
-      default:
-        return <ComplaintManagement />;
-    }
+  const toggleSection = (key) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
   };
 
   const handleClose = () => {
@@ -93,7 +72,7 @@ const UserManagement = () => {
         zIndex: 1,
         padding: '1rem',
         marginTop: '1rem',
-        maxWidth: '1400px',
+        maxWidth: '1000px',
         margin: '1rem auto 0 auto'
       }}>
         {/* Page Header */}
@@ -108,22 +87,14 @@ const UserManagement = () => {
           position: 'relative'
         }}>
           <h1 style={{
-            fontSize: '1.8rem',
+            fontSize: '1.5rem',
             fontWeight: '700',
-            color: '#000000',
-            margin: '0 0 0.4rem 0',
+            color: '#1e3a8a',
+            margin: '0',
             textAlign: 'center'
           }}>
             User Management Module
           </h1>
-          <p style={{ 
-            color: '#60a5fa', 
-            fontSize: '1rem',
-            margin: 0,
-            fontWeight: '400'
-          }}>
-            Manage user privileges and system access
-          </p>
           
           {/* Close Button */}
           <button
@@ -161,100 +132,62 @@ const UserManagement = () => {
           </button>
         </header>
 
-        {/* Navigation Tabs */}
-        <div className="config-tabs" style={{
-          display: 'flex',
-          flexWrap: 'nowrap',
-          gap: '0.5rem',
-          marginBottom: '1rem',
-          padding: '1rem',
-          background: 'white',
-          borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb'
-        }}>
-          {Object.keys(categories).map((key) => (
-            <button
-              key={key}
-              onClick={() => setActiveCategory(key)}
-              style={{
-                padding: '0.6rem 0.8rem',
-                border: activeCategory === key ? '2px solid #3b82f6' : '2px solid #e5e7eb',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.4rem',
-                background: activeCategory === key ? '#eff6ff' : 'white',
-                color: activeCategory === key ? '#1d4ed8' : '#374151',
-                boxShadow: activeCategory === key 
-                  ? '0 4px 12px rgba(59, 130, 246, 0.15)' 
-                  : '0 2px 4px rgba(0, 0, 0, 0.05)',
-                transform: activeCategory === key ? 'translateY(-2px)' : 'translateY(0)',
-                flex: '1',
-                whiteSpace: 'nowrap'
-              }}
-              onMouseEnter={(e) => {
-                if (activeCategory !== key) {
-                  e.target.style.borderColor = '#9ca3af';
-                  e.target.style.transform = 'translateY(-1px)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeCategory !== key) {
-                  e.target.style.borderColor = '#e5e7eb';
-                  e.target.style.transform = 'translateY(0)';
-                }
-              }}
-            >
-              <span style={{ 
-                fontSize: '1.2rem'
-              }}>
-                {categoryIcons[key]}
-              </span>
-              <span>
-                {categories[key]}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Active Category Indicator */}
-        <div style={{
-          marginBottom: '1rem',
-          padding: '0.75rem',
-          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-          borderRadius: '8px',
-          color: 'white',
-          textAlign: 'center'
-        }}>
-          <h2 style={{
-            margin: 0,
-            fontSize: '1.25rem',
-            fontWeight: '600',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem'
-          }}>
-            <span>{categoryIcons[activeCategory]}</span>
-            {categories[activeCategory]}
-          </h2>
-        </div>
-
-        {/* Content Area */}
-        <div className="config-content" style={{
+        {/* Collapsible Sections */}
+        <div className="collapsible-sections" style={{
           background: 'white',
           borderRadius: '12px',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
           border: '1px solid #e5e7eb',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          maxWidth: '1000px',
+          margin: '0 auto',
+          padding: '1.5rem'
         }}>
-          {renderActiveComponent()}
+          {sections.map((section, index) => (
+            <div key={section.key} style={{ 
+              borderBottom: index < sections.length - 1 ? '1px solid #e5e7eb' : 'none',
+              marginBottom: index < sections.length - 1 ? '8px' : '0'
+            }}>
+              {/* Section Button */}
+              <button
+                onClick={() => toggleSection(section.key)}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: '#3b82f6',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'background-color 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#2563eb';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#3b82f6';
+                }}
+              >
+                {section.title}
+              </button>
+              
+              {/* Collapsible Content */}
+              {expandedSections[section.key] && (
+                <div style={{
+                  padding: '1.5rem',
+                  background: '#f8fafc',
+                  borderTop: '1px solid #e5e7eb'
+                }}>
+                  <section.component />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
@@ -263,4 +196,7 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
+
+
+
 

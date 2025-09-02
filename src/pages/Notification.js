@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import backgroundVideo from '../assets/Background.mp4';
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([
@@ -31,7 +32,12 @@ const Notification = () => {
   };
 
   return (
-    <>
+    <div style={styles.page}>
+      <video autoPlay loop muted style={styles.videoBackground}>
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div style={styles.gradientOverlay}></div>
       <Navbar />
       <div style={styles.container}>
         <h2 style={styles.heading}>Notification Center</h2>
@@ -97,20 +103,47 @@ const Notification = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
 const styles = {
+  page: {
+    position: 'relative',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    overflowX: 'hidden',
+  },
+  videoBackground: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    objectFit: 'cover',
+    zIndex: -2,
+  },
+  gradientOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+    zIndex: -1,
+  },
   container: {
     padding: '2rem',
     fontFamily: 'Segoe UI, sans-serif',
-    backgroundColor: '#f9fafb',
+    backgroundColor: 'rgba(249, 250, 251, 0.95)',
     borderRadius: '8px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
     maxWidth: '1000px',
     margin: '2rem auto 4rem',
-    marginLeft: '220px', // Adjust if you have sidebar, else remove or set 0
+    marginTop: '50px',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
   },
   heading: {
     marginBottom: '1.5rem',

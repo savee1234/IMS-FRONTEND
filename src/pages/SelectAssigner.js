@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import backgroundVideo from '../assets/Background.mp4';
 
 const employees = [
   { empNo: 'E001', name: 'Alice Johnson', designation: 'Technician', status: 'Available', solutions: ['Reset Password', 'Check Connectivity', 'Assign Engineer'] },
@@ -38,11 +39,48 @@ const SelectAssigner = () => {
 
   return (
     <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
+      position: 'relative',
+      minHeight: '100vh'
     }}>
+      {/* Background Video */}
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          zIndex: -2
+        }}
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Overlay */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        zIndex: -1
+      }}></div>
+
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '20px',
+        fontFamily: 'Arial, sans-serif',
+        position: 'relative',
+        zIndex: 1
+      }}>
       <div style={{
         padding: '20px',
         backgroundColor: 'white',
@@ -170,6 +208,7 @@ const SelectAssigner = () => {
             Back to Form
           </button>
         </div>
+      </div>
       </div>
     </div>
   );

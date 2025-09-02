@@ -133,7 +133,7 @@ const RosterManagement = () => {
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          padding: "2rem",
+          padding: "2.5rem",
           marginTop: "4rem",
         }}
       >
@@ -143,16 +143,22 @@ const RosterManagement = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "1.5rem",
+            marginBottom: "2rem",
+            background: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(20px)",
+            padding: "1.5rem 2rem",
+            borderRadius: "16px",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
           }}
         >
           <h2
             style={{
-              fontSize: "1.8rem",
+              fontSize: "2.2rem",
               fontWeight: "bold",
-              color: "#1f2937",
-              borderBottom: "2px solid #3b82f6",
-              paddingBottom: "0.5rem",
+              color: "#ffffff",
+              margin: 0,
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
             }}
           >
             Create Roster
@@ -160,11 +166,25 @@ const RosterManagement = () => {
           <button
             onClick={() => navigate("/roster-view")}
             style={{
-              padding: "0.6rem 1.2rem",
-              background: "#10b981",
+              padding: "0.8rem 1.8rem",
+              background: "linear-gradient(135deg, #10b981, #059669)",
               color: "#fff",
-              borderRadius: "6px",
-              fontSize: "1rem",
+              borderRadius: "10px",
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
             }}
           >
             View Rosters
@@ -174,11 +194,13 @@ const RosterManagement = () => {
         {/* Form Section */}
         <div
           style={{
-            background: "rgba(255, 255, 255, 0.95)",
-            padding: "2rem",
-            borderRadius: "8px",
-            border: "1px solid #d1d5db",
+            background: "rgba(255, 255, 255, 0.98)",
+            padding: "2.5rem",
+            borderRadius: "16px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
             marginBottom: "2rem",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(20px)"
           }}
         >
           {/* Month Picker */}
@@ -186,15 +208,20 @@ const RosterManagement = () => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "1rem",
+              gap: "1.5rem",
               marginBottom: "2rem",
+              background: "rgba(59, 130, 246, 0.05)",
+              padding: "1.5rem",
+              borderRadius: "12px",
+              border: "1px solid rgba(59, 130, 246, 0.1)"
             }}
           >
             <label
               style={{
                 fontWeight: "600",
-                color: "#374151",
+                color: "#1f2937",
                 fontSize: "1rem",
+                minWidth: "120px"
               }}
             >
               Select Month
@@ -208,99 +235,186 @@ const RosterManagement = () => {
               }}
               style={{
                 width: "300px", // ✅ Same size as RosterView
-                padding: "0.75rem",
-                border: "1px solid #d1d5db",
-                borderRadius: "6px",
+                padding: "1rem 1.2rem",
+                border: "2px solid rgba(59, 130, 246, 0.2)",
+                borderRadius: "10px",
                 fontSize: "1rem",
                 backgroundColor: "white",
+                outline: "none",
+                transition: "all 0.3s ease",
+                boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)"
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "#3b82f6";
+                e.target.style.boxShadow = "0 4px 16px rgba(59, 130, 246, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
+                e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.1)";
               }}
             />
           </div>
 
           {/* Roster Table */}
           {roster.length > 0 && (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                border: "1px solid #d1d5db",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <thead>
-                <tr style={{ background: "#f3f4f6" }}>
-                  <th style={thStyle}>Date</th>
-                  <th style={thStyle}>Day</th>
-                  <th style={thStyle}>Shift</th>
-                  {["E1", "E2", "E3", "E4", "E5"].map((col) => (
-                    <th key={col} style={thStyle}>
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {roster.map((day, dayIndex) => (
-                  <React.Fragment key={day.date}>
-                    {day.shifts.map((shift, shiftIndex) => (
-                      <tr key={`${day.date}-${shift.shift}`}>
-                        {shiftIndex === 0 && (
-                          <>
-                            <td rowSpan={2} style={tdStyle}>
-                              {new Date(day.date).toLocaleDateString("en-GB")}
-                            </td>
-                            <td rowSpan={2} style={tdStyle}>
-                              {day.dayName}
-                            </td>
-                          </>
-                        )}
-                        <td style={tdStyle}>{shift.shift}</td>
-                        {shift.employees.map((emp, empIndex) => (
-                          <td key={empIndex} style={tdStyle}>
-                            <select
-                              value={emp}
-                              onChange={(e) =>
-                                handleEmployeeSelect(
-                                  dayIndex,
-                                  shiftIndex,
-                                  empIndex,
-                                  e.target.value
-                                )
-                              }
-                              style={{
-                                width: "100%",
-                                padding: "0.3rem",
-                                border: "1px solid #d1d5db",
-                                borderRadius: "4px",
-                              }}
-                            >
-                              <option value="">Select</option>
-                              {employees.map((employee, i) => (
-                                <option key={i} value={employee}>
-                                  {employee}
-                                </option>
-                              ))}
-                            </select>
-                          </td>
-                        ))}
-                      </tr>
+            <div style={{ 
+              overflowX: "auto", 
+              borderRadius: "12px", 
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+              border: "1px solid rgba(59, 130, 246, 0.1)",
+              backgroundColor: "white",
+              padding: "1rem"
+            }}>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  border: "1px solid #d1d5db",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <thead>
+                  <tr style={{ 
+                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                    color: "white"
+                  }}>
+                    <th style={{
+                      ...thStyle,
+                      color: "white",
+                      fontWeight: "600",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                      border: "none",
+                      padding: "1rem 0.8rem"
+                    }}>Date</th>
+                    <th style={{
+                      ...thStyle,
+                      color: "white",
+                      fontWeight: "600",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                      border: "none",
+                      padding: "1rem 0.8rem"
+                    }}>Day</th>
+                    <th style={{
+                      ...thStyle,
+                      color: "white",
+                      fontWeight: "600",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                      border: "none",
+                      padding: "1rem 0.8rem"
+                    }}>Shift</th>
+                    {["E1", "E2", "E3", "E4", "E5"].map((col) => (
+                      <th key={col} style={{
+                        ...thStyle,
+                        color: "white",
+                        fontWeight: "600",
+                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                        border: "none",
+                        padding: "1rem 0.8rem"
+                      }}>
+                        {col}
+                      </th>
                     ))}
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </table>
+                  </tr>
+                </thead>
+                <tbody>
+                  {roster.map((day, dayIndex) => (
+                    <React.Fragment key={day.date}>
+                      {day.shifts.map((shift, shiftIndex) => (
+                        <tr key={`${day.date}-${shift.shift}`}>
+                          {shiftIndex === 0 && (
+                            <>
+                              <td rowSpan={2} style={tdStyle}>
+                                {new Date(day.date).toLocaleDateString("en-GB")}
+                              </td>
+                              <td rowSpan={2} style={tdStyle}>
+                                {day.dayName}
+                              </td>
+                            </>
+                          )}
+                          <td style={tdStyle}>{shift.shift}</td>
+                          {shift.employees.map((emp, empIndex) => (
+                            <td key={empIndex} style={tdStyle}>
+                              <select
+                                value={emp}
+                                onChange={(e) =>
+                                  handleEmployeeSelect(
+                                    dayIndex,
+                                    shiftIndex,
+                                    empIndex,
+                                    e.target.value
+                                  )
+                                }
+                                style={{
+                                  width: "100%",
+                                  padding: "0.5rem",
+                                  border: "2px solid rgba(59, 130, 246, 0.2)",
+                                  borderRadius: "8px",
+                                  fontSize: "0.9rem",
+                                  backgroundColor: "white",
+                                  transition: "all 0.3s ease",
+                                  outline: "none",
+                                  cursor: "pointer"
+                                }}
+                                onFocus={(e) => {
+                                  e.target.style.borderColor = "#3b82f6";
+                                  e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                                }}
+                                onBlur={(e) => {
+                                  e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
+                                  e.target.style.boxShadow = "none";
+                                }}
+                              >
+                                <option value="">Select</option>
+                                {employees.map((employee, i) => (
+                                  <option key={i} value={employee}>
+                                    {employee}
+                                  </option>
+                                ))}
+                              </select>
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
 
           {/* Action Buttons */}
           {roster.length > 0 && (
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "flex-end", 
+              gap: "1.5rem",
+              marginTop: "2rem",
+              padding: "1.5rem",
+              background: "rgba(59, 130, 246, 0.03)",
+              borderRadius: "12px",
+              border: "1px solid rgba(59, 130, 246, 0.1)"
+            }}>
               <button
                 onClick={resetRoster}
                 style={{
-                  padding: "0.6rem 1.2rem",
-                  background: "#6b7280",
+                  padding: "0.8rem 1.8rem",
+                  background: "linear-gradient(135deg, #6b7280, #4b5563)",
                   color: "#fff",
-                  borderRadius: "6px",
+                  borderRadius: "10px",
+                  border: "none",
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 15px rgba(107, 114, 128, 0.3)"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "translateY(-2px)";
+                  e.target.style.boxShadow = "0 6px 20px rgba(107, 114, 128, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow = "0 4px 15px rgba(107, 114, 128, 0.3)";
                 }}
               >
                 Reset
@@ -308,10 +422,24 @@ const RosterManagement = () => {
               <button
                 onClick={submitRoster}
                 style={{
-                  padding: "0.6rem 1.2rem",
-                  background: "#3b82f6",
+                  padding: "0.8rem 1.8rem",
+                  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
                   color: "#fff",
-                  borderRadius: "6px",
+                  borderRadius: "10px",
+                  border: "none",
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = "translateY(-2px)";
+                  e.target.style.boxShadow = "0 6px 20px rgba(59, 130, 246, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = "translateY(0)";
+                  e.target.style.boxShadow = "0 4px 15px rgba(59, 130, 246, 0.3)";
                 }}
               >
                 Submit

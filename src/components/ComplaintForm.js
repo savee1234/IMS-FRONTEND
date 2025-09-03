@@ -1,7 +1,10 @@
+<<<<<<< HEAD
+=======
 // ComplaintOnboarding.jsx
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
+>>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
 import React, { useMemo, useState } from "react";
 import "./ComplaintForm.css"; // Paste the CSS below into this path
 
@@ -106,7 +109,12 @@ export default function ComplaintOnboarding() {
 
   return (
     <div className="wrap">
+<<<<<<< HEAD
+      <form className="page" onSubmit={onSubmit}>
+        <h1 className="page-title">Complaint Logging</h1>
+=======
      
+>>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
 
         {/* ======= SECTION: Complaint Details ======= */}
         <section className="card">
@@ -370,7 +378,11 @@ export default function ComplaintOnboarding() {
             <button type="submit" className="btn primary">Submit</button>
           </div>
         </section>
+<<<<<<< HEAD
+      </form>
+=======
   
+>>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
     </div>
   );
 }

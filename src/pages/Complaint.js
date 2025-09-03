@@ -16,20 +16,12 @@ const Complaint = () => (
         <source src={bgVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-<<<<<<< HEAD
       <div className="complaint-bg-overlay"></div>
-      
+      <div className="container">
         <ComplaintForm />
-      
+      </div>
       <Footer />
-=======
-      
-      <ComplaintForm />
->>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
     </div>
-     <Footer />
-   
-   
   </>
 );
 

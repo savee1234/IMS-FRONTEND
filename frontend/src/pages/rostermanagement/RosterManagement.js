@@ -17,7 +17,7 @@ const RosterManagement = () => {
   const [roster, setRoster] = useState([]);
   const navigate = useNavigate();
 
-  // ✅ Generate Month Data
+  //  Generate Month Data
   const generateMonthData = (selectedMonth) => {
     const [year, monthNum] = selectedMonth.split("-").map(Number);
     const daysInMonth = new Date(year, monthNum, 0).getDate();
@@ -42,14 +42,14 @@ const RosterManagement = () => {
     setRoster(newRoster);
   };
 
-  // ✅ Handle Employee Selection
+  // Handle Employee Selection
   const handleEmployeeSelect = (dayIndex, shiftIndex, empIndex, value) => {
     const updated = [...roster];
     updated[dayIndex].shifts[shiftIndex].employees[empIndex] = value;
     setRoster(updated);
   };
 
-  // ✅ Reset Roster
+  //  Reset Roster
   const resetRoster = () => {
     setRoster((prev) =>
       prev.map((day) => ({
@@ -62,7 +62,7 @@ const RosterManagement = () => {
     );
   };
 
-  // ✅ Submit Roster
+  // Submit Roster
   const submitRoster = () => {
     if (!month || roster.length === 0) {
       alert("⚠ Please select a month and add roster details before submitting.");
@@ -134,7 +134,7 @@ const RosterManagement = () => {
           display: "flex",
           flexDirection: "column",
           padding: "2.5rem",
-          marginTop: "4rem",
+          marginTop: "1rem",
         }}
       >
         {/* Header */}
@@ -149,7 +149,7 @@ const RosterManagement = () => {
             padding: "1.5rem 2rem",
             borderRadius: "16px",
             border: "1px solid rgba(255, 255, 255, 0.2)",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
           }}
         >
           <h2
@@ -158,7 +158,7 @@ const RosterManagement = () => {
               fontWeight: "bold",
               color: "#ffffff",
               margin: 0,
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
             }}
           >
             Create Roster
@@ -176,7 +176,7 @@ const RosterManagement = () => {
               cursor: "pointer",
               transition: "all 0.3s ease",
               boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
             }}
             onMouseEnter={(e) => {
               e.target.style.transform = "translateY(-2px)";
@@ -200,7 +200,7 @@ const RosterManagement = () => {
             border: "1px solid rgba(255, 255, 255, 0.3)",
             marginBottom: "2rem",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(20px)"
+            backdropFilter: "blur(20px)",
           }}
         >
           {/* Month Picker */}
@@ -213,7 +213,7 @@ const RosterManagement = () => {
               background: "rgba(59, 130, 246, 0.05)",
               padding: "1.5rem",
               borderRadius: "12px",
-              border: "1px solid rgba(59, 130, 246, 0.1)"
+              border: "1px solid rgba(59, 130, 246, 0.1)",
             }}
           >
             <label
@@ -221,7 +221,7 @@ const RosterManagement = () => {
                 fontWeight: "600",
                 color: "#1f2937",
                 fontSize: "1rem",
-                minWidth: "120px"
+                minWidth: "120px",
               }}
             >
               Select Month
@@ -234,7 +234,7 @@ const RosterManagement = () => {
                 generateMonthData(e.target.value);
               }}
               style={{
-                width: "300px", // ✅ Same size as RosterView
+                width: "300px",
                 padding: "1rem 1.2rem",
                 border: "2px solid rgba(59, 130, 246, 0.2)",
                 borderRadius: "10px",
@@ -242,29 +242,33 @@ const RosterManagement = () => {
                 backgroundColor: "white",
                 outline: "none",
                 transition: "all 0.3s ease",
-                boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)"
+                boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)",
               }}
               onFocus={(e) => {
                 e.target.style.borderColor = "#3b82f6";
-                e.target.style.boxShadow = "0 4px 16px rgba(59, 130, 246, 0.2)";
+                e.target.style.boxShadow =
+                  "0 4px 16px rgba(59, 130, 246, 0.2)";
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
-                e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.1)";
+                e.target.style.boxShadow =
+                  "0 2px 8px rgba(59, 130, 246, 0.1)";
               }}
             />
           </div>
 
           {/* Roster Table */}
           {roster.length > 0 && (
-            <div style={{ 
-              overflowX: "auto", 
-              borderRadius: "12px", 
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-              border: "1px solid rgba(59, 130, 246, 0.1)",
-              backgroundColor: "white",
-              padding: "1rem"
-            }}>
+            <div
+              style={{
+                overflowX: "auto",
+                borderRadius: "12px",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+                border: "1px solid rgba(59, 130, 246, 0.1)",
+                backgroundColor: "white",
+                padding: "1rem",
+              }}
+            >
               <table
                 style={{
                   width: "100%",
@@ -274,43 +278,17 @@ const RosterManagement = () => {
                 }}
               >
                 <thead>
-                  <tr style={{ 
-                    background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                    color: "white"
-                  }}>
-                    <th style={{
-                      ...thStyle,
+                  <tr
+                    style={{
+                      background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
                       color: "white",
-                      fontWeight: "600",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-                      border: "none",
-                      padding: "1rem 0.8rem"
-                    }}>Date</th>
-                    <th style={{
-                      ...thStyle,
-                      color: "white",
-                      fontWeight: "600",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-                      border: "none",
-                      padding: "1rem 0.8rem"
-                    }}>Day</th>
-                    <th style={{
-                      ...thStyle,
-                      color: "white",
-                      fontWeight: "600",
-                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-                      border: "none",
-                      padding: "1rem 0.8rem"
-                    }}>Shift</th>
+                    }}
+                  >
+                    <th style={headerStyle}>Date</th>
+                    <th style={headerStyle}>Day</th>
+                    <th style={headerStyle}>Shift</th>
                     {["E1", "E2", "E3", "E4", "E5"].map((col) => (
-                      <th key={col} style={{
-                        ...thStyle,
-                        color: "white",
-                        fontWeight: "600",
-                        textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-                        border: "none",
-                        padding: "1rem 0.8rem"
-                      }}>
+                      <th key={col} style={headerStyle}>
                         {col}
                       </th>
                     ))}
@@ -353,14 +331,16 @@ const RosterManagement = () => {
                                   backgroundColor: "white",
                                   transition: "all 0.3s ease",
                                   outline: "none",
-                                  cursor: "pointer"
+                                  cursor: "pointer",
                                 }}
                                 onFocus={(e) => {
                                   e.target.style.borderColor = "#3b82f6";
-                                  e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                                  e.target.style.boxShadow =
+                                    "0 0 0 3px rgba(59, 130, 246, 0.1)";
                                 }}
                                 onBlur={(e) => {
-                                  e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
+                                  e.target.style.borderColor =
+                                    "rgba(59, 130, 246, 0.2)";
                                   e.target.style.boxShadow = "none";
                                 }}
                               >
@@ -384,62 +364,46 @@ const RosterManagement = () => {
 
           {/* Action Buttons */}
           {roster.length > 0 && (
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "flex-end", 
-              gap: "1.5rem",
-              marginTop: "2rem",
-              padding: "1.5rem",
-              background: "rgba(59, 130, 246, 0.03)",
-              borderRadius: "12px",
-              border: "1px solid rgba(59, 130, 246, 0.1)"
-            }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "1.5rem",
+                marginTop: "2rem",
+                padding: "1.5rem",
+                background: "rgba(59, 130, 246, 0.03)",
+                borderRadius: "12px",
+                border: "1px solid rgba(59, 130, 246, 0.1)",
+              }}
+            >
               <button
                 onClick={resetRoster}
-                style={{
-                  padding: "0.8rem 1.8rem",
-                  background: "linear-gradient(135deg, #6b7280, #4b5563)",
-                  color: "#fff",
-                  borderRadius: "10px",
-                  border: "none",
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 4px 15px rgba(107, 114, 128, 0.3)"
-                }}
+                style={resetBtnStyle}
                 onMouseEnter={(e) => {
                   e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow = "0 6px 20px rgba(107, 114, 128, 0.4)";
+                  e.target.style.boxShadow =
+                    "0 6px 20px rgba(107, 114, 128, 0.4)";
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow = "0 4px 15px rgba(107, 114, 128, 0.3)";
+                  e.target.style.boxShadow =
+                    "0 4px 15px rgba(107, 114, 128, 0.3)";
                 }}
               >
                 Reset
               </button>
               <button
                 onClick={submitRoster}
-                style={{
-                  padding: "0.8rem 1.8rem",
-                  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                  color: "#fff",
-                  borderRadius: "10px",
-                  border: "none",
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)"
-                }}
+                style={submitBtnStyle}
                 onMouseEnter={(e) => {
                   e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow = "0 6px 20px rgba(59, 130, 246, 0.4)";
+                  e.target.style.boxShadow =
+                    "0 6px 20px rgba(59, 130, 246, 0.4)";
                 }}
                 onMouseLeave={(e) => {
                   e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow = "0 4px 15px rgba(59, 130, 246, 0.3)";
+                  e.target.style.boxShadow =
+                    "0 4px 15px rgba(59, 130, 246, 0.3)";
                 }}
               >
                 Submit
@@ -464,6 +428,41 @@ const tdStyle = {
   padding: "0.5rem",
   border: "1px solid #d1d5db",
   textAlign: "center",
+};
+
+const headerStyle = {
+  ...thStyle,
+  color: "white",
+  fontWeight: "600",
+  textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+  border: "none",
+  padding: "1rem 0.8rem",
+};
+
+const resetBtnStyle = {
+  padding: "0.8rem 1.8rem",
+  background: "linear-gradient(135deg, #6b7280, #4b5563)",
+  color: "#fff",
+  borderRadius: "10px",
+  border: "none",
+  fontSize: "1rem",
+  fontWeight: "600",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  boxShadow: "0 4px 15px rgba(107, 114, 128, 0.3)",
+};
+
+const submitBtnStyle = {
+  padding: "0.8rem 1.8rem",
+  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+  color: "#fff",
+  borderRadius: "10px",
+  border: "none",
+  fontSize: "1rem",
+  fontWeight: "600",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
 };
 
 export default RosterManagement;

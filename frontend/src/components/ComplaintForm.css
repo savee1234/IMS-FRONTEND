@@ -1,0 +1,149 @@
+:root {
+  --bg: #0b1020;
+  --card: #0e1630;
+  --ink: #eef2ff;
+  --muted: #a9b0c7;
+  --primary: #6aa8ff;
+  --stroke: #233052;
+  --accent: #8b9ad1;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { background: radial-gradient(1200px 800px at 20% -10%, #142243 0, #0b1020 50%, #070b18 100%); color: var(--ink); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+
+.wrap { display: grid; place-items: flex-start center; padding: 32px; }
+.page { width: min(1200px, 92vw); }
+.page-title { text-align: center; letter-spacing: 0.3px; font-size: 28px; margin: 0 0 18px; color: var(--ink); }
+
+/* Square card look */
+.card {
+  position: relative;
+  background: rgba(14, 22, 48, 0.95);
+  border: 2px solid var(--stroke);
+  border-radius: 22px;
+  padding: 18px 18px 22px;
+  margin: 18px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+/* Decorative grid of subtle squares behind content */
+.card::before {
+  content: none;
+  display: none;
+
+}
+
+.card-title {
+  font-weight: 700; letter-spacing: 0.2px;
+  margin: 0 0 14px; color: var(--accent);
+}
+
+.grid { display: grid; gap: 14px; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.full { grid-column: 1 / -1; }
+.top-gap { margin-top: 12px; }
+
+.field { display: grid; gap: 8px; }
+.label { font-size: 12px; color: var(--muted); letter-spacing: 0.3px; }
+.control { position: relative; }
+
+/* Inputs – square, chunky, consistent */
+.input {
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--stroke);
+  background: rgba(255,255,255,0.03);
+  color: var(--ink);
+  outline: none;
+}
+.input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(106,168,255,0.18); }
+.textarea { height: auto; resize: vertical; min-height: 120px; }
+
+/* Search row */
+.search-row { display: grid; gap: 8px; margin-bottom: 10px; }
+.search-inline { display: flex; gap: 10px; align-items: center; }
+.note { font-size: 12px; color: #ffbfbf; border-left: 3px solid #ff7c7c; padding-left: 10px; }
+
+/* Table */
+.table-wrap { overflow: auto; border-radius: 14px; border: 2px solid var(--stroke); }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { border-bottom: 1px solid var(--stroke); padding: 10px 12px; text-align: left; }
+.table thead th { background: rgba(255,255,255,0.03); font-weight: 600; color: var(--accent); }
+.w-180 { width: 180px; }
+
+/* File Upload button */
+.inline { display: flex; gap: 10px; align-items: center; }
+.upload { display: inline-flex; gap: 8px; align-items: center; padding: 10px 14px; border-radius: 12px; border: 2px dashed var(--stroke); cursor: pointer; font-size: 14px; color: var(--muted); }
+.upload input { display: none; }
+
+/* Buttons */
+.actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; }
+.btn { height: 42px; padding: 0 18px; border-radius: 12px; border: 2px solid var(--stroke); background: rgba(255,255,255,0.03); color: var(--ink); cursor: pointer; font-weight: 600; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn.primary { border-color: var(--primary); background: linear-gradient(180deg, rgba(106,168,255,0.35), rgba(106,168,255,0.15)); }
+.btn.ghost { background: transparent; }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .w-180 { width: auto; }
+}
+.complaint-bg-wrapper {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.complaint-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.complaint-bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input,
+.textarea,
+select,
+option {
+  color: #111 !important;        /* Pure black for input text */
+  background: #fff !important;   /* Ensure background is white for contrast */
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: black !important;        /* Softer placeholder color */
+}
+
+.label {
+  color: #222 !important;        /* Dark label for better readability */
+}

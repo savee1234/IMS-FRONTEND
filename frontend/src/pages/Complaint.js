@@ -17,9 +17,9 @@ const Complaint = () => (
         Your browser does not support the video tag.
       </video>
       <div className="complaint-bg-overlay"></div>
-      <div className="container">
+      
         <ComplaintForm />
-      </div>
+      
       <Footer />
     </div>
   </>

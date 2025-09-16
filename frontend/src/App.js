@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { isAuthenticated } from './utils/auth';
 
 
 import Login from './pages/Login';
@@ -28,8 +29,7 @@ import MyTasks from './pages/MyTasks';
 
 // PrivateRoute component to protect routes if not logged in
 const PrivateRoute = ({ children }) => {
-  const isLoggedIn = localStorage.getItem('staff'); // check login
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
 };
 
 function App() {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserShield, FaLock, FaSignInAlt } from 'react-icons/fa';
+import axios from 'axios';
+import { isAuthenticated } from '../utils/auth';
 import backgroundVideo from '../assets/Background.mp4';
 import logo from '../assets/slt-logo.png';
 
@@ -12,26 +14,52 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('staff');
-    if (isLoggedIn) {
+    if (isAuthenticated()) {
       navigate('/');
     }
   }, [navigate]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    setTimeout(() => {
-      if (serviceNumber === '123' && password === 'admin') {
-        localStorage.setItem('staff', JSON.stringify({ serviceNumber }));
+    try {
+      // Make API call to backend login endpoint
+      const response = await axios.post('http://localhost:44354/Login/login', {
+        username: serviceNumber,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data && response.data.success) {
+        // Store user data in localStorage
+        const userData = {
+          serviceNumber: response.data.user.username,
+          userId: response.data.user.id,
+          email: response.data.user.email,
+          isActive: response.data.user.isActive
+        };
+        
+        localStorage.setItem('staff', JSON.stringify(userData));
+        
         navigate('/');
       } else {
-        setError('Invalid service number or password');
+        setError(response.data.error || 'Login failed. Please try again.');
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError('Network error. Please check your connection and try again.');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

@@ -134,48 +134,91 @@ const RosterView = () => {
 
       <Navbar />
 
-      <div style={{ position: "relative", zIndex: 1, padding: "2rem", marginTop: "4rem" }}>
+      <div style={{ 
+        position: "relative", 
+        zIndex: 1, 
+        minHeight: "100vh", 
+        display: "flex", 
+        flexDirection: "column", 
+        padding: "2.5rem", 
+                 marginTop: "1rem" 
+      }}>
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
-          <button
-            onClick={() => navigate("/roster")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              backgroundColor: "#6b7280",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-            }}
-          >
-            ← Back
-          </button>
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "2rem",
+          background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(20px)",
+          padding: "1.5rem 2rem",
+          borderRadius: "16px",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+        }}>
           <h2
             style={{
-              fontSize: "1.8rem",
+              fontSize: "2.2rem",
               fontWeight: "bold",
-              color: "#1f2937",
-              borderBottom: "2px solid #3b82f6",
-              paddingBottom: "0.5rem",
+              color: "#ffffff",
               margin: 0,
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
             }}
           >
             Roster View
           </h2>
+          <button
+            onClick={() => navigate("/roster")}
+            style={{
+              padding: "0.8rem 1.8rem",
+              background: "linear-gradient(135deg, #10b981, #059669)",
+              color: "#fff",
+              borderRadius: "10px",
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
+            }}
+                     >
+             Back
+           </button>
         </div>
 
-        {/* Month Filter */}
-        <div style={{ marginBottom: "2rem" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "0.5rem",
-              fontSize: "0.9rem",
-              fontWeight: "500",
-              color: "#374151",
-            }}
-          >
-            Select Month
-          </label>
+                 {/* Month Filter */}
+         <div style={{
+           display: "flex",
+           alignItems: "center",
+           gap: "1.5rem",
+           marginBottom: "2rem",
+           background: "rgba(59, 130, 246, 0.15)",
+           padding: "1.5rem",
+           borderRadius: "12px",
+           border: "1px solid rgba(59, 130, 246, 0.2)"
+         }}>
+           <label
+             style={{
+               fontWeight: "600",
+               color: "#ffffff",
+               fontSize: "1rem",
+               minWidth: "120px",
+               display: "flex",
+               alignItems: "center",
+               height: "100%"
+             }}
+           >
+             Select Month
+           </label>
           <input
             type="month"
             value={month}
@@ -185,117 +228,146 @@ const RosterView = () => {
             }}
             style={{
               width: "300px",
-              padding: "0.75rem",
-              border: "1px solid #d1d5db",
-              borderRadius: "4px",
+              padding: "1rem 1.2rem",
+              border: "2px solid rgba(59, 130, 246, 0.2)",
+              borderRadius: "10px",
               fontSize: "1rem",
               backgroundColor: "white",
+              outline: "none",
+              transition: "all 0.3s ease",
+              boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)"
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "#3b82f6";
+              e.target.style.boxShadow = "0 4px 16px rgba(59, 130, 246, 0.2)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
+              e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.1)";
             }}
           />
         </div>
 
         {/* Roster List */}
         {!selectedRoster && !editingRoster && (
-          <div style={{ overflowX: "auto" }}>
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  <th style={thStyle}>Roster Name</th>
-                  <th style={thStyle}>Month</th>
-                  <th style={thStyle}>Created By</th>
-                  <th style={thStyle}>Created By Name</th>
-                  <th style={thStyle}>Created DTM</th>
-                  <th style={thStyle}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentRosters.length > 0 ? (
-                  currentRosters.map((roster, index) => (
-                    <tr
-                      key={roster.id}
-                      style={{ backgroundColor: index % 2 === 0 ? "#f9fafb" : "#ffffff" }}
-                    >
-                      <td style={tdStyle}>{roster.rosterName}</td>
-                      <td style={tdStyle}>
-                        {new Date(roster.month + "-01").toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                        })}
-                      </td>
-                      <td style={tdStyle}>{roster.createdBy}</td>
-                      <td style={tdStyle}>{roster.createdByName}</td>
-                      <td style={tdStyle}>{roster.createdDTM}</td>
-                      <td style={tdStyle}>
-                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
-                          <button style={btnView} onClick={() => handleViewRoster(roster)}>
-                            View
-                          </button>
-                          <button style={btnUpdate} onClick={() => handleUpdateRoster(roster)}>
-                            Update
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
+          <div style={{
+            background: "rgba(255, 255, 255, 0.98)",
+            padding: "2.5rem",
+            borderRadius: "16px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            marginBottom: "2rem",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(20px)"
+          }}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={tableStyle}>
+                <thead>
                   <tr>
-                    <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "#6b7280" }}>
-                      No rosters available
-                      {month
-                        ? ` for ${new Date(month + "-01").toLocaleDateString("en-US", {
+                    <th style={thStyle}>Roster Name</th>
+                    <th style={thStyle}>Month</th>
+                    <th style={thStyle}>Created By</th>
+                    <th style={thStyle}>Created By Name</th>
+                    <th style={thStyle}>Created DTM</th>
+                    <th style={thStyle}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentRosters.length > 0 ? (
+                    currentRosters.map((roster, index) => (
+                      <tr
+                        key={roster.id}
+                        style={{ backgroundColor: index % 2 === 0 ? "#f9fafb" : "#ffffff" }}
+                      >
+                        <td style={tdStyle}>{roster.rosterName}</td>
+                        <td style={tdStyle}>
+                          {new Date(roster.month + "-01").toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "long",
-                          })}`
-                        : ""}.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                          })}
+                        </td>
+                        <td style={tdStyle}>{roster.createdBy}</td>
+                        <td style={tdStyle}>{roster.createdByName}</td>
+                        <td style={tdStyle}>{roster.createdDTM}</td>
+                        <td style={tdStyle}>
+                          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+                            <button style={btnView} onClick={() => handleViewRoster(roster)}>
+                              View
+                            </button>
+                            <button style={btnUpdate} onClick={() => handleUpdateRoster(roster)}>
+                              Update
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "#6b7280" }}>
+                        No rosters available
+                        {month
+                          ? ` for ${new Date(month + "-01").toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                            })}`
+                          : ""}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div style={{ marginTop: "1rem", textAlign: "center" }}>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    style={{
-                      margin: "0 0.25rem",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "4px",
-                      border: currentPage === page ? "2px solid #3b82f6" : "1px solid #d1d5db",
-                      backgroundColor: currentPage === page ? "#3b82f6" : "white",
-                      color: currentPage === page ? "white" : "#374151",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {page}
-                  </button>
-                ))}
-                {currentPage < totalPages && (
-                  <button
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    style={{
-                      marginLeft: "0.5rem",
-                      padding: "0.5rem 1rem",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "4px",
-                      backgroundColor: "white",
-                      cursor: "pointer",
-                    }}
-                  >
-                    &gt;&gt;
-                  </button>
-                )}
-              </div>
-            )}
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div style={{ marginTop: "1rem", textAlign: "center" }}>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      style={{
+                        margin: "0 0.25rem",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        border: currentPage === page ? "2px solid #3b82f6" : "1px solid #d1d5db",
+                        backgroundColor: currentPage === page ? "#3b82f6" : "white",
+                        color: currentPage === page ? "white" : "#374151",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  {currentPage < totalPages && (
+                    <button
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      style={{
+                        marginLeft: "0.5rem",
+                        padding: "0.5rem 1rem",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "4px",
+                        backgroundColor: "white",
+                        cursor: "pointer",
+                      }}
+                    >
+                      &gt;&gt;
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* Detailed Roster View */}
         {selectedRoster && !editingRoster && (
-          <div>
+          <div style={{
+            background: "rgba(255, 255, 255, 0.98)",
+            padding: "2.5rem",
+            borderRadius: "16px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            marginBottom: "2rem",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(20px)"
+          }}>
             <button
               onClick={() => setSelectedRoster(null)}
               style={{
@@ -369,21 +441,27 @@ const RosterView = () => {
 
         {/* Update Editor (mirrors Add Roster) */}
         {editingRoster && (
-          <div>
+          <div style={{
+            background: "rgba(255, 255, 255, 0.98)",
+            padding: "2.5rem",
+            borderRadius: "16px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            marginBottom: "2rem",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(20px)"
+          }}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
               <button onClick={() => setEditingRoster(null)} style={btnCancel}>← Back</button>
               <h3 style={{ margin: 0 }}>Update Roster</h3>
             </div>
 
-            <div
-              style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                padding: "2rem",
-                borderRadius: "8px",
-                border: "1px solid #d1d5db",
-                marginBottom: "2rem",
-              }}
-            >
+            <div style={{
+              background: "rgba(255, 255, 255, 0.95)",
+              padding: "2rem",
+              borderRadius: "8px",
+              border: "1px solid #d1d5db",
+              marginBottom: "2rem",
+            }}>
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
                 <div>
                   <label style={labelStyle}>Roster Name</label>
@@ -430,7 +508,7 @@ const RosterView = () => {
                     {editData.map((day, dayIndex) => (
                       <React.Fragment key={day.date}>
                         {day.shifts.map((shift, shiftIndex) => (
-                          <tr key={`${day.date}-${shift.shift}`}>
+                          <tr key={'${day.date}-${shift.shift}'}>
                             {shiftIndex === 0 && (
                               <>
                                 <td rowSpan={2} style={tdStyle}>{new Date(day.date).toLocaleDateString("en-GB")}</td>
@@ -476,7 +554,7 @@ const RosterView = () => {
   );
 };
 
-/* ✅ Table Styles */
+/*  Table Styles */
 const tableStyle = {
   width: "100%",
   borderCollapse: "collapse",
@@ -529,26 +607,6 @@ const btnSave = {
   color: "white",
   borderRadius: "4px",
   border: "none",
-};
-
-const modalOverlay = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  background: "rgba(0,0,0,0.5)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 10,
-};
-
-const modalBox = {
-  background: "white",
-  padding: "2rem",
-  borderRadius: "8px",
-  width: "400px",
 };
 
 const labelStyle = { display: "block", marginTop: "0.5rem", fontWeight: "500" };

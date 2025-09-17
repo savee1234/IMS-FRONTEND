@@ -173,13 +173,14 @@ const OperationAvailability = () => {
           border: '1px solid #d1d5db'
         }}>
           <thead>
-            <tr style={{ backgroundColor: '#f9fafb' }}>
+            <tr>
               <th style={{ 
                 padding: '1rem', 
                 textAlign: 'left',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
-                color: '#374151'
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
               }}>
                 Operation Availability
               </th>
@@ -188,7 +189,8 @@ const OperationAvailability = () => {
                 textAlign: 'left',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
-                color: '#374151'
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
               }}>
                 Created By
               </th>
@@ -197,7 +199,8 @@ const OperationAvailability = () => {
                 textAlign: 'left',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
-                color: '#374151'
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
               }}>
                 Created Time
               </th>
@@ -206,7 +209,8 @@ const OperationAvailability = () => {
                 textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
-                color: '#374151'
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
               }}>
                 Actions
               </th>
@@ -256,41 +260,37 @@ const OperationAvailability = () => {
                     <button
                       onClick={() => handleOpEdit(item)}
                       style={{
-                        padding: '0.5rem 0.75rem',
-                        backgroundColor: '#f59e0b',
+                        backgroundColor: '#FFB300',
                         color: 'white',
-                        border: '1px solid #f59e0b',
+                        border: 'none',
                         borderRadius: '4px',
-                        fontSize: '0.8rem',
                         cursor: 'pointer',
-                        marginRight: '0.5rem',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '0.25rem'
+                        justifyContent: 'center',
+                        padding: '6px 8px',
+                        marginRight: '6px'
                       }}
                       title="Update"
                     >
                       <FaEdit />
-                      Update
                     </button>
                     <button
                       onClick={() => handleOperationDelete(item.id)}
                       style={{
-                        padding: '0.5rem 0.75rem',
-                        backgroundColor: '#ef4444',
+                        backgroundColor: '#F44336',
                         color: 'white',
-                        border: '1px solid #ef4444',
+                        border: 'none',
                         borderRadius: '4px',
-                        fontSize: '0.8rem',
                         cursor: 'pointer',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '0.25rem'
+                        justifyContent: 'center',
+                        padding: '6px 8px'
                       }}
                       title="Delete"
                     >
                       <FaTrash />
-                      Delete
                     </button>
                   </td>
                 </tr>

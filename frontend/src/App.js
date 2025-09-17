@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { isAuthenticated } from './utils/auth';
 
 
 import Login from './pages/Login';
 import Home from './pages/Home';
-import ComplaintForm from './pages/Complaint';
+import ComplaintForm from './pages/complaint/Complaint';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page
@@ -28,8 +29,7 @@ import MyTasks from './pages/MyTasks';
 
 // PrivateRoute component to protect routes if not logged in
 const PrivateRoute = ({ children }) => {
-  const isLoggedIn = localStorage.getItem('staff'); // check login
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
+  return isAuthenticated() ? children : <Navigate to="/login" replace />;
 };
 
 function App() {

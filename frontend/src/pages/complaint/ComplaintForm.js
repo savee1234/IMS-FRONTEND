@@ -1,12 +1,9 @@
-<<<<<<< HEAD
-=======
 // ComplaintOnboarding.jsx
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
->>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
 import React, { useMemo, useState } from "react";
-import "./ComplaintForm.css"; // Paste the CSS below into this path
+import "./ComplaintForm.css"; // Updated path
 
 export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
@@ -108,17 +105,81 @@ export default function ComplaintOnboarding() {
   };
 
   return (
-    <div className="wrap">
-<<<<<<< HEAD
-      <form className="page" onSubmit={onSubmit}>
-        <h1 className="page-title">Complaint Logging</h1>
-=======
-     
->>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
+    <div className="content-wrapper" style={{
+      position: 'relative',
+      zIndex: 1,
+      padding: '1rem',
+      marginTop: '1rem',
+      maxWidth: '1400px',
+      margin: '1rem auto 0 auto'
+    }}>
+      {/* Page Header */}
+      <header className="page-header" style={{
+        textAlign: 'center',
+        marginBottom: '1rem',
+        padding: '1.5rem',
+        background: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        border: '1px solid #e5e7eb'
+      }}>
+        <h1 style={{
+          fontSize: '2.5rem',
+          fontWeight: '700',
+          color: '#1f2937',
+          margin: '0 0 0.5rem 0',
+          textAlign: 'center'
+        }}>
+           Complaint Onboard Module
+        </h1>
+        <p style={{ 
+          color: '#6b7280', 
+          fontSize: '1.1rem',
+          margin: 0,
+          fontWeight: '400'
+        }}>
+          Submit and manage customer complaints efficiently
+        </p>
+      </header>
 
+      <form className="config-content" style={{
+        background: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        border: '1px solid #e5e7eb',
+        overflow: 'hidden',
+        padding: '2rem'
+      }} onSubmit={onSubmit}>
+        
         {/* ======= SECTION: Complaint Details ======= */}
-        <section className="card">
-          <div className="card-title">Request Details</div>
+        <section className="config-section" style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: 'rgba(248, 250, 252, 0.5)',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            marginBottom: '1.5rem',
+            padding: '1rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            borderRadius: '8px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}>
+              📋 Request Details
+            </h2>
+          </div>
+
           <div className="grid grid-2">
             <Field label="Request Reference">
               <input
@@ -207,8 +268,33 @@ export default function ComplaintOnboarding() {
         </section>
 
         {/* ======= SECTION: Contact Person Details ======= */}
-        <section className="card">
-          <div className="card-title">Contact Person Details</div>
+        <section className="config-section" style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: 'rgba(248, 250, 252, 0.5)',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            marginBottom: '1.5rem',
+            padding: '1rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            borderRadius: '8px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}>
+              👤 Contact Person Details
+            </h2>
+          </div>
 
           <div className="search-row">
             <div className="search-inline">
@@ -245,7 +331,7 @@ export default function ComplaintOnboarding() {
               />
             </Field>
 
-            <Field label="Mobile No">
+            <Field label="Mobile No" className="mobile-no-field">
               <input
                 className="input"
                 value={form.mobile}
@@ -284,8 +370,33 @@ export default function ComplaintOnboarding() {
         </section>
 
         {/* ======= SECTION: Assignment ======= */}
-        <section className="card">
-          <div className="card-title">Assignment</div>
+        <section className="config-section" style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: 'rgba(248, 250, 252, 0.5)',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            marginBottom: '1.5rem',
+            padding: '1rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            borderRadius: '8px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}>
+              👥 Assignment
+            </h2>
+          </div>
 
           <div className="table-wrap">
             <table className="table">
@@ -373,26 +484,49 @@ export default function ComplaintOnboarding() {
             </Field>
           </div>
 
-          <div className="actions">
-            <button type="button" className="btn ghost" onClick={onReset}>Reset</button>
-            <button type="submit" className="btn primary">Submit</button>
+          <div className="actions" style={{
+            display: 'flex', 
+            gap: '12px', 
+            justifyContent: 'center', 
+            marginTop: '2rem',
+            padding: '1.5rem',
+            background: 'rgba(248, 250, 252, 0.3)',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb'
+          }}>
+            <button type="button" className="btn ghost" onClick={onReset} style={{
+              padding: '0.75rem 2rem',
+              fontSize: '1rem',
+              fontWeight: '600',
+              borderRadius: '8px'
+            }}>Reset Form</button>
+            <button type="submit" className="btn primary" style={{
+              padding: '0.75rem 2rem',
+              fontSize: '1rem',
+              fontWeight: '600',
+              borderRadius: '8px'
+            }}>Submit Complaint</button>
           </div>
         </section>
-<<<<<<< HEAD
       </form>
-=======
-  
->>>>>>> 2cf6bf1cf138dbbe956d23ad1720eabd58a9e3a9
     </div>
   );
 }
 
 function Field({ label, children, className = "" }) {
   return (
-    <div className={`field ${className}`}>
-      <label className="label">{label}</label>
+    <div className={`field ${className}`} style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.5rem'
+    }}>
+      <label className="label" style={{
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        color: '#374151',
+        marginBottom: '0.25rem'
+      }}>{label}</label>
       <div className="control">{children}</div>
     </div>
   );
 }
-

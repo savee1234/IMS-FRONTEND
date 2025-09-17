@@ -3,7 +3,7 @@
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
 import React, { useMemo, useState } from "react";
-import "./ComplaintForm.css"; // Updated path
+import "./ComplainForm.css"; // Paste the CSS below into this path
 
 export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
@@ -130,7 +130,7 @@ export default function ComplaintOnboarding() {
           margin: '0 0 0.5rem 0',
           textAlign: 'center'
         }}>
-          Complaint Onboard
+           Complaint Onboard Module
         </h1>
         <p style={{ 
           color: '#6b7280', 
@@ -530,3 +530,4 @@ function Field({ label, children, className = "" }) {
     </div>
   );
 }
+

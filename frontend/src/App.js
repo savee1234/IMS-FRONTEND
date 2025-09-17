@@ -6,7 +6,7 @@ import { isAuthenticated } from './utils/auth';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
-import ComplaintForm from './pages/Complaint';
+import ComplaintForm from './pages/complaint/Complaint';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page

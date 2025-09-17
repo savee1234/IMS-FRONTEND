@@ -3,7 +3,7 @@
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
 import React, { useMemo, useState } from "react";
-import "./ComplainForm.css"; // Paste the CSS below into this path
+import "./ComplaintForm.css"; // Updated path
 
 export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
@@ -530,4 +530,3 @@ function Field({ label, children, className = "" }) {
     </div>
   );
 }
-

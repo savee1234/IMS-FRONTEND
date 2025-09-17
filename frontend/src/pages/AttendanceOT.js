@@ -39,235 +39,374 @@ const AttendanceOT = () => {
     // TODO: Backend API call for reject
   };
 
-  // Styles
-  const styles = {
-     page: {
-      position: 'relative',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-    },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
-      zIndex: -1,
-    },
-    container: {
-      padding: '3rem',
-      marginLeft: '100px', // Adjust for sidebar width if you have one, else set to 0
-      maxWidth: '1200px',
-      fontFamily: 'Arial, sans-serif',
-      minHeight: '80vh',
-      backgroundColor: '#f4f7fa',
-       
-    },
-    header: {
-      color: '#2c3e50',
-      marginBottom: '1.5rem',
-      borderBottom: '1px solid #ecf0f1',
-      paddingBottom: '0.5rem',
-      fontSize: '1.8rem',
-      fontWeight: '700',
-    },
-    filterContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '1.5rem',
-      marginBottom: '2.5rem',
-      flexWrap: 'wrap'
-    },
-    filterLabel: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      fontWeight: '600',
-      color: '#34495e'
-    },
-    filterInput: {
-      padding: '0.5rem',
-      border: '1px solid #bdc3c7',
-      borderRadius: '4px',
-      fontSize: '0.9rem'
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-      backgroundColor: 'white',
-      borderRadius: '8px',
-      overflow: 'hidden',
-    },
-    tableHeader: {
-      backgroundColor: '#3498db',
-      color: 'white',
-      textAlign: 'left',
-      padding: '0.75rem',
-      fontWeight: '600'
-    },
-    tableCell: {
-      padding: '0.75rem',
-      borderBottom: '1px solid #ecf0f1',
-      verticalAlign: 'middle',
-    },
-    tableRow: {
-      transition: 'background-color 0.2s',
-      cursor: 'default',
-    },
-    tableRowHover: {
-      backgroundColor: '#f8f9fa',
-    },
-    noRecords: {
-      textAlign: 'center',
-      padding: '1rem',
-      color: '#7f8c8d'
-    },
-    actionButton: {
-      padding: '0.5rem 1rem',
-      marginRight: '0.5rem',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontWeight: '600',
-      fontSize: '0.8rem',
-      transition: 'background-color 0.2s'
-    },
-    approveButton: {
-      backgroundColor: '#2ecc71',
-      color: 'white',
-    },
-    approveButtonHover: {
-      backgroundColor: '#27ae60',
-    },
-    rejectButton: {
-      backgroundColor: '#e74c3c',
-      color: 'white',
-    },
-    rejectButtonHover: {
-      backgroundColor: '#c0392b',
-    },
-    statusPending: {
-      color: '#f39c12',
-      fontWeight: '600'
-    },
-    statusApproved: {
-      color: '#2ecc71',
-      fontWeight: '600'
-    },
-    statusRejected: {
-      color: '#e74c3c',
-      fontWeight: '600'
-    }
-  };
-
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'Pending': return styles.statusPending;
-      case 'Approved': return styles.statusApproved;
-      case 'Rejected': return styles.statusRejected;
+      case 'Pending': return { color: '#f39c12', fontWeight: '600' };
+      case 'Approved': return { color: '#2ecc71', fontWeight: '600' };
+      case 'Rejected': return { color: '#e74c3c', fontWeight: '600' };
       default: return {};
     }
   };
 
   return (
-    <div style={styles.page}>
-          <video autoPlay loop muted style={styles.videoBackground}>
-            <source src={backgroundVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div style={styles.gradientOverlay}></div>
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1,
+        }}
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        zIndex: -1,
+      }}></div>
+      
       <Navbar />
-      <div style={styles.container}>
-        <h2 style={styles.header}>Attendance & Overtime Management</h2>
+      
+      <div className="content-wrapper" style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '1rem',
+        marginTop: '1rem',
+        maxWidth: '1400px',
+        margin: '1rem auto 0 auto'
+      }}>
+        {/* Page Header */}
+        <header className="page-header" style={{
+          textAlign: 'center',
+          marginBottom: '1rem',
+          padding: '1.5rem',
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb'
+        }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            color: '#1f2937',
+            margin: '0 0 0.5rem 0',
+            textAlign: 'center'
+          }}>
+            Attendance & Overtime Management
+          </h1>
+          <p style={{ 
+            color: '#6b7280', 
+            fontSize: '1.1rem',
+            margin: 0,
+            fontWeight: '400'
+          }}>
+            Manage employee attendance and overtime records efficiently
+          </p>
+        </header>
 
-        <div style={styles.filterContainer}>
-          <label style={styles.filterLabel}>
-            Filter by Date:
-            <input
-              type="date"
-              value={filterDate}
-              onChange={e => setFilterDate(e.target.value)}
-              style={styles.filterInput}
-            />
-          </label>
+        {/* Filter Section */}
+        <section className="config-section" style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: 'rgba(248, 250, 252, 0.5)',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            marginBottom: '1.5rem',
+            padding: '1rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            borderRadius: '8px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}>
+              🔍 Search & Filter
+            </h2>
+          </div>
 
-          <label style={styles.filterLabel}>
-            Search Employee:
-            <input
-              type="text"
-              placeholder="Enter name"
-              value={searchName}
-              onChange={e => setSearchName(e.target.value)}
-              style={styles.filterInput}
-            />
-          </label>
-        </div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.5rem',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}>
+              <label style={{
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '0.25rem'
+              }}>Filter by Date:</label>
+              <input
+                type="date"
+                value={filterDate}
+                onChange={e => setFilterDate(e.target.value)}
+                style={{
+                  padding: '0.75rem',
+                  border: '1px solid #cbd5e0',
+                  borderRadius: '6px',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s ease',
+                  minWidth: '200px'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#1e3a8a'}
+                onBlur={(e) => e.target.style.borderColor = '#cbd5e0'}
+              />
+            </div>
 
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.tableHeader}>Employee Name</th>
-              <th style={styles.tableHeader}>Date</th>
-              <th style={styles.tableHeader}>OT Hours</th>
-              <th style={styles.tableHeader}>Status</th>
-              <th style={styles.tableHeader}>Comments</th>
-              <th style={styles.tableHeader}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.length === 0 ? (
-              <tr>
-                <td colSpan="6" style={styles.noRecords}>No records found matching your criteria</td>
-              </tr>
-            ) : (
-              records.map(rec => (
-                <tr key={rec.id} style={styles.tableRow}>
-                  <td style={styles.tableCell}>{rec.name}</td>
-                  <td style={styles.tableCell}>{rec.date}</td>
-                  <td style={styles.tableCell}>{rec.hours}</td>
-                  <td style={{ ...styles.tableCell, ...getStatusStyle(rec.status) }}>{rec.status}</td>
-                  <td style={styles.tableCell}>{rec.comments}</td>
-                  <td style={styles.tableCell}>
-                    {rec.status === 'Pending' && (
-                      <>
-                        <button
-                          onClick={() => handleApprove(rec.id)}
-                          style={{ ...styles.actionButton, ...styles.approveButton }}
-                          onMouseOver={e => e.currentTarget.style.backgroundColor = styles.approveButtonHover.backgroundColor}
-                          onMouseOut={e => e.currentTarget.style.backgroundColor = styles.approveButton.backgroundColor}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(rec.id)}
-                          style={{ ...styles.actionButton, ...styles.rejectButton }}
-                          onMouseOver={e => e.currentTarget.style.backgroundColor = styles.rejectButtonHover.backgroundColor}
-                          onMouseOut={e => e.currentTarget.style.backgroundColor = styles.rejectButton.backgroundColor}
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                  </td>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}>
+              <label style={{
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '0.25rem'
+              }}>Search Employee:</label>
+              <input
+                type="text"
+                placeholder="Enter employee name"
+                value={searchName}
+                onChange={e => setSearchName(e.target.value)}
+                style={{
+                  padding: '0.75rem',
+                  border: '1px solid #cbd5e0',
+                  borderRadius: '6px',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s ease',
+                  minWidth: '250px'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#1e3a8a'}
+                onBlur={(e) => e.target.style.borderColor = '#cbd5e0'}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Records Table Section */}
+        <section className="config-section" style={{
+          marginBottom: '2rem',
+          padding: '1.5rem',
+          background: 'rgba(248, 250, 252, 0.5)',
+          borderRadius: '8px',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            marginBottom: '1.5rem',
+            padding: '1rem 1.5rem',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            borderRadius: '8px',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}>
+              📊 Attendance Records
+            </h2>
+          </div>
+
+          <div style={{
+            overflow: 'auto',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb',
+            background: '#ffffff',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+          }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>Employee Name</th>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>Date</th>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>OT Hours</th>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>Status</th>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>Comments</th>
+                  <th style={{
+                    background: '#1e3a8a',
+                    fontWeight: '600',
+                    color: '#ffffff',
+                    borderBottom: '2px solid #1e3a8a',
+                    padding: '12px 14px',
+                    textAlign: 'left'
+                  }}>Actions</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {records.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" style={{
+                      textAlign: 'center',
+                      padding: '2rem',
+                      color: '#6b7280',
+                      fontStyle: 'italic'
+                    }}>No records found matching your criteria</td>
+                  </tr>
+                ) : (
+                  records.map(rec => (
+                    <tr key={rec.id} style={{
+                      transition: 'background-color 0.2s ease',
+                      borderBottom: '1px solid #e5e7eb'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>{rec.name}</td>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>{rec.date}</td>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>{rec.hours}</td>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb',
+                        ...getStatusStyle(rec.status)
+                      }}>{rec.status}</td>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>{rec.comments}</td>
+                      <td style={{
+                        padding: '12px 14px',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>
+                        {rec.status === 'Pending' && (
+                          <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                              onClick={() => handleApprove(rec.id)}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#2ecc71',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.875rem',
+                                transition: 'all 0.2s ease'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.background = '#27ae60';
+                                e.target.style.transform = 'translateY(-1px)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.background = '#2ecc71';
+                                e.target.style.transform = 'translateY(0)';
+                              }}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => handleReject(rec.id)}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                background: '#e74c3c',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.875rem',
+                                transition: 'all 0.2s ease'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.background = '#c0392b';
+                                e.target.style.transform = 'translateY(-1px)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.background = '#e74c3c';
+                                e.target.style.transform = 'translateY(0)';
+                              }}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
+      
       <Footer />
     </div>
   );

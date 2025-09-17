@@ -7,7 +7,6 @@ import backgroundVideo from '../../assets/Background.mp4';
 import OnboardMedium from './OnboardMedium';
 import Organization from './Organization';
 import Organizations from './Organizations';
-import ContactInfo from './ContactInfo';
 import SolutionsProjects from './SolutionsProjects';
 import Shifts from './Shifts';
 import EscalationRules from './EscalationRules';
@@ -20,7 +19,6 @@ const Configuration = () => {
     onboardMedium: 'Onboard Medium',
     organization: 'Organization',
     organizations: 'Organizations Contact Persons',
-    contactInfo: 'Customer Contact Info',
     solutionsPerProject: 'Solutions & Projects',
     shifts: 'Roster Shift Periods',
     escalationRules: 'Escalation Rules',
@@ -31,7 +29,6 @@ const Configuration = () => {
     onboardMedium: '📱',
     organization: '🏛️',
     organizations: '🏢',
-    contactInfo: '👥',
     solutionsPerProject: '🔧',
     shifts: '⏰',
     escalationRules: '🚨',
@@ -46,8 +43,7 @@ const Configuration = () => {
         return <Organization />;
       case 'organizations':
         return <Organizations />;
-      case 'contactInfo':
-        return <ContactInfo />;
+      
       case 'solutionsPerProject':
         return <SolutionsProjects />;
       case 'shifts':

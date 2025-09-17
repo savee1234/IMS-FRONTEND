@@ -316,71 +316,26 @@ const Organization = () => {
             fontSize: '0.875rem'
           }}>
             <thead>
-              <tr style={{
-                backgroundColor: '#f9fafb',
-                borderBottom: '2px solid #e5e7eb'
-              }}>
-                                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Organization ID
-                 </th>
-                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Organization
-                 </th>
-                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Organization Type
-                 </th>
-                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Created By
-                 </th>
-                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Created By Name
-                 </th>
-                 <th style={{
-                   padding: '1rem',
-                   textAlign: 'left',
-                   fontWeight: '600',
-                   color: '#374151',
-                   border: '1px solid #d1d5db'
-                 }}>
-                   Created Date
-                 </th>
-                <th style={{
-                  padding: '1rem',
-                  textAlign: 'center',
-                  fontWeight: '600',
-                  color: '#374151',
-                  border: '1px solid #d1d5db'
-                }}>
+              <tr>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Organization ID
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Organization
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Organization Type
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Created By
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Created By Name
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
+                  Created Date
+                </th>
+                <th style={{ padding: '1rem', textAlign: 'center', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
                   Actions
                 </th>
               </tr>

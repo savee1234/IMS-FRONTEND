@@ -6,13 +6,13 @@ let mongod;
 const connectDB = async () => {
   try {
     // Try to connect to the provided MongoDB URI first
-    if (process.env.MONGODB_URI && process.env.MONGODB_URI !== 'mongodb://localhost:27017/ims') {
+    if (process.env.MONGODB_URI) {
       await mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000,
       });
-      console.log('MongoDB connected successfully');
+      console.log('MongoDB connected successfully to cloud database');
       return;
     }
     

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaTimes, FaUser, FaBuilding, FaEnvelope, FaMobile, FaPhone, FaIdCard, FaCalendarAlt } from 'react-icons/fa';
 
 const Organizations = () => {
   const [orgFormData, setOrgFormData] = useState({
@@ -19,6 +19,8 @@ const Organizations = () => {
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
 
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
 
@@ -181,13 +183,13 @@ const Organizations = () => {
   };
 
   const handleView = (contact) => {
-    const orgName = contact.organizationId?.organization || contact.organizationName;
-    alert(`Viewing contact:
-Name: ${contact.name}
-Organization: ${orgName}
-Email: ${contact.email}
-Mobile: ${contact.mobileNumber || 'N/A'}
-Office: ${contact.officeContactNumber || 'N/A'}`);
+    setSelectedContact(contact);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedContact(null);
   };
 
   const handleEdit = (contact) => {
@@ -205,8 +207,364 @@ Office: ${contact.officeContactNumber || 'N/A'}`);
     setEditingId(contact._id);
   };
 
+  // Contact Details Modal Component
+  const ContactDetailsModal = () => {
+    if (!viewModalOpen || !selectedContact) return null;
+
+    const orgName = selectedContact.organizationId?.organization || selectedContact.organizationName;
+
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '1rem'
+      }}>
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '600px',
+          maxHeight: '90vh',
+          overflow: 'auto',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          border: '1px solid #e5e7eb'
+        }}>
+          {/* Modal Header */}
+          <div style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px 12px 0 0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '50%',
+                padding: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <FaUser size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '600' }}>
+                  Contact Person Details
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.875rem', opacity: 0.9 }}>
+                  {selectedContact.name}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={closeViewModal}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '2.5rem',
+                height: '2.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: 'white',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              <FaTimes size={16} />
+            </button>
+          </div>
+
+          {/* Modal Body */}
+          <div style={{ padding: '2rem' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1.5rem',
+              marginBottom: '2rem'
+            }}>
+              {/* Personal Information Card */}
+              <div style={{
+                backgroundColor: '#f8fafc',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h4 style={{
+                  margin: '0 0 1rem 0',
+                  color: '#1e293b',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <FaUser size={16} style={{ color: '#3b82f6' }} />
+                  Personal Information
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FaIdCard size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Full Name:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.name}</p>
+                    </div>
+                  </div>
+                  
+                  {selectedContact.title && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <FaIdCard size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                      <div>
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Title:</span>
+                        <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.title}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedContact.callingName && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <FaUser size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                      <div>
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Calling Name:</span>
+                        <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.callingName}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Organization Information Card */}
+              <div style={{
+                backgroundColor: '#f0f9ff',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #bae6fd'
+              }}>
+                <h4 style={{
+                  margin: '0 0 1rem 0',
+                  color: '#1e293b',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <FaBuilding size={16} style={{ color: '#0ea5e9' }} />
+                  Organization Details
+                </h4>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaBuilding size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Organization:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{orgName}</p>
+                  </div>
+                </div>
+                
+                {selectedContact.contactPersonId && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.75rem' }}>
+                    <FaIdCard size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Contact ID:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.contactPersonId}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Contact Information - Full Width */}
+            <div style={{
+              backgroundColor: '#f0fdf4',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              border: '1px solid #bbf7d0',
+              marginBottom: '1.5rem'
+            }}>
+              <h4 style={{
+                margin: '0 0 1rem 0',
+                color: '#1e293b',
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <FaEnvelope size={16} style={{ color: '#10b981' }} />
+                Contact Information
+              </h4>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '1rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaEnvelope size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Email:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.email}</p>
+                  </div>
+                </div>
+                
+                {selectedContact.mobileNumber && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FaMobile size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Mobile:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.mobileNumber}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {selectedContact.officeContactNumber && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FaPhone size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Office:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.officeContactNumber}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Record Information */}
+            <div style={{
+              backgroundColor: '#fef3c7',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              border: '1px solid #fde68a'
+            }}>
+              <h4 style={{
+                margin: '0 0 1rem 0',
+                color: '#1e293b',
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <FaCalendarAlt size={16} style={{ color: '#f59e0b' }} />
+                Record Information
+              </h4>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '1rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaUser size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Created By:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedContact.createdByName}</p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaCalendarAlt size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Created Date:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>
+                      {new Date(selectedContact.createdDtm).toLocaleDateString()} at {new Date(selectedContact.createdDtm).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div style={{
+            borderTop: '1px solid #e5e7eb',
+            padding: '1.5rem',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '1rem',
+            backgroundColor: '#f8fafc',
+            borderRadius: '0 0 12px 12px'
+          }}>
+            <button
+              onClick={() => {
+                closeViewModal();
+                handleEdit(selectedContact);
+              }}
+              style={{
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#2563eb';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#3b82f6';
+              }}
+            >
+              <FaEdit size={14} />
+              Edit Contact
+            </button>
+            <button
+              onClick={closeViewModal}
+              style={{
+                backgroundColor: '#6b7280',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#4b5563';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#6b7280';
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="organizations-section" style={{ padding: '2rem' }}>
+      {/* Contact Details Modal */}
+      <ContactDetailsModal />
       <h2 style={{ 
         fontSize: '1.8rem', 
         fontWeight: 'bold', 

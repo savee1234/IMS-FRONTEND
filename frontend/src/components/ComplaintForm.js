@@ -5,7 +5,7 @@
 import React, { useMemo, useState } from "react";
 import "./ComplainForm.css"; // Paste the CSS below into this path
 
-export default function ComplaintOnboarding() {
+export default function ComplainForm() {
   // ------- Dummy data (replace with real API data) --------
   const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
   const categories = ["Billing", "Connectivity", "Technical", "Other"];

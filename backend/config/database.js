@@ -11,13 +11,15 @@ const connectDB = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000,
+        retryWrites: true,
+        w: 'majority'
       });
       console.log('MongoDB connected successfully to cloud database');
       return;
     }
     
     // Fallback to in-memory MongoDB for development
-    console.log('Starting in-memory MongoDB...');
+    console.log('No MONGODB_URI found, starting in-memory MongoDB...');
     mongod = await MongoMemoryServer.create();
     const uri = mongod.getUri();
     

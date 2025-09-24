@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaTimes, FaBuilding, FaIdCard, FaTag, FaUser, FaCalendarAlt } from 'react-icons/fa';
 
 const Organization = () => {
   const [orgFormData, setOrgFormData] = useState({
@@ -13,6 +13,8 @@ const Organization = () => {
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
   
   // API Base URL
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
@@ -147,12 +149,13 @@ const Organization = () => {
   };
 
   const handleView = (org) => {
-    alert(`Viewing Organization:
-ID: ${org.organizationId || 'Not assigned'}
-Organization: ${org.organization}
-Type: ${org.organizationType}
-Created By: ${org.createdByName}
-Created Date: ${new Date(org.createdDtm).toLocaleString()}`);
+    setSelectedOrganization(org);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedOrganization(null);
   };
 
   const handleEdit = (org) => {
@@ -163,6 +166,346 @@ Created Date: ${new Date(org.createdDtm).toLocaleString()}`);
     setEditMode(true);
     setEditingId(org._id);
     setError('');
+  };
+
+  // Organization Details Modal Component
+  const OrganizationDetailsModal = () => {
+    if (!viewModalOpen || !selectedOrganization) return null;
+
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '1rem'
+      }}>
+        <div style={{
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '650px',
+          maxHeight: '90vh',
+          overflow: 'auto',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          border: '1px solid #e5e7eb'
+        }}>
+          {/* Modal Header */}
+          <div style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px 12px 0 0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '50%',
+                padding: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <FaBuilding size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '600' }}>
+                  Organization Details
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.875rem', opacity: 0.9 }}>
+                  {selectedOrganization.organization}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={closeViewModal}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '2.5rem',
+                height: '2.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: 'white',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+              }}
+            >
+              <FaTimes size={16} />
+            </button>
+          </div>
+
+          {/* Modal Body */}
+          <div style={{ padding: '2rem' }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1.5rem',
+              marginBottom: '2rem'
+            }}>
+              {/* Organization Information Card */}
+              <div style={{
+                backgroundColor: '#f0f9ff',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #bae6fd'
+              }}>
+                <h4 style={{
+                  margin: '0 0 1rem 0',
+                  color: '#1e293b',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <FaBuilding size={16} style={{ color: '#0ea5e9' }} />
+                  Organization Information
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {selectedOrganization.organizationId && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <FaIdCard size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                      <div>
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Organization ID:</span>
+                        <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.organizationId}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FaBuilding size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Organization Name:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.organization}</p>
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FaTag size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Organization Type:</span>
+                      <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.organizationType}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Information Card */}
+              <div style={{
+                backgroundColor: '#f0fdf4',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #bbf7d0'
+              }}>
+                <h4 style={{
+                  margin: '0 0 1rem 0',
+                  color: '#1e293b',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <FaIdCard size={16} style={{ color: '#10b981' }} />
+                  Status Information
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      backgroundColor: selectedOrganization.isActive ? '#10b981' : '#ef4444'
+                    }} />
+                    <div>
+                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Status:</span>
+                      <p style={{ 
+                        margin: 0, 
+                        color: selectedOrganization.isActive ? '#10b981' : '#ef4444', 
+                        fontWeight: '600' 
+                      }}>
+                        {selectedOrganization.isActive ? 'Active' : 'Inactive'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {selectedOrganization.endedBy && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <FaUser size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                      <div>
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Ended By:</span>
+                        <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.endedByName}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedOrganization.endDtm && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <FaCalendarAlt size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                      <div>
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>End Date:</span>
+                        <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>
+                          {new Date(selectedOrganization.endDtm).toLocaleDateString()} at {new Date(selectedOrganization.endDtm).toLocaleTimeString()}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Creation Information - Full Width */}
+            <div style={{
+              backgroundColor: '#fef3c7',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              border: '1px solid #fde68a'
+            }}>
+              <h4 style={{
+                margin: '0 0 1rem 0',
+                color: '#1e293b',
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <FaCalendarAlt size={16} style={{ color: '#f59e0b' }} />
+                Creation Information
+              </h4>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '1rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaUser size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Created By:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.createdByName}</p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaCalendarAlt size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Created Date:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>
+                      {new Date(selectedOrganization.createdDtm).toLocaleDateString()} at {new Date(selectedOrganization.createdDtm).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaIdCard size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Created By ID:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>{selectedOrganization.createdBy}</p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FaCalendarAlt size={14} style={{ color: '#6b7280', minWidth: '14px' }} />
+                  <div>
+                    <span style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Last Updated:</span>
+                    <p style={{ margin: 0, color: '#1f2937', fontWeight: '600' }}>
+                      {selectedOrganization.updatedAt ? 
+                        `${new Date(selectedOrganization.updatedAt).toLocaleDateString()} at ${new Date(selectedOrganization.updatedAt).toLocaleTimeString()}` :
+                        'Not updated'
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div style={{
+            borderTop: '1px solid #e5e7eb',
+            padding: '1.5rem',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '1rem',
+            backgroundColor: '#f8fafc',
+            borderRadius: '0 0 12px 12px'
+          }}>
+            <button
+              onClick={() => {
+                closeViewModal();
+                handleEdit(selectedOrganization);
+              }}
+              style={{
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#2563eb';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#3b82f6';
+              }}
+            >
+              <FaEdit size={14} />
+              Edit Organization
+            </button>
+            <button
+              onClick={closeViewModal}
+              style={{
+                backgroundColor: '#6b7280',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#4b5563';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#6b7280';
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -481,6 +824,9 @@ Created Date: ${new Date(org.createdDtm).toLocaleString()}`);
           </table>
         </div>
       </div>
+      
+      {/* Organization Details Modal */}
+      <OrganizationDetailsModal />
     </div>
   );
 };

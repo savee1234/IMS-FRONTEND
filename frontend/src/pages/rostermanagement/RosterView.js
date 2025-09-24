@@ -508,7 +508,7 @@ const RosterView = () => {
                     {editData.map((day, dayIndex) => (
                       <React.Fragment key={day.date}>
                         {day.shifts.map((shift, shiftIndex) => (
-                          <tr key={`${day.date}-${shift.shift}`}>
+                          <tr key={'${day.date}-${shift.shift}'}>
                             {shiftIndex === 0 && (
                               <>
                                 <td rowSpan={2} style={tdStyle}>{new Date(day.date).toLocaleDateString("en-GB")}</td>

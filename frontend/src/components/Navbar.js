@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { logout } from '../utils/auth';
 import sltLogo from '../assets/slt-logo.png';
 
 const Navbar = () => {
@@ -22,8 +23,7 @@ const Navbar = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('staff');
-    navigate('/login');
+    logout();
   };
 
   useEffect(() => {

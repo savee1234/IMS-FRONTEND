@@ -3,9 +3,9 @@
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
 import React, { useMemo, useState } from "react";
-import "./ComplainForm.css"; // Paste the CSS below into this path
+import "./ComplaintForm.css"; // Updated path
 
-export default function ComplainForm() {
+export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
   const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
@@ -130,7 +130,7 @@ export default function ComplainForm() {
           margin: '0 0 0.5rem 0',
           textAlign: 'center'
         }}>
-           Complaint Onboard Module
+          Complaint Onboard
         </h1>
         <p style={{ 
           color: '#6b7280', 
@@ -530,4 +530,3 @@ function Field({ label, children, className = "" }) {
     </div>
   );
 }
-

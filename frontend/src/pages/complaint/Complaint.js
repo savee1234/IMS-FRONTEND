@@ -1,8 +1,8 @@
 import React from 'react';
-import ComplaintForm from './complaint/ComplaintForm';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import bgVideo from "../assets/Background.mp4";
+import ComplaintForm from './ComplaintForm';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import bgVideo from "../../assets/Background.mp4";
 
 const Complaint = () => (
   <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>

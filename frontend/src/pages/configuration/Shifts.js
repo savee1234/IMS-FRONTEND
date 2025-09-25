@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 
 const Shifts = () => {
@@ -9,22 +9,74 @@ const Shifts = () => {
   const [toHours, setToHours] = useState('05');
   const [toMinutes, setToMinutes] = useState('00');
   const [toAmPm, setToAmPm] = useState('PM');
+  const [shifts, setShifts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [selectedShift, setSelectedShift] = useState(null);
   
-  // Sample shift data - replace with your actual data
-  const [shifts] = useState([
-    { id: 1, name: 'Morning', fromTime: '09:00 AM', toTime: '05:00 PM', createdBy: 'Admin', createdDtm: '2023-09-15 10:30 AM' },
-    { id: 2, name: 'Night', fromTime: '09:00 PM', toTime: '05:00 AM', createdBy: 'Admin', createdDtm: '2023-09-15 10:30 AM' },
-    { id: 3, name: 'Evening', fromTime: '01:00 PM', toTime: '09:00 PM', createdBy: 'Supervisor', createdDtm: '2023-09-16 02:15 PM' },
-    { id: 4, name: 'Weekend', fromTime: '08:00 AM', toTime: '04:00 PM', createdBy: 'Manager', createdDtm: '2023-09-17 11:05 AM' },
-  ]);
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
-  const handleSubmit = (e) => {
+  const fetchShifts = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/shifts`);
+      const data = await res.json();
+      if (data.success) {
+        setShifts(data.data);
+      } else {
+        setError(data.message || 'Failed to fetch shifts');
+      }
+    } catch (e) {
+      console.error('Error fetching shifts:', e);
+      setError('Failed to load shifts');
+    } finally {
+      setLoading(false);
+    }
+  }, [API_BASE_URL]);
+
+  useEffect(() => {
+    fetchShifts();
+  }, [fetchShifts]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      shiftName,
-      fromTime: `${fromHours}:${fromMinutes} ${fromAmPm}`,
-      toTime: `${toHours}:${toMinutes} ${toAmPm}`
-    });
+    if (!shiftName.trim()) {
+      setError('Shift name is required');
+      return;
+    }
+    const fromTime = `${fromHours}:${fromMinutes} ${fromAmPm}`;
+    const toTime = `${toHours}:${toMinutes} ${toAmPm}`;
+
+    setLoading(true);
+    setError('');
+    try {
+      const url = editMode ? `${API_BASE_URL}/api/shifts/${editingId}` : `${API_BASE_URL}/api/shifts`;
+      const method = editMode ? 'PUT' : 'POST';
+      const body = editMode
+        ? { name: shiftName.trim(), fromTime, toTime }
+        : { name: shiftName.trim(), fromTime, toTime, createdBy: 'current_user', createdByName: 'Current User' };
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchShifts();
+        handleReset();
+      } else {
+        setError(data.message || 'Failed to save shift');
+      }
+    } catch (e) {
+      console.error('Error saving shift:', e);
+      setError('Failed to save shift');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {
@@ -35,10 +87,140 @@ const Shifts = () => {
     setToHours('05');
     setToMinutes('00');
     setToAmPm('PM');
+    setEditMode(false);
+    setEditingId(null);
+    setError('');
+  };
+
+  const handleEdit = (shift) => {
+    setShiftName(shift.name);
+    // Parse times like "09:00 AM"
+    const [fh, fmampm] = shift.fromTime.split(':');
+    const [fm, fampm] = fmampm.trim().split(' ');
+    setFromHours(fh.padStart(2, '0'));
+    setFromMinutes(fm);
+    setFromAmPm(fampm);
+    const [th, tmampm] = shift.toTime.split(':');
+    const [tm, tampm] = tmampm.trim().split(' ');
+    setToHours(th.padStart(2, '0'));
+    setToMinutes(tm);
+    setToAmPm(tampm);
+    setEditMode(true);
+    setEditingId(shift._id);
+  };
+
+  const handleView = (shift) => {
+    setSelectedShift(shift);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setSelectedShift(null);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this shift?')) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/shifts/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endedBy: 'current_user', endedByName: 'Current User' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchShifts();
+      } else {
+        setError(data.message || 'Failed to delete shift');
+      }
+    } catch (e) {
+      console.error('Error deleting shift:', e);
+      setError('Failed to delete shift');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div style={styles.container}>
+      {/* Shift Details Modal */}
+      {viewModalOpen && selectedShift && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalBox}>
+            {/* Modal Header */}
+            <div style={styles.modalHeader}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={styles.modalHeaderIcon}>⏱️</div>
+                <div>
+                  <h3 style={styles.modalTitle}>Shift Details</h3>
+                  <p style={styles.modalSubtitle}>{selectedShift.name}</p>
+                </div>
+              </div>
+              <button onClick={closeViewModal} style={styles.modalCloseBtn} aria-label="Close details">✕</button>
+            </div>
+
+            {/* Modal Body */}
+            <div style={styles.modalBody}>
+              <div style={styles.modalGrid}>
+                {/* Shift Info */}
+                <div style={styles.infoCardPrimary}>
+                  <h4 style={styles.infoTitle}>Shift Information</h4>
+                  <div style={styles.infoList}>
+                    <div style={styles.infoRow}><span style={styles.infoLabel}>Shift Name:</span><span style={styles.infoValue}>{selectedShift.name}</span></div>
+                    <div style={styles.infoRow}><span style={styles.infoLabel}>Start Time:</span><span style={styles.infoValue}>{selectedShift.fromTime}</span></div>
+                    <div style={styles.infoRow}><span style={styles.infoLabel}>To Time:</span><span style={styles.infoValue}>{selectedShift.toTime}</span></div>
+                    {selectedShift.shiftId && (
+                      <div style={styles.infoRow}><span style={styles.infoLabel}>Shift ID:</span><span style={styles.infoValue}>{selectedShift.shiftId}</span></div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Record Info */}
+                <div style={styles.infoCardSecondary}>
+                  <h4 style={styles.infoTitle}>Record Information</h4>
+                  <div style={styles.infoList}>
+                    <div style={styles.infoRow}><span style={styles.infoLabel}>Created By:</span><span style={styles.infoValue}>{selectedShift.createdByName}</span></div>
+                    <div style={styles.infoRow}><span style={styles.infoLabel}>Created Date:</span><span style={styles.infoValue}>
+                      {selectedShift.createdDtm ? (
+                        <>
+                          {new Date(selectedShift.createdDtm).toLocaleDateString()}&nbsp;&nbsp;
+                          {new Date(selectedShift.createdDtm).toLocaleTimeString()}
+                        </>
+                      ) : '-'}
+                    </span></div>
+                    {!selectedShift.isActive && (
+                      <>
+                        <div style={styles.infoRow}><span style={styles.infoLabel}>Ended By:</span><span style={styles.infoValue}>{selectedShift.endedByName || '-'}</span></div>
+                        <div style={styles.infoRow}><span style={styles.infoLabel}>Ended Date:</span><span style={styles.infoValue}>
+                          {selectedShift.endDtm ? (
+                            <>
+                              {new Date(selectedShift.endDtm).toLocaleDateString()}&nbsp;&nbsp;
+                              {new Date(selectedShift.endDtm).toLocaleTimeString()}
+                            </>
+                          ) : '-'}
+                        </span></div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={styles.modalFooter}>
+              <button
+                onClick={() => { closeViewModal(); handleEdit(selectedShift); }}
+                style={styles.primaryBtn}
+              >
+                Edit Shift
+              </button>
+              <button onClick={closeViewModal} style={styles.secondaryBtn}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div style={styles.formSection}>
         <div style={styles.addHeader}>
           <h3 style={styles.cardTitle}>Add Shift Time</h3>
@@ -136,9 +318,10 @@ const Shifts = () => {
           <button 
             type="submit" 
             onClick={handleSubmit}
-            style={styles.saveButton}
+            disabled={loading}
+            style={{ ...styles.saveButton, backgroundColor: loading ? '#9ca3af' : '#2196F3', border: loading ? '1px solid #9ca3af' : 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
           >
-            Save
+            {loading ? 'Saving...' : (editMode ? 'Update' : 'Save')}
           </button>
         </div>
       </div>
@@ -162,35 +345,46 @@ const Shifts = () => {
                 </tr>
               </thead>
               <tbody>
-                {shifts.map((shift) => (
-                  <tr key={shift.id} style={styles.tr}>
-                    <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack, ...styles.tdFirst}}>{shift.name}</td>
-                    <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.fromTime}</td>
-                    <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.toTime}</td>
-                    <td style={{...styles.td, ...styles.tdCenter}}>{shift.createdBy}</td>
-                    <td style={{...styles.td, ...styles.tdCenter}}>
-                      <span>{shift.createdDtm.split(' ')[0]}</span>
-                      <span style={styles.dtmTime}>{shift.createdDtm.split(' ').slice(1).join(' ')}</span>
-                    </td>
-                    <td style={{...styles.tdAction, ...styles.tdLast}}>
-                      <div style={styles.actionIcons}>
-                        <button style={{...styles.iconButton, ...styles.viewBtn}} title="View">
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 3C4.667 3 1.82 5.073 0.666992 8C1.82099 10.927 4.66699 13 8.00033 13C11.3337 13 14.18 10.927 15.3337 8C14.1797 5.073 11.333 3 8 3ZM8 11.3333C6.16004 11.3333 4.66667 9.83996 4.66667 8C4.66667 6.16004 6.16004 4.66667 8 4.66667C9.83996 4.66667 11.3333 6.16004 11.3333 8C11.3333 9.83996 9.83996 11.3333 8 11.3333ZM8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6Z" fill="#FFFFFF"/>
-                          </svg>
-                        </button>
-                        <button style={{...styles.iconButton, ...styles.editBtn}} title="Update">
-                          <FaEdit />
-                        </button>
-                        <button style={{...styles.iconButton, ...styles.deleteBtn}} title="Delete">
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.66667 12.6667C4.66667 13.4 5.26667 14 6 14H10C10.7333 14 11.3333 13.4 11.3333 12.6667V5.33333H4.66667V12.6667ZM12.6667 3.33333H10.3333L9.66667 2.66667H6.33333L5.66667 3.33333H3.33333V5H12.6667V3.33333Z" fill="#FFFFFF"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
+                {shifts.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" style={{ ...styles.td, ...styles.tdCenter }}>No shifts found</td>
                   </tr>
-                ))}
+                ) : (
+                  shifts.map((shift) => (
+                    <tr key={shift._id} style={styles.tr}>
+                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack, ...styles.tdFirst}}>{shift.name}</td>
+                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.fromTime}</td>
+                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.toTime}</td>
+                      <td style={{...styles.td, ...styles.tdCenter}}>{shift.createdByName}</td>
+                      <td style={{...styles.td, ...styles.tdCenter}}>
+                        {shift.createdDtm ? (
+                          <>
+                            {new Date(shift.createdDtm).toLocaleDateString()}
+                            {'\u00A0\u00A0'}
+                            {new Date(shift.createdDtm).toLocaleTimeString()}
+                          </>
+                        ) : ''}
+                      </td>
+                      <td style={{...styles.tdAction, ...styles.tdLast}}>
+                        <div style={styles.actionIcons}>
+                          <button style={{...styles.iconButton, ...styles.viewBtn}} title="View">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M8 3C4.667 3 1.82 5.073 0.666992 8C1.82099 10.927 4.66699 13 8.00033 13C11.3337 13 14.18 10.927 15.3337 8C14.1797 5.073 11.333 3 8 3ZM8 11.3333C6.16004 11.3333 4.66667 9.83996 4.66667 8C4.66667 6.16004 6.16004 4.66667 8 4.66667C9.83996 4.66667 11.3333 6.16004 11.3333 8C11.3333 9.83996 9.83996 11.3333 8 11.3333ZM8 6C6 6.89543 6 6 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6Z" fill="#FFFFFF"/>
+                            </svg>
+                          </button>
+                          <button onClick={() => handleEdit(shift)} style={{...styles.iconButton, ...styles.editBtn}} title="Update">
+                            <FaEdit />
+                          </button>
+                          <button onClick={() => handleDelete(shift._id)} style={{...styles.iconButton, ...styles.deleteBtn}} title="Delete">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M4.66667 12.6667C4.66667 13.4 5.26667 14 6 14H10C10.7333 14 11.3333 13.4 11.3333 12.6667V5.33333H4.66667V12.6667ZM12.6667 3.33333H10.3333L9.66667 2.66667H6.33333L5.66667 3.33333H3.33333V5H12.6667V3.33333Z" fill="#FFFFFF"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

@@ -7,8 +7,9 @@ const { connectDB } = require('./config/database');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
-const organizationRoutes = require('./routes/organizations');
-const organizationContactPersonRoutes = require('./routes/organizationContactPersons');
+const shiftRoutes = require('./routes/shifts');
+const operationAvailabilityRoutes = require('./routes/operationAvailability');
+const solutionProjectsRoutes = require('./routes/solutionProjects');
 
 const app = express();
 const PORT = process.env.PORT || 44354;
@@ -33,8 +34,9 @@ connectDB();
 
 // Routes
 app.use('/Login', authRoutes);
-app.use('/api/organizations', organizationRoutes);
-app.use('/api/organization-contact-persons', organizationContactPersonRoutes);
+app.use('/api/shifts', shiftRoutes);
+app.use('/api/operation-availability', operationAvailabilityRoutes);
+app.use('/api/solution-projects', solutionProjectsRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

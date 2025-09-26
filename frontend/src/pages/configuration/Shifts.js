@@ -367,7 +367,7 @@ const Shifts = () => {
                       </td>
                       <td style={{...styles.tdAction, ...styles.tdLast}}>
                         <div style={styles.actionIcons}>
-                          <button style={{...styles.iconButton, ...styles.viewBtn}} title="View">
+                          <button onClick={() => handleView(shift)} style={{...styles.iconButton, ...styles.viewBtn}} title="View">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M8 3C4.667 3 1.82 5.073 0.666992 8C1.82099 10.927 4.66699 13 8.00033 13C11.3337 13 14.18 10.927 15.3337 8C14.1797 5.073 11.333 3 8 3ZM8 11.3333C6.16004 11.3333 4.66667 9.83996 4.66667 8C4.66667 6.16004 6.16004 4.66667 8 4.66667C9.83996 4.66667 11.3333 6.16004 11.3333 8C11.3333 9.83996 9.83996 11.3333 8 11.3333ZM8 6C6 6.89543 6 6 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6Z" fill="#FFFFFF"/>
                             </svg>
@@ -622,6 +622,137 @@ const styles = {
   viewBtn: { backgroundColor: '#10b981' },
   editBtn: { backgroundColor: '#FFB300' },
   deleteBtn: { backgroundColor: '#F44336' }
+};
+
+// Add modal styles to match the Organization Contact Person view theme
+styles.modalOverlay = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1000,
+  padding: '1rem'
+};
+
+styles.modalBox = {
+  backgroundColor: 'white',
+  borderRadius: '12px',
+  width: '100%',
+  maxWidth: '600px',
+  maxHeight: '90vh',
+  overflow: 'auto',
+  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  border: '1px solid #e5e7eb'
+};
+
+styles.modalHeader = {
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  color: 'white',
+  padding: '1.5rem',
+  borderRadius: '12px 12px 0 0',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center'
+};
+
+styles.modalHeaderIcon = {
+  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  borderRadius: '50%',
+  padding: '0.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+styles.modalTitle = { margin: 0, fontSize: '1.25rem', fontWeight: '600' };
+styles.modalSubtitle = { margin: 0, fontSize: '0.875rem', opacity: 0.9 };
+
+styles.modalCloseBtn = {
+  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  border: 'none',
+  borderRadius: '50%',
+  width: '2.5rem',
+  height: '2.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  color: 'white'
+};
+
+styles.modalBody = { padding: '2rem' };
+
+styles.modalGrid = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '1.5rem',
+  marginBottom: '2rem'
+};
+
+styles.infoCardPrimary = {
+  backgroundColor: '#f8fafc',
+  borderRadius: '8px',
+  padding: '1.5rem',
+  border: '1px solid #e2e8f0'
+};
+
+styles.infoCardSecondary = {
+  backgroundColor: '#fef3c7',
+  borderRadius: '8px',
+  padding: '1.5rem',
+  border: '1px solid #fde68a'
+};
+
+styles.infoTitle = {
+  margin: '0 0 1rem 0',
+  color: '#1e293b',
+  fontSize: '1.1rem',
+  fontWeight: '600'
+};
+
+styles.infoList = { display: 'flex', flexDirection: 'column', gap: '0.75rem' };
+styles.infoRow = { display: 'flex', alignItems: 'center', gap: '0.75rem' };
+styles.infoLabel = { fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' };
+styles.infoValue = { margin: 0, color: '#1f2937', fontWeight: '600' };
+
+styles.modalFooter = {
+  borderTop: '1px solid #e5e7eb',
+  padding: '1.5rem',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  gap: '1rem',
+  backgroundColor: '#f8fafc',
+  borderRadius: '0 0 12px 12px'
+};
+
+styles.primaryBtn = {
+  backgroundColor: '#3b82f6',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  padding: '0.75rem 1.5rem',
+  fontSize: '0.875rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem'
+};
+
+styles.secondaryBtn = {
+  backgroundColor: '#6b7280',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  padding: '0.75rem 1.5rem',
+  fontSize: '0.875rem',
+  fontWeight: '600',
+  cursor: 'pointer'
 };
 
 export default Shifts;

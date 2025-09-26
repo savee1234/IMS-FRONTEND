@@ -10,14 +10,16 @@ const authRoutes = require('./routes/auth');
 const shiftRoutes = require('./routes/shifts');
 const operationAvailabilityRoutes = require('./routes/operationAvailability');
 const solutionProjectsRoutes = require('./routes/solutionProjects');
+const organizationsRoutes = require('./routes/organizations');
+const organizationContactPersonsRoutes = require('./routes/organizationContactPersons');
 
 const app = express();
+
 const PORT = process.env.PORT || 44354;
 
 // Security middleware
 app.use(helmet());
 app.use(cors());
-
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -53,6 +55,8 @@ app.use('/Login', authRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api/operation-availability', operationAvailabilityRoutes);
 app.use('/api/solution-projects', solutionProjectsRoutes);
+app.use('/api/organizations', organizationsRoutes);
+app.use('/api/organization-contact-persons', organizationContactPersonsRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

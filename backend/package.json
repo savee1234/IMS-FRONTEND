@@ -8,8 +8,7 @@
     "dev": "nodemon server.js",
     "seed-organizations": "node scripts/seedOrganizations.js",
     "seed-contact-persons": "node scripts/seedContactPersons.js",
-    "seed-all": "node scripts/seedUsers.js && node scripts/seedOrganizations.js && node scripts/seedContactPersons.js",
-    "clear-sample-data": "node scripts/clearSampleData.js",
+    "seed-all": "node scripts/seedOrganizations.js && node scripts/seedContactPersons.js",
     "clear-cloud-data": "node scripts/clearCloudDatabase.js"
   },
   "dependencies": {
@@ -24,6 +23,6 @@
   },
   "devDependencies": {
     "mongodb-memory-server": "^10.2.1",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.1.10"
   }
 }

@@ -1,11 +1,11 @@
 // ComplaintOnboarding.jsx
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
-// -------------------------------------------------
+// --------------------------------------------------
 import React, { useMemo, useState } from "react";
 import "./ComplainForm.css"; // Paste the CSS below into this path
 
-export default function ComplaintOnboarding() {
+export default function ComplainForm() {
   // ------- Dummy data (replace with real API data) --------
   const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
   const categories = ["Billing", "Connectivity", "Technical", "Other"];

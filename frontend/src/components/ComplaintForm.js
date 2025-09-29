@@ -1,7 +1,7 @@
 // ComplaintOnboarding.jsx
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
-// -------------------------------------------------
+// --------------------------------------------------
 import React, { useMemo, useState } from "react";
 import "./ComplainForm.css"; // Paste the CSS below into this path
 

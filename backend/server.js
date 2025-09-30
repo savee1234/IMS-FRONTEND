@@ -13,7 +13,7 @@ const organizationContactPersonRoutes = require('./routes/organizationContactPer
 
 const app = express();
 const PORT = process.env.PORT || 44354;
-const onboardMediumRoutes = require('./routes/onboardMediums');
+const onboardMediumRoutes = require('./routes/onboardMedium');
 
 // Security middleware
 app.use(helmet());

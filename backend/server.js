@@ -13,6 +13,7 @@ const organizationContactPersonRoutes = require('./routes/organizationContactPer
 
 const app = express();
 const PORT = process.env.PORT || 44354;
+const onboardMediumRoutes = require('./routes/onboardMediums');
 
 // Security middleware
 app.use(helmet());
@@ -52,6 +53,7 @@ process.on('unhandledRejection', (err) => {
 app.use('/Login', authRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/organization-contact-persons', organizationContactPersonRoutes);
+app.use('/api/onboard-mediums', onboardMediumRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

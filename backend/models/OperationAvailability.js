@@ -70,7 +70,6 @@ operationAvailabilitySchema.pre('save', async function(next) {
       }
 
       this.operationAvailabilityId = `OPAV${nextNumber.toString().padStart(3, '0')}`;
-
     } catch (error) {
       return next(error);
     }

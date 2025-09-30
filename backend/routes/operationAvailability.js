@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
 
     // Check duplicate by name (active)
     const existing = await OperationAvailability.findOne({
-      name: { $regex: new RegExp('^${name.trim()}$', 'i') },
+      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
       isActive: true
     });
     if (existing) {
@@ -101,7 +101,7 @@ router.put('/:id', async (req, res) => {
 
     if (name && name.trim() !== doc.name) {
       const duplicate = await OperationAvailability.findOne({
-        name: { $regex: new RegExp('^${name.trim()}$', 'i') },
+        name: { $regex: new RegExp(`^${name.trim()}$`, 'i') },
         isActive: true,
         _id: { $ne: req.params.id }
       });

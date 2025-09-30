@@ -91,100 +91,77 @@ const RosterManagement = () => {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh" }}>
-      {/* Background Video */}
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
       <video
         autoPlay
         loop
         muted
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
           zIndex: -1,
         }}
       >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
 
-      {/* Blur Overlay */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          background: "rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(10px)",
-          zIndex: -1,
-        }}
-      ></div>
-
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        zIndex: -1,
+      }}></div>
+      
       <Navbar />
-
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          padding: "2.5rem",
-          marginTop: "1rem",
-        }}
-      >
+      
+      <div className="content-wrapper" style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '1rem',
+        marginTop: '1rem',
+        maxWidth: '1400px',
+        margin: '1rem auto 0 auto'
+      }}>
+        <div className="config-content" style={{
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb',
+          overflow: 'hidden'
+        }}>
+          <div className="roster-management-section" style={{ padding: '2rem' }}>
         {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "2rem",
-            background: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(20px)",
-            padding: "1.5rem 2rem",
-            borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "2.2rem",
-              fontWeight: "bold",
-              color: "#ffffff",
-              margin: 0,
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            Create Roster
-          </h2>
+        <div style={{ 
+          fontSize: '1.8rem', 
+          fontWeight: 'bold', 
+          color: '#1f2937',
+          marginBottom: '2rem',
+          textAlign: 'left',
+          borderBottom: '2px solid #3b82f6',
+          paddingBottom: '0.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <h2 style={{ margin: 0 }}>Create Roster</h2>
           <button
             onClick={() => navigate("/roster-view")}
             style={{
-              padding: "0.8rem 1.8rem",
-              background: "linear-gradient(135deg, #10b981, #059669)",
-              color: "#fff",
-              borderRadius: "10px",
-              fontSize: "1.1rem",
-              fontWeight: "600",
-              border: "none",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
+              padding: '0.75rem 2rem',
+              backgroundColor: '#10b981',
+              color: 'white',
+              border: '1px solid #10b981',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              cursor: 'pointer'
             }}
           >
             View Rosters
@@ -192,39 +169,28 @@ const RosterManagement = () => {
         </div>
 
         {/* Form Section */}
-        <div
-          style={{
-            background: "rgba(255, 255, 255, 0.98)",
-            padding: "2.5rem",
-            borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            marginBottom: "2rem",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(20px)",
-          }}
-        >
+        <form style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          padding: '2rem',
+          borderRadius: '8px',
+          border: '1px solid #d1d5db',
+          marginBottom: '2rem',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+        }}>
           {/* Month Picker */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1.5rem",
-              marginBottom: "2rem",
-              background: "rgba(59, 130, 246, 0.05)",
-              padding: "1.5rem",
-              borderRadius: "12px",
-              border: "1px solid rgba(59, 130, 246, 0.1)",
-            }}
-          >
-            <label
-              style={{
-                fontWeight: "600",
-                color: "#1f2937",
-                fontSize: "1rem",
-                minWidth: "120px",
-              }}
-            >
-              Select Month
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            marginBottom: '1.5rem',
+            gap: '1rem'
+          }}>
+            <label style={{
+              fontWeight: '600',
+              color: '#374151',
+              fontSize: '1rem',
+              minWidth: '120px'
+            }}>
+              Select Month :
             </label>
             <input
               type="month"
@@ -234,61 +200,68 @@ const RosterManagement = () => {
                 generateMonthData(e.target.value);
               }}
               style={{
-                width: "300px",
-                padding: "1rem 1.2rem",
-                border: "2px solid rgba(59, 130, 246, 0.2)",
-                borderRadius: "10px",
-                fontSize: "1rem",
-                backgroundColor: "white",
-                outline: "none",
-                transition: "all 0.3s ease",
-                boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = "#3b82f6";
-                e.target.style.boxShadow =
-                  "0 4px 16px rgba(59, 130, 246, 0.2)";
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
-                e.target.style.boxShadow =
-                  "0 2px 8px rgba(59, 130, 246, 0.1)";
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '0.9rem',
+                width: '300px',
+                outline: 'none',
+                color: '#374151'
               }}
             />
           </div>
+        </form>
 
           {/* Roster Table */}
           {roster.length > 0 && (
-            <div
-              style={{
-                overflowX: "auto",
-                borderRadius: "12px",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-                border: "1px solid rgba(59, 130, 246, 0.1)",
-                backgroundColor: "white",
-                padding: "1rem",
-              }}
-            >
-              <table
-                style={{
-                  width: "100%",
-                  borderCollapse: "collapse",
-                  border: "1px solid #d1d5db",
-                  marginBottom: "1.5rem",
-                }}
-              >
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              border: '1px solid #d1d5db',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              marginBottom: '2rem'
+            }}>
+              <table style={{ 
+                width: '100%', 
+                borderCollapse: 'collapse',
+                border: '1px solid #d1d5db'
+              }}>
                 <thead>
-                  <tr
-                    style={{
-                      background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                      color: "white",
-                    }}
-                  >
-                    <th style={headerStyle}>Date</th>
-                    <th style={headerStyle}>Day</th>
-                    <th style={headerStyle}>Shift</th>
+                  <tr>
+                    <th style={{
+                      padding: '1rem', 
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>Date</th>
+                    <th style={{
+                      padding: '1rem', 
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>Day</th>
+                    <th style={{
+                      padding: '1rem', 
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>Shift</th>
                     {["E1", "E2", "E3", "E4", "E5"].map((col) => (
-                      <th key={col} style={headerStyle}>
+                      <th key={col} style={{
+                        padding: '1rem', 
+                        textAlign: 'center',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>
                         {col}
                       </th>
                     ))}
@@ -301,17 +274,33 @@ const RosterManagement = () => {
                         <tr key={`${day.date}-${shift.shift}`}>
                           {shiftIndex === 0 && (
                             <>
-                              <td rowSpan={2} style={tdStyle}>
+                              <td rowSpan={2} style={{
+                                padding: '1rem',
+                                border: '1px solid #d1d5db',
+                                color: '#374151'
+                              }}>
                                 {new Date(day.date).toLocaleDateString("en-GB")}
                               </td>
-                              <td rowSpan={2} style={tdStyle}>
+                              <td rowSpan={2} style={{
+                                padding: '1rem',
+                                border: '1px solid #d1d5db',
+                                color: '#374151'
+                              }}>
                                 {day.dayName}
                               </td>
                             </>
                           )}
-                          <td style={tdStyle}>{shift.shift}</td>
+                          <td style={{
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>{shift.shift}</td>
                           {shift.employees.map((emp, empIndex) => (
-                            <td key={empIndex} style={tdStyle}>
+                            <td key={empIndex} style={{
+                              padding: '1rem',
+                              border: '1px solid #d1d5db',
+                              textAlign: 'center'
+                            }}>
                               <select
                                 value={emp}
                                 onChange={(e) =>
@@ -323,25 +312,14 @@ const RosterManagement = () => {
                                   )
                                 }
                                 style={{
-                                  width: "100%",
-                                  padding: "0.5rem",
-                                  border: "2px solid rgba(59, 130, 246, 0.2)",
-                                  borderRadius: "8px",
-                                  fontSize: "0.9rem",
-                                  backgroundColor: "white",
-                                  transition: "all 0.3s ease",
-                                  outline: "none",
-                                  cursor: "pointer",
-                                }}
-                                onFocus={(e) => {
-                                  e.target.style.borderColor = "#3b82f6";
-                                  e.target.style.boxShadow =
-                                    "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                                }}
-                                onBlur={(e) => {
-                                  e.target.style.borderColor =
-                                    "rgba(59, 130, 246, 0.2)";
-                                  e.target.style.boxShadow = "none";
+                                  width: '100%',
+                                  padding: '0.5rem',
+                                  border: '1px solid #d1d5db',
+                                  borderRadius: '4px',
+                                  fontSize: '0.9rem',
+                                  backgroundColor: 'white',
+                                  outline: 'none',
+                                  cursor: 'pointer'
                                 }}
                               >
                                 <option value="">Select</option>
@@ -359,60 +337,44 @@ const RosterManagement = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
-          )}
 
-          {/* Action Buttons */}
-          {roster.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "1.5rem",
-                marginTop: "2rem",
-                padding: "1.5rem",
-                background: "rgba(59, 130, 246, 0.03)",
-                borderRadius: "12px",
-                border: "1px solid rgba(59, 130, 246, 0.1)",
-              }}
-            >
-              <button
-                onClick={resetRoster}
-                style={resetBtnStyle}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow =
-                    "0 6px 20px rgba(107, 114, 128, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow =
-                    "0 4px 15px rgba(107, 114, 128, 0.3)";
-                }}
-              >
-                Reset
-              </button>
-              <button
-                onClick={submitRoster}
-                style={submitBtnStyle}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "translateY(-2px)";
-                  e.target.style.boxShadow =
-                    "0 6px 20px rgba(59, 130, 246, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "translateY(0)";
-                  e.target.style.boxShadow =
-                    "0 4px 15px rgba(59, 130, 246, 0.3)";
-                }}
-              >
-                Submit
-              </button>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-end',
+                gap: '1rem',
+                marginTop: '1.5rem'
+              }}>
+                <button type="button" onClick={resetRoster} style={{
+                  padding: '0.75rem 2rem',
+                  backgroundColor: '#6b7280',
+                  color: 'white',
+                  border: '1px solid #6b7280',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}>
+                  Reset
+                </button>
+                
+                <button onClick={submitRoster} style={{
+                  padding: '0.75rem 2rem',
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  border: '1px solid #3b82f6',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}>
+                  Submit
+                </button>
+              </div>
             </div>
           )}
+          </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

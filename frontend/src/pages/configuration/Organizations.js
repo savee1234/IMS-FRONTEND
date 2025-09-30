@@ -288,8 +288,9 @@ const Organizations = () => {
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
               }}
+              aria-label="Close"
             >
-              <FaTimes size={16} />
+              {'\u2715'}
             </button>
           </div>
 

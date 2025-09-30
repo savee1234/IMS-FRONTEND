@@ -1,70 +1,112 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const OperationAvailability = () => {
   const [operationAvailability, setOperationAvailability] = useState('');
-  const [operationData, setOperationData] = useState([
-    {
-      id: 1,
-      operationAvailability: '24/7 Support',
-      createdBy: 'admin',
-      createdTime: '2024-01-15 10:30:00'
-    },
-    {
-      id: 2,
-      operationAvailability: 'Business Hours Only',
-      createdBy: 'manager',
-      createdTime: '2024-01-14 14:20:00'
-    },
-    {
-      id: 3,
-      operationAvailability: 'Emergency Response',
-      createdBy: 'supervisor',
-      createdTime: '2024-01-13 09:15:00'
-    },
-    {
-      id: 4,
-      operationAvailability: 'Maintenance Window',
-      createdBy: 'technician',
-      createdTime: '2024-01-12 16:45:00'
-    }
-  ]);
+  const [operationData, setOperationData] = useState([]);
   const [opEditMode, setOpEditMode] = useState(false);
   const [editingOpId, setEditingOpId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleOpSubmit = (e) => {
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
+
+  const fetchOperationAvailability = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/operation-availability`);
+      const data = await res.json();
+      if (data.success) {
+        setOperationData(data.data);
+      } else {
+        setError(data.message || 'Failed to fetch operation availability');
+      }
+    } catch (e) {
+      console.error('Error fetching operation availability:', e);
+      setError('Failed to load operation availability');
+    } finally {
+      setLoading(false);
+    }
+  }, [API_BASE_URL]);
+
+  useEffect(() => {
+    fetchOperationAvailability();
+  }, [fetchOperationAvailability]);
+
+  const handleOpSubmit = async (e) => {
     e.preventDefault();
     if (!operationAvailability.trim()) return;
 
-    if (opEditMode) {
-      setOperationData(operationData.map(item => 
-        item.id === editingOpId 
-          ? { ...item, operationAvailability: operationAvailability.trim() }
-          : item
-      ));
-      setOpEditMode(false);
-      setEditingOpId(null);
-    } else {
-      const newOperation = {
-        id: operationData.length + 1,
-        operationAvailability: operationAvailability,
-        createdBy: 'current_user',
-        createdTime: new Date().toLocaleString()
-      };
-      setOperationData([...operationData, newOperation]);
+    setLoading(true);
+    setError('');
+    try {
+      const url = opEditMode
+        ? `${API_BASE_URL}/api/operation-availability/${editingOpId}`
+        : `${API_BASE_URL}/api/operation-availability`;
+      const method = opEditMode ? 'PUT' : 'POST';
+      const body = opEditMode
+        ? { name: operationAvailability.trim() }
+        : {
+            name: operationAvailability.trim(),
+            isAvailable: true,
+            createdBy: 'current_user', // TODO: replace with real user id
+            createdByName: 'Current User' // TODO: replace with real user name
+          };
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchOperationAvailability();
+        setOpEditMode(false);
+        setEditingOpId(null);
+        setOperationAvailability('');
+      } else {
+        setError(data.message || 'Failed to save operation availability');
+      }
+    } catch (e) {
+      console.error('Error saving operation availability:', e);
+      setError('Failed to save operation availability');
+    } finally {
+      setLoading(false);
     }
-    
-    setOperationAvailability('');
   };
 
   const handleOpEdit = (item) => {
-    setOperationAvailability(item.operationAvailability);
+    setOperationAvailability(item.name);
     setOpEditMode(true);
-    setEditingOpId(item.id);
+    setEditingOpId(item._id);
   };
 
-  const handleOperationDelete = (id) => {
-    setOperationData(operationData.filter(op => op.id !== id));
+  const handleOperationDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this record?')) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/operation-availability/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endedBy: 'current_user', // TODO: replace with real user id
+          endedByName: 'Current User' // TODO: replace with real user name
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchOperationAvailability();
+      } else {
+        setError(data.message || 'Failed to delete record');
+      }
+    } catch (e) {
+      console.error('Error deleting record:', e);
+      setError('Failed to delete record');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpReset = () => {
@@ -87,6 +129,19 @@ const OperationAvailability = () => {
         Operation Availability
       </h2>
       
+      {error && (
+        <div style={{
+          backgroundColor: '#fee2e2',
+          border: '1px solid #fecaca',
+          color: '#dc2626',
+          padding: '1rem',
+          borderRadius: '4px',
+          marginBottom: '1rem'
+        }}>
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleOpSubmit} style={{
         background: 'rgba(255, 255, 255, 0.95)',
         padding: '2rem',
@@ -145,17 +200,17 @@ const OperationAvailability = () => {
             Reset
           </button>
           
-          <button type="submit" style={{
+          <button type="submit" disabled={loading} style={{
             padding: '0.75rem 2rem',
-            backgroundColor: '#3b82f6',
+            backgroundColor: loading ? '#9ca3af' : '#3b82f6',
             color: 'white',
-            border: '1px solid #3b82f6',
+            border: loading ? '1px solid #9ca3af' : '1px solid #3b82f6',
             borderRadius: '4px',
             fontSize: '0.9rem',
             fontWeight: '600',
-            cursor: 'pointer'
+            cursor: loading ? 'not-allowed' : 'pointer'
           }}>
-            {opEditMode ? 'Update' : 'Submit'}
+            {loading ? 'Saving...' : (opEditMode ? 'Update' : 'Submit')}
           </button>
         </div>
       </form>
@@ -176,7 +231,7 @@ const OperationAvailability = () => {
             <tr>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -186,7 +241,7 @@ const OperationAvailability = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -196,7 +251,7 @@ const OperationAvailability = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -230,27 +285,36 @@ const OperationAvailability = () => {
               </tr>
             ) : (
               operationData.map(item => (
-                <tr key={item.id}>
+                <tr key={item._id}>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
-                    {item.operationAvailability}
+                    {item.name}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
-                    {item.createdBy}
+                    {item.createdByName}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
-                    {item.createdTime}
+                    {item.createdDtm ? (
+                      <>
+                        {new Date(item.createdDtm).toLocaleDateString()}
+                        {'\u00A0\u00A0'}
+                        {new Date(item.createdDtm).toLocaleTimeString()}
+                      </>
+                    ) : ''}
                   </td>
                   <td style={{ 
                     padding: '1rem',
@@ -276,7 +340,7 @@ const OperationAvailability = () => {
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleOperationDelete(item.id)}
+                      onClick={() => handleOperationDelete(item._id)}
                       style={{
                         backgroundColor: '#F44336',
                         color: 'white',

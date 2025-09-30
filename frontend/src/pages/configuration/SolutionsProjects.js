@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const SolutionsProjects = () => {
@@ -8,41 +8,36 @@ const SolutionsProjects = () => {
     solution: ''
   });
 
-  const [solutionResponsibleData, setSolutionResponsibleData] = useState([
-    {
-      id: 1,
-      employee: 'John Doe',
-      solutionType: 'Web Development',
-      solution: 'Customer Portal',
-      createdBy: 'admin',
-      createdDtm: '2024-01-15 10:30:00'
-    },
-    {
-      id: 2,
-      employee: 'Jane Smith',
-      solutionType: 'Mobile App',
-      solution: 'Inventory System',
-      createdBy: 'manager',
-      createdDtm: '2024-01-14 14:20:00'
-    },
-    {
-      id: 3,
-      employee: 'Mike Johnson',
-      solutionType: 'Database',
-      solution: 'Payment Gateway',
-      createdBy: 'supervisor',
-      createdDtm: '2024-01-13 09:15:00'
-    },
-    {
-      id: 4,
-      employee: 'Sarah Wilson',
-      solutionType: 'API Integration',
-      solution: 'Analytics Dashboard',
-      createdBy: 'lead',
-      createdDtm: '2024-01-12 16:45:00'
-    }
-  ]);
+  const [solutionResponsibleData, setSolutionResponsibleData] = useState([]);
   const [solEditMode, setSolEditMode] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
+
+  const fetchSolutions = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/solution-projects`);
+      const data = await res.json();
+      if (data.success) {
+        setSolutionResponsibleData(data.data);
+      } else {
+        setError(data.message || 'Failed to fetch solution projects');
+      }
+    } catch (e) {
+      console.error('Error fetching solution projects:', e);
+      setError('Failed to load solution projects');
+    } finally {
+      setLoading(false);
+    }
+  }, [API_BASE_URL]);
+
+  useEffect(() => {
+    fetchSolutions();
+  }, [fetchSolutions]);
 
   const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
   const solutionTypes = ['Web Development', 'Mobile App', 'Database', 'API Integration'];
@@ -56,28 +51,52 @@ const SolutionsProjects = () => {
     }));
   };
 
-  const handleSolutionSubmit = (e) => {
+  const handleSolutionSubmit = async (e) => {
     e.preventDefault();
     if (!solutionFormData.employee || !solutionFormData.solutionType || !solutionFormData.solution) {
       alert('Please fill in all fields');
       return;
     }
 
-    const newSolution = {
-      id: solutionResponsibleData.length + 1,
-      employee: solutionFormData.employee,
-      solutionType: solutionFormData.solutionType,
-      solution: solutionFormData.solution,
-      createdBy: 'current_user',
-      createdDtm: new Date().toLocaleString()
-    };
+    setLoading(true);
+    setError('');
+    try {
+      const url = solEditMode
+        ? `${API_BASE_URL}/api/solution-projects/${editingId}`
+        : `${API_BASE_URL}/api/solution-projects`;
+      const method = solEditMode ? 'PUT' : 'POST';
+      const body = solEditMode
+        ? {
+            employee: solutionFormData.employee,
+            solutionType: solutionFormData.solutionType,
+            solution: solutionFormData.solution
+          }
+        : {
+            employee: solutionFormData.employee,
+            solutionType: solutionFormData.solutionType,
+            solution: solutionFormData.solution,
+            createdBy: 'current_user', // TODO: replace with real user id
+            createdByName: 'Current User' // TODO: replace with real user name
+          };
 
-    setSolutionResponsibleData([...solutionResponsibleData, newSolution]);
-    setSolutionFormData({
-      employee: '',
-      solutionType: '',
-      solution: ''
-    });
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchSolutions();
+        handleSolutionReset();
+      } else {
+        setError(data.message || 'Failed to save solution project');
+      }
+    } catch (e) {
+      console.error('Error saving solution project:', e);
+      setError('Failed to save solution project');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSolutionReset = () => {
@@ -87,10 +106,35 @@ const SolutionsProjects = () => {
       solution: ''
     });
     setSolEditMode(false);
+    setEditingId(null);
+    setError('');
   };
 
-  const handleSolutionDelete = (id) => {
-    setSolutionResponsibleData(solutionResponsibleData.filter(item => item.id !== id));
+  const handleSolutionDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this record?')) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/solution-projects/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endedBy: 'current_user', // TODO: replace
+          endedByName: 'Current User' // TODO: replace
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchSolutions();
+      } else {
+        setError(data.message || 'Failed to delete record');
+      }
+    } catch (e) {
+      console.error('Error deleting record:', e);
+      setError('Failed to delete record');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSolutionEdit = (item) => {
@@ -100,6 +144,7 @@ const SolutionsProjects = () => {
       solution: item.solution
     });
     setSolEditMode(true);
+    setEditingId(item._id);
   };
 
   return (
@@ -125,6 +170,19 @@ const SolutionsProjects = () => {
         Employees Responsible for Solutions
       </h3>
       
+      {error && (
+        <div style={{
+          backgroundColor: '#fee2e2',
+          border: '1px solid #fecaca',
+          color: '#dc2626',
+          padding: '1rem',
+          borderRadius: '4px',
+          marginBottom: '1rem'
+        }}>
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSolutionSubmit} style={{
         background: 'rgba(255, 255, 255, 0.95)',
         padding: '2rem',
@@ -267,18 +325,19 @@ const SolutionsProjects = () => {
           </button>
           <button 
             type="submit"
+            disabled={loading}
             style={{
               padding: '0.75rem 2rem',
-              backgroundColor: '#3b82f6',
+              backgroundColor: loading ? '#9ca3af' : '#3b82f6',
               color: 'white',
-              border: '1px solid #3b82f6',
+              border: loading ? '1px solid #9ca3af' : '1px solid #3b82f6',
               borderRadius: '4px',
               fontSize: '0.9rem',
               fontWeight: '600',
-              cursor: 'pointer'
+              cursor: loading ? 'not-allowed' : 'pointer'
             }}
           >
-            {solEditMode ? 'Update' : 'Submit'}
+            {loading ? 'Saving...' : (solEditMode ? 'Update' : 'Submit')}
           </button>
         </div>
       </form>
@@ -299,7 +358,7 @@ const SolutionsProjects = () => {
             <tr>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -309,7 +368,7 @@ const SolutionsProjects = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -319,7 +378,7 @@ const SolutionsProjects = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -329,7 +388,7 @@ const SolutionsProjects = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -339,7 +398,7 @@ const SolutionsProjects = () => {
               </th>
               <th style={{ 
                 padding: '1rem', 
-                textAlign: 'left',
+                textAlign: 'center',
                 border: '1px solid #d1d5db',
                 fontWeight: '600',
                 backgroundColor: '#1a237e',
@@ -373,41 +432,52 @@ const SolutionsProjects = () => {
               </tr>
             ) : (
               solutionResponsibleData.map(item => (
-                <tr key={item.id}>
+                <tr key={item._id}>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
                     {item.employee}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
                     {item.solutionType}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
                     {item.solution}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
-                    {item.createdBy}
+                    {item.createdByName}
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151'
+                    color: '#374151',
+                    textAlign: 'center'
                   }}>
-                    {item.createdDtm}
+                    {item.createdDtm ? (
+                      <>
+                        {new Date(item.createdDtm).toLocaleDateString()}
+                        {'\u00A0\u00A0'}
+                        {new Date(item.createdDtm).toLocaleTimeString()}
+                      </>
+                    ) : ''}
                   </td>
                   <td style={{ 
                     padding: '1rem',
@@ -433,7 +503,7 @@ const SolutionsProjects = () => {
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleSolutionDelete(item.id)}
+                      onClick={() => handleSolutionDelete(item._id)}
                       style={{
                         backgroundColor: '#F44336',
                         color: 'white',

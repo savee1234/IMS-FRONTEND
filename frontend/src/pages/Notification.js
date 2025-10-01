@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { FaBell, FaUser, FaEnvelope, FaSms, FaToggleOn, FaToggleOff, FaCalendarAlt, FaExclamationTriangle, FaEdit, FaEye } from 'react-icons/fa';
 import backgroundVideo from '../assets/Background.mp4';
 
 const Notification = () => {
@@ -23,6 +24,30 @@ const Notification = () => {
     },
   ]);
 
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case 'Sent':
+        return { backgroundColor: '#dcfce7', color: '#16a34a' };
+      case 'Failed':
+        return { backgroundColor: '#fee2e2', color: '#dc2626' };
+      case 'Pending':
+        return { backgroundColor: '#fef3c7', color: '#d97706' };
+      default:
+        return { backgroundColor: '#f3f4f6', color: '#6b7280' };
+    }
+  };
+
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case 'Email':
+        return <FaEnvelope style={{ marginRight: '0.5rem' }} />;
+      case 'SMS':
+        return <FaSms style={{ marginRight: '0.5rem' }} />;
+      default:
+        return <FaBell style={{ marginRight: '0.5rem' }} />;
+    }
+  };
+
   const toggleCustomerNotify = (id) => {
     setNotifications((prev) =>
       prev.map((n) =>
@@ -32,165 +57,288 @@ const Notification = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <video autoPlay loop muted style={styles.videoBackground}>
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1,
+        }}
+      >
         <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
       </video>
-      <div style={styles.gradientOverlay}></div>
+
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        zIndex: -1,
+      }}></div>
+      
       <Navbar />
-      <div style={styles.container}>
-        <h2 style={styles.heading}>Notification Center</h2>
-        <div style={styles.tableWrapper}>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Recipient</th>
-                <th style={styles.th}>Type</th>
-                <th style={styles.th}>Status</th>
-                <th style={styles.th}>Date</th>
-                <th style={styles.th}>Notify Customer</th>
-                <th style={styles.th}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notifications.map((n) => (
-                <tr key={n.id}>
-                  <td style={styles.td}>{n.recipient}</td>
-                  <td style={styles.td}>{n.type}</td>
-                  <td
-                    style={{
-                      ...styles.td,
-                      color: n.status === 'Sent' ? 'green' : 'red',
+      <div className="content-wrapper" style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '1rem',
+        marginTop: '1rem',
+        maxWidth: '1400px',
+        margin: '1rem auto 0 auto'
+      }}>
+        <div className="config-content" style={{
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb',
+          overflow: 'hidden'
+        }}>
+          <div className="notification-section" style={{ padding: '2rem' }}>
+            {/* Header */}
+            <div style={{ 
+              fontSize: '1.8rem', 
+              fontWeight: 'bold', 
+              color: '#1f2937',
+              marginBottom: '2rem',
+              textAlign: 'left',
+              borderBottom: '2px solid #3b82f6',
+              paddingBottom: '0.5rem',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <FaBell style={{ marginRight: '0.75rem', color: '#3b82f6' }} />
+              <h2 style={{ margin: 0 }}>Notification Center</h2>
+            </div>
+
+            {/* Notifications Table */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              border: '1px solid #d1d5db',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              marginBottom: '2rem'
+            }}>
+              <table style={{ 
+                width: '100%', 
+                borderCollapse: 'collapse',
+                border: '1px solid #d1d5db'
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
                       fontWeight: '600',
-                    }}
-                  >
-                    {n.status}
-                  </td>
-                  <td style={styles.td}>{n.date}</td>
-                  <td style={styles.td}>
-                    <span
-                      style={{
-                        padding: '4px 8px',
-                        borderRadius: '12px',
-                        backgroundColor: n.notifyCustomer ? '#10b981' : '#f87171',
-                        color: '#fff',
-                        fontWeight: '500',
-                        fontSize: '0.85rem',
-                      }}
-                    >
-                      {n.notifyCustomer ? 'ON' : 'OFF'}
-                    </span>
-                  </td>
-                  <td style={styles.td}>
-                    <button
-                      onClick={() => toggleCustomerNotify(n.id)}
-                      style={styles.button}
-                    >
-                      Toggle Notify
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div style={styles.alert}>
-          <p>
-            <strong>Auto Notification:</strong> System will notify supervisors if
-            issues are pending beyond critical time limits.
-          </p>
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <FaUser style={{ marginRight: '0.5rem' }} />
+                        Recipient
+                      </div>
+                    </th>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <FaBell style={{ marginRight: '0.5rem' }} />
+                        Type
+                      </div>
+                    </th>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <FaExclamationTriangle style={{ marginRight: '0.5rem' }} />
+                        Status
+                      </div>
+                    </th>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <FaCalendarAlt style={{ marginRight: '0.5rem' }} />
+                        Date
+                      </div>
+                    </th>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <FaBell style={{ marginRight: '0.5rem' }} />
+                        Notify Customer
+                      </div>
+                    </th>
+                    <th style={{
+                      padding: '1rem',
+                      textAlign: 'center',
+                      border: '1px solid #d1d5db',
+                      fontWeight: '600',
+                      backgroundColor: '#1a237e',
+                      color: '#ffffff'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <FaEdit style={{ marginRight: '0.5rem' }} />
+                        Action
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notifications.map((n) => (
+                    <tr key={n.id}>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        color: '#374151'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <FaUser style={{ marginRight: '0.5rem', color: '#6b7280' }} />
+                          {n.recipient}
+                        </div>
+                      </td>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        color: '#374151'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          {getTypeIcon(n.type)}
+                          {n.type}
+                        </div>
+                      </td>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        color: '#374151'
+                      }}>
+                        <span style={{
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: '9999px',
+                          fontSize: '0.75rem',
+                          fontWeight: '500',
+                          ...getStatusStyle(n.status)
+                        }}>
+                          {n.status}
+                        </span>
+                      </td>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        color: '#374151'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <FaCalendarAlt style={{ marginRight: '0.5rem', color: '#6b7280' }} />
+                          {n.date}
+                        </div>
+                      </td>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        color: '#374151'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          {n.notifyCustomer ? 
+                            <FaToggleOn style={{ marginRight: '0.5rem', color: '#10b981', fontSize: '1.2rem' }} /> :
+                            <FaToggleOff style={{ marginRight: '0.5rem', color: '#ef4444', fontSize: '1.2rem' }} />
+                          }
+                          <span style={{
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: '500',
+                            backgroundColor: n.notifyCustomer ? '#dcfce7' : '#fee2e2',
+                            color: n.notifyCustomer ? '#16a34a' : '#dc2626'
+                          }}>
+                            {n.notifyCustomer ? 'ON' : 'OFF'}
+                          </span>
+                        </div>
+                      </td>
+                      <td style={{ 
+                        padding: '1rem',
+                        border: '1px solid #d1d5db',
+                        textAlign: 'center'
+                      }}>
+                        <button
+                          onClick={() => toggleCustomerNotify(n.id)}
+                          style={{
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '6px 8px'
+                          }}
+                          title="Toggle Notification"
+                        >
+                          {n.notifyCustomer ? <FaToggleOff /> : <FaToggleOn />}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Alert Section */}
+            <div style={{
+              background: 'rgba(239, 246, 255, 0.95)',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid #dbeafe',
+              borderLeft: '4px solid #3b82f6',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <FaExclamationTriangle style={{ marginRight: '0.75rem', color: '#3b82f6', marginTop: '0.25rem' }} />
+                <div>
+                  <h4 style={{ margin: '0 0 0.5rem 0', color: '#1e40af', fontSize: '1.1rem', fontWeight: '600' }}>Auto Notification</h4>
+                  <p style={{ margin: 0, color: '#1e40af', lineHeight: '1.6' }}>
+                    System will automatically notify supervisors if issues are pending beyond critical time limits.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );
-};
-
-const styles = {
-  page: {
-    position: 'relative',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    overflowX: 'hidden',
-  },
-  videoBackground: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    objectFit: 'cover',
-    zIndex: -2,
-  },
-  gradientOverlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
-    zIndex: -1,
-  },
-  container: {
-    padding: '2rem',
-    fontFamily: 'Segoe UI, sans-serif',
-    backgroundColor: 'rgba(249, 250, 251, 0.95)',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-    maxWidth: '1000px',
-    margin: '2rem auto 4rem',
-    marginTop: '50px',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-  },
-  heading: {
-    marginBottom: '1.5rem',
-    fontSize: '1.8rem',
-    color: '#1e3a8a',
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    backgroundColor: '#fff',
-    borderRadius: '6px',
-    overflow: 'hidden',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-  },
-  th: {
-    backgroundColor: '#1e3a8a',
-    color: '#fff',
-    padding: '1rem',
-    textAlign: 'left',
-    fontSize: '0.9rem',
-  },
-  td: {
-    padding: '0.9rem',
-    borderBottom: '1px solid #e5e7eb',
-    fontSize: '0.9rem',
-  },
-  button: {
-    padding: '6px 12px',
-    backgroundColor: '#1e3a8a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '0.85rem',
-    transition: 'background-color 0.3s ease',
-  },
-  alert: {
-    marginTop: '2rem',
-    padding: '1rem',
-    backgroundColor: '#e0f2fe',
-    borderRadius: '6px',
-    borderLeft: '4px solid #0284c7',
-    color: '#0369a1',
-  },
 };
 
 export default Notification;

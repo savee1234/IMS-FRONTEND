@@ -1,185 +1,418 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+
 const OnboardMedium = () => {
-  const [items, setItems] = useState([]);
-  const [newValue, setNewValue] = useState('');
-  const [editIndex, setEditIndex] = useState(null);
-  const [editValue, setEditValue] = useState('');
+  const [onboardMedium, setOnboardMedium] = useState('');
+  const [onboardData, setOnboardData] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleAdd = () => {
-    if (!newValue.trim()) return;
-    setItems([...items, newValue.trim()]);
-    setNewValue('');
+  // Fetch onboard mediums from API
+  const fetchOnboardMediums = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:44354/api/onboard-mediums');
+      const result = await response.json();
+      
+      if (result.success) {
+        setOnboardData(result.data);
+      } else {
+        setError('Failed to fetch onboard mediums');
+      }
+    } catch (error) {
+      console.error('Error fetching onboard mediums:', error);
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (index) => {
-    setItems(items.filter((_, i) => i !== index));
+  // Load data on component mount
+  useEffect(() => {
+    fetchOnboardMediums();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!onboardMedium.trim()) return;
+
+    try {
+      setLoading(true);
+      setError('');
+
+      if (editMode) {
+        // Update existing onboard medium
+        const response = await fetch(`http://localhost:44354/api/onboard-mediums/${editingId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: onboardMedium.trim()
+          })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          await fetchOnboardMediums(); // Refresh the list
+          setEditMode(false);
+          setEditingId(null);
+          setOnboardMedium('');
+        } else {
+          setError(result.message || 'Failed to update onboard medium');
+        }
+      } else {
+        // Create new onboard medium
+        const response = await fetch('http://localhost:44354/api/onboard-mediums', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: onboardMedium.trim(),
+            createdBy: 'current_user',
+            createdByName: 'Current User'
+          })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          await fetchOnboardMediums(); // Refresh the list
+          setOnboardMedium('');
+        } else {
+          setError(result.message || 'Failed to create onboard medium');
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting onboard medium:', error);
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const startEdit = (index) => {
-    setEditIndex(index);
-    setEditValue(items[index]);
+  const handleEdit = (item) => {
+    setOnboardMedium(item.name);
+    setEditMode(true);
+    setEditingId(item._id);
   };
 
-  const saveEdit = () => {
-    if (!editValue.trim()) return;
-    const updatedItems = [...items];
-    updatedItems[editIndex] = editValue.trim();
-    setItems(updatedItems);
-    setEditIndex(null);
-    setEditValue('');
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this onboard medium?')) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError('');
+
+      const response = await fetch(`http://localhost:44354/api/onboard-mediums/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          endedBy: 'current_user',
+          endedByName: 'Current User'
+        })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        await fetchOnboardMediums(); // Refresh the list
+      } else {
+        setError(result.message || 'Failed to delete onboard medium');
+      }
+    } catch (error) {
+      console.error('Error deleting onboard medium:', error);
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const cancelEdit = () => {
-    setEditIndex(null);
-    setEditValue('');
+  const handleReset = () => {
+    setOnboardMedium('');
+    setEditMode(false);
+    setEditingId(null);
+    setError('');
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString();
   };
 
   return (
-    <div className="config-section">
+    <div className="onboard-medium-section" style={{ padding: '2rem' }}>
+      <h2 style={{ 
+        fontSize: '1.8rem', 
+        fontWeight: 'bold', 
+        color: '#1f2937',
+        marginBottom: '2rem',
+        textAlign: 'left',
+        borderBottom: '2px solid #3b82f6',
+        paddingBottom: '0.5rem'
+      }}>
+        Onboard Medium
+      </h2>
+      
+      {error && (
         <div style={{
-          background: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '12px',
-          padding: '2rem',
-          margin: '1rem 0'
+          backgroundColor: '#fee2e2',
+          border: '1px solid #fecaca',
+          color: '#dc2626',
+          padding: '0.75rem',
+          borderRadius: '4px',
+          marginBottom: '1rem'
         }}>
-          <h2 style={{ color: '#374151', marginBottom: '1.5rem' }}>Onboard Medium</h2>
-          
-          <div style={{ marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-              <input
-                type="text"
-                value={newValue}
-                onChange={(e) => setNewValue(e.target.value)}
-                placeholder="Add new onboard medium"
-                style={{
-                  flex: 1,
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '6px',
-                  fontSize: '0.9rem'
-                }}
-              />
-              <button 
-                onClick={handleAdd}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  background: '#3b82f6',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: '600'
-                }}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-
-          <div style={{
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            background: 'white'
+          {error}
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit} style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        padding: '2rem',
+        borderRadius: '8px',
+        border: '1px solid #d1d5db',
+        marginBottom: '2rem',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          marginBottom: '1.5rem',
+          gap: '1rem'
+        }}>
+          <label style={{
+            fontWeight: '600',
+            color: '#374151',
+            fontSize: '1rem',
+            minWidth: '180px'
           }}>
-            {items.length === 0 ? (
-              <div style={{
-                padding: '2rem',
-                textAlign: 'center',
-                color: '#6b7280',
-                fontStyle: 'italic'
+            Onboard Medium :
+          </label>
+          <input
+            type="text"
+            value={onboardMedium}
+            onChange={(e) => setOnboardMedium(e.target.value)}
+            placeholder="Enter onboard medium"
+            required
+            style={{
+              padding: '0.75rem',
+              border: '1px solid #d1d5db',
+              borderRadius: '4px',
+              fontSize: '0.9rem',
+              width: '300px',
+              outline: 'none',
+              color: '#374151'
+            }}
+          />
+        </div>
+        
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'flex-end',
+          gap: '1rem'
+        }}>
+          <button type="button" onClick={handleReset} style={{
+            padding: '0.75rem 2rem',
+            backgroundColor: '#6b7280',
+            color: 'white',
+            border: '1px solid #6b7280',
+            borderRadius: '4px',
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}>
+            Reset
+          </button>
+          
+          <button type="submit" disabled={loading} style={{
+            padding: '0.75rem 2rem',
+            backgroundColor: loading ? '#9ca3af' : '#3b82f6',
+            color: 'white',
+            border: `1px solid ${loading ? '#9ca3af' : '#3b82f6'}`,
+            borderRadius: '4px',
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            cursor: loading ? 'not-allowed' : 'pointer'
+          }}>
+            {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
+          </button>
+        </div>
+      </form>
+
+      <div className="onboard-table" style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: '8px',
+        padding: '1.5rem',
+        border: '1px solid #d1d5db',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      }}>
+        <table style={{ 
+          width: '100%', 
+          borderCollapse: 'collapse',
+          border: '1px solid #d1d5db'
+        }}>
+          <thead>
+            <tr>
+              <th style={{ 
+                padding: '1rem', 
+                textAlign: 'left',
+                border: '1px solid #d1d5db',
+                fontWeight: '600',
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
               }}>
-                No onboard medium items found. Add one above.
-              </div>
-            ) : (
-              items.map((item, index) => (
-                <div key={index} style={{
-                  padding: '1rem',
-                  borderBottom: index < items.length - 1 ? '1px solid #e5e7eb' : 'none',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+                Medium ID
+              </th>
+              <th style={{ 
+                padding: '1rem', 
+                textAlign: 'left',
+                border: '1px solid #d1d5db',
+                fontWeight: '600',
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
+              }}>
+                Onboard Medium
+              </th>
+              <th style={{ 
+                padding: '1rem', 
+                textAlign: 'left',
+                border: '1px solid #d1d5db',
+                fontWeight: '600',
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
+              }}>
+                Created By
+              </th>
+              <th style={{ 
+                padding: '1rem', 
+                textAlign: 'left',
+                border: '1px solid #d1d5db',
+                fontWeight: '600',
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
+              }}>
+                Created Time
+              </th>
+              <th style={{ 
+                padding: '1rem', 
+                textAlign: 'center',
+                border: '1px solid #d1d5db',
+                fontWeight: '600',
+                backgroundColor: '#1a237e',
+                color: '#ffffff'
+              }}>
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="5" style={{ 
+                  padding: '2rem', 
+                  textAlign: 'center',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db'
                 }}>
-                  {editIndex === index ? (
-                    <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        style={{
-                          flex: 1,
-                          padding: '0.5rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '4px'
-                        }}
-                      />
-                      <button 
-                        onClick={saveEdit}
-                        style={{
-                          padding: '0.5rem 1rem',
-                          background: '#10b981',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Save
-                      </button>
-                      <button 
-                        onClick={cancelEdit}
-                        style={{
-                          padding: '0.5rem 1rem',
-                          background: '#6b7280',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <span style={{ color: '#374151', fontWeight: '500' }}>{item}</span>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button 
-                          onClick={() => startEdit(index)}
-                          style={{
-                            padding: '0.4rem 0.8rem',
-                            background: '#3b82f6',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(index)}
-                          style={{
-                            padding: '0.4rem 0.8rem',
-                            background: '#dc2626',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem'
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
+                  Loading...
+                </td>
+              </tr>
+            ) : onboardData.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ 
+                  padding: '2rem', 
+                  textAlign: 'center',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db'
+                }}>
+                  No onboard medium records found
+                </td>
+              </tr>
+            ) : (
+              onboardData.map(item => (
+                <tr key={item._id}>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
+                  }}>
+                    {item.onboardMediumId}
+                  </td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
+                  }}>
+                    {item.name}
+                  </td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
+                  }}>
+                    {item.createdByName}
+                  </td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
+                  }}>
+                    {formatDate(item.createdDtm)}
+                  </td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    textAlign: 'center'
+                  }}>
+                    <button
+                      onClick={() => handleEdit(item)}
+                      disabled={loading}
+                      style={{
+                        backgroundColor: loading ? '#9ca3af' : '#FFB300',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '6px 8px',
+                        marginRight: '6px'
+                      }}
+                      title="Update"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      disabled={loading}
+                      style={{
+                        backgroundColor: loading ? '#9ca3af' : '#F44336',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '6px 8px'
+                      }}
+                      title="Delete"
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+                </tr>
               ))
             )}
-          </div>
-        </div>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

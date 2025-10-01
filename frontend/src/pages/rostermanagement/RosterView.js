@@ -99,408 +99,608 @@ const RosterView = () => {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
-      {/* Background Video */}
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
       <video
         autoPlay
         loop
         muted
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
-          width: "100vw",
-          height: "100vh",
-          objectFit: "cover",
-          zIndex: -2,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1,
         }}
       >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
 
-      {/* Blur Overlay */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          background: "rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(10px)",
-          zIndex: -1,
-        }}
-      ></div>
-
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        zIndex: -1,
+      }}></div>
+      
       <Navbar />
 
-      <div style={{ 
-        position: "relative", 
-        zIndex: 1, 
-        minHeight: "100vh", 
-        display: "flex", 
-        flexDirection: "column", 
-        padding: "2.5rem", 
-                 marginTop: "1rem" 
+      <div className="content-wrapper" style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '1rem',
+        marginTop: '1rem',
+        maxWidth: '1400px',
+        margin: '1rem auto 0 auto'
       }}>
-        {/* Header */}
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "2rem",
-          background: "rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(20px)",
-          padding: "1.5rem 2rem",
-          borderRadius: "16px",
-          border: "1px solid rgba(255, 255, 255, 0.2)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+        <div className="config-content" style={{
+          background: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e5e7eb',
+          overflow: 'hidden'
         }}>
-          <h2
-            style={{
-              fontSize: "2.2rem",
-              fontWeight: "bold",
-              color: "#ffffff",
-              margin: 0,
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
-            }}
-          >
-            Roster View
-          </h2>
-          <button
-            onClick={() => navigate("/roster")}
-            style={{
-              padding: "0.8rem 1.8rem",
-              background: "linear-gradient(135deg, #10b981, #059669)",
-              color: "#fff",
-              borderRadius: "10px",
-              fontSize: "1.1rem",
-              fontWeight: "600",
-              border: "none",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
-            }}
-                     >
-             Back
-           </button>
-        </div>
-
-                 {/* Month Filter */}
-         <div style={{
-           display: "flex",
-           alignItems: "center",
-           gap: "1.5rem",
-           marginBottom: "2rem",
-           background: "rgba(59, 130, 246, 0.15)",
-           padding: "1.5rem",
-           borderRadius: "12px",
-           border: "1px solid rgba(59, 130, 246, 0.2)"
-         }}>
-           <label
-             style={{
-               fontWeight: "600",
-               color: "#ffffff",
-               fontSize: "1rem",
-               minWidth: "120px",
-               display: "flex",
-               alignItems: "center",
-               height: "100%"
-             }}
-           >
-             Select Month
-           </label>
-          <input
-            type="month"
-            value={month}
-            onChange={(e) => {
-              setMonth(e.target.value);
-              setCurrentPage(1);
-            }}
-            style={{
-              width: "300px",
-              padding: "1rem 1.2rem",
-              border: "2px solid rgba(59, 130, 246, 0.2)",
-              borderRadius: "10px",
-              fontSize: "1rem",
-              backgroundColor: "white",
-              outline: "none",
-              transition: "all 0.3s ease",
-              boxShadow: "0 2px 8px rgba(59, 130, 246, 0.1)"
-            }}
-            onFocus={(e) => {
-              e.target.style.borderColor = "#3b82f6";
-              e.target.style.boxShadow = "0 4px 16px rgba(59, 130, 246, 0.2)";
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = "rgba(59, 130, 246, 0.2)";
-              e.target.style.boxShadow = "0 2px 8px rgba(59, 130, 246, 0.1)";
-            }}
-          />
-        </div>
-
-        {/* Roster List */}
-        {!selectedRoster && !editingRoster && (
-          <div style={{
-            background: "rgba(255, 255, 255, 0.98)",
-            padding: "2.5rem",
-            borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            marginBottom: "2rem",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(20px)"
-          }}>
-            <div style={{ overflowX: "auto" }}>
-              <table style={tableStyle}>
-                <thead>
-                  <tr>
-                    <th style={thStyle}>Roster Name</th>
-                    <th style={thStyle}>Month</th>
-                    <th style={thStyle}>Created By</th>
-                    <th style={thStyle}>Created By Name</th>
-                    <th style={thStyle}>Created DTM</th>
-                    <th style={thStyle}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentRosters.length > 0 ? (
-                    currentRosters.map((roster, index) => (
-                      <tr
-                        key={roster.id}
-                        style={{ backgroundColor: index % 2 === 0 ? "#f9fafb" : "#ffffff" }}
-                      >
-                        <td style={tdStyle}>{roster.rosterName}</td>
-                        <td style={tdStyle}>
-                          {new Date(roster.month + "-01").toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                          })}
-                        </td>
-                        <td style={tdStyle}>{roster.createdBy}</td>
-                        <td style={tdStyle}>{roster.createdByName}</td>
-                        <td style={tdStyle}>{roster.createdDTM}</td>
-                        <td style={tdStyle}>
-                          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
-                            <button style={btnView} onClick={() => handleViewRoster(roster)}>
-                              View
-                            </button>
-                            <button style={btnUpdate} onClick={() => handleUpdateRoster(roster)}>
-                              Update
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="6" style={{ textAlign: "center", padding: "1rem", color: "#6b7280" }}>
-                        No rosters available
-                        {month
-                          ? ` for ${new Date(month + "-01").toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                            })}`
-                          : ""}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div style={{ marginTop: "1rem", textAlign: "center" }}>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      style={{
-                        margin: "0 0.25rem",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        border: currentPage === page ? "2px solid #3b82f6" : "1px solid #d1d5db",
-                        backgroundColor: currentPage === page ? "#3b82f6" : "white",
-                        color: currentPage === page ? "white" : "#374151",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {page}
-                    </button>
-                  ))}
-                  {currentPage < totalPages && (
-                    <button
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                      style={{
-                        marginLeft: "0.5rem",
-                        padding: "0.5rem 1rem",
-                        border: "1px solid #d1d5db",
-                        borderRadius: "4px",
-                        backgroundColor: "white",
-                        cursor: "pointer",
-                      }}
-                    >
-                      &gt;&gt;
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Detailed Roster View */}
-        {selectedRoster && !editingRoster && (
-          <div style={{
-            background: "rgba(255, 255, 255, 0.98)",
-            padding: "2.5rem",
-            borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            marginBottom: "2rem",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(20px)"
-          }}>
-            <button
-              onClick={() => setSelectedRoster(null)}
-              style={{
-                padding: "0.5rem 1rem",
-                marginBottom: "1rem",
-                backgroundColor: "#6b7280",
-                color: "white",
-                borderRadius: "4px",
-              }}
-            >
-              ← Back to Rosters
-            </button>
-
-            <h3 style={{ marginBottom: "1rem" }}>{selectedRoster.rosterName}</h3>
-
-            {/* Show All Employees */}
-            <div style={{ marginBottom: "1rem", padding: "1rem", background: "#f3f4f6", borderRadius: "6px" }}>
-              <strong>All Employees:</strong>{" "}
-              {Array.from(
-                new Set(
-                  selectedRoster.data.flatMap((day) =>
-                    day.shifts.flatMap((shift) => shift.employees.filter(Boolean))
-                  )
-                )
-              ).join(", ") || "No employees"}
-            </div>
-
-            {/* Daily shifts */}
-            {selectedRoster.data.map((day) => (
-              <div
-                key={day.date}
+          <div className="roster-view-section" style={{ padding: '2rem' }}>
+            {/* Header */}
+            <div style={{ 
+              fontSize: '1.8rem', 
+              fontWeight: 'bold', 
+              color: '#1f2937',
+              marginBottom: '2rem',
+              textAlign: 'left',
+              borderBottom: '2px solid #3b82f6',
+              paddingBottom: '0.5rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <h2 style={{ margin: 0 }}>Roster View</h2>
+              <button
+                onClick={() => navigate("/roster")}
                 style={{
-                  marginBottom: "1.5rem",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "6px",
-                  backgroundColor: "#f9fafb",
-                  padding: "0.5rem",
+                  padding: '0.75rem 2rem',
+                  backgroundColor: '#10b981',
+                  color: 'white',
+                  border: '1px solid #10b981',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
                 }}
               >
-                <strong style={{ display: "block", marginBottom: "0.5rem" }}>
-                  {new Date(day.date).toLocaleDateString("en-GB")} - {day.dayName}
-                </strong>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                Back
+              </button>
+            </div>
+
+            {/* Month Filter */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              padding: '2rem',
+              borderRadius: '8px',
+              border: '1px solid #d1d5db',
+              marginBottom: '2rem',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                marginBottom: '1.5rem',
+                gap: '1rem'
+              }}>
+                <label style={{
+                  fontWeight: '600',
+                  color: '#374151',
+                  fontSize: '1rem',
+                  minWidth: '120px'
+                }}>
+                  Select Month :
+                </label>
+                <input
+                  type="month"
+                  value={month}
+                  onChange={(e) => {
+                    setMonth(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  style={{
+                    padding: '0.75rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    width: '300px',
+                    outline: 'none',
+                    color: '#374151'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Roster List */}
+            {!selectedRoster && !editingRoster && (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #d1d5db',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}>
+                <table style={{ 
+                  width: '100%', 
+                  borderCollapse: 'collapse',
+                  border: '1px solid #d1d5db'
+                }}>
                   <thead>
-                    <tr style={{ backgroundColor: "#e5e7eb" }}>
-                      <th style={thStyle}>Shift</th>
-                      <th style={thStyle}>E1</th>
-                      <th style={thStyle}>E2</th>
-                      <th style={thStyle}>E3</th>
-                      <th style={thStyle}>E4</th>
-                      <th style={thStyle}>E5</th>
+                    <tr>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Roster Name</th>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Month</th>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Created By</th>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Created By Name</th>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Created DTM</th>
+                      <th style={{ 
+                        padding: '1rem', 
+                        textAlign: 'center',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {day.shifts.map((shift) => (
-                      <tr key={shift.shift}>
-                        <td style={tdStyle}>{shift.shift}</td>
-                        {[...Array(5)].map((_, i) => (
-                          <td key={i} style={tdStyle}>
-                            {shift.employees[i] || "-"}
+                    {currentRosters.length > 0 ? (
+                      currentRosters.map((roster, index) => (
+                        <tr key={roster.id}>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>{roster.rosterName}</td>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>
+                            {new Date(roster.month + "-01").toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                            })}
                           </td>
-                        ))}
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>{roster.createdBy}</td>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>{roster.createdByName}</td>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>{roster.createdDTM}</td>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            textAlign: 'center'
+                          }}>
+                            <button
+                              onClick={() => handleViewRoster(roster)}
+                              style={{
+                                backgroundColor: '#3b82f6',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                padding: '6px 12px',
+                                marginRight: '6px',
+                                fontSize: '0.875rem'
+                              }}
+                            >
+                              View
+                            </button>
+                            <button
+                              onClick={() => handleUpdateRoster(roster)}
+                              style={{
+                                backgroundColor: '#10b981',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                padding: '6px 12px',
+                                fontSize: '0.875rem'
+                              }}
+                            >
+                              Update
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" style={{ 
+                          padding: '2rem', 
+                          textAlign: 'center',
+                          color: '#6b7280',
+                          border: '1px solid #d1d5db'
+                        }}>
+                          No rosters available
+                          {month
+                            ? ` for ${new Date(month + "-01").toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                              })}`
+                            : ""}
+                        </td>
                       </tr>
+                    )}
+                  </tbody>
+                </table>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        style={{
+                          margin: '0 0.25rem',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '4px',
+                          border: currentPage === page ? '2px solid #3b82f6' : '1px solid #d1d5db',
+                          backgroundColor: currentPage === page ? '#3b82f6' : 'white',
+                          color: currentPage === page ? 'white' : '#374151',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    {currentPage < totalPages && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        style={{
+                          marginLeft: '0.5rem',
+                          padding: '0.5rem 1rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          backgroundColor: 'white',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        &gt;&gt;
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Roster Details View */}
+            {selectedRoster && !editingRoster && (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #d1d5db',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1.5rem'
+                }}>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#1f2937'
+                  }}>Roster Details - {selectedRoster.rosterName}</h3>
+                  <button
+                    onClick={() => setSelectedRoster(null)}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      backgroundColor: '#6b7280',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '0.875rem'
+                    }}
+                  >
+                    Back to List
+                  </button>
+                </div>
+
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  border: '1px solid #d1d5db'
+                }}>
+                  <thead>
+                    <tr>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Date</th>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Day</th>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Shift</th>
+                      {["E1", "E2", "E3", "E4", "E5"].map((col) => (
+                        <th key={col} style={{
+                          padding: '1rem',
+                          textAlign: 'center',
+                          border: '1px solid #d1d5db',
+                          fontWeight: '600',
+                          backgroundColor: '#1a237e',
+                          color: '#ffffff'
+                        }}>
+                          {col}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedRoster.data.map((day, dayIndex) => (
+                      <React.Fragment key={day.date}>
+                        {day.shifts.map((shift, shiftIndex) => (
+                          <tr key={`${day.date}-${shift.shift}`}>
+                            {shiftIndex === 0 && (
+                              <>
+                                <td rowSpan={2} style={{
+                                  padding: '1rem',
+                                  border: '1px solid #d1d5db',
+                                  color: '#374151'
+                                }}>
+                                  {new Date(day.date).toLocaleDateString("en-GB")}
+                                </td>
+                                <td rowSpan={2} style={{
+                                  padding: '1rem',
+                                  border: '1px solid #d1d5db',
+                                  color: '#374151'
+                                }}>
+                                  {day.dayName}
+                                </td>
+                              </>
+                            )}
+                            <td style={{
+                              padding: '1rem',
+                              border: '1px solid #d1d5db',
+                              color: '#374151'
+                            }}>{shift.shift}</td>
+                            {shift.employees.map((emp, empIndex) => (
+                              <td key={empIndex} style={{
+                                padding: '1rem',
+                                border: '1px solid #d1d5db',
+                                textAlign: 'center',
+                                color: '#374151'
+                              }}>
+                                {emp || "Not Assigned"}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </React.Fragment>
                     ))}
                   </tbody>
                 </table>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {/* Update Editor (mirrors Add Roster) */}
-        {editingRoster && (
-          <div style={{
-            background: "rgba(255, 255, 255, 0.98)",
-            padding: "2.5rem",
-            borderRadius: "16px",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
-            marginBottom: "2rem",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            backdropFilter: "blur(20px)"
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-              <button onClick={() => setEditingRoster(null)} style={btnCancel}>← Back</button>
-              <h3 style={{ margin: 0 }}>Update Roster</h3>
-            </div>
+            {/* Roster Update Form */}
+            {editingRoster && (
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '8px',
+                padding: '1.5rem',
+                border: '1px solid #d1d5db',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1.5rem'
+                }}>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: '1.5rem',
+                    fontWeight: '600',
+                    color: '#1f2937'
+                  }}>Update Roster - {editingRoster.rosterName}</h3>
+                  <div>
+                    <button
+                      onClick={handleSaveUpdate}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#10b981',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        marginRight: '0.5rem'
+                      }}
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                      onClick={() => setEditingRoster(null)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#6b7280',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
 
-            <div style={{
-              background: "rgba(255, 255, 255, 0.95)",
-              padding: "2rem",
-              borderRadius: "8px",
-              border: "1px solid #d1d5db",
-              marginBottom: "2rem",
-            }}>
-              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-                <div>
-                  <label style={labelStyle}>Roster Name</label>
-                  <input
-                    type="text"
-                    value={editForm.rosterName}
-                    onChange={(e) => setEditForm({ ...editForm, rosterName: e.target.value })}
-                    style={inputStyle}
-                  />
+                {/* Update Form Fields */}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  padding: '1.5rem',
+                  borderRadius: '8px',
+                  border: '1px solid #d1d5db',
+                  marginBottom: '1.5rem'
+                }}>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                    gap: '1rem'
+                  }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontWeight: '600',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Roster Name:</label>
+                      <input
+                        type="text"
+                        value={editForm.rosterName}
+                        onChange={(e) => setEditForm({ ...editForm, rosterName: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          fontSize: '0.9rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontWeight: '600',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Created By Name:</label>
+                      <input
+                        type="text"
+                        value={editForm.createdByName}
+                        onChange={(e) => setEditForm({ ...editForm, createdByName: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          fontSize: '0.9rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label style={labelStyle}>Month</label>
-                  <input
-                    type="month"
-                    value={editForm.month}
-                    onChange={(e) => setEditForm({ ...editForm, month: e.target.value })}
-                    style={inputStyle}
-                  />
-                </div>
-                <div>
-                  <label style={labelStyle}>Created By Name</label>
-                  <input
-                    type="text"
-                    value={editForm.createdByName}
-                    onChange={(e) => setEditForm({ ...editForm, createdByName: e.target.value })}
-                    style={inputStyle}
-                  />
-                </div>
-              </div>
 
-              {editData && editData.length > 0 && (
-                <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #d1d5db" }}>
+                {/* Editable Roster Table */}
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  border: '1px solid #d1d5db'
+                }}>
                   <thead>
-                    <tr style={{ background: "#f3f4f6" }}>
-                      <th style={thStyle}>Date</th>
-                      <th style={thStyle}>Day</th>
-                      <th style={thStyle}>Shift</th>
+                    <tr>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Date</th>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Day</th>
+                      <th style={{
+                        padding: '1rem',
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Shift</th>
                       {["E1", "E2", "E3", "E4", "E5"].map((col) => (
-                        <th key={col} style={thStyle}>{col}</th>
+                        <th key={col} style={{
+                          padding: '1rem',
+                          textAlign: 'center',
+                          border: '1px solid #d1d5db',
+                          fontWeight: '600',
+                          backgroundColor: '#1a237e',
+                          color: '#ffffff'
+                        }}>
+                          {col}
+                        </th>
                       ))}
                     </tr>
                   </thead>
@@ -508,26 +708,62 @@ const RosterView = () => {
                     {editData.map((day, dayIndex) => (
                       <React.Fragment key={day.date}>
                         {day.shifts.map((shift, shiftIndex) => (
-                          <tr key={'${day.date}-${shift.shift}'}>
+                          <tr key={`${day.date}-${shift.shift}`}>
                             {shiftIndex === 0 && (
                               <>
-                                <td rowSpan={2} style={tdStyle}>{new Date(day.date).toLocaleDateString("en-GB")}</td>
-                                <td rowSpan={2} style={tdStyle}>{day.dayName}</td>
+                                <td rowSpan={2} style={{
+                                  padding: '1rem',
+                                  border: '1px solid #d1d5db',
+                                  color: '#374151'
+                                }}>
+                                  {new Date(day.date).toLocaleDateString("en-GB")}
+                                </td>
+                                <td rowSpan={2} style={{
+                                  padding: '1rem',
+                                  border: '1px solid #d1d5db',
+                                  color: '#374151'
+                                }}>
+                                  {day.dayName}
+                                </td>
                               </>
                             )}
-                            <td style={tdStyle}>{shift.shift}</td>
+                            <td style={{
+                              padding: '1rem',
+                              border: '1px solid #d1d5db',
+                              color: '#374151'
+                            }}>{shift.shift}</td>
                             {shift.employees.map((emp, empIndex) => (
-                              <td key={empIndex} style={tdStyle}>
+                              <td key={empIndex} style={{
+                                padding: '1rem',
+                                border: '1px solid #d1d5db',
+                                textAlign: 'center'
+                              }}>
                                 <select
                                   value={emp}
                                   onChange={(e) =>
-                                    handleEmployeeSelectEdit(dayIndex, shiftIndex, empIndex, e.target.value)
+                                    handleEmployeeSelectEdit(
+                                      dayIndex,
+                                      shiftIndex,
+                                      empIndex,
+                                      e.target.value
+                                    )
                                   }
-                                  style={{ width: "100%", padding: "0.3rem", border: "1px solid #d1d5db", borderRadius: "4px" }}
+                                  style={{
+                                    width: '100%',
+                                    padding: '0.5rem',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '4px',
+                                    fontSize: '0.9rem',
+                                    backgroundColor: 'white',
+                                    outline: 'none',
+                                    cursor: 'pointer'
+                                  }}
                                 >
                                   <option value="">Select</option>
                                   {employees.map((employee, i) => (
-                                    <option key={i} value={employee}>{employee}</option>
+                                    <option key={i} value={employee}>
+                                      {employee}
+                                    </option>
                                   ))}
                                 </select>
                               </td>
@@ -538,84 +774,14 @@ const RosterView = () => {
                     ))}
                   </tbody>
                 </table>
-              )}
-
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "1rem", gap: "0.5rem" }}>
-                <button onClick={() => setEditingRoster(null)} style={btnCancel}>Cancel</button>
-                <button onClick={handleSaveUpdate} style={btnSave}>Save</button>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
-
       <Footer />
     </div>
   );
-};
-
-/*  Table Styles */
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
-  border: "1px solid #d1d5db",
-  backgroundColor: "white",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-};
-
-const thStyle = {
-  padding: "0.8rem",
-  border: "1px solid #d1d5db",
-  textAlign: "center",
-  backgroundColor: "#f3f4f6",
-  fontWeight: "600",
-};
-
-const tdStyle = {
-  padding: "0.6rem",
-  border: "1px solid #d1d5db",
-  textAlign: "center",
-};
-
-const btnView = {
-  padding: "0.5rem 1rem",
-  backgroundColor: "#3b82f6",
-  color: "white",
-  borderRadius: "4px",
-  border: "none",
-};
-
-const btnUpdate = {
-  padding: "0.5rem 1rem",
-  backgroundColor: "#10b981",
-  color: "white",
-  borderRadius: "4px",
-  border: "none",
-};
-
-const btnCancel = {
-  padding: "0.5rem 1rem",
-  backgroundColor: "#6b7280",
-  color: "white",
-  borderRadius: "4px",
-  border: "none",
-};
-
-const btnSave = {
-  padding: "0.5rem 1rem",
-  backgroundColor: "#10b981",
-  color: "white",
-  borderRadius: "4px",
-  border: "none",
-};
-
-const labelStyle = { display: "block", marginTop: "0.5rem", fontWeight: "500" };
-const inputStyle = {
-  width: "100%",
-  padding: "0.5rem",
-  border: "1px solid #d1d5db",
-  borderRadius: "4px",
-  marginBottom: "0.5rem",
 };
 
 export default RosterView;

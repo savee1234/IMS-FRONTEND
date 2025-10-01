@@ -50,16 +50,16 @@ const OperationAvailability = () => {
         : {
             name: operationAvailability.trim(),
             isAvailable: true,
-            createdBy: 'current_user', // TODO: replace with real user id
-            createdByName: 'Current User' // TODO: replace with real user name
+            createdBy: 'current_user',
+            createdByName: 'Current User'
           };
 
-      const res = await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
-      const data = await res.json();
+      const data = await response.json();
       if (data.success) {
         await fetchOperationAvailability();
         setOpEditMode(false);
@@ -87,15 +87,15 @@ const OperationAvailability = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/operation-availability/${id}`, {
+      const deleteRes = await fetch(`${API_BASE_URL}/api/operation-availability/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          endedBy: 'current_user', // TODO: replace with real user id
-          endedByName: 'Current User' // TODO: replace with real user name
+          endedBy: 'current_user',
+          endedByName: 'Current User'
         })
       });
-      const data = await res.json();
+      const data = await deleteRes.json();
       if (data.success) {
         await fetchOperationAvailability();
       } else {
@@ -202,120 +202,132 @@ const OperationAvailability = () => {
           
           <button type="submit" disabled={loading} style={{
             padding: '0.75rem 2rem',
-            backgroundColor: loading ? '#9ca3af' : '#3b82f6',
+            backgroundColor: '#3b82f6',
             color: 'white',
-            border: loading ? '1px solid #9ca3af' : '1px solid #3b82f6',
+            border: '1px solid #3b82f6',
             borderRadius: '4px',
             fontSize: '0.9rem',
             fontWeight: '600',
-            cursor: loading ? 'not-allowed' : 'pointer'
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.6 : 1
           }}>
-            {loading ? 'Saving...' : (opEditMode ? 'Update' : 'Submit')}
+            {loading ? 'Saving...' : (opEditMode ? 'Update' : 'Add')}
           </button>
         </div>
       </form>
 
-      <div className="operations-table" style={{
+      <div style={{
         background: 'rgba(255, 255, 255, 0.95)',
         borderRadius: '8px',
         padding: '1.5rem',
         border: '1px solid #d1d5db',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
       }}>
-        <table style={{ 
-          width: '100%', 
-          borderCollapse: 'collapse',
-          border: '1px solid #d1d5db'
-        }}>
-          <thead>
-            <tr>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Operation Availability
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Created By
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Created Time
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {operationData.length === 0 ? (
+        {loading && operationData.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+            Loading operation availability...
+          </div>
+        ) : operationData.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+            No operation availability entries found.
+          </div>
+        ) : (
+          <table style={{ 
+            width: '100%', 
+            borderCollapse: 'collapse',
+            border: '1px solid #d1d5db'
+          }}>
+            <thead>
               <tr>
-                <td colSpan="4" style={{ 
-                  padding: '2rem', 
+                <th style={{ 
+                  padding: '1rem', 
+                  textAlign: 'left',
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>ID</th>
+                <th style={{ 
+                  padding: '1rem', 
+                  textAlign: 'left',
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>Operation Availability</th>
+                <th style={{ 
+                  padding: '1rem', 
+                  textAlign: 'left',
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>Status</th>
+                <th style={{ 
+                  padding: '1rem', 
+                  textAlign: 'left',
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>Created By</th>
+                <th style={{ 
+                  padding: '1rem', 
+                  textAlign: 'left',
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>Created Date</th>
+                <th style={{ 
+                  padding: '1rem', 
                   textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
-                  No operation availability records found
-                </td>
+                  border: '1px solid #d1d5db',
+                  fontWeight: '600',
+                  backgroundColor: '#1a237e',
+                  color: '#ffffff'
+                }}>Actions</th>
               </tr>
-            ) : (
-              operationData.map(item => (
+            </thead>
+            <tbody>
+              {operationData.map((item, index) => (
                 <tr key={item._id}>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center'
+                    color: '#374151'
+                  }}>{item.operationAvailabilityId || `OPAV${String(index + 1).padStart(3, '0')}`}</td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
+                  }}>{item.name}</td>
+                  <td style={{ 
+                    padding: '1rem',
+                    border: '1px solid #d1d5db',
+                    color: '#374151'
                   }}>
-                    {item.name}
+                    <span style={{
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: '500',
+                      backgroundColor: item.isAvailable ? '#dcfce7' : '#fee2e2',
+                      color: item.isAvailable ? '#166534' : '#dc2626'
+                    }}>
+                      {item.isAvailable ? 'Available' : 'Not Available'}
+                    </span>
                   </td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center'
-                  }}>
-                    {item.createdByName}
-                  </td>
+                    color: '#374151'
+                  }}>{item.createdByName}</td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center'
-                  }}>
-                    {item.createdDtm ? (
-                      <>
-                        {new Date(item.createdDtm).toLocaleDateString()}
-                        {'\u00A0\u00A0'}
-                        {new Date(item.createdDtm).toLocaleTimeString()}
-                      </>
-                    ) : ''}
-                  </td>
+                    color: '#374151'
+                  }}>{new Date(item.createdDtm).toLocaleDateString()}</td>
                   <td style={{ 
                     padding: '1rem',
                     border: '1px solid #d1d5db',
@@ -324,44 +336,38 @@ const OperationAvailability = () => {
                     <button
                       onClick={() => handleOpEdit(item)}
                       style={{
-                        backgroundColor: '#FFB300',
+                        backgroundColor: '#3b82f6',
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
                         cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px',
-                        marginRight: '6px'
+                        padding: '6px 12px',
+                        marginRight: '6px',
+                        fontSize: '0.875rem'
                       }}
-                      title="Update"
                     >
                       <FaEdit />
                     </button>
                     <button
                       onClick={() => handleOperationDelete(item._id)}
                       style={{
-                        backgroundColor: '#F44336',
+                        backgroundColor: '#ef4444',
                         color: 'white',
                         border: 'none',
                         borderRadius: '4px',
                         cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px'
+                        padding: '6px 12px',
+                        fontSize: '0.875rem'
                       }}
-                      title="Delete"
                     >
                       <FaTrash />
                     </button>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

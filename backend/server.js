@@ -16,6 +16,7 @@ const organizationContactPersonsRoutes = require('./routes/organizationContactPe
 const app = express();
 
 const PORT = process.env.PORT || 44354;
+const onboardMediumRoutes = require('./routes/onboardMedium');
 
 // Security middleware
 app.use(helmet());
@@ -57,6 +58,7 @@ app.use('/api/operation-availability', operationAvailabilityRoutes);
 app.use('/api/solution-projects', solutionProjectsRoutes);
 app.use('/api/organizations', organizationsRoutes);
 app.use('/api/organization-contact-persons', organizationContactPersonsRoutes);
+app.use('/api/onboard-mediums', onboardMediumRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

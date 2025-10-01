@@ -78,7 +78,7 @@ router.put('/:id', async (req, res) => {
     if (name) {
       name = String(name).trim();
       if (name && name !== doc.name) {
-        const dup = await OnboardMedium.findOne({ name: { $regex: new RegExp(`^${name}$1`, 'i') }, isActive: true, _id: { $ne: id } });
+        const dup = await OnboardMedium.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') }, isActive: true, _id: { $ne: id } });
         if (dup) {
           return res.status(400).json({ success: false, message: 'An onboard medium with this name already exists' });
         }

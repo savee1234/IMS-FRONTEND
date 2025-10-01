@@ -19,7 +19,8 @@
     "express-rate-limit": "^6.10.0",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.0"
+    "mongoose": "^7.5.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "mongodb-memory-server": "^10.2.1",

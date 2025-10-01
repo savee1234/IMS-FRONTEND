@@ -15,7 +15,11 @@ const employees = [
 const RosterManagement = () => {
   const [month, setMonth] = useState("");
   const [roster, setRoster] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
   //  Generate Month Data
   const generateMonthData = (selectedMonth) => {
@@ -63,31 +67,51 @@ const RosterManagement = () => {
   };
 
   // Submit Roster
-  const submitRoster = () => {
+  const submitRoster = async () => {
     if (!month || roster.length === 0) {
-      alert("⚠ Please select a month and add roster details before submitting.");
+      setError("⚠ Please select a month and add roster details before submitting.");
       return;
     }
 
-    const existingRosters = JSON.parse(localStorage.getItem("rosters")) || [];
+    setLoading(true);
+    setError('');
 
-    const newRoster = {
-      id: Date.now(),
-      rosterName: `${new Date(month + "-01").toLocaleString("en-US", {
+    try {
+      const rosterName = `${new Date(month + "-01").toLocaleString("en-US", {
         month: "long",
-      })} Roster`,
-      month,
-      createdBy: "EMP001",
-      createdByName: "John Doe",
-      createdDTM: new Date().toLocaleString(),
-      data: roster,
-    };
+        year: "numeric"
+      })} Roster`;
 
-    const updatedRosters = [...existingRosters, newRoster];
-    localStorage.setItem("rosters", JSON.stringify(updatedRosters));
+      const rosterData = {
+        rosterName,
+        month,
+        data: roster,
+        createdBy: "EMP001", // TODO: Get from auth context
+        createdByName: "John Doe" // TODO: Get from auth context
+      };
 
-    alert("✅ Roster saved successfully!");
-    navigate("/roster-view");
+      const response = await fetch(`${API_BASE_URL}/api/rosters`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rosterData)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("✅ Roster saved successfully!");
+        navigate("/roster-view");
+      } else {
+        setError(data.message || 'Failed to save roster');
+      }
+    } catch (error) {
+      console.error('Error saving roster:', error);
+      setError('Failed to save roster. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -167,6 +191,20 @@ const RosterManagement = () => {
             View Rosters
           </button>
         </div>
+
+        {/* Error Display */}
+        {error && (
+          <div style={{
+            backgroundColor: '#fee2e2',
+            border: '1px solid #fecaca',
+            color: '#dc2626',
+            padding: '1rem',
+            borderRadius: '4px',
+            marginBottom: '1rem'
+          }}>
+            {error}
+          </div>
+        )}
 
         {/* Form Section */}
         <form style={{
@@ -357,17 +395,17 @@ const RosterManagement = () => {
                   Reset
                 </button>
                 
-                <button onClick={submitRoster} style={{
+                <button onClick={submitRoster} disabled={loading} style={{
                   padding: '0.75rem 2rem',
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: loading ? '#9ca3af' : '#3b82f6',
                   color: 'white',
-                  border: '1px solid #3b82f6',
+                  border: `1px solid ${loading ? '#9ca3af' : '#3b82f6'}`,
                   borderRadius: '4px',
                   fontSize: '0.9rem',
                   fontWeight: '600',
-                  cursor: 'pointer'
+                  cursor: loading ? 'not-allowed' : 'pointer'
                 }}>
-                  Submit
+                  {loading ? 'Saving...' : 'Submit'}
                 </button>
               </div>
             </div>

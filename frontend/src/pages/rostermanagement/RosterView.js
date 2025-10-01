@@ -17,6 +17,8 @@ const RosterView = () => {
   const [month, setMonth] = useState("");
   const [rosters, setRosters] = useState([]);
   const [selectedRoster, setSelectedRoster] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // For Update
   const [editingRoster, setEditingRoster] = useState(null);
@@ -31,13 +33,39 @@ const RosterView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const rostersPerPage = 5;
 
-  // Load saved rosters from localStorage
-  useEffect(() => {
-    const savedRosters = JSON.parse(localStorage.getItem("rosters")) || [];
-    setRosters(savedRosters);
-  }, []);
+  const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
-  const filteredRosters = month ? rosters.filter((r) => r.month === month) : rosters;
+  // Fetch rosters from backend
+  const fetchRosters = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const url = month 
+        ? `${API_BASE_URL}/api/rosters?month=${month}`
+        : `${API_BASE_URL}/api/rosters`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.success) {
+        setRosters(data.data);
+      } else {
+        setError(data.message || 'Failed to fetch rosters');
+      }
+    } catch (error) {
+      console.error('Error fetching rosters:', error);
+      setError('Failed to load rosters');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load rosters on component mount and when month changes
+  useEffect(() => {
+    fetchRosters();
+  }, [month]);
+
+  const filteredRosters = rosters; // Backend filtering is now handled by the API
 
   // Pagination calculations
   const indexOfLastRoster = currentPage * rostersPerPage;
@@ -65,15 +93,39 @@ const RosterView = () => {
     setEditData(copied);
   };
 
-  const handleSaveUpdate = () => {
-    const updatedRosters = rosters.map((r) =>
-      r.id === editingRoster.id
-        ? { ...r, ...editForm, data: editData, createdDTM: new Date().toLocaleString() }
-        : r
-    );
-    setRosters(updatedRosters);
-    localStorage.setItem("rosters", JSON.stringify(updatedRosters));
-    setEditingRoster(null);
+  const handleSaveUpdate = async () => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      const updateData = {
+        rosterName: editForm.rosterName,
+        data: editData
+      };
+      
+      const response = await fetch(`${API_BASE_URL}/api/rosters/${editingRoster._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData)
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        await fetchRosters(); // Refresh the list
+        setEditingRoster(null);
+        setError('');
+      } else {
+        setError(data.message || 'Failed to update roster');
+      }
+    } catch (error) {
+      console.error('Error updating roster:', error);
+      setError('Failed to update roster');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEmployeeSelectEdit = (dayIndex, shiftIndex, empIndex, value) => {
@@ -175,6 +227,20 @@ const RosterView = () => {
                 Back
               </button>
             </div>
+
+            {/* Error Display */}
+            {error && (
+              <div style={{
+                backgroundColor: '#fee2e2',
+                border: '1px solid #fecaca',
+                color: '#dc2626',
+                padding: '1rem',
+                borderRadius: '4px',
+                marginBottom: '1rem'
+              }}>
+                {error}
+              </div>
+            )}
 
             {/* Month Filter */}
             <div style={{
@@ -288,7 +354,7 @@ const RosterView = () => {
                   <tbody>
                     {currentRosters.length > 0 ? (
                       currentRosters.map((roster, index) => (
-                        <tr key={roster.id}>
+                        <tr key={roster._id}>
                           <td style={{ 
                             padding: '1rem',
                             border: '1px solid #d1d5db',
@@ -318,7 +384,7 @@ const RosterView = () => {
                             padding: '1rem',
                             border: '1px solid #d1d5db',
                             color: '#374151'
-                          }}>{roster.createdDTM}</td>
+                          }}>{new Date(roster.createdDtm).toLocaleString()}</td>
                           <td style={{ 
                             padding: '1rem',
                             border: '1px solid #d1d5db',

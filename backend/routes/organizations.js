@@ -204,46 +204,20 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// SOFT DELETE organization
+// DELETE organization
 router.delete('/:id', async (req, res) => {
   try {
-    const { endedBy, endedByName } = req.body;
-    
-    if (!endedBy || !endedByName) {
-      return res.status(400).json({
-        success: false,
-        message: 'endedBy and endedByName are required for deletion'
-      });
+    const id = req.params.id;
+
+    const doc = await Organization.findByIdAndDelete(id);
+    if (!doc) {
+      return res.status(404).json({ success: false, message: 'Organization not found' });
     }
-    
-    const organization = await Organization.findById(req.params.id);
-    
-    if (!organization || !organization.isActive) {
-      return res.status(404).json({
-        success: false,
-        message: 'Organization not found'
-      });
-    }
-    
-    // Soft delete
-    organization.isActive = false;
-    organization.endedBy = endedBy;
-    organization.endedByName = endedByName;
-    organization.endDtm = new Date();
-    
-    await organization.save();
-    
-    res.json({
-      success: true,
-      message: 'Organization deleted successfully'
-    });
+
+    res.json({ success: true, message: 'Organization deleted' });
   } catch (error) {
     console.error('Error deleting organization:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to delete organization',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Failed to delete organization', error: error.message });
   }
 });
 

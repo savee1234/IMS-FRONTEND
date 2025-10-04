@@ -244,48 +244,27 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// SOFT DELETE organization contact person
+
+
+// DELETE organization contact person
 router.delete('/:id', async (req, res) => {
   try {
-    const { endedBy, endedByName } = req.body;
-    
-    if (!endedBy || !endedByName) {
-      return res.status(400).json({
-        success: false,
-        message: 'endedBy and endedByName are required for deletion'
-      });
+    const id = req.params.id;
+
+    const doc = await OrganizationContactPerson.findByIdAndDelete(id);
+    if (!doc) {
+      return res.status(404).json({ success: false, message: 'Contact person not found' });
     }
-    
-    const contactPerson = await OrganizationContactPerson.findById(req.params.id);
-    
-    if (!contactPerson || !contactPerson.isActive) {
-      return res.status(404).json({
-        success: false,
-        message: 'Organization contact person not found'
-      });
-    }
-    
-    // Soft delete
-    contactPerson.isActive = false;
-    contactPerson.endedBy = endedBy;
-    contactPerson.endedByName = endedByName;
-    contactPerson.endDtm = new Date();
-    
-    await contactPerson.save();
-    
-    res.json({
-      success: true,
-      message: 'Organization contact person deleted successfully'
-    });
+
+    res.json({ success: true, message: 'Contact person deleted' });
   } catch (error) {
-    console.error('Error deleting organization contact person:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to delete organization contact person',
-      error: error.message
-    });
+    console.error('Error deleting contact person:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete contact person', error: error.message });
   }
 });
+
+
+
 
 // GET organizations for dropdown
 router.get('/dropdown/organizations', async (req, res) => {

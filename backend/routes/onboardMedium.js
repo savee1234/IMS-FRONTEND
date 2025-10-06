@@ -94,27 +94,16 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE onboard medium (soft delete)
+// DELETE onboard medium 
 router.delete('/:id', async (req, res) => {
   try {
-    const { endedBy, endedByName } = req.body;
     const id = req.params.id;
 
-    if (!endedBy || !endedByName) {
-      return res.status(400).json({ success: false, message: 'endedBy and endedByName are required for deletion' });
-    }
-
-    const doc = await OnboardMedium.findById(id);
-    if (!doc || !doc.isActive) {
+    const doc = await OnboardMedium.findByIdAndDelete(id);
+    if (!doc) {
       return res.status(404).json({ success: false, message: 'Onboard medium not found' });
     }
 
-    doc.isActive = false;
-    doc.endedBy = endedBy;
-    doc.endedByName = endedByName;
-    doc.endDtm = new Date();
-
-    await doc.save();
     res.json({ success: true, message: 'Onboard medium deleted' });
   } catch (error) {
     console.error('Error deleting onboard medium:', error);

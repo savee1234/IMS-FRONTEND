@@ -71,26 +71,26 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// SOFT DELETE shift
+
+
+//DELETE shift
 router.delete('/:id', async (req, res) => {
   try {
-    const { endedBy, endedByName } = req.body;
-    if (!endedBy || !endedByName) {
-      return res.status(400).json({ success: false, message: 'endedBy and endedByName are required for deletion' });
+    const id = req.params.id;
+
+    const doc = await Shift.findByIdAndDelete(id);
+    if (!doc) {
+      return res.status(404).json({ success: false, message: 'Shift not found' });
     }
-    const doc = await Shift.findById(req.params.id);
-    if (!doc || !doc.isActive) return res.status(404).json({ success: false, message: 'Shift not found' });
-    doc.isActive = false;
-    doc.endedBy = endedBy;
-    doc.endedByName = endedByName;
-    doc.endDtm = new Date();
-    await doc.save();
-    res.json({ success: true, message: 'Shift deleted successfully' });
+
+    res.json({ success: true, message: 'Shift deleted' });
   } catch (error) {
     console.error('Error deleting shift:', error);
     res.status(500).json({ success: false, message: 'Failed to delete shift', error: error.message });
   }
 });
+
+
 
 // RESET: soft-delete existing and insert new list
 // Body: { items: [{ name, fromTime, toTime }], createdBy, createdByName }

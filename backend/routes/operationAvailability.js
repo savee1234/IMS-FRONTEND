@@ -121,31 +121,23 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// SOFT DELETE
+// DELETE op.avalability
 router.delete('/:id', async (req, res) => {
   try {
-    const { endedBy, endedByName } = req.body;
-    if (!endedBy || !endedByName) {
-      return res.status(400).json({ success: false, message: 'endedBy and endedByName are required for deletion' });
+    const id = req.params.id;
+
+    const doc = await OperationAvailability.findByIdAndDelete(id);
+    if (!doc) {
+      return res.status(404).json({ success: false, message: 'Operation availability not found' });
     }
 
-    const doc = await OperationAvailability.findById(req.params.id);
-    if (!doc || !doc.isActive) {
-      return res.status(404).json({ success: false, message: 'Record not found' });
-    }
-
-    doc.isActive = false;
-    doc.endedBy = endedBy;
-    doc.endedByName = endedByName;
-    doc.endDtm = new Date();
-    await doc.save();
-
-    res.json({ success: true, message: 'Operation availability deleted successfully' });
+    res.json({ success: true, message: 'Operation availability deleted' });
   } catch (error) {
     console.error('Error deleting operation availability:', error);
     res.status(500).json({ success: false, message: 'Failed to delete operation availability', error: error.message });
   }
 });
+
 
 // RESET: remove existing active data and insert new list
 // Body: { items: [{ name, isAvailable }], createdBy, createdByName }

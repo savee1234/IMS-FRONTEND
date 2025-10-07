@@ -1,83 +1,118 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { FaEdit, FaEye, FaTrashAlt } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
-import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
 
-const fetchTasks = () =>
-  new Promise((resolve) =>
-    setTimeout(() => {
-      resolve([
-        {
-          id: '1',
-          reference: 'REQ-001',
-          requester: 'Chamodi Perera',
-          priority: 'High',
-          status: 'Open',
-          issue: 'Unable to access system',
-          phone: '0712345678',
-          email: 'chamodi@slt.com',
-          created: '2025-05-27',
-        },
-        {
-          id: '2',
-          reference: 'REQ-002',
-          requester: 'Saman Silva',
-          priority: 'Low',
-          status: 'Completed',
-          issue: 'Software installation request',
-          phone: '0771234567',
-          email: 'saman@slt.com',
-          created: '2025-06-01',
-        },
-        {
-          id: '3',
-          reference: 'REQ-003',
-          requester: 'Nadeesha Fernando',
-          priority: 'Medium',
-          status: 'Ongoing',
-          issue: 'Network connectivity issue',
-          phone: '0789123456',
-          email: 'nadeesha@slt.com',
-          created: '2025-06-15',
-        },
-      ]);
-    }, 500)
-  );
+const styles = {
+  page: {
+    position: 'relative',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    overflowX: 'hidden',
+  },
+  videoBackground: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    objectFit: 'cover',
+    zIndex: -2,
+  },
+  gradientOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+    zIndex: -1,
+  },
+};
 
 const MyTasks = () => {
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
-    fetchTasks().then(setTasks);
-  }, []);
-
-   const styles = {
-    page: {
-      position: 'relative',
-      minHeight: '100vh',
+  // table styles adapted to match configuration tables (e.g., Shifts)
+  const tableStyles = {
+    section: {
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      padding: '24px',
+      boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
+      border: '1px solid #eef2f7',
+      marginBottom: '64px'
+    },
+    header: {
       display: 'flex',
       flexDirection: 'column',
-      overflowX: 'hidden',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      marginBottom: '20px',
+      textAlign: 'left'
     },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
+    title: {
+      margin: 0,
+      fontSize: '22px',
+      fontWeight: 500,
+      color: '#000',
+      textAlign: 'left'
     },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
-      zIndex: -1,
+    titleRule: {
+      width: '100%',
+      height: '2px',
+      background: '#3b82f6',
+      borderRadius: '1px',
+      marginTop: '6px'
     },
+    tableWrap: { width: '100%', overflowX: 'auto' },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      fontSize: '14px',
+      backgroundColor: '#fff',
+      border: '1px solid #e3e8ef'
+    },
+    th: {
+      backgroundColor: '#1a237e',
+      color: '#ffffff',
+      fontWeight: 600,
+      padding: '12px 15px',
+      textAlign: 'left',
+      borderBottom: '1px solid #e3e8ef',
+      borderRight: '1px solid #e3e8ef',
+      whiteSpace: 'nowrap'
+    },
+    thCenter: { textAlign: 'center' },
+    tr: { borderBottom: '1px solid #e3e8ef' },
+    td: {
+      padding: '12px 15px',
+      color: '#333',
+      verticalAlign: 'middle',
+      borderRight: '1px solid #e3e8ef'
+    },
+    tdCenter: { textAlign: 'center' },
+    actionsCell: { textAlign: 'center' },
+    actionIcons: {
+      display: 'flex',
+      gap: '8px',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    iconButton: {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      padding: '6px 8px',
+      borderRadius: '4px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white'
+    },
+    viewBtn: { backgroundColor: '#10b981' },
+    editBtn: { backgroundColor: '#FFB300' },
+    deleteBtn: { backgroundColor: '#F44336' }
   };
 
   return (
@@ -92,261 +127,186 @@ const MyTasks = () => {
         flex: 1,
         padding: '24px'
       }}>
-        <h1 style={{
-          fontSize: '1.875rem',
-          fontWeight: 700,
-          marginBottom: '24px',
-          color: '#0d0d0eff'
-        }}>
-          My Tasks
-        </h1>
-
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px'
-        }}>
-          <button style={{
-            marginBottom: '12px',
-            backgroundColor: '#10b981',
-            color: 'white',
-            padding: '8px 16px',
-            borderRadius: '4px',
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s',
-            ':hover': {
-              backgroundColor: '#059669'
-            }
-          }}>
-            View Tasks
-          </button>
-
+        {/* White container with header and 3 tables */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Page Topic Header (configuration/attendance card style) */}
           <div style={{
             display: 'flex',
-            gap: '8px',
-            marginBottom: '12px'
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '8px 0',
+            marginBottom: '28px'
           }}>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.12)',
+              border: '1px solid #e5e7eb',
+              padding: '14px 24px',
+              width: '100%'
             }}>
-              CSV
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              Excel
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              PDF
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              Print
-            </button>
-          </div>
-        </div>
-
-        <div style={{
-          overflowX: 'auto'
-        }}>
-          <table style={{
-            minWidth: '100%',
-            backgroundColor: 'white',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-            borderRadius: '4px',
-            fontSize: '0.875rem'
-          }}>
-            <thead>
-              <tr style={{
-                backgroundColor: '#e5e7eb',
-                color: '#374151'
+              <h1 style={{
+                margin: 0,
+                textAlign: 'center',
+                fontSize: '2rem',
+                fontWeight: 700,
+                color: '#111827'
               }}>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Reference</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Requester</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Priority</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Status</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Issue</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Phone</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Email</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Created</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map((task) => (
-                <tr key={task.id} style={{
-                  borderTop: '1px solid #e5e7eb',
-                  ':hover': {
-                    backgroundColor: '#f9fafb'
-                  }
-                }}>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.reference}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.requester}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.priority}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>
-                    <span
-                      style={{
-                        padding: '4px 8px',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 500,
-                        backgroundColor: task.status === 'Open'
-                          ? '#fee2e2'
-                          : task.status === 'Ongoing'
-                          ? '#fef3c7'
-                          : '#d1fae5',
-                        color: task.status === 'Open'
-                          ? '#dc2626'
-                          : task.status === 'Ongoing'
-                          ? '#92400e'
-                          : '#065f46'
-                      }}
-                    >
-                      {task.status}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.issue}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.phone}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.email}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.created}</td>
-                  <td style={{ 
-                    padding: '12px', 
-                    textAlign: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '8px'
-                  }}>
-                    <button title="Details" style={{
-                      color: '#2563eb',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#1e40af'
-                      }
-                    }}>
-                      <FaFileAlt />
-                    </button>
-                    <button title="History" style={{
-                      color: '#4b5563',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#1f2937'
-                      }
-                    }}>
-                      <FaHistory />
-                    </button>
-                    <button title="Comments" style={{
-                      color: '#7c3aed',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#5b21b6'
-                      }
-                    }}>
-                      <FaComments />
-                    </button>
-                    <button title="Done" style={{
-                      color: '#059669',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#047857'
-                      }
-                    }}>
-                      <FaCheck />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                View Task
+              </h1>
+              <p style={{
+                margin: '8px 0 0 0',
+                textAlign: 'center',
+                color: '#6b7280',
+                fontSize: '0.95rem'
+              }}>
+                Review and manage your tasks
+              </p>
+            </div>
+          </div>
+          {/* Outer white area containing all three tables */}
+          <div style={{ background: 'transparent', borderRadius: '10px', padding: '0px', boxShadow: 'none', border: 'none' }}>
+            {/* Complaints Table */}
+            <section style={tableStyles.section}>
+              <div style={tableStyles.header}>
+                <h3 style={{ ...tableStyles.title, textAlign: 'center' }}>Complaints</h3>
+                <div style={tableStyles.titleRule} />
+              </div>
+              <div style={tableStyles.tableWrap}>
+                <table style={tableStyles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...tableStyles.th }}>Reference</th>
+                      <th style={{ ...tableStyles.th }}>Category</th>
+                      <th style={{ ...tableStyles.th }}>Organization</th>
+                      <th style={{ ...tableStyles.th }}>Solution</th>
+                      <th style={{ ...tableStyles.th }}>Medium</th>
+                      <th style={{ ...tableStyles.th }}>Medium Source</th>
+                      <th style={{ ...tableStyles.th, ...tableStyles.thCenter }}>Created</th>
+                      <th style={{ ...tableStyles.th, ...tableStyles.thCenter }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={tableStyles.tr}>
+                      <td style={tableStyles.td}>REQ-0001</td>
+                      <td style={tableStyles.td}>Connectivity</td>
+                      <td style={tableStyles.td}>SLT</td>
+                      <td style={tableStyles.td}>Pending</td>
+                      <td style={tableStyles.td}>Hotline</td>
+                      <td style={tableStyles.td}>Customer</td>
+                      <td style={{ ...tableStyles.td, ...tableStyles.tdCenter }}>2025-06-01</td>
+                      <td style={{ ...tableStyles.td, ...tableStyles.actionsCell }}>
+                        <div style={tableStyles.actionIcons}>
+                          <button title="View" style={{ ...tableStyles.iconButton, ...tableStyles.viewBtn }}>
+                            <FaEye size={14} />
+                          </button>
+                          <button title="Update" style={{ ...tableStyles.iconButton, ...tableStyles.editBtn }}>
+                            <FaEdit size={14} />
+                          </button>
+                          <button title="Delete" style={{ ...tableStyles.iconButton, ...tableStyles.deleteBtn }}>
+                            <FaTrashAlt size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
 
-        {/* Pagination Footer */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: '16px',
-          fontSize: '0.875rem'
-        }}>
-          <span>Showing 1 to {tasks.length} of {tasks.length} entries</span>
-          <div style={{
-            display: 'flex',
-            gap: '8px'
-          }}>
-            <button style={{
-              padding: '4px 10px',
-              border: '1px solid #151515ff',
-              borderRadius: '4px',
-              color: '#f7f7fbff',
-              backgroundColor: 'black',
-              cursor: 'pointer',
-              ':hover': {
-                backgroundColor: '#0e0e0eff'
-              },
-              ':disabled': {
-                opacity: 0.5
-              }
-            }} disabled>
-              Previous
-            </button>
-            <button style={{
-              padding: '4px 18px',
-              border: '1px solid #151515ff',
-              borderRadius: '4px',
-              color: '#f7f7fbff',
-              backgroundColor: 'black',
-              cursor: 'pointer',
-              ':hover': {
-                backgroundColor: '#f3f4f6'
-              }
-            }}>
-              Next
-            </button>
+            {/* Contact Persons Table */}
+            <section style={tableStyles.section}>
+              <div style={tableStyles.header}>
+                <h3 style={{ ...tableStyles.title, textAlign: 'center' }}>Contact Persons</h3>
+                <div style={tableStyles.titleRule} />
+              </div>
+              <div style={tableStyles.tableWrap}>
+                <table style={tableStyles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...tableStyles.th }}>Name</th>
+                      <th style={{ ...tableStyles.th }}>Title</th>
+                      <th style={{ ...tableStyles.th }}>Email</th>
+                      <th style={{ ...tableStyles.th }}>Mobile</th>
+                      <th style={{ ...tableStyles.th }}>Office Mobile</th>
+                      <th style={{ ...tableStyles.th, ...tableStyles.thCenter }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={tableStyles.tr}>
+                      <td style={tableStyles.td}>Auto Found Person</td>
+                      <td style={tableStyles.td}>Mr.</td>
+                      <td style={tableStyles.td}>found.person@slt.lk</td>
+                      <td style={tableStyles.td}>0712345678</td>
+                      <td style={tableStyles.td}>0112345678</td>
+                      <td style={{ ...tableStyles.td, ...tableStyles.actionsCell }}>
+                        <div style={tableStyles.actionIcons}>
+                          <button title="View" style={{ ...tableStyles.iconButton, ...tableStyles.viewBtn }}>
+                            <FaEye size={14} />
+                          </button>
+                          <button title="Update" style={{ ...tableStyles.iconButton, ...tableStyles.editBtn }}>
+                            <FaEdit size={14} />
+                          </button>
+                          <button title="Delete" style={{ ...tableStyles.iconButton, ...tableStyles.deleteBtn }}>
+                            <FaTrashAlt size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Assignments Table */}
+            <section style={tableStyles.section}>
+              <div style={tableStyles.header}>
+                <h3 style={{ ...tableStyles.title, textAlign: 'center' }}>Assignments</h3>
+                <div style={tableStyles.titleRule} />
+              </div>
+              <div style={tableStyles.tableWrap}>
+                <table style={tableStyles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...tableStyles.th }}>Emp No</th>
+                      <th style={{ ...tableStyles.th }}>Name</th>
+                      <th style={{ ...tableStyles.th }}>Designation</th>
+                      <th style={{ ...tableStyles.th }}>Availability</th>
+                      <th style={{ ...tableStyles.th }}>Main Assignment</th>
+                      <th style={{ ...tableStyles.th }}>Sub Assignment</th>
+                      <th style={{ ...tableStyles.th }}>Doc Ref</th>
+                      <th style={{ ...tableStyles.th }}>Doc Subject</th>
+                      <th style={{ ...tableStyles.th, ...tableStyles.thCenter }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={tableStyles.tr}>
+                      <td style={tableStyles.td}>E001</td>
+                      <td style={tableStyles.td}>Kumara Perera</td>
+                      <td style={tableStyles.td}>Engineer</td>
+                      <td style={tableStyles.td}>Office</td>
+                      <td style={tableStyles.td}>Field Visit</td>
+                      <td style={tableStyles.td}>Fiber Team</td>
+                      <td style={tableStyles.td}>DOC-REF</td>
+                      <td style={tableStyles.td}>Subject</td>
+                      <td style={{ ...tableStyles.td, ...tableStyles.actionsCell }}>
+                        <div style={tableStyles.actionIcons}>
+                          <button title="View" style={{ ...tableStyles.iconButton, ...tableStyles.viewBtn }}>
+                            <FaEye size={14} />
+                          </button>
+                          <button title="Update" style={{ ...tableStyles.iconButton, ...tableStyles.editBtn }}>
+                            <FaEdit size={14} />
+                          </button>
+                          <button title="Delete" style={{ ...tableStyles.iconButton, ...tableStyles.deleteBtn }}>
+                            <FaTrashAlt size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
         </div>
       </main>

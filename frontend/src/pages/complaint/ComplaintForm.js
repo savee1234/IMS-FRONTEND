@@ -3,9 +3,12 @@
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css"; // Updated path
 
 export default function ComplaintOnboarding() {
+  const navigate = useNavigate();
+  
   // ------- Dummy data (replace with real API data) --------
   const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
@@ -49,6 +52,8 @@ export default function ComplaintOnboarding() {
   });
 
   const [notFoundMsg, setNotFoundMsg] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [complaintId, setComplaintId] = useState(null);
 
   // ------- Handlers --------
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
@@ -95,13 +100,43 @@ export default function ComplaintOnboarding() {
       remarks: ""
     });
     setNotFoundMsg("");
+    setSubmitted(false);
+    setComplaintId(null);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: send to backend
-    alert("Submitted! Check console for payload.");
-    console.log("Complaint payload", form);
+    
+    try {
+      const response = await fetch('http://localhost:44354/api/complaints', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        console.log("Complaint submitted successfully", result.data);
+        setSubmitted(true);
+        setComplaintId(result.data._id);
+        alert("Complaint submitted successfully!");
+      } else {
+        throw new Error(result.message || 'Failed to submit complaint');
+      }
+    } catch (error) {
+      console.error("Error submitting complaint:", error);
+      alert("Error submitting complaint: " + error.message);
+    }
+  };
+
+  const onViewComplaint = () => {
+    // Navigate to the complaint view page using React Router
+    if (complaintId) {
+      navigate(`/complaint/view/${complaintId}`);
+    }
   };
 
   return (
@@ -506,6 +541,18 @@ export default function ComplaintOnboarding() {
               fontWeight: '600',
               borderRadius: '8px'
             }}>Submit Complaint</button>
+            {submitted && (
+              <button type="button" className="btn secondary" onClick={onViewComplaint} style={{
+                padding: '0.75rem 2rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                borderRadius: '8px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer'
+              }}>View Complaint</button>
+            )}
           </div>
         </section>
       </form>

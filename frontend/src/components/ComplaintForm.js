@@ -471,7 +471,7 @@ export default function ComplainForm() {
                 onChange={(e) => update("docSubject", e.target.value)}
                 placeholder="Subject"
               />
-            </Field>/skjadkasd
+            </Field>
 
             <Field label="Remarks" className="full">
               <textarea

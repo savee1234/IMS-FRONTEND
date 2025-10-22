@@ -14,6 +14,7 @@ const organizationsRoutes = require('./routes/organizations');
 const organizationContactPersonsRoutes = require('./routes/organizationContactPersons');
 const rosterRoutes = require('./routes/rosters');
 const complaintsRoutes = require('./routes/complaints');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.use('/api/organization-contact-persons', organizationContactPersonsRoutes);
 app.use('/api/onboard-mediums', onboardMediumRoutes);
 app.use('/api/rosters', rosterRoutes);
 app.use('/api/complaints', complaintsRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

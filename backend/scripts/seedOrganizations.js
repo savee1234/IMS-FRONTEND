@@ -1,72 +1,69 @@
 const mongoose = require('mongoose');
-const { connectDB } = require('../config/database');
 const Organization = require('../models/Organization');
-require('dotenv').config();
+const { connectDB } = require('../config/database');
 
 const seedOrganizations = async () => {
   try {
     await connectDB();
-    
-    // Clear existing organizations (only if you want to reset)
-    // await Organization.deleteMany({});
-    
+    console.log('Connected to database for seeding...');
+
+    // Check if organizations already exist
+    const existingOrgs = await Organization.countDocuments();
+    if (existingOrgs > 0) {
+      console.log('Organizations already exist, skipping seed...');
+      return;
+    }
+
+    // Create default organizations
     const organizations = [
       {
-        organization: 'ABC Corporation',
+        organization: 'SLT',
         organizationType: 'Type 1',
-        createdBy: '015777',
-        createdByName: 'Romaine Murcott'
+        createdBy: 'system',
+        createdByName: 'System Administrator'
       },
       {
-        organization: 'XYZ Industries',
+        organization: 'Mobitel',
+        organizationType: 'Type 1',
+        createdBy: 'system',
+        createdByName: 'System Administrator'
+      },
+      {
+        organization: 'Dialog',
         organizationType: 'Type 2',
-        createdBy: '015778',
-        createdByName: 'John Smith'
+        createdBy: 'system',
+        createdByName: 'System Administrator'
       },
       {
-        organization: 'Tech Solutions Ltd',
-        organizationType: 'Type 1',
-        createdBy: '015779',
-        createdByName: 'Sarah Johnson'
+        organization: 'Hutch',
+        organizationType: 'Type 2',
+        createdBy: 'system',
+        createdByName: 'System Administrator'
       },
       {
-        organization: 'Global Systems Inc',
+        organization: 'Airtel',
         organizationType: 'Type 3',
-        createdBy: '015780',
-        createdByName: 'Mike Wilson'
-      },
-      {
-        organization: 'Innovation Corp',
-        organizationType: 'Type 2',
-        createdBy: '015781',
-        createdByName: 'Lisa Brown'
+        createdBy: 'system',
+        createdByName: 'System Administrator'
       }
     ];
-    
-    // Check if organizations already exist
-    for (const orgData of organizations) {
-      const existingOrg = await Organization.findOne({ 
-        organization: { $regex: new RegExp(`^${orgData.organization}$`, 'i') },
-        isActive: true 
-      });
-      
-      if (!existingOrg) {
-        const organization = new Organization(orgData);
-        await organization.save();
-        console.log(`✓ Created organization: ${organization.organizationId} - ${orgData.organization}`);
-      } else {
-        console.log(`- Organization already exists: ${existingOrg.organizationId} - ${orgData.organization}`);
-      }
-    }
-    
-    console.log('\n🎉 Organizations seeding completed successfully!');
-    process.exit(0);
+
+    const createdOrgs = await Organization.insertMany(organizations);
+    console.log(`✅ Successfully seeded ${createdOrgs.length} organizations`);
+
+    // List the created organizations
+    createdOrgs.forEach((org, index) => {
+      console.log(`${index + 1}. ${org.organization} (${org.organizationId}) - ${org.organizationType}`);
+    });
+
   } catch (error) {
-    console.error('❌ Error seeding organizations:', error);
-    process.exit(1);
+    console.error('Error seeding organizations:', error);
+  } finally {
+    mongoose.connection.close();
   }
 };
 
+// Run if called directly
 if (require.main === module) {
   seedOrganizations();
 }

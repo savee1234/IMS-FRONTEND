@@ -43,7 +43,6 @@ const Configuration = () => {
         return <Organization />;
       case 'organizations':
         return <Organizations />;
-      
       case 'solutionsPerProject':
         return <SolutionsProjects />;
       case 'shifts':

@@ -10,9 +10,11 @@ const authRoutes = require('./routes/auth');
 const shiftRoutes = require('./routes/shifts');
 const operationAvailabilityRoutes = require('./routes/operationAvailability');
 const solutionProjectsRoutes = require('./routes/solutionProjects');
-const organizationsRoutes = require('./routes/organizations');
-const organizationContactPersonsRoutes = require('./routes/organizationContactPersons');
+const organizationRoutes = require('./routes/organizations');
+const organizationContactPersonRoutes = require('./routes/organizationContactPersons');
 const rosterRoutes = require('./routes/rosters');
+const complaintRoutes = require('./routes/complaintRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
@@ -57,10 +59,12 @@ app.use('/Login', authRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api/operation-availability', operationAvailabilityRoutes);
 app.use('/api/solution-projects', solutionProjectsRoutes);
-app.use('/api/organizations', organizationsRoutes);
-app.use('/api/organization-contact-persons', organizationContactPersonsRoutes);
+app.use('/api/organizations', organizationRoutes);
+app.use('/api/organization-contact-persons', organizationContactPersonRoutes);
 app.use('/api/onboard-mediums', onboardMediumRoutes);
 app.use('/api/rosters', rosterRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

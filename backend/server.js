@@ -10,6 +10,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const organizationRoutes = require('./routes/organizations');
 const organizationContactPersonRoutes = require('./routes/organizationContactPersons');
+const complaintRoutes = require('./routes/complaintRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 44354;
@@ -52,6 +54,8 @@ process.on('unhandledRejection', (err) => {
 app.use('/Login', authRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/organization-contact-persons', organizationContactPersonRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/contacts', contactRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

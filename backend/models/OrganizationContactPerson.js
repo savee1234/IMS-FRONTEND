@@ -96,17 +96,15 @@ organizationContactPersonSchema.pre('save', async function(next) {
     try {
       // Generate a unique contact person ID format: CP001, CP002, etc.
       const lastContact = await this.constructor.findOne(
-        { contactPersonId: { $exists: true, $ne: null } },
-        {},
-        { sort: { contactPersonId: -1 } }
-      );
-      
+        { contactPersonId: { $exists: true, $ne: null } }
+      ).sort({ contactPersonId: -1 });
+
       let nextNumber = 1;
       if (lastContact && lastContact.contactPersonId) {
         const lastNumber = parseInt(lastContact.contactPersonId.replace('CP', ''));
         nextNumber = lastNumber + 1;
       }
-      
+
       this.contactPersonId = `CP${nextNumber.toString().padStart(3, '0')}`;
     } catch (error) {
       return next(error);

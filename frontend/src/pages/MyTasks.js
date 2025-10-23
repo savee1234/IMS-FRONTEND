@@ -48,15 +48,101 @@ const MyTasks = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
     setShowModal(true);
+    setIsEditing(false);
+    // Initialize edit form data with current complaint data
+    setEditFormData({
+      reference: complaint.reference,
+      requester: complaint.requester,
+      priority: complaint.priority,
+      status: complaint.status,
+      phone: complaint.phone,
+      email: complaint.email,
+      issue: complaint.issue,
+      categoryType: complaint.originalComplaint?.categoryType || '',
+      organization: complaint.originalComplaint?.organization || '',
+      solutionType: complaint.originalComplaint?.solutionType || '',
+      medium: complaint.originalComplaint?.medium || '',
+      assignment: complaint.originalComplaint?.assignment || '',
+      docRef: complaint.originalComplaint?.docRef || '',
+      docSubject: complaint.originalComplaint?.docSubject || '',
+      remarks: complaint.originalComplaint?.remarks || ''
+    });
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedComplaint(null);
+    setIsEditing(false);
+    setEditFormData({});
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    // Reset form data to original values
+    if (selectedComplaint) {
+      setEditFormData({
+        reference: selectedComplaint.reference,
+        requester: selectedComplaint.requester,
+        priority: selectedComplaint.priority,
+        status: selectedComplaint.status,
+        phone: selectedComplaint.phone,
+        email: selectedComplaint.email,
+        issue: selectedComplaint.issue,
+        categoryType: selectedComplaint.originalComplaint?.categoryType || '',
+        organization: selectedComplaint.originalComplaint?.organization || '',
+        solutionType: selectedComplaint.originalComplaint?.solutionType || '',
+        medium: selectedComplaint.originalComplaint?.medium || '',
+        assignment: selectedComplaint.originalComplaint?.assignment || '',
+        docRef: selectedComplaint.originalComplaint?.docRef || '',
+        docSubject: selectedComplaint.originalComplaint?.docSubject || '',
+        remarks: selectedComplaint.originalComplaint?.remarks || ''
+      });
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      // Here you would typically make an API call to update the complaint
+      // For now, we'll just update the local state
+      console.log('Saving complaint with data:', editFormData);
+      
+      // Update the selected complaint with new data
+      const updatedComplaint = {
+        ...selectedComplaint,
+        ...editFormData,
+        originalComplaint: {
+          ...selectedComplaint.originalComplaint,
+          ...editFormData
+        }
+      };
+      
+      setSelectedComplaint(updatedComplaint);
+      setIsEditing(false);
+      
+      // Show success message
+      alert('Complaint updated successfully!');
+      
+    } catch (error) {
+      console.error('Error updating complaint:', error);
+      alert('Error updating complaint. Please try again.');
+    }
   };
 
   useEffect(() => {
@@ -77,7 +163,7 @@ const MyTasks = () => {
     loadTasks();
   }, []);
 
-   const styles = {
+  const styles = {
     page: {
       position: 'relative',
       minHeight: '100vh',
@@ -100,729 +186,894 @@ const MyTasks = () => {
       left: 0,
       width: '100vw',
       height: '100vh',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
+      background: 'rgba(255, 255, 255, 0.05)',
+      backdropFilter: 'blur(5px)',
       zIndex: -1,
     },
+    contentWrapper: {
+      position: 'relative',
+      zIndex: 1,
+      padding: '1rem',
+      marginTop: '1rem',
+      maxWidth: '1400px',
+      margin: '1rem auto 0 auto'
+    },
+    pageHeader: {
+      textAlign: 'center',
+      marginBottom: '1rem',
+      padding: '1.5rem',
+      background: 'white',
+      borderRadius: '12px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e5e7eb'
+    },
+    pageTitle: {
+      fontSize: '2.5rem',
+      fontWeight: '700',
+      color: '#1f2937',
+      margin: '0 0 0.5rem 0',
+      textAlign: 'center'
+    },
+    pageSubtitle: {
+      color: '#6b7280',
+      fontSize: '1.1rem',
+      margin: 0,
+      fontWeight: '400'
+    },
+    contentContainer: {
+      background: 'white',
+      borderRadius: '12px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e5e7eb',
+      overflow: 'hidden',
+      padding: '2rem'
+    },
+    actionBar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '1.5rem',
+      padding: '1rem',
+      background: 'rgba(248, 250, 252, 0.5)',
+      borderRadius: '8px',
+      border: '1px solid #e5e7eb'
+    },
+    refreshButton: {
+      backgroundColor: '#10b981',
+      color: 'white',
+      padding: '0.75rem 1.5rem',
+      borderRadius: '8px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '1rem',
+      fontWeight: '600',
+      transition: 'background-color 0.2s'
+    },
+    exportButtons: {
+      display: 'flex',
+      gap: '0.5rem'
+    },
+    exportButton: {
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      padding: '0.5rem 1rem',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      transition: 'background-color 0.2s'
+    },
+    errorMessage: {
+      color: '#dc2626',
+      backgroundColor: '#fee2e2',
+      padding: '0.75rem 1rem',
+      borderRadius: '6px',
+      marginBottom: '1rem',
+      border: '1px solid #fecaca'
+    },
+    tableContainer: {
+      overflowX: 'auto',
+      borderRadius: '8px',
+      border: '1px solid #e5e7eb'
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      backgroundColor: 'white'
+    },
+    tableHeader: {
+      backgroundColor: '#f8fafc',
+      borderBottom: '2px solid #e5e7eb'
+    },
+    tableHeaderCell: {
+      padding: '1rem',
+      textAlign: 'left',
+      fontWeight: '600',
+      color: '#374151',
+      fontSize: '0.875rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em'
+    },
+    tableRow: {
+      borderBottom: '1px solid #f3f4f6',
+      transition: 'background-color 0.2s'
+    },
+    tableCell: {
+      padding: '1rem',
+      color: '#374151',
+      fontSize: '0.875rem'
+    },
+    statusBadge: {
+      padding: '0.25rem 0.75rem',
+      borderRadius: '9999px',
+      fontSize: '0.75rem',
+      fontWeight: '600',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em'
+    },
+    viewButton: {
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      padding: '0.5rem 1rem',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      transition: 'background-color 0.2s'
+    },
+    loadingContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '3rem',
+      color: '#6b7280'
+    },
+    emptyState: {
+      textAlign: 'center',
+      padding: '3rem',
+      color: '#6b7280'
+    },
+    modalOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: '2rem',
+      borderRadius: '12px',
+      maxWidth: '600px',
+      width: '90%',
+      maxHeight: '80vh',
+      overflowY: 'auto',
+      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
+    },
+    modalHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '1.5rem'
+    },
+    modalTitle: {
+      margin: 0,
+      fontSize: '1.5rem',
+      fontWeight: '600',
+      color: '#1f2937'
+    },
+    closeButton: {
+      background: 'none',
+      border: 'none',
+      fontSize: '1.5rem',
+      cursor: 'pointer',
+      color: '#6b7280',
+      padding: '4px',
+      borderRadius: '4px',
+      transition: 'background-color 0.2s'
+    },
+    modalGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '1rem',
+      marginBottom: '1.5rem'
+    },
+    modalField: {
+      marginBottom: '0.5rem'
+    },
+    modalLabel: {
+      fontWeight: '600',
+      color: '#374151',
+      fontSize: '0.875rem'
+    },
+    modalValue: {
+      margin: '4px 0 0 0',
+      color: '#6b7280',
+      fontSize: '0.875rem'
+    },
+    modalDescription: {
+      marginBottom: '1.5rem'
+    },
+    modalDescriptionLabel: {
+      fontWeight: '600',
+      color: '#374151',
+      fontSize: '0.875rem',
+      marginBottom: '0.5rem'
+    },
+    modalDescriptionValue: {
+      margin: '8px 0 0 0',
+      color: '#6b7280',
+      lineHeight: '1.5',
+      padding: '12px',
+      backgroundColor: '#f9fafb',
+      borderRadius: '6px',
+      border: '1px solid #e5e7eb',
+      fontSize: '0.875rem'
+    },
+    modalContactInfo: {
+      marginBottom: '1.5rem'
+    },
+    modalContactLabel: {
+      fontWeight: '600',
+      color: '#374151',
+      fontSize: '0.875rem',
+      marginBottom: '0.5rem'
+    },
+    modalContactValue: {
+      margin: '8px 0 0 0',
+      padding: '12px',
+      backgroundColor: '#f9fafb',
+      borderRadius: '6px',
+      border: '1px solid #e5e7eb'
+    },
+    modalContactItem: {
+      margin: '0 0 4px 0',
+      color: '#6b7280',
+      fontSize: '0.875rem'
+    },
+    modalActions: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '12px'
+    },
+    modalButton: {
+      padding: '8px 16px',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      transition: 'background-color 0.2s'
+    },
+    closeModalButton: {
+      backgroundColor: '#6b7280',
+      color: 'white'
+    },
+    editModalButton: {
+      backgroundColor: '#3b82f6',
+      color: 'white'
+    },
+    editInput: {
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #d1d5db',
+      borderRadius: '6px',
+      fontSize: '0.875rem',
+      color: '#374151',
+      backgroundColor: 'white',
+      transition: 'border-color 0.2s'
+    },
+    editSelect: {
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #d1d5db',
+      borderRadius: '6px',
+      fontSize: '0.875rem',
+      color: '#374151',
+      backgroundColor: 'white',
+      transition: 'border-color 0.2s'
+    },
+    editTextarea: {
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #d1d5db',
+      borderRadius: '6px',
+      fontSize: '0.875rem',
+      color: '#374151',
+      backgroundColor: 'white',
+      transition: 'border-color 0.2s',
+      resize: 'vertical',
+      minHeight: '80px'
+    },
+    editActions: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '12px',
+      marginTop: '1.5rem',
+      paddingTop: '1rem',
+      borderTop: '1px solid #e5e7eb'
+    },
+    saveButton: {
+      backgroundColor: '#10b981',
+      color: 'white',
+      padding: '8px 16px',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      transition: 'background-color 0.2s'
+    },
+    cancelButton: {
+      backgroundColor: '#6b7280',
+      color: 'white',
+      padding: '8px 16px',
+      borderRadius: '6px',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      transition: 'background-color 0.2s'
+    }
   };
 
   return (
     <div style={styles.page}>
-          <video autoPlay loop muted style={styles.videoBackground}>
-            <source src={backgroundVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div style={styles.gradientOverlay}></div>
+      <video autoPlay loop muted style={styles.videoBackground}>
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div style={styles.gradientOverlay}></div>
       <Navbar />
-      <main style={{
-        flex: 1,
-        padding: '24px'
-      }}>
-        <h1 style={{
-          fontSize: '1.875rem',
-          fontWeight: 700,
-          marginBottom: '24px',
-          color: '#0d0d0eff'
-        }}>
-          My Tasks
-        </h1>
+      
+      <div style={styles.contentWrapper}>
+        {/* Page Header */}
+        <header style={styles.pageHeader}>
+          <h1 style={styles.pageTitle}>
+            My Tasks
+          </h1>
+          <p style={styles.pageSubtitle}>
+            View and manage your assigned tasks and complaints
+          </p>
+        </header>
 
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px'
-        }}>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              marginBottom: '12px',
-              backgroundColor: '#10b981',
-              color: 'white',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#059669'
-              }
-            }}
-          >
-            {loading ? 'Loading...' : 'Refresh Tasks'}
-          </button>
+        <div style={styles.contentContainer}>
+          {/* Action Bar */}
+          <div style={styles.actionBar}>
+            <button
+              onClick={() => window.location.reload()}
+              style={styles.refreshButton}
+            >
+              {loading ? 'Loading...' : 'Refresh Tasks'}
+            </button>
+
+            <div style={styles.exportButtons}>
+              <button style={styles.exportButton}>
+                CSV
+              </button>
+              <button style={styles.exportButton}>
+                Excel
+              </button>
+              <button style={styles.exportButton}>
+                PDF
+              </button>
+              <button style={styles.exportButton}>
+                Print
+              </button>
+            </div>
+          </div>
 
           {error && (
-            <div style={{
-              color: '#dc2626',
-              backgroundColor: '#fee2e2',
-              padding: '8px 12px',
-              borderRadius: '4px',
-              marginBottom: '12px'
-            }}>
+            <div style={styles.errorMessage}>
               {error}
             </div>
           )}
 
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            marginBottom: '12px'
-          }}>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              CSV
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              Excel
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              PDF
-            </button>
-            <button style={{
-              backgroundColor: '#1048b9ff',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              ':hover': {
-                backgroundColor: '#1048b9ff'
-              }
-            }}>
-              Print
-            </button>
+          <div style={styles.tableContainer}>
+            <table style={styles.table}>
+              <thead style={styles.tableHeader}>
+                <tr>
+                  <th style={styles.tableHeaderCell}>Reference</th>
+                  <th style={styles.tableHeaderCell}>Requester</th>
+                  <th style={styles.tableHeaderCell}>Priority</th>
+                  <th style={styles.tableHeaderCell}>Status</th>
+                  <th style={styles.tableHeaderCell}>Issue</th>
+                  <th style={styles.tableHeaderCell}>Phone</th>
+                  <th style={styles.tableHeaderCell}>Email</th>
+                  <th style={styles.tableHeaderCell}>Created</th>
+                  <th style={styles.tableHeaderCell}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td colSpan="9" style={styles.loadingContainer}>
+                      Loading complaints...
+                    </td>
+                  </tr>
+                ) : tasks.length === 0 ? (
+                  <tr>
+                    <td colSpan="9" style={styles.emptyState}>
+                      No complaints found. Submit a complaint to see it here.
+                    </td>
+                  </tr>
+                ) : (
+                  tasks.map((task) => (
+                    <tr key={task.id} style={styles.tableRow}>
+                      <td style={styles.tableCell}>{task.reference}</td>
+                      <td style={styles.tableCell}>{task.requester}</td>
+                      <td style={styles.tableCell}>{task.priority}</td>
+                      <td style={styles.tableCell}>
+                        <span
+                          style={{
+                            ...styles.statusBadge,
+                            backgroundColor: task.status === 'Open'
+                              ? '#fee2e2'
+                              : task.status === 'Ongoing'
+                              ? '#fef3c7'
+                              : '#d1fae5',
+                            color: task.status === 'Open'
+                              ? '#dc2626'
+                              : task.status === 'Ongoing'
+                              ? '#92400e'
+                              : '#065f46'
+                          }}
+                        >
+                          {task.status}
+                        </span>
+                      </td>
+                      <td style={styles.tableCell}>{task.issue}</td>
+                      <td style={styles.tableCell}>{task.phone}</td>
+                      <td style={styles.tableCell}>{task.email}</td>
+                      <td style={styles.tableCell}>{task.created}</td>
+                      <td style={styles.tableCell}>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                          <button
+                            title="Details"
+                            onClick={() => handleViewDetails(task)}
+                            style={{
+                              color: '#2563eb',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          >
+                            <FaFileAlt />
+                          </button>
+                          <button 
+                            title="History" 
+                            style={{
+                              color: '#4b5563',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          >
+                            <FaHistory />
+                          </button>
+                          <button 
+                            title="Comments" 
+                            style={{
+                              color: '#7c3aed',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          >
+                            <FaComments />
+                          </button>
+                          <button 
+                            title="Done" 
+                            style={{
+                              color: '#059669',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          >
+                            <FaCheck />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <div style={{
-          overflowX: 'auto'
-        }}>
-          <table style={{
-            minWidth: '100%',
-            backgroundColor: 'white',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-            borderRadius: '4px',
-            fontSize: '0.875rem'
-          }}>
-            <thead>
-              <tr style={{
-                backgroundColor: '#e5e7eb',
-                color: '#374151'
-              }}>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Reference</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Requester</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Priority</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Status</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Issue</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Phone</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Email</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Created</th>
-                <th style={{ padding: '12px', textAlign: 'center' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="9" style={{ padding: '24px', textAlign: 'center' }}>
-                    Loading complaints...
-                  </td>
-                </tr>
-              ) : tasks.length === 0 ? (
-                <tr>
-                  <td colSpan="9" style={{ padding: '24px', textAlign: 'center' }}>
-                    No complaints found. Submit a complaint to see it here.
-                  </td>
-                </tr>
-              ) : (
-                tasks.map((task) => (
-                <tr key={task.id} style={{
-                  borderTop: '1px solid #e5e7eb',
-                  ':hover': {
-                    backgroundColor: '#f9fafb'
-                  }
-                }}>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.reference}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.requester}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.priority}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>
-                    <span
-                      style={{
-                        padding: '4px 8px',
-                        borderRadius: '9999px',
-                        fontSize: '0.75rem',
-                        fontWeight: 500,
-                        backgroundColor: task.status === 'Open'
-                          ? '#fee2e2'
-                          : task.status === 'Ongoing'
-                          ? '#fef3c7'
-                          : '#d1fae5',
-                        color: task.status === 'Open'
-                          ? '#dc2626'
-                          : task.status === 'Ongoing'
-                          ? '#92400e'
-                          : '#065f46'
-                      }}
-                    >
-                      {task.status}
-                    </span>
-                  </td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.issue}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.phone}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.email}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{task.created}</td>
-                  <td style={{ 
-                    padding: '12px', 
-                    textAlign: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '8px'
-                  }}>
-                    <button
-                      title="Details"
-                      onClick={() => handleViewDetails(task.originalComplaint)}
-                      style={{
-                        color: '#2563eb',
-                        border: 'none',
-                        background: 'none',
-                        cursor: 'pointer',
-                        ':hover': {
-                          color: '#1e40af'
-                        }
-                      }}
-                    >
-                      <FaFileAlt />
-                    </button>
-                    <button title="History" style={{
-                      color: '#4b5563',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#1f2937'
-                      }
-                    }}>
-                      <FaHistory />
-                    </button>
-                    <button title="Comments" style={{
-                      color: '#7c3aed',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#5b21b6'
-                      }
-                    }}>
-                      <FaComments />
-                    </button>
-                    <button title="Done" style={{
-                      color: '#059669',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: '#047857'
-                      }
-                    }}>
-                      <FaCheck />
-                    </button>
-                  </td>
-                </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pagination Footer */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: '16px',
-          fontSize: '0.875rem'
-        }}>
-          <span>Showing 1 to {tasks.length} of {tasks.length} entries</span>
-          <div style={{
-            display: 'flex',
-            gap: '8px'
-          }}>
-            <button style={{
-              padding: '4px 10px',
-              border: '1px solid #151515ff',
-              borderRadius: '4px',
-              color: '#f7f7fbff',
-              backgroundColor: 'black',
-              cursor: 'pointer',
-              ':hover': {
-                backgroundColor: '#0e0e0eff'
-              },
-              ':disabled': {
-                opacity: 0.5
-              }
-            }} disabled>
-              Previous
-            </button>
-            <button style={{
-              padding: '4px 18px',
-              border: '1px solid #151515ff',
-              borderRadius: '4px',
-              color: '#f7f7fbff',
-              backgroundColor: 'black',
-              cursor: 'pointer',
-              ':hover': {
-                backgroundColor: '#f3f4f6'
-              }
-            }}>
-              Next
-            </button>
-          </div>
-        </div>
-      </main>
-
+      </div>
+      
       {/* Complaint Details Modal */}
       {showModal && selectedComplaint && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '12px',
-            padding: '24px',
-            maxWidth: '800px',
-            width: '100%',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
-          }}>
-            {/* Modal Header */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '24px',
-              paddingBottom: '16px',
-              borderBottom: '2px solid #e5e7eb'
-            }}>
-              <h2 style={{
-                margin: 0,
-                color: '#1f2937',
-                fontSize: '1.5rem',
-                fontWeight: '700'
-              }}>
-                Complaint Details - {selectedComplaint.requestRef || 'New Complaint'}
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>
+                Complaint Details
               </h2>
               <button
                 onClick={closeModal}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '24px',
-                  cursor: 'pointer',
-                  color: '#6b7280',
-                  padding: '4px'
-                }}
+                style={styles.closeButton}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
               >
                 ×
               </button>
             </div>
 
-            {/* Complaint Details Content */}
-            <div style={{ display: 'grid', gap: '24px' }}>
-              {/* Request Information */}
-              <section>
-                <h3 style={{
-                  color: '#3b82f6',
-                  margin: '0 0 16px 0',
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  borderBottom: '1px solid #e5e7eb',
-                  paddingBottom: '8px'
-                }}>
-                  📋 Request Information
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Reference Number:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937', fontSize: '1.1rem', fontWeight: '500' }}>
-                      {selectedComplaint.requestRef || 'N/A'}
-                    </p>
+            <div style={styles.modalGrid}>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Reference:</div>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editFormData.reference || ''}
+                    onChange={(e) => handleInputChange('reference', e.target.value)}
+                    style={styles.editInput}
+                  />
+                ) : (
+                  <div style={styles.modalValue}>
+                    {selectedComplaint.reference}
                   </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Category:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.categoryType || 'N/A'}</p>
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Requester:</div>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editFormData.requester || ''}
+                    onChange={(e) => handleInputChange('requester', e.target.value)}
+                    style={styles.editInput}
+                  />
+                ) : (
+                  <div style={styles.modalValue}>
+                    {selectedComplaint.requester}
                   </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Organization:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.organization || 'N/A'}</p>
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Priority:</div>
+                {isEditing ? (
+                  <select
+                    value={editFormData.priority || ''}
+                    onChange={(e) => handleInputChange('priority', e.target.value)}
+                    style={styles.editSelect}
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                  </select>
+                ) : (
+                  <div style={styles.modalValue}>
+                    {selectedComplaint.priority}
                   </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Solution Type:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.solutionType || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Status:
-                    </label>
-                    <span style={{
-                      padding: '4px 12px',
-                      borderRadius: '20px',
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      backgroundColor: selectedComplaint.solutionName === 'Resolved' ? '#d1fae5' :
-                                     selectedComplaint.solutionName === 'In Progress' ? '#fef3c7' : '#fee2e2',
-                      color: selectedComplaint.solutionName === 'Resolved' ? '#065f46' :
-                             selectedComplaint.solutionName === 'In Progress' ? '#92400e' : '#dc2626'
-                    }}>
-                      {selectedComplaint.solutionName || 'Pending'}
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Status:</div>
+                {isEditing ? (
+                  <select
+                    value={editFormData.status || ''}
+                    onChange={(e) => handleInputChange('status', e.target.value)}
+                    style={styles.editSelect}
+                  >
+                    <option value="Open">Open</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                ) : (
+                  <div style={styles.modalValue}>
+                    <span
+                      style={{
+                        ...styles.statusBadge,
+                        backgroundColor: selectedComplaint.status === 'Open'
+                          ? '#fee2e2'
+                          : selectedComplaint.status === 'Ongoing'
+                          ? '#fef3c7'
+                          : '#d1fae5',
+                        color: selectedComplaint.status === 'Open'
+                          ? '#dc2626'
+                          : selectedComplaint.status === 'Ongoing'
+                          ? '#92400e'
+                          : '#065f46'
+                      }}
+                    >
+                      {selectedComplaint.status}
                     </span>
                   </div>
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Phone:</div>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editFormData.phone || ''}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    style={styles.editInput}
+                  />
+                ) : (
+                  <div style={styles.modalValue}>
+                    {selectedComplaint.phone}
+                  </div>
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Email:</div>
+                {isEditing ? (
+                  <input
+                    type="email"
+                    value={editFormData.email || ''}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    style={styles.editInput}
+                  />
+                ) : (
+                  <div style={styles.modalValue}>
+                    {selectedComplaint.email}
+                  </div>
+                )}
+              </div>
+              <div style={styles.modalField}>
+                <div style={styles.modalLabel}>Created:</div>
+                <div style={styles.modalValue}>
+                  {selectedComplaint.created}
                 </div>
-              </section>
-
-              {/* Contact Information */}
-              <section>
-                <h3 style={{
-                  color: '#3b82f6',
-                  margin: '0 0 16px 0',
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  borderBottom: '1px solid #e5e7eb',
-                  paddingBottom: '8px'
-                }}>
-                  👤 Contact Information
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Contact Name:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.contactName || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Email:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.email || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Mobile:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.mobile || selectedComplaint.searchMobile || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Office Mobile:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.officeMobile || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Title:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.title || 'N/A'}</p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Organization Contact Person Information */}
-              {selectedComplaint.organizationContactPerson && (
-                <section>
-                  <h3 style={{
-                    color: '#10b981',
-                    margin: '0 0 16px 0',
-                    fontSize: '1.125rem',
-                    fontWeight: '600',
-                    borderBottom: '1px solid #e5e7eb',
-                    paddingBottom: '8px'
-                  }}>
-                    🏢 Organization Contact Person
-                  </h3>
-                  <div style={{
-                    padding: '16px',
-                    backgroundColor: '#f0fdf4',
-                    borderRadius: '8px',
-                    border: '1px solid #bbf7d0',
-                    marginBottom: '16px'
-                  }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#166534', display: 'block', marginBottom: '4px' }}>
-                          Name:
-                        </label>
-                        <p style={{ margin: 0, color: '#166534', fontWeight: '500' }}>
-                          {selectedComplaint.organizationContactPerson.name || 'N/A'}
-                        </p>
-                      </div>
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#166534', display: 'block', marginBottom: '4px' }}>
-                          Organization:
-                        </label>
-                        <p style={{ margin: 0, color: '#166534', fontWeight: '500' }}>
-                          {selectedComplaint.organizationContactPerson.organizationName || 'N/A'}
-                        </p>
-                      </div>
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#166534', display: 'block', marginBottom: '4px' }}>
-                          Email:
-                        </label>
-                        <p style={{ margin: 0, color: '#166534' }}>
-                          {selectedComplaint.organizationContactPerson.email || 'N/A'}
-                        </p>
-                      </div>
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#166534', display: 'block', marginBottom: '4px' }}>
-                          Mobile:
-                        </label>
-                        <p style={{ margin: 0, color: '#166534' }}>
-                          {selectedComplaint.organizationContactPerson.mobileNumber || 'N/A'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              )}
-
-              {/* Communication Details */}
-              <section>
-                <h3 style={{
-                  color: '#3b82f6',
-                  margin: '0 0 16px 0',
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  borderBottom: '1px solid #e5e7eb',
-                  paddingBottom: '8px'
-                }}>
-                  📞 Communication Details
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Medium:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.medium || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Medium Source:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.mediumSource || 'N/A'}</p>
-                  </div>
-                </div>
-              </section>
-
-              {/* Complaint Details */}
-              <section>
-                <h3 style={{
-                  color: '#3b82f6',
-                  margin: '0 0 16px 0',
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  borderBottom: '1px solid #e5e7eb',
-                  paddingBottom: '8px'
-                }}>
-                  📝 Complaint Details
-                </h3>
-                <div>
-                  <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                    Complaint Description:
-                  </label>
-                  <div style={{
-                    padding: '12px',
-                    backgroundColor: '#f9fafb',
-                    borderRadius: '8px',
-                    border: '1px solid #e5e7eb',
-                    minHeight: '60px',
-                    whiteSpace: 'pre-wrap'
-                  }}>
-                    {selectedComplaint.complaint || 'No complaint description provided'}
-                  </div>
-                </div>
-              </section>
-
-              {/* Assignment Information */}
-              {(selectedComplaint.mainAssignment || selectedComplaint.subAssignment) && (
-                <section>
-                  <h3 style={{
-                    color: '#3b82f6',
-                    margin: '0 0 16px 0',
-                    fontSize: '1.125rem',
-                    fontWeight: '600',
-                    borderBottom: '1px solid #e5e7eb',
-                    paddingBottom: '8px'
-                  }}>
-                    👥 Assignment Information
-                  </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                    <div>
-                      <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                        Main Assignment:
-                      </label>
-                      <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.mainAssignment || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                        Sub Assignment:
-                      </label>
-                      <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.subAssignment || 'N/A'}</p>
-                    </div>
-                  </div>
-                </section>
-              )}
-
-              {/* Document Information */}
-              {(selectedComplaint.docRef || selectedComplaint.docSubject || selectedComplaint.remarks) && (
-                <section>
-                  <h3 style={{
-                    color: '#3b82f6',
-                    margin: '0 0 16px 0',
-                    fontSize: '1.125rem',
-                    fontWeight: '600',
-                    borderBottom: '1px solid #e5e7eb',
-                    paddingBottom: '8px'
-                  }}>
-                    📄 Document Information
-                  </h3>
-                  <div style={{ display: 'grid', gap: '16px' }}>
-                    {selectedComplaint.docRef && (
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                          Document Reference:
-                        </label>
-                        <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.docRef}</p>
-                      </div>
-                    )}
-                    {selectedComplaint.docSubject && (
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                          Document Subject:
-                        </label>
-                        <p style={{ margin: 0, color: '#1f2937' }}>{selectedComplaint.docSubject}</p>
-                      </div>
-                    )}
-                    {selectedComplaint.remarks && (
-                      <div>
-                        <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                          Remarks:
-                        </label>
-                        <div style={{
-                          padding: '12px',
-                          backgroundColor: '#f9fafb',
-                          borderRadius: '8px',
-                          border: '1px solid #e5e7eb',
-                          whiteSpace: 'pre-wrap'
-                        }}>
-                          {selectedComplaint.remarks}
-                        </div>
+              </div>
+              {selectedComplaint.originalComplaint && (
+                <>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Category:</div>
+                    {isEditing ? (
+                      <select
+                        value={editFormData.categoryType || ''}
+                        onChange={(e) => handleInputChange('categoryType', e.target.value)}
+                        style={styles.editSelect}
+                      >
+                        <option value="">Select Category</option>
+                        <option value="Billing">Billing</option>
+                        <option value="Connectivity">Connectivity</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.categoryType || 'N/A'}
                       </div>
                     )}
                   </div>
-                </section>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Organization:</div>
+                    {isEditing ? (
+                      <select
+                        value={editFormData.organization || ''}
+                        onChange={(e) => handleInputChange('organization', e.target.value)}
+                        style={styles.editSelect}
+                      >
+                        <option value="">Select Organization</option>
+                        <option value="SLT">SLT</option>
+                        <option value="Mobitel">Mobitel</option>
+                        <option value="ABC Pvt Ltd">ABC Pvt Ltd</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.organization || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Solution Type:</div>
+                    {isEditing ? (
+                      <select
+                        value={editFormData.solutionType || ''}
+                        onChange={(e) => handleInputChange('solutionType', e.target.value)}
+                        style={styles.editSelect}
+                      >
+                        <option value="">Select Solution Type</option>
+                        <option value="Permanent">Permanent</option>
+                        <option value="Temporary">Temporary</option>
+                        <option value="Workaround">Workaround</option>
+                        <option value="Feature Request">Feature Request</option>
+                      </select>
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.solutionType || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Medium:</div>
+                    {isEditing ? (
+                      <select
+                        value={editFormData.medium || ''}
+                        onChange={(e) => handleInputChange('medium', e.target.value)}
+                        style={styles.editSelect}
+                      >
+                        <option value="">Select Medium</option>
+                        <option value="Hotline">Hotline</option>
+                        <option value="Email">Email</option>
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="SMS">SMS</option>
+                        <option value="Walk-in">Walk-in</option>
+                      </select>
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.medium || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Assignment:</div>
+                    {isEditing ? (
+                      <select
+                        value={editFormData.assignment || ''}
+                        onChange={(e) => handleInputChange('assignment', e.target.value)}
+                        style={styles.editSelect}
+                      >
+                        <option value="">Select Assignment</option>
+                        <option value="Field Visit">Field Visit</option>
+                        <option value="Remote Fix">Remote Fix</option>
+                        <option value="Call Back">Call Back</option>
+                        <option value="Escalate L2">Escalate L2</option>
+                        <option value="Fiber Team">Fiber Team</option>
+                        <option value="Billing Team">Billing Team</option>
+                        <option value="Tech Support">Tech Support</option>
+                      </select>
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.assignment || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Document Reference:</div>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editFormData.docRef || ''}
+                        onChange={(e) => handleInputChange('docRef', e.target.value)}
+                        style={styles.editInput}
+                        placeholder="Enter document reference"
+                      />
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.docRef || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Document Subject:</div>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editFormData.docSubject || ''}
+                        onChange={(e) => handleInputChange('docSubject', e.target.value)}
+                        style={styles.editInput}
+                        placeholder="Enter document subject"
+                      />
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.docSubject || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                  <div style={styles.modalField}>
+                    <div style={styles.modalLabel}>Remarks:</div>
+                    {isEditing ? (
+                      <textarea
+                        value={editFormData.remarks || ''}
+                        onChange={(e) => handleInputChange('remarks', e.target.value)}
+                        style={styles.editTextarea}
+                        placeholder="Enter remarks"
+                      />
+                    ) : (
+                      <div style={styles.modalValue}>
+                        {selectedComplaint.originalComplaint.remarks || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
-
-              {/* Timestamps */}
-              <section>
-                <h3 style={{
-                  color: '#3b82f6',
-                  margin: '0 0 16px 0',
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  borderBottom: '1px solid #e5e7eb',
-                  paddingBottom: '8px'
-                }}>
-                  🕒 Timestamps
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Created At:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>
-                      {selectedComplaint.createdAt ? new Date(selectedComplaint.createdAt).toLocaleString() : 'N/A'}
-                    </p>
-                  </div>
-                  <div>
-                    <label style={{ fontWeight: '600', color: '#374151', display: 'block', marginBottom: '4px' }}>
-                      Last Updated:
-                    </label>
-                    <p style={{ margin: 0, color: '#1f2937' }}>
-                      {selectedComplaint.updatedAt ? new Date(selectedComplaint.updatedAt).toLocaleString() : 'N/A'}
-                    </p>
-                  </div>
-                </div>
-              </section>
             </div>
 
-            {/* Modal Footer */}
-            <div style={{
-              marginTop: '32px',
-              paddingTop: '16px',
-              borderTop: '1px solid #e5e7eb',
-              textAlign: 'center'
-            }}>
-              <button
-                onClick={closeModal}
-                style={{
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: '500'
-                }}
-              >
-                Close
-              </button>
+            <div style={styles.modalDescription}>
+              <div style={styles.modalDescriptionLabel}>Issue Description:</div>
+              {isEditing ? (
+                <textarea
+                  value={editFormData.issue || ''}
+                  onChange={(e) => handleInputChange('issue', e.target.value)}
+                  style={styles.editTextarea}
+                  placeholder="Enter issue description"
+                />
+              ) : (
+                <div style={styles.modalDescriptionValue}>
+                  {selectedComplaint.issue}
+                </div>
+              )}
+            </div>
+
+            {selectedComplaint.organizationContactPerson && (
+              <div style={styles.modalContactInfo}>
+                <div style={styles.modalContactLabel}>Organization Contact Person:</div>
+                <div style={styles.modalContactValue}>
+                  <div style={styles.modalContactItem}>
+                    <strong>Name:</strong> {selectedComplaint.organizationContactPerson.name}
+                  </div>
+                  <div style={styles.modalContactItem}>
+                    <strong>Organization:</strong> {selectedComplaint.organizationContactPerson.organizationName}
+                  </div>
+                  <div style={styles.modalContactItem}>
+                    <strong>Email:</strong> {selectedComplaint.organizationContactPerson.email}
+                  </div>
+                  <div style={styles.modalContactItem}>
+                    <strong>Mobile:</strong> {selectedComplaint.organizationContactPerson.mobileNumber}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div style={styles.modalActions}>
+              {isEditing ? (
+                <>
+                  <button
+                    onClick={handleCancelEdit}
+                    style={{...styles.modalButton, ...styles.cancelButton}}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveEdit}
+                    style={{...styles.modalButton, ...styles.saveButton}}
+                  >
+                    Save Changes
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={closeModal}
+                    style={{...styles.modalButton, ...styles.closeModalButton}}
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={handleEditClick}
+                    style={{...styles.modalButton, ...styles.editModalButton}}
+                  >
+                    Edit Complaint
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

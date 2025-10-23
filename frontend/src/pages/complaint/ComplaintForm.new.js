@@ -45,6 +45,21 @@ export default function ComplaintOnboarding() {
   });
 
   const [generatedRef, setGeneratedRef] = useState("");
+
+  // Function to generate reference number in format YY-MM-DD-XXXX
+  const generateReferenceNumber = () => {
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2); // Last 2 digits of year
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Month with leading zero
+    const day = now.getDate().toString().padStart(2, '0'); // Day with leading zero
+    
+    // For now, we'll use a simple counter. In a real system, you might want to fetch the last number from the database
+    const sequence = Math.floor(Math.random() * 9999) + 1; // Random number between 1-9999
+    const sequenceStr = sequence.toString().padStart(4, '0'); // Pad to 4 digits
+    
+    return `${year}-${month}-${day}-${sequenceStr}`;
+  };
+
   const [notFoundMsg, setNotFoundMsg] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [complaintId, setComplaintId] = useState(null);
@@ -64,6 +79,13 @@ export default function ComplaintOnboarding() {
   const [organizationContactPersons, setOrganizationContactPersons] = useState([]);
   const [selectedContactPerson, setSelectedContactPerson] = useState("");
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
+
+  // Generate reference number when component mounts
+  useEffect(() => {
+    const refNumber = generateReferenceNumber();
+    setGeneratedRef(refNumber);
+    setForm(prev => ({ ...prev, requestRef: refNumber }));
+  }, []);
 
   // Fetch mobile numbers for dropdown
   useEffect(() => {

@@ -10,7 +10,8 @@ const fetchTasks = async () => {
     if (!response.ok) {
       throw new Error('Failed to fetch complaints');
     }
-    const complaints = await response.json();
+    const result = await response.json();
+    const complaints = result.data || result; // Handle both old and new response formats
 
     // Map backend data to frontend display format
     return complaints.map((complaint, index) => ({

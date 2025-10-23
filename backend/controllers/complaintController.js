@@ -78,7 +78,11 @@ const createComplaint = async (req, res) => {
     console.log('Creating complaint with data:', complaintData);
     const complaint = await Complaint.create(complaintData);
     console.log('Complaint created successfully:', complaint);
-    res.status(201).json(complaint);
+    res.status(201).json({
+      success: true,
+      message: "Complaint created successfully",
+      data: complaint
+    });
   } catch (error) {
     console.error("Error creating complaint:", error);
     res.status(500).json({
@@ -95,10 +99,18 @@ const getAllComplaints = async (req, res) => {
     const complaints = await Complaint.find()
       .populate('organizationContactPersonId', 'name organizationName email mobileNumber')
       .sort({ createdAt: -1 });
-    res.json(complaints);
+    res.json({
+      success: true,
+      message: "Complaints fetched successfully",
+      data: complaints
+    });
   } catch (error) {
     console.error("Error fetching complaints:", error);
-    res.status(500).json({ message: "Error fetching complaints", error });
+    res.status(500).json({ 
+      success: false,
+      message: "Error fetching complaints", 
+      error: error.message 
+    });
   }
 };
 

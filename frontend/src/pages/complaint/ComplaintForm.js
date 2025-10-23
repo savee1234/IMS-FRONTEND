@@ -375,9 +375,7 @@ export default function ComplaintOnboarding() {
   };
 
   const onViewComplaint = () => {
-    if (complaintId) {
-      navigate(`/complaint/view/${complaintId}`);
-    }
+    navigate('/my-tasks');
   };
 
   return (

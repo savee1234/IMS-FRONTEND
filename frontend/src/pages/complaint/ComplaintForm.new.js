@@ -6,7 +6,7 @@ export default function ComplaintOnboarding() {
   const navigate = useNavigate();
   
   // ------- Dummy data (replace with real API data) --------
-  const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
+  // const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"]; // Removed hardcoded data
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
   const solutions = ["Pending", "In Progress", "Resolved", "Escalated"];
   const mediums = ["Hotline", "Email", "WhatsApp", "SMS", "Walk-in"];
@@ -79,6 +79,8 @@ export default function ComplaintOnboarding() {
   const [organizationContactPersons, setOrganizationContactPersons] = useState([]);
   const [selectedContactPerson, setSelectedContactPerson] = useState("");
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrganizations, setLoadingOrganizations] = useState(false);
 
   // Generate reference number when component mounts
   useEffect(() => {
@@ -107,6 +109,28 @@ export default function ComplaintOnboarding() {
     };
 
     fetchMobileNumbers();
+  }, []);
+
+  // Fetch organizations for dropdown
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      setLoadingOrganizations(true);
+      try {
+        const response = await fetch('http://localhost:44354/api/organizations');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setOrganizations(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching organizations:', error);
+      } finally {
+        setLoadingOrganizations(false);
+      }
+    };
+
+    fetchOrganizations();
   }, []);
 
   // Fetch organization contact persons for dropdown

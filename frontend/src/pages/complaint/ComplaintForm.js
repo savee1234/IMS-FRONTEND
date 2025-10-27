@@ -4,7 +4,8 @@
 // -------------------------------------------------
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./ComplaintForm.css"; // Updated path
+import "./ComplaintForm.css";
+import ContactPersonSelect from "../../components/ContactPersonSelect";
 
 export default function ComplaintOnboarding() {
   const navigate = useNavigate();
@@ -244,6 +245,28 @@ export default function ComplaintOnboarding() {
     // Reset solutionName when solutionType changes
     if (key === 'solutionType') {
       setForm((f) => ({ ...f, solutionName: '' }));
+    }
+  };
+
+  const handleContactSelect = (contact) => {
+    if (contact) {
+      setSelectedContactPerson(contact);
+      update("organizationContactPersonId", contact._id);
+      update("contactName", contact.name);
+      update("email", contact.email);
+      update("mobile", contact.mobileNumber);
+      update("officeMobile", contact.officeContactNumber);
+      update("title", contact.title || "Mr.");
+      setNotFoundMsg("");
+    } else {
+      setSelectedContactPerson(null);
+      update("organizationContactPersonId", "");
+      update("contactName", "");
+      update("email", "");
+      update("mobile", "");
+      update("officeMobile", "");
+      update("title", "Mr.");
+      setNotFoundMsg("");
     }
   };
 
@@ -764,83 +787,23 @@ export default function ComplaintOnboarding() {
             </h2>
           </div>
 
-          {/* Organization Contact Person Selection */}
+          {/* Contact Person Searchable Dropdown */}
           <div className="search-row" style={{ marginBottom: '1rem' }}>
             <div className="search-inline">
-              <label className="label">Select from Organization Contacts:</label>
-              <select
-                className="input"
-                value={selectedContactPerson}
-                onChange={(e) => onContactPersonSelect(e.target.value)}
-                style={{ flex: 1 }}
-              >
-                <option value="">Select existing contact person...</option>
-                {loadingContactPersons ? (
-                  <option disabled>Loading contact persons...</option>
-                ) : (
-                  organizationContactPersons.map((person) => (
-                    <option key={person._id} value={person._id}>
-                      {person.name} ({person.organizationName}) - {person.mobileNumber}
-                    </option>
-                  ))
-                )}
-              </select>
+              <label className="label">Search Contact Person:</label>
+              <ContactPersonSelect
+                contacts={organizationContactPersons}
+                onSelect={handleContactSelect}
+                isLoading={loadingContactPersons}
+                selectedPerson={selectedContactPerson}
+                placeholder="Search by name or mobile number..."
+              />
             </div>
-          </div>
-
-          <div className="search-row">
-            <div style={{ marginBottom: '1rem' }}>
-              <label className="label">Search Type:</label>
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem' }}>
-                  <input
-                    type="radio"
-                    value="mobile"
-                    checked={searchType === 'mobile'}
-                    onChange={(e) => setSearchType(e.target.value)}
-                  />
-                  Mobile Number
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem' }}>
-                  <input
-                    type="radio"
-                    value="name"
-                    checked={searchType === 'name'}
-                    onChange={(e) => setSearchType(e.target.value)}
-                  />
-                  Name
-                </label>
+            {notFoundMsg && (
+              <div className="note" style={{ marginTop: '0.5rem', color: '#666' }}>
+                {notFoundMsg}
               </div>
-            </div>
-
-            <div className="search-inline">
-              <label className="label">
-                {searchType === 'mobile' ? 'Mobile Number:' : 'Contact Name:'}
-              </label>
-              {searchType === 'mobile' ? (
-                <input
-                  type="text"
-                  className="input"
-                  value={form.searchMobile}
-                  onChange={(e) => update("searchMobile", e.target.value)}
-                  placeholder="Enter mobile number (07XXXXXXXX)"
-                  style={{ flex: 1 }}
-                />
-              ) : (
-                <input
-                  type="text"
-                  className="input"
-                  value={nameSearch}
-                  onChange={(e) => setNameSearch(e.target.value)}
-                  placeholder="Enter contact name"
-                  style={{ flex: 1 }}
-                />
-              )}
-              <button type="button" className="btn" onClick={onSearchContact}>
-                Search
-              </button>
-            </div>
-            {notFoundMsg && <div className="note">{notFoundMsg}</div>}
+            )}
           </div>
 
           {/* Contact Search Results */}

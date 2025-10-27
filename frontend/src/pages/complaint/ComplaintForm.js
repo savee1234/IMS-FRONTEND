@@ -12,7 +12,7 @@ export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
   // const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"]; // Removed hardcoded data
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
-  const solutions = ["Pending", "In Progress", "Resolved", "Escalated"];
+  // Removed hardcoded solutions - will fetch from API
   const mediums = ["Hotline", "Email", "WhatsApp", "SMS", "Walk-in"];
   const mediumSources = ["Customer", "Field Ops", "Retail", "Corporate"];
 
@@ -54,9 +54,23 @@ export default function ComplaintOnboarding() {
     remarks: ""
   });
 
+  const [notFoundMsg, setNotFoundMsg] = useState("");
   const [generatedRef, setGeneratedRef] = useState("");
 
-  const [notFoundMsg, setNotFoundMsg] = useState("");
+  // Function to generate reference number in format YY-MM-DD-XXXX
+  const generateReferenceNumber = () => {
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2); // Last 2 digits of year
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Month with leading zero
+    const day = now.getDate().toString().padStart(2, '0'); // Day with leading zero
+
+    // For now, we'll use a simple counter. In a real system, you might want to fetch the last number from the database
+    const sequence = Math.floor(Math.random() * 9999) + 1; // Random number between 1-9999
+    const sequenceStr = sequence.toString().padStart(4, '0'); // Pad to 4 digits
+
+    return `${year}-${month}-${day}-${sequenceStr}`;
+  };
+
   const [submitted, setSubmitted] = useState(false);
   const [complaintId, setComplaintId] = useState(null);
   const [mobileOptions, setMobileOptions] = useState([]);
@@ -77,198 +91,72 @@ export default function ComplaintOnboarding() {
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
-
-  // Fetch mobile numbers for dropdown
-  useEffect(() => {
-    const fetchMobileNumbers = async () => {
-      setLoadingMobiles(true);
-      try {
-        const response = await fetch('http://localhost:44354/api/organization-contact-persons/dropdown/mobile-numbers');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setMobileOptions(data.data);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching mobile numbers:', error);
-      } finally {
-        setLoadingMobiles(false);
-      }
-    };
-
-    fetchMobileNumbers();
-  }, []);
-
-  // Fetch organizations for dropdown
-  useEffect(() => {
-    const fetchOrganizations = async () => {
-      setLoadingOrganizations(true);
-      try {
-        const response = await fetch('http://localhost:44354/api/organizations');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setOrganizations(data.data);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching organizations:', error);
-      } finally {
-        setLoadingOrganizations(false);
-      }
-    };
-
-    fetchOrganizations();
-  }, []);
-
-  // Fetch organization contact persons for dropdown
-  useEffect(() => {
-    const fetchOrganizationContactPersons = async () => {
-      setLoadingContactPersons(true);
-      try {
-        const response = await fetch('http://localhost:44354/api/organization-contact-persons');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setOrganizationContactPersons(data.data);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching organization contact persons:', error);
-      } finally {
-        setLoadingContactPersons(false);
-      }
-    };
-
-    fetchOrganizationContactPersons();
-  }, []);
+  const [loadingSolutionData, setLoadingSolutionData] = useState(false);
+  const [filteredSolutions, setFilteredSolutions] = useState([]);
 
   // ------- Handlers --------
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
-  const onContactPersonSelect = (contactPersonId) => {
+  const onContactPersonSelect = async (contactPersonId) => {
     setSelectedContactPerson(contactPersonId);
-    update("organizationContactPersonId", contactPersonId);
-
-    if (contactPersonId) {
-      // Find the selected contact person and populate form fields
-      const contactPerson = organizationContactPersons.find(cp => cp._id === contactPersonId);
-      if (contactPerson) {
-        update("contactName", contactPerson.name);
-        update("email", contactPerson.email);
-        update("mobile", contactPerson.mobileNumber);
-        update("officeMobile", contactPerson.officeContactNumber);
-        update("title", contactPerson.title);
-        update("searchMobile", contactPerson.mobileNumber);
-
-        // Clear search result since we're using existing contact
-        setSearchResult(null);
-        setNotFoundMsg("");
-        setShowAddDetails(false);
+    try {
+      const response = await fetch(`http://localhost:44354/api/organization-contact-persons/${contactPersonId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          const person = data.data;
+          update("contactName", person.name);
+          update("email", person.email);
+          update("mobile", person.mobileNumber);
+          update("officeMobile", person.officeContactNumber);
+          update("title", person.title);
+          update("organizationContactPersonId", person._id);
+        }
       }
-    } else {
-      // Clear contact fields when no contact person is selected
-      update("contactName", "");
-      update("email", "");
-      update("mobile", "");
-      update("officeMobile", "");
-      update("title", "Mr.");
-      update("searchMobile", "");
+    } catch (error) {
+      console.error('Error fetching contact person details:', error);
     }
   };
 
   const onSearchContact = async () => {
-    const searchValue = searchType === 'mobile' ? form.searchMobile : nameSearch;
-
-    if (!searchValue) {
-      setNotFoundMsg(`Please enter a ${searchType === 'mobile' ? 'mobile number' : 'name'} to search.`);
-      setSearchResult(null);
+    if (!form.mobile && !nameSearch) {
+      setNotFoundMsg("Please enter a mobile number or name to search");
       return;
     }
 
-    // Clear previous states
-    setNotFoundMsg("");
-    setSearchResult(null);
-    setShowAddDetails(false);
-
     try {
-      let searchUrl = 'http://localhost:44354/api/organization-contact-persons';
-      let searchParams = `?search=${encodeURIComponent(searchValue)}&limit=50`;
+      const searchQuery = searchType === 'mobile' ? form.mobile : nameSearch;
+      const response = await fetch(`http://localhost:44354/api/organization-contact-persons/search?${searchType}=${searchQuery}`);
 
-      if (searchType === 'mobile') {
-        // For mobile search, use the existing search-or-create endpoint
-        const response = await fetch('http://localhost:44354/api/organization-contact-persons/search-or-create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mobileNumber: searchValue,
-            contactData: newContactData,
-            organizationId: null,
-            createdBy: 'complaint_system',
-            createdByName: 'Complaint Management System'
-          })
-        });
-
+      if (response.ok) {
         const data = await response.json();
-
-        if (data.success) {
-          if (data.found) {
-            setSearchResult('found');
-            update("contactName", data.data.name);
-            update("email", data.data.email);
-            update("mobile", data.data.mobileNumber);
-            update("officeMobile", data.data.officeContactNumber);
-            update("title", data.data.title);
-          } else {
-            setSearchResult('not_found');
-            update("contactName", "");
-            update("email", "");
-            update("mobile", searchValue);
-            update("officeMobile", "");
-            update("title", "Mr.");
-          }
-        } else {
-          setNotFoundMsg(data.message || "Error searching contact.");
-          setSearchResult('not_found');
-        }
-      } else {
-        // For name search, use the dedicated name search endpoint
-        const nameResponse = await fetch(`http://localhost:44354/api/organization-contact-persons/search-by-name?name=${encodeURIComponent(searchValue)}&limit=20`);
-        const nameData = await nameResponse.json();
-
-        if (nameData.success && nameData.data.length > 0) {
-          // If multiple results found, show the first one or handle selection
-          const contact = nameData.data[0];
+        if (data.success && data.data) {
           setSearchResult('found');
-          update("contactName", contact.name);
-          update("email", contact.email);
-          update("mobile", contact.mobileNumber);
-          update("officeMobile", contact.officeContactNumber);
-          update("title", contact.title);
-
-          if (nameData.data.length > 1) {
-            setNotFoundMsg(`Found ${nameData.data.length} contacts. Showing first match: ${contact.name}`);
-          }
+          update("contactName", data.data.name);
+          update("email", data.data.email);
+          update("mobile", data.data.mobileNumber);
+          update("officeMobile", data.data.officeContactNumber);
+          update("title", data.data.title);
+          update("organizationContactPersonId", data.data._id);
+          setNotFoundMsg("");
         } else {
           setSearchResult('not_found');
-          update("contactName", searchValue);
-          update("email", "");
-          update("mobile", "");
-          update("officeMobile", "");
-          update("title", "Mr.");
+          setShowAddDetails(true);
+          setNotFoundMsg(`No contact found with this ${searchType}. Please add details.`);
         }
       }
     } catch (error) {
-      console.error(error);
-      setNotFoundMsg("Error searching contact.");
-      setSearchResult('not_found');
+      console.error('Error searching contact:', error);
+      setNotFoundMsg("Error searching contact. Please try again.");
     }
   };
 
   const onReset = () => {
+    // Generate new reference number on reset
+    const newRefNumber = generateReferenceNumber();
+    
     setForm({
-      requestRef: "",
+      requestRef: newRefNumber,
       categoryType: "",
       organization: "",
       solutionType: "",
@@ -289,20 +177,6 @@ export default function ComplaintOnboarding() {
       remarks: ""
     });
     setNotFoundMsg("");
-    setGeneratedRef("");
-    setSubmitted(false);
-    setComplaintId(null);
-    setSearchResult(null);
-    setShowAddDetails(false);
-    setSelectedContactPerson("");
-    setSearchType('mobile');
-    setNameSearch("");
-    setNewContactData({
-      name: "",
-      email: "",
-      organization: "",
-      title: "Mr."
-    });
   };
 
   const onSubmit = async (e) => {
@@ -337,8 +211,10 @@ export default function ComplaintOnboarding() {
 
         if (createResponse.ok) {
           const createData = await createResponse.json();
-          if (createData.success && createData.data) {
-            // Update form with the created contact details
+          console.log('New contact created:', createData.data);
+
+          // Update form with the created contact details
+          if (createData.created) {
             update("contactName", createData.data.name);
             update("email", createData.data.email);
             update("mobile", createData.data.mobileNumber);
@@ -375,6 +251,8 @@ export default function ComplaintOnboarding() {
         }
       });
 
+      console.log('Submitting complaint data:', submissionData);
+
       const response = await fetch("http://localhost:44354/api/complaints", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -383,25 +261,31 @@ export default function ComplaintOnboarding() {
 
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('Submission failed:', response.status, errorText);
         throw new Error(`Submission failed: ${response.status} ${errorText}`);
       }
 
       const savedComplaint = await response.json();
+      console.log('Complaint saved successfully:', savedComplaint);
       setComplaintId(savedComplaint.data._id);
       setSubmitted(true);
-      setGeneratedRef(savedComplaint.data.requestRef || "Generated");
-      alert(`✅ Complaint submitted successfully! Reference: ${savedComplaint.data.requestRef}`);
 
+      // The backend should generate and return the requestRef
+      const referenceNumber = savedComplaint.data.requestRef || "Generated";
+      setGeneratedRef(referenceNumber);
+
+      alert(`Complaint submitted successfully! Reference: ${referenceNumber}`);
+
+      // Don't reset form if you want to show the success state
+      // onReset();
     } catch (error) {
       console.error('Submission error:', error);
-      alert(`❌ Error submitting complaint: ${error.message}`);
+      alert(`Error submitting complaint: ${error.message}`);
     }
   };
 
   const onViewComplaint = () => {
-    if (complaintId) {
-      navigate(`/complaint/view/${complaintId}`);
-    }
+    navigate('/my-tasks');
   };
 
   return (
@@ -441,26 +325,6 @@ export default function ComplaintOnboarding() {
           Submit and manage customer complaints efficiently
         </p>
       </header>
-
-      {/* Success Message with Generated Reference */}
-      {generatedRef && (
-        <div style={{
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          color: 'white',
-          padding: '1rem 1.5rem',
-          borderRadius: '8px',
-          marginBottom: '1.5rem',
-          textAlign: 'center',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-        }}>
-          <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>
-            ✅ Complaint Submitted Successfully!
-          </h3>
-          <p style={{ margin: 0, fontSize: '1.2rem', fontWeight: '600' }}>
-            Reference Number: {generatedRef}
-          </p>
-        </div>
-      )}
 
       <form className="config-content" style={{
         background: 'white',
@@ -506,9 +370,7 @@ export default function ComplaintOnboarding() {
                 className="input"
                 value={form.requestRef}
                 onChange={(e) => update("requestRef", e.target.value)}
-                placeholder="Auto-generated on submission"
-                title="This will be auto-generated when the complaint is submitted"
-                style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
+                placeholder="REQ-0001"
               />
             </Field>
 
@@ -532,27 +394,9 @@ export default function ComplaintOnboarding() {
                 onChange={(e) => update("organization", e.target.value)}
               >
                 <option value="">Select…</option>
-                {loadingOrganizations ? (
-                  <option disabled>Loading organizations...</option>
-                ) : (
-                  organizations.map((org) => (
-                    <option key={org._id} value={org.organization}>{org.organization}</option>
-                  ))
-                )}
-              </select>
-            </Field>
-
-            <Field label="Solution Type">
-              <select
-                className="input"
-                value={form.solutionType}
-                onChange={(e) => update("solutionType", e.target.value)}
-              >
-                <option value="">Select…</option>
-                <option>Permanent</option>
-                <option>Temporary</option>
-                <option>Workaround</option>
-                <option>Feature Request</option>
+                {organizations.map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
               </select>
             </Field>
 
@@ -561,11 +405,22 @@ export default function ComplaintOnboarding() {
                 className="input"
                 value={form.solutionName}
                 onChange={(e) => update("solutionName", e.target.value)}
+                disabled={!form.solutionType || loadingSolutionData}
               >
                 <option value="">Select…</option>
-                {solutions.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                {loadingSolutionData ? (
+                  <option disabled>Loading...</option>
+                ) : form.solutionType ? (
+                  filteredSolutions.length > 0 ? (
+                    filteredSolutions.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))
+                  ) : (
+                    <option disabled>No solutions available for this type</option>
+                  )
+                ) : (
+                  <option disabled>Please select a solution type first</option>
+                )}
               </select>
             </Field>
 
@@ -991,23 +846,28 @@ export default function ComplaintOnboarding() {
                     <td>{s.name}</td>
                     <td>{s.designation}</td>
                     <td>{s.availability}</td>
+                    <td style={{ verticalAlign: 'middle' }}>
+                      <select
+                        className="input"
+                        value={form.mainAssignment}
+                        onChange={(e) => update("mainAssignment", e.target.value)}
+                      >
+                        <option value="">Select…</option>
+                        <option>Field Visit</option>
+                        <option>Remote Fix</option>
+                        <option>Call Back</option>
+                        <option>Escalate L2</option>
+                      </select>
+                    </td>
                     <td>
                       <select
                         className="input"
-                        value={form.assignment}
-                        onChange={(e) => update("assignment", e.target.value)}
+                        value={form.subAssignment}
+                        onChange={(e) => update("subAssignment", e.target.value)}
                       >
                         <option value="">Select…</option>
-                        <optgroup label="Main Assignments">
-                          <option>Field Visit</option>
-                          <option>Remote Fix</option>
-                          <option>Call Back</option>
-                          <option>Escalate L2</option>
-                        </optgroup>
-                        <optgroup label="Sub Assignments">
-                          <option>Fiber Team</option>
-                          <option>Billing Team</option>
-                        </optgroup>
+                        <option>Fiber Team</option>
+                        <option>Billing Team</option>
                         <option>Tech Support</option>
                       </select>
                     </td>

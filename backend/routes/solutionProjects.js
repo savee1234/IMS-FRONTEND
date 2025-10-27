@@ -5,7 +5,7 @@ const SolutionProject = require('../models/SolutionProject');
 // GET all
 router.get('/', async (req, res) => {
   try {
-    const { page = 1, limit = 10, search } = req.query;
+    const { page = 1, limit = 10, search, solutionType } = req.query;
     let filter = { isActive: true };
     if (search) {
       filter.$or = [
@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
         { solutionProjectId: { $regex: search, $options: 'i' } },
         { createdByName: { $regex: search, $options: 'i' } }
       ];
+    }
+    // Add solutionType filter if provided
+    if (solutionType) {
+      filter.solutionType = solutionType;
     }
     const skip = (page - 1) * limit;
     const [items, total] = await Promise.all([

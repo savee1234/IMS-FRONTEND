@@ -97,6 +97,9 @@ export default function ComplaintOnboarding() {
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
 
+  // State for staff assignments (each row has independent selection)
+  const [staffAssignments, setStaffAssignments] = useState({});
+
   // Generate reference number when component mounts
   useEffect(() => {
     const refNumber = generateReferenceNumber();
@@ -242,6 +245,13 @@ export default function ComplaintOnboarding() {
     if (key === 'solutionType') {
       setForm((f) => ({ ...f, solutionName: '' }));
     }
+  };
+
+  const updateStaffAssignment = (empNo, assignment) => {
+    setStaffAssignments((prev) => ({
+      ...prev,
+      [empNo]: assignment
+    }));
   };
 
   const onContactPersonSelect = (contactPersonId) => {
@@ -403,6 +413,7 @@ export default function ComplaintOnboarding() {
       organization: "",
       title: "Mr."
     });
+    setStaffAssignments({});
   };
 
   const onSubmit = async (e) => {
@@ -1108,24 +1119,22 @@ export default function ComplaintOnboarding() {
                     <td>{s.name}</td>
                     <td>{s.designation}</td>
                     <td>{s.availability}</td>
-                    <td>
+                    <td style={{ verticalAlign: 'middle' }}>
                       <select
                         className="input"
-                        value={form.assignment}
-                        onChange={(e) => update("assignment", e.target.value)}
+                        value={staffAssignments[s.empNo] || ""}
+                        onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}
+                        style={{ 
+                          paddingTop: '4px',
+                          paddingBottom: '4px',
+                          lineHeight: '1.2',
+                          marginTop: '-2px',
+                          verticalAlign: 'middle'
+                        }}
                       >
                         <option value="">Select…</option>
-                        <optgroup label="Main Assignments">
-                          <option>Field Visit</option>
-                          <option>Remote Fix</option>
-                          <option>Call Back</option>
-                          <option>Escalate L2</option>
-                        </optgroup>
-                        <optgroup label="Sub Assignments">
-                          <option>Fiber Team</option>
-                          <option>Billing Team</option>
-                        </optgroup>
-                        <option>Tech Support</option>
+                        <option value="Main Assignment">Main Assignment</option>
+                        <option value="Sub Assignment">Sub Assignment</option>
                       </select>
                     </td>
                   </tr>

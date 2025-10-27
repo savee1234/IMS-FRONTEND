@@ -9,8 +9,6 @@ import Organization from './Organization';
 import Organizations from './Organizations';
 import SolutionsProjects from './SolutionsProjects';
 import Shifts from './Shifts';
-import EscalationRules from './EscalationRules';
-import OperationAvailability from './OperationAvailability';
 
 const Configuration = () => {
   const [activeCategory, setActiveCategory] = useState('onboardMedium');
@@ -21,8 +19,6 @@ const Configuration = () => {
     organizations: 'Organizations Contact Persons',
     solutionsPerProject: 'Solutions & Projects',
     shifts: 'Roster Shift Periods',
-    escalationRules: 'Escalation Rules',
-    newFeature: 'Operation Availability',
   };
 
   const categoryIcons = {
@@ -31,8 +27,6 @@ const Configuration = () => {
     organizations: '🏢',
     solutionsPerProject: '🔧',
     shifts: '⏰',
-    escalationRules: '🚨',
-    newFeature: '⚙️',
   };
 
   const renderActiveComponent = () => {
@@ -47,10 +41,6 @@ const Configuration = () => {
         return <SolutionsProjects />;
       case 'shifts':
         return <Shifts />;
-      case 'escalationRules':
-        return <EscalationRules />;
-      case 'newFeature':
-        return <OperationAvailability />;
       default:
         return <OnboardMedium />;
     }

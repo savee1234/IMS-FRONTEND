@@ -16,7 +16,7 @@ const Navbar = () => {
     '/users',
     '/attendance',
     '/configuration',
-    '/notification',
+    '/dashboard',
     '/reporting',
     '/pending-assignments',
     '/my-tasks',
@@ -90,7 +90,7 @@ const Navbar = () => {
                   <Link to="/users" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>User Management</Link>
                   <Link to="/attendance" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Attendance</Link>
                   <Link to="/configuration" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Configuration</Link>
-                  <Link to="/notification" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Notification</Link>
+                  <Link to="/dashboard" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Dashboard</Link>
                   <Link to="/reporting" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Reporting</Link>
                   <Link to="/pending-assignments" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Pending Assignments</Link>
                   <Link to="/my-tasks" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>View Tasks</Link>

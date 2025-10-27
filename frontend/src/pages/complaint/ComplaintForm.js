@@ -56,6 +56,20 @@ export default function ComplaintOnboarding() {
 
   const [generatedRef, setGeneratedRef] = useState("");
 
+  // Function to generate reference number in format YY-MM-DD-XXXX
+  const generateReferenceNumber = () => {
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2); // Last 2 digits of year
+    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Month with leading zero
+    const day = now.getDate().toString().padStart(2, '0'); // Day with leading zero
+    
+    // For now, we'll use a simple counter. In a real system, you might want to fetch the last number from the database
+    const sequence = Math.floor(Math.random() * 9999) + 1; // Random number between 1-9999
+    const sequenceStr = sequence.toString().padStart(4, '0'); // Pad to 4 digits
+    
+    return `${year}-${month}-${day}-${sequenceStr}`;
+  };
+
   const [notFoundMsg, setNotFoundMsg] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [complaintId, setComplaintId] = useState(null);
@@ -77,6 +91,13 @@ export default function ComplaintOnboarding() {
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
+
+  // Generate reference number when component mounts
+  useEffect(() => {
+    const refNumber = generateReferenceNumber();
+    setGeneratedRef(refNumber);
+    update("requestRef", refNumber);
+  }, []);
 
   // Fetch mobile numbers for dropdown
   useEffect(() => {
@@ -267,8 +288,11 @@ export default function ComplaintOnboarding() {
   };
 
   const onReset = () => {
+    // Generate new reference number on reset
+    const newRefNumber = generateReferenceNumber();
+    
     setForm({
-      requestRef: "",
+      requestRef: newRefNumber,
       categoryType: "",
       organization: "",
       solutionType: "",
@@ -289,7 +313,7 @@ export default function ComplaintOnboarding() {
       remarks: ""
     });
     setNotFoundMsg("");
-    setGeneratedRef("");
+    setGeneratedRef(newRefNumber);
     setSubmitted(false);
     setComplaintId(null);
     setSearchResult(null);
@@ -389,8 +413,10 @@ export default function ComplaintOnboarding() {
       const savedComplaint = await response.json();
       setComplaintId(savedComplaint.data._id);
       setSubmitted(true);
-      setGeneratedRef(savedComplaint.data.requestRef || "Generated");
-      alert(`✅ Complaint submitted successfully! Reference: ${savedComplaint.data.requestRef}`);
+      // Use the reference number from the backend response, or fall back to the generated one
+      const finalRef = savedComplaint.data.requestRef || form.requestRef;
+      setGeneratedRef(finalRef);
+      alert(`✅ Complaint submitted successfully! Reference: ${finalRef}`);
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -399,9 +425,7 @@ export default function ComplaintOnboarding() {
   };
 
   const onViewComplaint = () => {
-    if (complaintId) {
-      navigate(`/complaint/view/${complaintId}`);
-    }
+    navigate('/my-tasks');
   };
 
   return (
@@ -442,8 +466,8 @@ export default function ComplaintOnboarding() {
         </p>
       </header>
 
-      {/* Success Message with Generated Reference */}
-      {generatedRef && (
+      {/* Success Message with Generated Reference - Only show after submission */}
+      {submitted && generatedRef && (
         <div style={{
           background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
           color: 'white',
@@ -505,10 +529,10 @@ export default function ComplaintOnboarding() {
               <input
                 className="input"
                 value={form.requestRef}
-                onChange={(e) => update("requestRef", e.target.value)}
-                placeholder="Auto-generated on submission"
-                title="This will be auto-generated when the complaint is submitted"
-                style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
+                readOnly
+                placeholder="Auto-generated reference number"
+                title="This reference number is automatically generated"
+                style={{ backgroundColor: '#f3f4f6', color: '#6b7280', cursor: 'not-allowed' }}
               />
             </Field>
 

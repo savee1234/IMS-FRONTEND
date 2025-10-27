@@ -12,7 +12,7 @@ export default function ComplaintOnboarding() {
   // ------- Dummy data (replace with real API data) --------
   // const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"]; // Removed hardcoded data
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
-  const solutions = ["Pending", "In Progress", "Resolved", "Escalated"];
+  // Removed hardcoded solutions - will fetch from API
   const mediums = ["Hotline", "Email", "WhatsApp", "SMS", "Walk-in"];
   const mediumSources = ["Customer", "Field Ops", "Retail", "Corporate"];
 
@@ -53,7 +53,12 @@ export default function ComplaintOnboarding() {
     docSubject: "",
     remarks: ""
   });
-
+  
+  // New state for solution types and solutions
+  const [solutionTypes, setSolutionTypes] = useState([]);
+  const [solutions, setSolutions] = useState([]);
+  const [filteredSolutions, setFilteredSolutions] = useState([]);
+  const [loadingSolutionData, setLoadingSolutionData] = useState(false);
   const [generatedRef, setGeneratedRef] = useState("");
 
   // Function to generate reference number in format YY-MM-DD-XXXX
@@ -165,8 +170,79 @@ export default function ComplaintOnboarding() {
     fetchOrganizationContactPersons();
   }, []);
 
+  // Fetch solution types and solutions from API
+  useEffect(() => {
+    const fetchSolutionData = async () => {
+      setLoadingSolutionData(true);
+      try {
+        const response = await fetch('http://localhost:44354/api/solution-projects');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            // Extract unique solution types and solutions from the data
+            const uniqueSolutionTypes = [...new Set(data.data.map(item => item.solutionType))];
+            const uniqueSolutions = [...new Set(data.data.map(item => item.solution))];
+            
+            setSolutionTypes(uniqueSolutionTypes);
+            setSolutions(uniqueSolutions);
+          } else {
+            console.error('API returned error:', data.message);
+          }
+        } else {
+          console.error('HTTP error:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('Network error fetching solution data:', error);
+      } finally {
+        setLoadingSolutionData(false);
+      }
+    };
+
+    fetchSolutionData();
+  }, []);
+  
+  // Filter solutions based on selected solution type
+  useEffect(() => {
+    if (form.solutionType) {
+      // Fetch solutions specific to the selected solution type
+      const fetchSolutionsForType = async () => {
+        try {
+          const response = await fetch(`http://localhost:44354/api/solution-projects?solutionType=${encodeURIComponent(form.solutionType)}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
+              // Extract unique solutions for the selected solution type
+              const solutionsForType = [...new Set(data.data.map(item => item.solution))];
+              setFilteredSolutions(solutionsForType);
+            } else {
+              console.error('API returned error:', data.message);
+              setFilteredSolutions([]);
+            }
+          } else {
+            console.error('HTTP error:', response.status, response.statusText);
+            setFilteredSolutions([]);
+          }
+        } catch (error) {
+          console.error('Network error fetching solutions for type:', error);
+          setFilteredSolutions([]);
+        }
+      };
+      
+      fetchSolutionsForType();
+    } else {
+      setFilteredSolutions([]);
+    }
+  }, [form.solutionType]);
+
   // ------- Handlers --------
-  const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
+  const update = (key, val) => {
+    setForm((f) => ({ ...f, [key]: val }));
+    
+    // Reset solutionName when solutionType changes
+    if (key === 'solutionType') {
+      setForm((f) => ({ ...f, solutionName: '' }));
+    }
+  };
 
   const onContactPersonSelect = (contactPersonId) => {
     setSelectedContactPerson(contactPersonId);
@@ -571,12 +647,18 @@ export default function ComplaintOnboarding() {
                 className="input"
                 value={form.solutionType}
                 onChange={(e) => update("solutionType", e.target.value)}
+                disabled={loadingSolutionData}
               >
                 <option value="">Select…</option>
-                <option>Permanent</option>
-                <option>Temporary</option>
-                <option>Workaround</option>
-                <option>Feature Request</option>
+                {loadingSolutionData ? (
+                  <option disabled>Loading...</option>
+                ) : solutionTypes.length > 0 ? (
+                  solutionTypes.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))
+                ) : (
+                  <option disabled>No solution types available</option>
+                )}
               </select>
             </Field>
 
@@ -585,11 +667,22 @@ export default function ComplaintOnboarding() {
                 className="input"
                 value={form.solutionName}
                 onChange={(e) => update("solutionName", e.target.value)}
+                disabled={!form.solutionType || loadingSolutionData}
               >
                 <option value="">Select…</option>
-                {solutions.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
+                {loadingSolutionData ? (
+                  <option disabled>Loading...</option>
+                ) : form.solutionType ? (
+                  filteredSolutions.length > 0 ? (
+                    filteredSolutions.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))
+                  ) : (
+                    <option disabled>No solutions available for this type</option>
+                  )
+                ) : (
+                  <option disabled>Please select a solution type first</option>
+                )}
               </select>
             </Field>
 

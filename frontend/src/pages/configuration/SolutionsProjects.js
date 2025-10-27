@@ -52,12 +52,30 @@ const SolutionsProjects = () => {
   const [solutionTypes, setSolutionTypes] = useState(['Web Development', 'Mobile App', 'Database', 'API Integration']);
   const [solutions, setSolutions] = useState(['Customer Portal', 'Inventory System', 'Payment Gateway', 'Analytics Dashboard']);
 
+  // Define solution type to solutions mapping
+  const [solutionTypeToSolutionsMap, setSolutionTypeToSolutionsMap] = useState({
+    'Web Development': ['Customer Portal', 'Inventory System', 'Analytics Dashboard'],
+    'Mobile App': ['Mobile App'],
+    'Database': ['Database'],
+    'API Integration': ['Payment Gateway']
+  });
+
   const handleSolutionInputChange = (e) => {
     const { name, value } = e.target;
-    setSolutionFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // If solutionType is changed, filter solutions based on solution type
+    if (name === 'solutionType') {
+      setSolutionFormData(prev => ({
+        ...prev,
+        solutionType: value,
+        solution: '' // Reset solution when solutionType changes
+      }));
+    } else {
+      setSolutionFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSolutionSubmit = async (e) => {
@@ -163,11 +181,17 @@ const SolutionsProjects = () => {
       return;
     }
     
-    if (solutions.includes(newSolution.trim())) {
+    // Check if solution already exists in any solution type
+    const solutionExists = Object.values(solutionTypeToSolutionsMap).some(solutionsArray => 
+      solutionsArray.includes(newSolution.trim())
+    );
+    
+    if (solutionExists) {
       alert('This solution already exists');
       return;
     }
     
+    // Add solution to the solutions state
     setSolutions(prev => [...prev, newSolution.trim()]);
     setNewSolution('');
     alert('Solution added successfully!');
@@ -184,7 +208,23 @@ const SolutionsProjects = () => {
       return;
     }
     
+    // Add new solution type
     setSolutionTypes(prev => [...prev, newSolutionType.trim()]);
+    
+    // Add default solution based on solution type
+    const defaultSolution = newSolutionType.trim();
+    const updatedMap = {
+      ...solutionTypeToSolutionsMap,
+      [newSolutionType.trim()]: [defaultSolution]
+    };
+    
+    setSolutionTypeToSolutionsMap(updatedMap);
+    
+    // Add solution to solutions array if not exists
+    if (!solutions.includes(defaultSolution)) {
+      setSolutions(prev => [...prev, defaultSolution]);
+    }
+    
     setNewSolutionType('');
     alert('Solution type added successfully!');
   };
@@ -192,6 +232,14 @@ const SolutionsProjects = () => {
   const handleDeleteSolution = (solutionToDelete) => {
     if (window.confirm(`Are you sure you want to delete "${solutionToDelete}"?`)) {
       setSolutions(prev => prev.filter(sol => sol !== solutionToDelete));
+      
+      // Remove solution from mapping
+      const updatedMap = {...solutionTypeToSolutionsMap};
+      Object.keys(updatedMap).forEach(type => {
+        updatedMap[type] = updatedMap[type].filter(sol => sol !== solutionToDelete);
+      });
+      setSolutionTypeToSolutionsMap(updatedMap);
+      
       alert('Solution deleted successfully!');
     }
   };
@@ -199,8 +247,19 @@ const SolutionsProjects = () => {
   const handleDeleteSolutionType = (typeToDelete) => {
     if (window.confirm(`Are you sure you want to delete "${typeToDelete}"?`)) {
       setSolutionTypes(prev => prev.filter(type => type !== typeToDelete));
+      
+      // Remove solution type from mapping
+      const updatedMap = {...solutionTypeToSolutionsMap};
+      delete updatedMap[typeToDelete];
+      setSolutionTypeToSolutionsMap(updatedMap);
+      
       alert('Solution type deleted successfully!');
     }
+  };
+
+  // Get solutions based on selected solution type
+  const getSolutionsForType = (solutionType) => {
+    return solutionTypeToSolutionsMap[solutionType] || [];
   };
 
   return (
@@ -335,6 +394,7 @@ const SolutionsProjects = () => {
               value={solutionFormData.solution}
               onChange={handleSolutionInputChange}
               required
+              disabled={!solutionFormData.solutionType} // Disable if no solution type selected
               style={{
                 padding: '0.75rem 2.5rem 0.75rem 0.75rem',
                 border: '1px solid #d1d5db',
@@ -343,7 +403,7 @@ const SolutionsProjects = () => {
                 background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
                 width: '250px',
                 outline: 'none',
-                cursor: 'pointer',
+                cursor: solutionFormData.solutionType ? 'pointer' : 'not-allowed',
                 color: '#374151',
                 WebkitAppearance: 'none',
                 MozAppearance: 'none',
@@ -351,7 +411,7 @@ const SolutionsProjects = () => {
               }}
             >
               <option value="">Select Solution</option>
-              {solutions.map(sol => (
+              {solutionFormData.solutionType && getSolutionsForType(solutionFormData.solutionType).map(sol => (
                 <option key={sol} value={sol}>{sol}</option>
               ))}
             </select>

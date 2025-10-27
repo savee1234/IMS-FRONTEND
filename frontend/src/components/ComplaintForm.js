@@ -2,12 +2,12 @@
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
 // --------------------------------------------------
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "./ComplainForm.css"; // Paste the CSS below into this path
 
 export default function ComplainForm() {
   // ------- Dummy data (replace with real API data) --------
-  const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"];
+  // const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"]; // Removed hardcoded data
   const categories = ["Billing", "Connectivity", "Technical", "Other"];
   const solutions = ["Pending", "In Progress", "Resolved", "Escalated"];
   const mediums = ["Hotline", "Email", "WhatsApp", "SMS", "Walk-in"];
@@ -48,7 +48,32 @@ export default function ComplainForm() {
     remarks: ""
   });
 
+  const [organizations, setOrganizations] = useState([]);
+  const [loadingOrganizations, setLoadingOrganizations] = useState(false);
+
   const [notFoundMsg, setNotFoundMsg] = useState("");
+
+  // Fetch organizations for dropdown
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      setLoadingOrganizations(true);
+      try {
+        const response = await fetch('http://localhost:44354/api/organizations');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setOrganizations(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching organizations:', error);
+      } finally {
+        setLoadingOrganizations(false);
+      }
+    };
+
+    fetchOrganizations();
+  }, []);
 
   // ------- Handlers --------
   const update = (key, val) => setForm((f) => ({ ...f, [key]: val }));
@@ -210,9 +235,13 @@ export default function ComplainForm() {
                 onChange={(e) => update("organization", e.target.value)}
               >
                 <option value="">Select…</option>
-                {organizations.map((o) => (
-                  <option key={o} value={o}>{o}</option>
-                ))}
+                {loadingOrganizations ? (
+                  <option disabled>Loading organizations...</option>
+                ) : (
+                  organizations.map((org) => (
+                    <option key={org._id} value={org.organization}>{org.organization}</option>
+                  ))
+                )}
               </select>
             </Field>
 

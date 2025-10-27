@@ -22,7 +22,7 @@ const modules = [
   { name: 'User Management', img: userManagementImg, path: '/users' },
   { name: 'Attendance', img: attendanceImg, path: '/attendance' },
   { name: 'Configuration', img: configImg, path: '/configuration' },
-  { name: 'Notification', img: notificationImg, path: '/notification' },
+  { name: 'Dashboard', img: notificationImg, path: '/dashboard' },
   { name: 'Reporting', img: reportsImg, path: '/reporting' },
   { name: 'Pending Assignments', img: pendingImg, path: '/pending-assignments' },
   { name: 'View My Tasks', img: tasksImg, path: '/my-tasks' },

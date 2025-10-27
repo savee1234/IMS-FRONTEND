@@ -20,7 +20,7 @@ import Configuration from './pages/configuration/Configuration';
 import Reports from './pages/Reports';
 import Attendance from './pages/AttendanceOT';
 import About from './pages/About';
-import Notification from './pages/Notification';
+import Dashboard from './pages/Dashboard';
 import Workflow from './pages/Workflow';
 
 import SelectAssigner from './pages/SelectAssigner';
@@ -58,7 +58,7 @@ function App() {
         <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
         <Route path="/configuration" element={<PrivateRoute><Configuration /></PrivateRoute>} />
         <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
-        <Route path="/notification" element={<PrivateRoute><Notification /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/workflow" element={<PrivateRoute><Workflow /></PrivateRoute>} />
         <Route path="/select-assigner" element={<PrivateRoute><SelectAssigner /></PrivateRoute>} />
         <Route path="/pending-assignments" element={<PrivateRoute><PendingAssignments /></PrivateRoute>} />

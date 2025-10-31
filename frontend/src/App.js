@@ -6,7 +6,7 @@ import { isAuthenticated } from './utils/auth';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
-import ComplaintForm from './pages/complaint/Complaint';
+import Complaint from './pages/Complaint';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page
@@ -20,12 +20,15 @@ import Configuration from './pages/configuration/Configuration';
 import Reports from './pages/Reports';
 import Attendance from './pages/AttendanceOT';
 import About from './pages/About';
-import Notification from './pages/Notification';
+import Dashboard from './pages/Dashboard';
 import Workflow from './pages/Workflow';
 
 import SelectAssigner from './pages/SelectAssigner';
 import PendingAssignments from './pages/PendingAssignments';
 import MyTasks from './pages/MyTasks';
+
+// Import the ComplaintView component
+import { ComplaintView } from './pages/complaint/index';
 
 // PrivateRoute component to protect routes if not logged in
 const PrivateRoute = ({ children }) => {
@@ -41,7 +44,8 @@ function App() {
 
         {/* Private routes protected by PrivateRoute */}
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="/complaint" element={<PrivateRoute><ComplaintForm /></PrivateRoute>} />
+        <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
+        <Route path="/complaint/view/:id" element={<PrivateRoute><ComplaintView /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
@@ -54,7 +58,7 @@ function App() {
         <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
         <Route path="/configuration" element={<PrivateRoute><Configuration /></PrivateRoute>} />
         <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
-        <Route path="/notification" element={<PrivateRoute><Notification /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/workflow" element={<PrivateRoute><Workflow /></PrivateRoute>} />
         <Route path="/select-assigner" element={<PrivateRoute><SelectAssigner /></PrivateRoute>} />
         <Route path="/pending-assignments" element={<PrivateRoute><PendingAssignments /></PrivateRoute>} />

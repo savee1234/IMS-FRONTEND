@@ -239,7 +239,7 @@ export default function ComplainForm() {
                   <option disabled>Loading organizations...</option>
                 ) : (
                   organizations.map((org) => (
-                    <option key={org._id} value={org.organization}>{org.organization}</option>
+                    <option key={org._id} value={org.organization}>{typeof org.organization === 'string' ? org.organization : 'Invalid Organization'}</option>
                   ))
                 )}
               </select>

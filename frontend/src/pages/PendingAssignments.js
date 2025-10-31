@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaEye, FaEdit, FaTrash, FaHistory, FaComments, FaCheck, FaFilter, FaCalendarAlt, FaUser, FaTasks, FaClipboardList } from 'react-icons/fa';
+import { FaEye, FaHistory, FaComments, FaCheck, FaFilter, FaCalendarAlt, FaUser, FaTasks, FaClipboardList, FaEdit } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import backgroundVideo from '../assets/Background.mp4';

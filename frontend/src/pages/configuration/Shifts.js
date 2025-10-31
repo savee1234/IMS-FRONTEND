@@ -40,7 +40,7 @@ const Shifts = () => {
 
   useEffect(() => {
     fetchShifts();
-  }, [fetchShifts]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

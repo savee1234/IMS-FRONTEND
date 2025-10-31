@@ -49,14 +49,14 @@ export default function ComplaintOnboarding() {
     organizationContactPersonId: "",
 
     // assignment
-    assignment: "",
+    mainAssignment: "",
+    subAssignment: "",
     docRef: "",
     docSubject: "",
     remarks: ""
   });
 
   const [notFoundMsg, setNotFoundMsg] = useState("");
-  const [generatedRef, setGeneratedRef] = useState("");
 
   // Function to generate reference number in format YY-MM-DD-XXXX
   const generateReferenceNumber = () => {
@@ -78,8 +78,7 @@ export default function ComplaintOnboarding() {
   const [loadingMobiles, setLoadingMobiles] = useState(false);
   const [searchResult, setSearchResult] = useState(null); // null, 'found', or 'not_found'
   const [showAddDetails, setShowAddDetails] = useState(false);
-  const [searchType, setSearchType] = useState('mobile'); // 'mobile' or 'name'
-  const [nameSearch, setNameSearch] = useState('');
+  const [staffAssignments, setStaffAssignments] = useState({});
   const [newContactData, setNewContactData] = useState({
     name: "",
     email: "",
@@ -94,11 +93,12 @@ export default function ComplaintOnboarding() {
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
   const [loadingSolutionData, setLoadingSolutionData] = useState(false);
   const [filteredSolutions, setFilteredSolutions] = useState([]);
+  const [solutionTypes, setSolutionTypes] = useState([]);
+  const [solutions, setSolutions] = useState([]);
 
   // Generate reference number when component mounts
   useEffect(() => {
     const refNumber = generateReferenceNumber();
-    setGeneratedRef(refNumber);
     update("requestRef", refNumber);
   }, []);
 
@@ -264,81 +264,11 @@ export default function ComplaintOnboarding() {
     }
   };
 
-  const updateStaffAssignment = (empNo, assignment) => {
-    setStaffAssignments((prev) => ({
-      ...prev,
-      [empNo]: assignment
-    }));
-  };
-
-  const onContactPersonSelect = (contactPersonId) => {
-    setSelectedContactPerson(contactPersonId);
-    update("organizationContactPersonId", contactPersonId);
-
-    if (contactPersonId) {
-      // Find the selected contact person and populate form fields
-      const contactPerson = organizationContactPersons.find(cp => cp._id === contactPersonId);
-      if (contactPerson) {
-        update("contactName", contactPerson.name);
-        update("email", contactPerson.email);
-        update("mobile", contactPerson.mobileNumber);
-        update("officeMobile", contactPerson.officeContactNumber);
-        update("title", contactPerson.title);
-        update("searchMobile", contactPerson.mobileNumber);
-
-        // Clear search result since we're using existing contact
-        setSearchResult(null);
-        setNotFoundMsg("");
-        setShowAddDetails(false);
-      }
-    } else {
-      // Clear contact fields when no contact person is selected
-      update("contactName", "");
-      update("email", "");
-      update("mobile", "");
-      update("officeMobile", "");
-      update("title", "Mr.");
-      update("searchMobile", "");
-    }
-  };
-
-  const onSearchContact = async () => {
-    if (!form.mobile && !nameSearch) {
-      setNotFoundMsg("Please enter a mobile number or name to search");
-      return;
-    }
-
-    try {
-      const searchQuery = searchType === 'mobile' ? form.mobile : nameSearch;
-      const response = await fetch(`http://localhost:44354/api/organization-contact-persons/search?${searchType}=${searchQuery}`);
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data) {
-          setSearchResult('found');
-          update("contactName", data.data.name);
-          update("email", data.data.email);
-          update("mobile", data.data.mobileNumber);
-          update("officeMobile", data.data.officeContactNumber);
-          update("title", data.data.title);
-          update("organizationContactPersonId", data.data._id);
-          setNotFoundMsg("");
-        } else {
-          setSearchResult('not_found');
-          setShowAddDetails(true);
-          setNotFoundMsg(`No contact found with this ${searchType}. Please add details.`);
-        }
-      }
-    } catch (error) {
-      console.error('Error searching contact:', error);
-      setNotFoundMsg("Error searching contact. Please try again.");
-    }
-  };
 
   const onReset = () => {
     // Generate new reference number on reset
     const newRefNumber = generateReferenceNumber();
-    
+
     setForm({
       requestRef: newRefNumber,
       categoryType: "",
@@ -355,7 +285,8 @@ export default function ComplaintOnboarding() {
       officeMobile: "",
       title: "Mr.",
       organizationContactPersonId: "",
-      assignment: "",
+      mainAssignment: "",
+      subAssignment: "",
       docRef: "",
       docSubject: "",
       remarks: ""
@@ -456,7 +387,7 @@ export default function ComplaintOnboarding() {
 
       // The backend should generate and return the requestRef
       const referenceNumber = savedComplaint.data.requestRef || "Generated";
-      setGeneratedRef(referenceNumber);
+      // setGeneratedRef(referenceNumber);
 
       alert(`Complaint submitted successfully! Reference: ${referenceNumber}`);
 

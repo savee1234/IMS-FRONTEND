@@ -49,16 +49,16 @@ export default function SimplifiedComplaintForm() {
   const [solutions, setSolutions] = useState([]);
   const [filteredSolutions, setFilteredSolutions] = useState([]);
   const [loadingSolutionData, setLoadingSolutionData] = useState(false);
-  const [generatedRef, setGeneratedRef] = useState("");
+  const [generatedRef] = useState("");
   const [notFoundMsg, setNotFoundMsg] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [complaintId, setComplaintId] = useState(null);
+  const [complaintId] = useState(null);
   const [mobileOptions, setMobileOptions] = useState([]);
   const [loadingMobiles, setLoadingMobiles] = useState(false);
-  const [searchResult, setSearchResult] = useState(null);
-  const [showAddDetails, setShowAddDetails] = useState(false);
   const [searchType, setSearchType] = useState('mobile');
   const [nameSearch, setNameSearch] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+  const [showAddDetails, setShowAddDetails] = useState(false);
   const [newContactData, setNewContactData] = useState({
     name: "",
     email: "",
@@ -93,7 +93,6 @@ export default function SimplifiedComplaintForm() {
   // Initialize form with reference number
   useEffect(() => {
     const refNumber = generateReferenceNumber();
-    setGeneratedRef(refNumber);
     update("requestRef", refNumber);
   }, []);
 
@@ -267,10 +266,10 @@ export default function SimplifiedComplaintForm() {
 
   // Search contact
   const onSearchContact = async () => {
-    const searchValue = searchType === 'mobile' ? form.searchMobile : nameSearch;
+    const searchValue = form.searchMobile;
 
     if (!searchValue) {
-      setNotFoundMsg(`Please enter a ${searchType === 'mobile' ? 'mobile number' : 'name'} to search.`);
+      setNotFoundMsg(`Please enter a mobile number to search.`);
       setSearchResult(null);
       return;
     }
@@ -280,65 +279,39 @@ export default function SimplifiedComplaintForm() {
     setShowAddDetails(false);
 
     try {
-      if (searchType === 'mobile') {
-        const response = await fetch('http://localhost:44354/api/organization-contact-persons/search-or-create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mobileNumber: searchValue,
-            contactData: newContactData,
-            organizationId: null,
-            createdBy: 'complaint_system',
-            createdByName: 'Complaint Management System'
-          })
-        });
+      const response = await fetch('http://localhost:44354/api/organization-contact-persons/search-or-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobileNumber: searchValue,
+          contactData: newContactData,
+          organizationId: null,
+          createdBy: 'complaint_system',
+          createdByName: 'Complaint Management System'
+        })
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (data.success) {
-          if (data.found) {
-            setSearchResult('found');
-            update("contactName", data.data.name);
-            update("email", data.data.email);
-            update("mobile", data.data.mobileNumber);
-            update("officeMobile", data.data.officeContactNumber);
-            update("title", data.data.title);
-          } else {
-            setSearchResult('not_found');
-            update("contactName", "");
-            update("email", "");
-            update("mobile", searchValue);
-            update("officeMobile", "");
-            update("title", "Mr.");
-          }
-        } else {
-          setNotFoundMsg(data.message || "Error searching contact.");
-          setSearchResult('not_found');
-        }
-      } else {
-        const nameResponse = await fetch(`http://localhost:44354/api/organization-contact-persons/search-by-name?name=${encodeURIComponent(searchValue)}&limit=20`);
-        const nameData = await nameResponse.json();
-
-        if (nameData.success && nameData.data.length > 0) {
-          const contact = nameData.data[0];
+      if (data.success) {
+        if (data.found) {
           setSearchResult('found');
-          update("contactName", contact.name);
-          update("email", contact.email);
-          update("mobile", contact.mobileNumber);
-          update("officeMobile", contact.officeContactNumber);
-          update("title", contact.title);
-
-          if (nameData.data.length > 1) {
-            setNotFoundMsg(`Found ${nameData.data.length} contacts. Showing first match: ${contact.name}`);
-          }
+          update("contactName", data.data.name);
+          update("email", data.data.email);
+          update("mobile", data.data.mobileNumber);
+          update("officeMobile", data.data.officeContactNumber);
+          update("title", data.data.title);
         } else {
           setSearchResult('not_found');
-          update("contactName", searchValue);
+          update("contactName", "");
           update("email", "");
-          update("mobile", "");
+          update("mobile", searchValue);
           update("officeMobile", "");
           update("title", "Mr.");
         }
+      } else {
+        setNotFoundMsg(data.message || "Error searching contact.");
+        setSearchResult('not_found');
       }
     } catch (error) {
       console.error(error);
@@ -373,14 +346,12 @@ export default function SimplifiedComplaintForm() {
       remarks: ""
     });
     setNotFoundMsg("");
-    setGeneratedRef(newRefNumber);
     setSubmitted(false);
-    setComplaintId(null);
     setSearchResult(null);
     setShowAddDetails(false);
     setSelectedContactPerson("");
-    setSearchType('mobile');
-    setNameSearch("");
+    setSearchType && setSearchType('mobile');
+    setNameSearch && setNameSearch("");
     setNewContactData({
       name: "",
       email: "",
@@ -474,10 +445,8 @@ export default function SimplifiedComplaintForm() {
       }
 
       const savedComplaint = await response.json();
-      setComplaintId(savedComplaint.data._id);
       setSubmitted(true);
       const finalRef = savedComplaint.data.requestRef || form.requestRef;
-      setGeneratedRef(finalRef);
       alert(`✅ Complaint submitted successfully! Reference: ${finalRef}`);
 
     } catch (error) {
@@ -558,7 +527,7 @@ export default function SimplifiedComplaintForm() {
                     <option disabled>Loading organizations...</option>
                   ) : (
                     organizations.map((org) => (
-                      <option key={org._id} value={org.organization}>{org.organization}</option>
+                      <option key={org._id} value={org.organization}>{typeof org.organization === 'string' ? org.organization : 'Invalid Organization'}</option>
                     ))
                   )}
                 </select>

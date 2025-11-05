@@ -28,7 +28,6 @@ import PendingAssignments from './pages/PendingAssignments';
 import MyTasks from './pages/MyTasks';
 
 // Import the ComplaintView component
-import { ComplaintView } from './pages/complaint/index';
 
 // PrivateRoute component to protect routes if not logged in
 const PrivateRoute = ({ children }) => {
@@ -45,7 +44,6 @@ function App() {
         {/* Private routes protected by PrivateRoute */}
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
-        <Route path="/complaint/view/:id" element={<PrivateRoute><ComplaintView /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />

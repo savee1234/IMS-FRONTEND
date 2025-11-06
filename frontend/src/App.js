@@ -24,11 +24,11 @@ import Dashboard from './pages/Dashboard';
 import Workflow from './pages/Workflow';
 
 import SelectAssigner from './pages/SelectAssigner';
-import PendingAssignments from './pages/PendingAssignments';
 import MyTasks from './pages/MyTasks';
+import MainAssignment from './pages/MainAssignment';
+import SubAssignment from './pages/SubAssignment';
 
 // Import the ComplaintView component
-import { ComplaintView } from './pages/complaint/index';
 
 // PrivateRoute component to protect routes if not logged in
 const PrivateRoute = ({ children }) => {
@@ -45,7 +45,6 @@ function App() {
         {/* Private routes protected by PrivateRoute */}
         <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
-        <Route path="/complaint/view/:id" element={<PrivateRoute><ComplaintView /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
@@ -61,8 +60,9 @@ function App() {
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/workflow" element={<PrivateRoute><Workflow /></PrivateRoute>} />
         <Route path="/select-assigner" element={<PrivateRoute><SelectAssigner /></PrivateRoute>} />
-        <Route path="/pending-assignments" element={<PrivateRoute><PendingAssignments /></PrivateRoute>} />
         <Route path="/my-tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+        <Route path="/main-assignment" element={<PrivateRoute><MainAssignment /></PrivateRoute>} />
+        <Route path="/sub-assignment" element={<PrivateRoute><SubAssignment /></PrivateRoute>} />
 
         {/* Public pages */}
         <Route path="/about" element={<About />} />

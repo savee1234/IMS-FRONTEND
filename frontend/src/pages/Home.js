@@ -6,7 +6,6 @@ import Footer from '../components/Footer';
 import complaintImg from '../assets/complaint.jpg';
 import rosterImg from '../assets/RosterManagement.jpg';
 import configImg from '../assets/Configuration.jpg';
-import pendingImg from '../assets/PendingAssignments.jpg';
 import reportsImg from '../assets/Reports.jpg';
 import tasksImg from '../assets/MyTasks.jpg';
 import notificationImg from '../assets/Notification.jpg';
@@ -24,8 +23,9 @@ const modules = [
   { name: 'Configuration', img: configImg, path: '/configuration' },
   { name: 'Dashboard', img: notificationImg, path: '/dashboard' },
   { name: 'Reporting', img: reportsImg, path: '/reporting' },
-  { name: 'Pending Assignments', img: pendingImg, path: '/pending-assignments' },
   { name: 'View My Tasks', img: tasksImg, path: '/my-tasks' },
+  { name: 'Main Assignment', img: tasksImg, path: '/main-assignment' },
+  { name: 'Sub Assignment', img: tasksImg, path: '/sub-assignment' },
 ];
 
 const styles = {

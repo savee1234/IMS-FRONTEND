@@ -101,6 +101,11 @@ export default function ComplaintOnboarding() {
   // State for staff assignments (each row has independent selection)
   const [staffAssignments, setStaffAssignments] = useState({});
 
+  // Track which empNo is currently marked as Main Assignment (if any)
+  const mainAssignedEmp = React.useMemo(() => {
+    return Object.keys(staffAssignments).find(emp => staffAssignments[emp] === 'Main Assignment');
+  }, [staffAssignments]);
+
   // Generate reference number when component mounts
   useEffect(() => {
     const refNumber = generateReferenceNumber();
@@ -271,10 +276,25 @@ export default function ComplaintOnboarding() {
   };
 
   const updateStaffAssignment = (empNo, assignment) => {
-    setStaffAssignments((prev) => ({
-      ...prev,
-      [empNo]: assignment
-    }));
+    setStaffAssignments(prev => {
+      const next = { ...prev };
+
+      if (assignment === 'Main Assignment') {
+        // demote any other main to sub
+        Object.keys(next).forEach(k => {
+          if (next[k] === 'Main Assignment' && k !== empNo) {
+            next[k] = 'Sub Assignment';
+          }
+        });
+        next[empNo] = 'Main Assignment';
+      } else if (assignment === 'Sub Assignment' || assignment === '') {
+        next[empNo] = assignment;
+      } else {
+        next[empNo] = assignment;
+      }
+
+      return next;
+    });
   };
 
   const onContactPersonSelect = (contactPersonId) => {
@@ -1096,7 +1116,7 @@ export default function ComplaintOnboarding() {
                         }}
                       >
                         <option value="">Select…</option>
-                        <option value="Main Assignment">Main Assignment</option>
+                        <option value="Main Assignment" disabled={mainAssignedEmp && mainAssignedEmp !== s.empNo}>Main Assignment</option>
                         <option value="Sub Assignment">Sub Assignment</option>
                       </select>
                     </td>

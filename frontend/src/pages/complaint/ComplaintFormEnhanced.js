@@ -66,7 +66,7 @@ export default function ComplaintFormEnhanced() {
     title: "Mr."
   });
   const [organizationContactPersons, setOrganizationContactPersons] = useState([]);
-  const [selectedContactPerson, setSelectedContactPerson] = useState("");
+  const [selectedContactPerson, setSelectedContactPerson] = useState(null);
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
@@ -99,7 +99,7 @@ export default function ComplaintFormEnhanced() {
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            setMobileOptions(data.data);
+            setMobileOptions(data.data || []);
           }
         }
       } catch (error) {
@@ -121,7 +121,7 @@ export default function ComplaintFormEnhanced() {
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            setOrganizations(data.data);
+            setOrganizations(data.data || []);
           }
         }
       } catch (error) {
@@ -143,7 +143,7 @@ export default function ComplaintFormEnhanced() {
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            setOrganizationContactPersons(data.data);
+            setOrganizationContactPersons(data.data || []);
           }
         }
       } catch (error) {
@@ -165,8 +165,9 @@ export default function ComplaintFormEnhanced() {
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            const uniqueSolutionTypes = [...new Set(data.data.map(item => item.solutionType))];
-            const uniqueSolutions = [...new Set(data.data.map(item => item.solution))];
+            const solutionData = data.data || [];
+            const uniqueSolutionTypes = [...new Set(solutionData.map(item => item.solutionType).filter(Boolean))];
+            const uniqueSolutions = [...new Set(solutionData.map(item => item.solution).filter(Boolean))];
             setSolutionTypes(uniqueSolutionTypes);
             setSolutions(uniqueSolutions);
           }
@@ -190,7 +191,8 @@ export default function ComplaintFormEnhanced() {
           if (response.ok) {
             const data = await response.json();
             if (data.success) {
-              const solutionsForType = [...new Set(data.data.map(item => item.solution))];
+              const solutionData = data.data || [];
+              const solutionsForType = [...new Set(solutionData.map(item => item.solution).filter(Boolean))];
               setFilteredSolutions(solutionsForType);
             } else {
               setFilteredSolutions([]);
@@ -221,13 +223,14 @@ export default function ComplaintFormEnhanced() {
 
   // Handle contact selection
   const handleContactSelect = (contact) => {
-    if (contact) {
+    // Ensure we're receiving a valid contact object
+    if (contact && typeof contact === 'object' && contact.name) {
       setSelectedContactPerson(contact);
-      update("organizationContactPersonId", contact._id);
-      update("contactName", contact.name);
-      update("email", contact.email);
-      update("mobile", contact.mobileNumber);
-      update("officeMobile", contact.officeContactNumber);
+      update("organizationContactPersonId", contact._id || contact.id || "");
+      update("contactName", contact.name || "");
+      update("email", contact.email || "");
+      update("mobile", contact.mobileNumber || "");
+      update("officeMobile", contact.officeContactNumber || "");
       update("title", contact.title || "Mr.");
       setNotFoundMsg("");
     } else {
@@ -256,14 +259,14 @@ export default function ComplaintFormEnhanced() {
     update("organizationContactPersonId", contactPersonId);
 
     if (contactPersonId) {
-      const contactPerson = organizationContactPersons.find(cp => cp._id === contactPersonId);
+      const contactPerson = (organizationContactPersons || []).find(cp => (cp._id || cp.id) === contactPersonId);
       if (contactPerson) {
-        update("contactName", contactPerson.name);
-        update("email", contactPerson.email);
-        update("mobile", contactPerson.mobileNumber);
-        update("officeMobile", contactPerson.officeContactNumber);
-        update("title", contactPerson.title);
-        update("searchMobile", contactPerson.mobileNumber);
+        update("contactName", contactPerson.name || "");
+        update("email", contactPerson.email || "");
+        update("mobile", contactPerson.mobileNumber || "");
+        update("officeMobile", contactPerson.officeContactNumber || "");
+        update("title", contactPerson.title || "Mr.");
+        update("searchMobile", contactPerson.mobileNumber || "");
         setSearchResult(null);
         setNotFoundMsg("");
         setShowAddDetails(false);
@@ -309,13 +312,13 @@ export default function ComplaintFormEnhanced() {
         const data = await response.json();
 
         if (data.success) {
-          if (data.found) {
+          if (data.found && data.data) {
             setSearchResult('found');
-            update("contactName", data.data.name);
-            update("email", data.data.email);
-            update("mobile", data.data.mobileNumber);
-            update("officeMobile", data.data.officeContactNumber);
-            update("title", data.data.title);
+            update("contactName", data.data.name || "");
+            update("email", data.data.email || "");
+            update("mobile", data.data.mobileNumber || "");
+            update("officeMobile", data.data.officeContactNumber || "");
+            update("title", data.data.title || "Mr.");
           } else {
             setSearchResult('not_found');
             update("contactName", "");
@@ -332,17 +335,17 @@ export default function ComplaintFormEnhanced() {
         const nameResponse = await fetch(`http://localhost:44354/api/organization-contact-persons/search-by-name?name=${encodeURIComponent(searchValue)}&limit=20`);
         const nameData = await nameResponse.json();
 
-        if (nameData.success && nameData.data.length > 0) {
+        if (nameData.success && nameData.data && nameData.data.length > 0) {
           const contact = nameData.data[0];
           setSearchResult('found');
-          update("contactName", contact.name);
-          update("email", contact.email);
-          update("mobile", contact.mobileNumber);
-          update("officeMobile", contact.officeContactNumber);
-          update("title", contact.title);
+          update("contactName", contact.name || "");
+          update("email", contact.email || "");
+          update("mobile", contact.mobileNumber || "");
+          update("officeMobile", contact.officeContactNumber || "");
+          update("title", contact.title || "Mr.");
 
           if (nameData.data.length > 1) {
-            setNotFoundMsg(`Found ${nameData.data.length} contacts. Showing first match: ${contact.name}`);
+            setNotFoundMsg(`Found ${nameData.data.length} contacts. Showing first match: ${contact.name || 'Unknown'}`);
           }
         } else {
           setSearchResult('not_found');
@@ -391,7 +394,7 @@ export default function ComplaintFormEnhanced() {
     setComplaintId(null);
     setSearchResult(null);
     setShowAddDetails(false);
-    setSelectedContactPerson("");
+    setSelectedContactPerson(null);
     setSearchType('mobile');
     setNameSearch("");
     setNewContactData({
@@ -435,22 +438,22 @@ export default function ComplaintFormEnhanced() {
         if (createResponse.ok) {
           const createData = await createResponse.json();
           if (createData.success && createData.data) {
-            update("contactName", createData.data.name);
-            update("email", createData.data.email);
-            update("mobile", createData.data.mobileNumber);
-            update("officeMobile", createData.data.officeContactNumber);
-            update("title", createData.data.title);
-            update("organizationContactPersonId", createData.data._id || "");
+            update("contactName", createData.data.name || "");
+            update("email", createData.data.email || "");
+            update("mobile", createData.data.mobileNumber || "");
+            update("officeMobile", createData.data.officeContactNumber || "");
+            update("title", createData.data.title || "");
+            update("organizationContactPersonId", createData.data._id || createData.data.id || "");
 
             const refreshResponse = await fetch('http://localhost:44354/api/organization-contact-persons');
             if (refreshResponse.ok) {
               const refreshData = await refreshResponse.json();
               if (refreshData.success) {
-                setOrganizationContactPersons(refreshData.data);
+                setOrganizationContactPersons(refreshData.data || []);
               }
             }
 
-            alert(`✅ New contact "${createData.data.name}" created and linked to complaint!`);
+            alert(`✅ New contact "${createData.data.name || 'Unknown'}" created and linked to complaint!`);
           }
         } else {
           const errorData = await createResponse.json().catch(() => ({}));
@@ -462,6 +465,7 @@ export default function ComplaintFormEnhanced() {
 
       const submissionData = { ...form };
 
+      // Remove empty fields that might cause issues
       Object.keys(submissionData).forEach(key => {
         if (submissionData[key] === "" || submissionData[key] === null || submissionData[key] === undefined) {
           delete submissionData[key];
@@ -480,9 +484,9 @@ export default function ComplaintFormEnhanced() {
       }
 
       const savedComplaint = await response.json();
-      setComplaintId(savedComplaint.data._id);
+      setComplaintId(savedComplaint.data?._id || savedComplaint.data?.id || null);
       setSubmitted(true);
-      const finalRef = savedComplaint.data.requestRef || form.requestRef;
+      const finalRef = savedComplaint.data?.requestRef || form.requestRef;
       setGeneratedRef(finalRef);
       alert(`✅ Complaint submitted successfully! Reference: ${finalRef}`);
 
@@ -525,7 +529,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Request Reference</label>
               <input
                 className="form-control"
-                value={form.requestRef}
+                value={form.requestRef || ""}
                 readOnly
                 placeholder="Auto-generated reference number"
                 title="This reference number is automatically generated"
@@ -536,7 +540,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label form-label-required">Category Type</label>
               <select
                 className="form-control"
-                value={form.categoryType}
+                value={form.categoryType || ""}
                 onChange={(e) => update("categoryType", e.target.value)}
                 required
               >
@@ -551,15 +555,17 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Organization</label>
               <select
                 className="form-control"
-                value={form.organization}
+                value={form.organization || ""}
                 onChange={(e) => update("organization", e.target.value)}
               >
                 <option value="">Select Organization</option>
                 {loadingOrganizations ? (
                   <option disabled>Loading organizations...</option>
                 ) : (
-                  organizations.map((org) => (
-                    <option key={org._id} value={org.organization}>{org.organization}</option>
+                  (organizations || []).map((org) => (
+                    <option key={org._id || org.id || org.organization} value={org.organization || org.name || ''}>
+                      {org.organization || org.name || 'Unnamed Organization'}
+                    </option>
                   ))
                 )}
               </select>
@@ -569,15 +575,15 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Solution Type</label>
               <select
                 className="form-control"
-                value={form.solutionType}
+                value={form.solutionType || ""}
                 onChange={(e) => update("solutionType", e.target.value)}
                 disabled={loadingSolutionData}
               >
                 <option value="">Select Solution Type</option>
                 {loadingSolutionData ? (
                   <option disabled>Loading...</option>
-                ) : solutionTypes.length > 0 ? (
-                  solutionTypes.map((type) => (
+                ) : (solutionTypes || []).length > 0 ? (
+                  (solutionTypes || []).map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))
                 ) : (
@@ -590,7 +596,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Solution Name</label>
               <select
                 className="form-control"
-                value={form.solutionName}
+                value={form.solutionName || ""}
                 onChange={(e) => update("solutionName", e.target.value)}
                 disabled={!form.solutionType || loadingSolutionData}
               >
@@ -598,8 +604,8 @@ export default function ComplaintFormEnhanced() {
                 {loadingSolutionData ? (
                   <option disabled>Loading...</option>
                 ) : form.solutionType ? (
-                  filteredSolutions.length > 0 ? (
-                    filteredSolutions.map((s) => (
+                  (filteredSolutions || []).length > 0 ? (
+                    (filteredSolutions || []).map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))
                   ) : (
@@ -615,7 +621,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Medium</label>
               <select
                 className="form-control"
-                value={form.medium}
+                value={form.medium || ""}
                 onChange={(e) => update("medium", e.target.value)}
               >
                 <option value="">Select Medium</option>
@@ -629,7 +635,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Medium Source</label>
               <select
                 className="form-control"
-                value={form.mediumSource}
+                value={form.mediumSource || ""}
                 onChange={(e) => update("mediumSource", e.target.value)}
               >
                 <option value="">Select Source</option>
@@ -644,7 +650,7 @@ export default function ComplaintFormEnhanced() {
               <textarea
                 className="form-control form-textarea"
                 rows={4}
-                value={form.complaint}
+                value={form.complaint || ""}
                 onChange={(e) => update("complaint", e.target.value)}
                 placeholder="Type the complaint here..."
                 required
@@ -664,7 +670,7 @@ export default function ComplaintFormEnhanced() {
               <div className="contact-search-input">
                 <label className="form-label">Search Contact Person</label>
                 <ContactPersonSelect
-                  contacts={organizationContactPersons}
+                  contacts={organizationContactPersons || []}
                   onSelect={handleContactSelect}
                   isLoading={loadingContactPersons}
                   selectedPerson={selectedContactPerson}
@@ -673,9 +679,9 @@ export default function ComplaintFormEnhanced() {
               </div>
             </div>
             
-            {selectedContactPerson && (
+            {selectedContactPerson && typeof selectedContactPerson === 'object' && selectedContactPerson.name && (
               <div className="selected-contact-display">
-                <strong>Selected Contact:</strong> {selectedContactPerson.name} ({selectedContactPerson.mobileNumber})
+                <strong>Selected Contact:</strong> {selectedContactPerson.name} ({selectedContactPerson.mobileNumber || 'No mobile'})
               </div>
             )}
             
@@ -686,10 +692,10 @@ export default function ComplaintFormEnhanced() {
             )}
           </div>
 
-          {searchResult === 'found' && (
+          {searchResult === 'found' && form.contactName && (
             <div className="contact-status contact-found">
               <div>
-                <strong>Contact Found:</strong> {form.contactName} ({form.mobile})
+                <strong>Contact Found:</strong> {form.contactName} ({form.mobile || 'No mobile'})
               </div>
               <div className="contact-status-actions">
                 <button 
@@ -736,9 +742,9 @@ export default function ComplaintFormEnhanced() {
                   <label className="form-label form-label-required">Contact Name</label>
                   <input
                     className="form-control"
-                    value={newContactData.name}
+                    value={newContactData.name || ""}
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const value = e.target.value || "";
                       setNewContactData({...newContactData, name: value});
                       update("contactName", value);
                     }}
@@ -751,9 +757,9 @@ export default function ComplaintFormEnhanced() {
                   <label className="form-label form-label-required">Email</label>
                   <input
                     className="form-control"
-                    value={newContactData.email}
+                    value={newContactData.email || ""}
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const value = e.target.value || "";
                       setNewContactData({...newContactData, email: value});
                       update("email", value);
                     }}
@@ -767,9 +773,9 @@ export default function ComplaintFormEnhanced() {
                   <label className="form-label">Organization</label>
                   <select
                     className="form-control"
-                    value={newContactData.organization}
+                    value={newContactData.organization || ""}
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const value = e.target.value || "";
                       setNewContactData({...newContactData, organization: value});
                     }}
                   >
@@ -777,8 +783,10 @@ export default function ComplaintFormEnhanced() {
                     {loadingOrganizations ? (
                       <option disabled>Loading organizations...</option>
                     ) : (
-                      organizations.map((org) => (
-                        <option key={org._id} value={org.organization}>{org.organization}</option>
+                      (organizations || []).map((org) => (
+                        <option key={org._id || org.id || org.organization} value={org.organization || org.name || ''}>
+                          {org.organization || org.name || 'Unnamed Organization'}
+                        </option>
                       ))
                     )}
                   </select>
@@ -788,9 +796,9 @@ export default function ComplaintFormEnhanced() {
                   <label className="form-label">Title</label>
                   <select
                     className="form-control"
-                    value={newContactData.title}
+                    value={newContactData.title || "Mr."}
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const value = e.target.value || "Mr.";
                       setNewContactData({...newContactData, title: value});
                       update("title", value);
                     }}
@@ -813,7 +821,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Contact Person Name</label>
               <input
                 className="form-control"
-                value={form.contactName}
+                value={form.contactName || ""}
                 onChange={(e) => update("contactName", e.target.value)}
                 placeholder="Full name"
               />
@@ -823,7 +831,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Email</label>
               <input
                 className="form-control"
-                value={form.email}
+                value={form.email || ""}
                 onChange={(e) => update("email", e.target.value)}
                 placeholder="name@example.com"
                 type="email"
@@ -834,7 +842,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Mobile No</label>
               <input
                 className="form-control"
-                value={form.mobile}
+                value={form.mobile || ""}
                 onChange={(e) => update("mobile", e.target.value)}
                 placeholder="07XXXXXXXX"
               />
@@ -844,9 +852,9 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Office Mobile No</label>
               <input
                 className="form-control"
-                value={form.officeMobile}
+                value={form.officeMobile || ""}
                 onChange={(e) => {
-                  const value = e.target.value;
+                  const value = e.target.value || "";
                   update("officeMobile", value);
                   if (searchResult === 'not_found') {
                     setNewContactData({...newContactData, officeMobile: value});
@@ -860,7 +868,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Title</label>
               <select
                 className="form-control"
-                value={form.title}
+                value={form.title || "Mr."}
                 onChange={(e) => update("title", e.target.value)}
               >
                 {titles.map((t) => (
@@ -889,12 +897,12 @@ export default function ComplaintFormEnhanced() {
                 </tr>
               </thead>
               <tbody>
-                {staff.map((s) => (
-                  <tr key={s.empNo}>
-                    <td>{s.empNo}</td>
-                    <td>{s.name}</td>
-                    <td>{s.designation}</td>
-                    <td>{s.availability}</td>
+                {(staff || []).map((s) => (
+                  <tr key={s.empNo || s.name || Math.random()}>
+                    <td>{s.empNo || 'N/A'}</td>
+                    <td>{s.name || 'Unnamed'}</td>
+                    <td>{s.designation || 'N/A'}</td>
+                    <td>{s.availability || 'N/A'}</td>
                     <td>
                       <select
                         className="assignment-select"
@@ -904,7 +912,7 @@ export default function ComplaintFormEnhanced() {
                         <option value="">Select Assignment</option>
                         <option value="Main Assignment">Main Assignment</option>
                         <option value="Sub Assignment">Sub Assignment</option>
-                      </select>
+                        </select>
                     </td>
                   </tr>
                 ))}
@@ -918,7 +926,7 @@ export default function ComplaintFormEnhanced() {
               <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <input
                   className="form-control"
-                  value={form.docRef}
+                  value={form.docRef || ""}
                   onChange={(e) => update("docRef", e.target.value)}
                   placeholder="DOC-REF"
                 />
@@ -937,7 +945,7 @@ export default function ComplaintFormEnhanced() {
               <label className="form-label">Document Subject</label>
               <input
                 className="form-control"
-                value={form.docSubject}
+                value={form.docSubject || ""}
                 onChange={(e) => update("docSubject", e.target.value)}
                 placeholder="Subject"
               />
@@ -948,7 +956,7 @@ export default function ComplaintFormEnhanced() {
               <textarea
                 className="form-control form-textarea"
                 rows={4}
-                value={form.remarks}
+                value={form.remarks || ""}
                 onChange={(e) => update("remarks", e.target.value)}
                 placeholder="Any special notes..."
               />

@@ -16,17 +16,17 @@ export default function ContactPersonSelect({
   useEffect(() => {
     // Filter contacts based on search term
     if (!search.trim()) {
-      setFiltered(contacts);
+      setFiltered(contacts || []);
       return;
     }
 
     const searchLower = search.toLowerCase();
-    const filtered = contacts.filter(contact => 
-      contact.name.toLowerCase().includes(searchLower) ||
+    const filteredContacts = (contacts || []).filter(contact => 
+      contact.name?.toLowerCase().includes(searchLower) ||
       contact.mobileNumber?.toLowerCase().includes(searchLower) ||
       contact.officeContactNumber?.toLowerCase().includes(searchLower)
     );
-    setFiltered(filtered);
+    setFiltered(filteredContacts);
   }, [search, contacts]);
 
   useEffect(() => {
@@ -42,7 +42,10 @@ export default function ContactPersonSelect({
   }, []);
 
   const handleSelect = (contact) => {
-    onSelect(contact);
+    // Ensure we're passing a valid contact object
+    if (contact && typeof contact === 'object') {
+      onSelect(contact);
+    }
     setIsOpen(false);
     setSearch('');
   };
@@ -54,19 +57,19 @@ export default function ContactPersonSelect({
           type="text"
           className="search-input"
           placeholder={placeholder}
-          value={search}
+          value={search || ''}
           onChange={(e) => {
-            setSearch(e.target.value);
+            setSearch(e.target.value || '');
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
         />
         <div className="selected-contact">
-          {selectedPerson && (
+          {selectedPerson && typeof selectedPerson === 'object' && selectedPerson.name ? (
             <span>
-              {selectedPerson.name} ({selectedPerson.mobileNumber})
+              {selectedPerson.name} ({selectedPerson.mobileNumber || 'No mobile'})
             </span>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -74,21 +77,21 @@ export default function ContactPersonSelect({
         <div className="dropdown-list">
           {isLoading ? (
             <div className="dropdown-item loading">Loading contacts...</div>
-          ) : filtered.length === 0 ? (
+          ) : !filtered || filtered.length === 0 ? (
             <div className="dropdown-item no-results">
               No contact person found for this search
             </div>
           ) : (
-            filtered.map(contact => (
+            (filtered || []).map(contact => (
               <div
-                key={contact._id}
+                key={contact._id || contact.id || Math.random()}
                 className="dropdown-item"
                 onClick={() => handleSelect(contact)}
               >
-                <div className="contact-name">{contact.name}</div>
+                <div className="contact-name">{contact.name || 'Unnamed'}</div>
                 <div className="contact-details">
                   {contact.mobileNumber && <span>{contact.mobileNumber}</span>}
-                  {contact.organizationName && <span>{contact.organizationName}</span>}
+                  {contact.organization && typeof contact.organization === 'string' && <span>{contact.organization}</span>}
                 </div>
               </div>
             ))

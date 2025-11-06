@@ -280,14 +280,18 @@ export default function ComplaintOnboarding() {
       const next = { ...prev };
 
       if (assignment === 'Main Assignment') {
-        // demote any other main to sub
-        Object.keys(next).forEach(k => {
-          if (next[k] === 'Main Assignment' && k !== empNo) {
-            next[k] = 'Sub Assignment';
+        // When one emp is set to Main, set every other staff to Sub Assignment
+        // This ensures other assignment selects are filled as 'Sub Assignment'.
+        // Use the `staff` array so we initialize values for all rows consistently.
+        staff.forEach(s => {
+          if (s.empNo === empNo) {
+            next[s.empNo] = 'Main Assignment';
+          } else {
+            next[s.empNo] = 'Sub Assignment';
           }
         });
-        next[empNo] = 'Main Assignment';
       } else if (assignment === 'Sub Assignment' || assignment === '') {
+        // Normal behavior for setting a specific row
         next[empNo] = assignment;
       } else {
         next[empNo] = assignment;

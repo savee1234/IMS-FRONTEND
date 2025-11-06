@@ -655,8 +655,10 @@ export default function ComplaintOnboarding() {
                 onChange={(e) => update("organization", e.target.value)}
               >
                 <option value="">Select…</option>
-                {organizations.map((o) => (
-                  <option key={o} value={o}>{o}</option>
+                {organizations.map((org) => (
+                  <option key={org._id} value={org.organization}>
+                    {org.organization}
+                  </option>
                 ))}
               </select>
             </Field>

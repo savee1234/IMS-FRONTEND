@@ -343,6 +343,14 @@ const RosterView = () => {
                       }}>Created DTM</th>
                       <th style={{ 
                         padding: '1rem', 
+                        textAlign: 'left',
+                        border: '1px solid #d1d5db',
+                        fontWeight: '600',
+                        backgroundColor: '#1a237e',
+                        color: '#ffffff'
+                      }}>Status</th>
+                      <th style={{ 
+                        padding: '1rem', 
                         textAlign: 'center',
                         border: '1px solid #d1d5db',
                         fontWeight: '600',
@@ -369,6 +377,7 @@ const RosterView = () => {
                               year: "numeric",
                               month: "long",
                             })}
+                            {!roster.isActive && " (Inactive)"}
                           </td>
                           <td style={{ 
                             padding: '1rem',
@@ -385,6 +394,17 @@ const RosterView = () => {
                             border: '1px solid #d1d5db',
                             color: '#374151'
                           }}>{new Date(roster.createdDtm).toLocaleString()}</td>
+                          <td style={{ 
+                            padding: '1rem',
+                            border: '1px solid #d1d5db',
+                            color: '#374151'
+                          }}>
+                            {roster.isActive ? (
+                              <span style={{ color: '#10b981', fontWeight: '600' }}>Active</span>
+                            ) : (
+                              <span style={{ color: '#6b7280' }}>Inactive</span>
+                            )}
+                          </td>
                           <td style={{ 
                             padding: '1rem',
                             border: '1px solid #d1d5db',
@@ -424,7 +444,7 @@ const RosterView = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="6" style={{ 
+                        <td colSpan="7" style={{ 
                           padding: '2rem', 
                           textAlign: 'center',
                           color: '#6b7280',

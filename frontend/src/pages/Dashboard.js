@@ -31,48 +31,43 @@ const Dashboard = () => {
   // Filter complaints by selected month
   const getFilteredComplaints = () => {
     if (!selectedDate || !complaints.length) return [];
-    
     const [year, month] = selectedDate.split('-');
-    
-    return complaints.filter(complaint => {
+    return complaints.filter((complaint) => {
       if (!complaint.createdAt) return false;
       const complaintDate = new Date(complaint.createdAt);
-      return complaintDate.getFullYear() === parseInt(year) && 
-             complaintDate.getMonth() + 1 === parseInt(month);
+      return (
+        complaintDate.getFullYear() === parseInt(year) &&
+        complaintDate.getMonth() + 1 === parseInt(month)
+      );
     });
   };
 
-  const getMonthlyCount = () => {
-    return getFilteredComplaints().length;
-  };
+  const getMonthlyCount = () => getFilteredComplaints().length;
 
   // Get status based on count
   const getStatusInfo = () => {
     const count = getMonthlyCount();
-    
+
     if (count === 0) {
       return {
         text: 'LOW',
-        bgColor: '#e6f3ff',
-        borderColor: '#b3d9ff',
-        textColor: '#0066cc',
-        accentColor: '#0066cc'
+        bgColor: '#d4edda',
+        borderColor: '#c3e6cb',
+        textColor: '#155724',
       };
     } else if (count <= 5) {
       return {
         text: 'MEDIUM',
-        bgColor: '#fff4e6',
-        borderColor: '#ffd9b3',
-        textColor: '#cc6600',
-        accentColor: '#ff8c00'
+        bgColor: '#cff4fc',
+        borderColor: '#b6effb',
+        textColor: '#055160',
       };
     } else {
       return {
         text: 'HIGH',
-        bgColor: '#ffe6e6',
-        borderColor: '#ffb3b3',
-        textColor: '#cc0000',
-        accentColor: '#ff4444'
+        bgColor: '#f8d7da',
+        borderColor: '#f5c6cb',
+        textColor: '#721c24',
       };
     }
   };
@@ -82,276 +77,248 @@ const Dashboard = () => {
   // Calculate date range for the selected month
   const getDateRange = () => {
     if (!selectedDate) return 'N/A - N/A';
-    
     const [year, month] = selectedDate.split('-');
-    
-    // First day of the month
+
     const firstDay = new Date(parseInt(year), parseInt(month) - 1, 1);
-    // Last day of the month
     const lastDay = new Date(parseInt(year), parseInt(month), 0);
-    
+
     const formatDate = (date) => {
       const d = new Date(date);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
       const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      return `${y}-${m}-${day}`;
     };
-    
+
     return `${formatDate(firstDay)} - ${formatDate(lastDay)}`;
   };
 
   return (
-    <div className="page-container" style={{ 
-      position: 'relative', 
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    }}>
-      {/* Enhanced Video Background */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 0,
-        overflow: 'hidden'
-      }}>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: 'translate(-50%, -50%)',
-            filter: 'brightness(0.7) contrast(1.1)'
-          }}
-        >
-          <source src={backgroundVideo} type="video/mp4" />
-        </video>
-        <div style={{
-          position: 'absolute',
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'fixed',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-          backdropFilter: 'blur(2px)'
-        }}></div>
-      </div>
+          objectFit: 'cover',
+          zIndex: -1,
+        }}
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+      </video>
+
+      {/* Overlay */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+          zIndex: -1,
+        }}
+      ></div>
 
       <Navbar />
-      
-      <div className="content-wrapper" style={{
-        position: 'relative',
-        zIndex: 2,
-        padding: '2rem',
-        maxWidth: '1400px',
-        margin: '0 auto'
-      }}>
+
+      <div
+        className="content-wrapper"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          padding: '1rem',
+          marginTop: '1rem',
+          maxWidth: '1400px',
+          margin: '1rem auto 0 auto',
+        }}
+      >
         {/* Dashboard Header */}
-        <header className="page-header" style={{
-          textAlign: 'center',
-          marginBottom: '2rem',
-          padding: '2rem',
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          backdropFilter: 'blur(10px)'
-        }}>
-          <h1 style={{
-            fontSize: '3rem',
-            fontWeight: '800',
-            background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            margin: '0 0 0.5rem 0',
-            textAlign: 'center'
-          }}>
+        <header
+          className="page-header"
+          style={{
+            textAlign: 'center',
+            marginBottom: '1rem',
+            padding: '1rem 1.5rem',
+            background: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
+          }}
+        >
+          <h1
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: '700',
+              color: '#1f2937',
+              margin: '0 0 0.25rem 0',
+              textAlign: 'center',
+            }}
+          >
             Dashboard
           </h1>
-          <p style={{ 
-            color: '#6b7280', 
-            fontSize: '1.1rem',
-            margin: 0,
-            fontWeight: '500'
-          }}>
+          <p
+            style={{
+              color: '#6b7280',
+              fontSize: '0.875rem',
+              margin: 0,
+              fontWeight: '400',
+            }}
+          >
             Incident Management System
           </p>
         </header>
 
-        {/* Stats Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-          gap: '2rem',
-          marginBottom: '2rem'
-        }}>
+        {/* Monthly Count and Counts With Status Cards */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '2rem',
+            marginBottom: '2rem',
+          }}
+        >
           {/* Monthly Count Card */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '20px',
-            padding: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            flexDirection: 'column',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-          }}>
-            <div style={{
+          <div
+            style={{
+              background: 'white',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #d1d5db',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              gap: '0.75rem',
-              marginBottom: '1.5rem'
-            }}>
-              <div style={{
-                width: '4px',
-                height: '24px',
-                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                borderRadius: '2px'
-              }}></div>
-              <h2 style={{ 
-                margin: 0, 
-                fontSize: '1.5rem', 
-                fontWeight: '700',
-                color: '#1f2937'
-              }}>
-                Monthly Count
-              </h2>
-            </div>
-            
+              justifyContent: 'center',
+            }}
+          >
+            <h2
+              style={{
+                margin: '0 0 1rem 0',
+                fontSize: '1.25rem',
+                fontWeight: 'bold',
+                color: '#000000',
+                textAlign: 'left',
+                width: '100%',
+              }}
+            >
+              Monthly Count
+            </h2>
+
             <input
               type="month"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               style={{
                 width: '100%',
-                padding: '0.75rem 1rem',
-                marginBottom: '1rem',
-                border: '2px solid #e5e7eb',
-                borderRadius: '12px',
-                fontSize: '1rem',
-                background: 'white',
-                transition: 'all 0.2s ease',
-                outline: 'none'
+                padding: '0.5rem',
+                marginBottom: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '0.875rem',
               }}
-              onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
             />
-            
-            <div style={{
-              fontSize: '0.9rem',
-              color: '#6b7280',
-              marginBottom: '1.5rem',
-              textAlign: 'center',
-              background: '#f8fafc',
-              padding: '0.5rem 1rem',
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb'
-            }}>
+
+            <div
+              style={{
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                marginBottom: '1rem',
+                textAlign: 'center',
+              }}
+            >
               {getDateRange()}
             </div>
-            
-            <div style={{
-              fontSize: '4rem',
-              fontWeight: '800',
-              background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textAlign: 'center',
-              marginTop: 'auto',
-              lineHeight: '1'
-            }}>
+
+            <div
+              style={{
+                fontSize: '3rem',
+                fontWeight: 'bold',
+                color: '#000000',
+                textAlign: 'center',
+                marginTop: 'auto',
+              }}
+            >
               {loading ? '...' : getMonthlyCount()}
             </div>
           </div>
 
           {/* Counts With Status Card */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '20px',
-            padding: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginBottom: '1.5rem'
-            }}>
-              <div style={{
-                width: '4px',
-                height: '24px',
-                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                borderRadius: '2px'
-              }}></div>
-              <h2 style={{ 
-                margin: 0, 
-                fontSize: '1.5rem', 
-                fontWeight: '700',
-                color: '#1f2937'
-              }}>
-                Counts With Status
-              </h2>
-            </div>
-            
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '1.5rem'
-            }}>
-              <span style={{
-                fontSize: '1.1rem',
-                fontWeight: '600',
-                color: '#374151',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em'
-              }}>
-                OPEN
-              </span>
-              
-              <div style={{
-                background: statusInfo.bgColor,
-                padding: '2rem',
-                borderRadius: '16px',
+          <div
+            style={{
+              background: 'white',
+              borderRadius: '8px',
+              padding: '1.5rem',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #d1d5db',
+            }}
+          >
+            <h2
+              style={{
+                margin: '0 0 1rem 0',
+                fontSize: '1.25rem',
+                fontWeight: 'bold',
+                color: '#000000',
+              }}
+            >
+              Counts With Status
+            </h2>
+
+            <div
+              style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.75rem',
-                border: `2px solid ${statusInfo.borderColor}`,
-                width: '100%',
-                maxWidth: '200px',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)'
-              }}>
-                <div style={{
-                  fontSize: '3.5rem',
-                  fontWeight: '800',
-                  color: statusInfo.accentColor,
-                  lineHeight: '1'
-                }}>
+                gap: '1rem',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  color: '#000000',
+                }}
+              >
+                OPEN
+              </span>
+
+              <div
+                style={{
+                  background: statusInfo.bgColor,
+                  padding: '1rem 1.5rem',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  border: `1px solid ${statusInfo.borderColor}`,
+                  width: 'fit-content',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 'bold',
+                    color: '#000000',
+                    lineHeight: '1',
+                  }}
+                >
                   {loading ? '...' : getMonthlyCount()}
                 </div>
-                <div style={{
-                  fontSize: '1rem',
-                  fontWeight: '700',
-                  color: statusInfo.textColor,
-                  padding: '0.5rem 1rem',
-                  borderRadius: '20px',
-                  background: 'rgba(255, 255, 255, 0.8)'
-                }}>
+                <div
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: 'bold',
+                    color: statusInfo.textColor,
+                  }}
+                >
                   {statusInfo.text}
                 </div>
               </div>
@@ -359,343 +326,140 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Data Tables Section */}
-        <div style={{
-          display: 'grid',
-          gap: '2rem'
-        }}>
-          {/* Top 5 Pending Complaints Section */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '20px',
+        {/* Top 5 Pending Complaints Section */}
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '12px',
             padding: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginBottom: '2rem'
-            }}>
-              <div style={{
-                width: '4px',
-                height: '24px',
-                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                borderRadius: '2px'
-              }}></div>
-              <h2 style={{ 
-                margin: 0, 
-                fontSize: '1.5rem', 
-                fontWeight: '700',
-                color: '#1f2937'
-              }}>
-                Top 5 Pending Complaints
-              </h2>
-            </div>
-            
-            <div style={{
-              overflow: 'hidden',
-              borderRadius: '12px',
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-            }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                background: 'white'
-              }}>
-                <thead>
-                  <tr style={{
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
-                  }}>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'left',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Request Reference
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'left',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Assigned To
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Total Pending Duration
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem'
-                    }}>
-                      Assign Duration
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{
-                    borderBottom: '1px solid #f3f4f6',
-                    transition: 'background-color 0.2s ease'
-                  }}>
-                    <td style={{
-                      padding: '1.25rem',
-                      color: '#374151',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid #f3f4f6',
-                      fontWeight: '500'
-                    }}>
-                      25-10-23-0001
-                    </td>
-                    <td style={{
-                      padding: '1.25rem',
-                      color: '#374151',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid #f3f4f6'
-                    }}>
-                      015777 - Romaine Murcott
-                    </td>
-                    <td style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      borderRight: '1px solid #f3f4f6'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        gap: '0.5rem',
-                        justifyContent: 'center'
-                      }}>
-                        <div style={{
-                          background: '#10b981',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '8px',
-                          fontWeight: '600',
-                          fontSize: '0.8rem',
-                          boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)'
-                        }}>
-                          22 H
-                        </div>
-                        <div style={{
-                          background: '#3b82f6',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '8px',
-                          fontWeight: '600',
-                          fontSize: '0.8rem',
-                          boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)'
-                        }}>
-                          35 M
-                        </div>
-                      </div>
-                    </td>
-                    <td style={{
-                      padding: '1.25rem',
-                      textAlign: 'center'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        gap: '0.5rem',
-                        justifyContent: 'center'
-                      }}>
-                        <div style={{
-                          background: '#10b981',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '8px',
-                          fontWeight: '600',
-                          fontSize: '0.8rem',
-                          boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)'
-                        }}>
-                          22 H
-                        </div>
-                        <div style={{
-                          background: '#3b82f6',
-                          color: 'white',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '8px',
-                          fontWeight: '600',
-                          fontSize: '0.8rem',
-                          boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)'
-                        }}>
-                          35 M
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e5e7eb',
+            marginBottom: '2rem',
+          }}
+        >
+          <h2
+            style={{
+              margin: '0 0 1.5rem 0',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#1f2937',
+              textAlign: 'center',
+            }}
+          >
+            Top 5 Pending Complaints
+          </h2>
 
-          {/* Complaint Counts Pending With Employees Section */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '20px',
+          {/* Static Example Table */}
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              border: '1px solid #d1d5db',
+            }}
+          >
+            <thead>
+              <tr
+                style={{
+                  backgroundColor: '#1a237e',
+                  borderBottom: '2px solid #1a237e',
+                }}
+              >
+                <th style={thStyle}>Request Reference</th>
+                <th style={thStyle}>Assigned To</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Total Pending Duration</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Assign Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <td style={tdStyle}>25-10-23-0001</td>
+                <td style={tdStyle}>015777 - Romaine Murcott</td>
+                <td style={{ ...tdStyle, textAlign: 'center' }}>22 H 35 M</td>
+                <td style={{ ...tdStyle, textAlign: 'center' }}>22 H 35 M</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Complaint Counts Pending With Employees Section */}
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '12px',
             padding: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginBottom: '2rem'
-            }}>
-              <div style={{
-                width: '4px',
-                height: '24px',
-                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                borderRadius: '2px'
-              }}></div>
-              <h2 style={{ 
-                margin: 0, 
-                fontSize: '1.5rem', 
-                fontWeight: '700',
-                color: '#1f2937'
-              }}>
-                Complaint Counts Pending With Employees
-              </h2>
-            </div>
-            
-            <div style={{
-              overflow: 'hidden',
-              borderRadius: '12px',
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-            }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                background: 'white'
-              }}>
-                <thead>
-                  <tr style={{
-                    background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'
-                  }}>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'left',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Employee
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Pending Count
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem',
-                      borderRight: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                      Resolved Count
-                    </th>
-                    <th style={{
-                      padding: '1.25rem',
-                      textAlign: 'center',
-                      fontWeight: '600',
-                      color: '#ffffff',
-                      fontSize: '0.9rem'
-                    }}>
-                      Rejected Count
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { employee: '015777 - Romaine Murcott', pending: 1, resolved: 0, rejected: 0 },
-                    { employee: '01599 - Sandun Amarasinghe', pending: 0, resolved: 0, rejected: 0 },
-                    { employee: '011111 - Amalya Dayaratne', pending: 0, resolved: 0, rejected: 0 },
-                    { employee: '014888 - Dinithi Weerasekara', pending: 0, resolved: 0, rejected: 0 },
-                    { employee: '022222 - Dinusha Lakpriya', pending: 0, resolved: 0, rejected: 0 },
-                    { employee: '066666 - Jaya Mohan', pending: 0, resolved: 0, rejected: 0 }
-                  ].map((emp, index) => (
-                    <tr key={index} style={{
-                      borderBottom: '1px solid #f3f4f6',
-                      transition: 'background-color 0.2s ease'
-                    }}>
-                      <td style={{
-                        padding: '1.25rem',
-                        color: '#374151',
-                        fontSize: '0.9rem',
-                        borderRight: '1px solid #f3f4f6',
-                        fontWeight: '500'
-                      }}>
-                        {emp.employee}
-                      </td>
-                      <td style={{
-                        padding: '1.25rem',
-                        textAlign: 'center',
-                        color: '#374151',
-                        fontSize: '0.9rem',
-                        borderRight: '1px solid #f3f4f6',
-                        fontWeight: '600'
-                      }}>
-                        {emp.pending}
-                      </td>
-                      <td style={{
-                        padding: '1.25rem',
-                        textAlign: 'center',
-                        color: '#374151',
-                        fontSize: '0.9rem',
-                        borderRight: '1px solid #f3f4f6',
-                        fontWeight: '600'
-                      }}>
-                        {emp.resolved}
-                      </td>
-                      <td style={{
-                        padding: '1.25rem',
-                        textAlign: 'center',
-                        color: '#374151',
-                        fontSize: '0.9rem',
-                        fontWeight: '600'
-                      }}>
-                        {emp.rejected}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e5e7eb',
+          }}
+        >
+          <h2
+            style={{
+              margin: '0 0 1.5rem 0',
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: '#1f2937',
+              textAlign: 'center',
+            }}
+          >
+            Complaint Counts Pending With Employees
+          </h2>
+
+          <table
+            style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              border: '1px solid #d1d5db',
+            }}
+          >
+            <thead>
+              <tr
+                style={{
+                  backgroundColor: '#1a237e',
+                  borderBottom: '2px solid #1a237e',
+                }}
+              >
+                <th style={thStyle}>Employee</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Pending Count</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Resolved Count</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Rejected Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={tdStyle}>015777 - Romaine Murcott</td>
+                <td style={tdCenter}>1</td>
+                <td style={tdCenter}>0</td>
+                <td style={tdCenter}>0</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
       <Footer />
     </div>
   );
+};
+
+// Styles for reuse
+const thStyle = {
+  padding: '1rem',
+  textAlign: 'left',
+  fontWeight: '600',
+  color: '#ffffff',
+  fontSize: '0.875rem',
+  borderRight: '1px solid #d1d5db',
+};
+
+const tdStyle = {
+  padding: '1rem',
+  color: '#374151',
+  fontSize: '0.875rem',
+  borderRight: '1px solid #d1d5db',
+};
+
+const tdCenter = {
+  ...tdStyle,
+  textAlign: 'center',
 };
 
 export default Dashboard;

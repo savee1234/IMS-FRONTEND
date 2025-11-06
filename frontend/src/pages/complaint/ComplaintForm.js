@@ -264,6 +264,150 @@ export default function ComplaintOnboarding() {
     }
   };
 
+  const updateStaffAssignment = (empNo, assignment) => {
+    setStaffAssignments(prev => {
+      const next = { ...prev };
+
+      if (assignment === 'Main Assignment') {
+        // When one emp is set to Main, set every other staff to Sub Assignment
+        // This ensures other assignment selects are filled as 'Sub Assignment'.
+        // Use the `staff` array so we initialize values for all rows consistently.
+        staff.forEach(s => {
+          if (s.empNo === empNo) {
+            next[s.empNo] = 'Main Assignment';
+          } else {
+            next[s.empNo] = 'Sub Assignment';
+          }
+        });
+      } else if (assignment === 'Sub Assignment' || assignment === '') {
+        // Normal behavior for setting a specific row
+        next[empNo] = assignment;
+      } else {
+        next[empNo] = assignment;
+      }
+
+      return next;
+    });
+  };
+
+  const onContactPersonSelect = (contactPersonId) => {
+    setSelectedContactPerson(contactPersonId);
+    update("organizationContactPersonId", contactPersonId);
+
+    if (contactPersonId) {
+      // Find the selected contact person and populate form fields
+      const contactPerson = organizationContactPersons.find(cp => cp._id === contactPersonId);
+      if (contactPerson) {
+        update("contactName", contactPerson.name);
+        update("email", contactPerson.email);
+        update("mobile", contactPerson.mobileNumber);
+        update("officeMobile", contactPerson.officeContactNumber);
+        update("title", contactPerson.title);
+        update("searchMobile", contactPerson.mobileNumber);
+
+        // Clear search result since we're using existing contact
+        setSearchResult(null);
+        setNotFoundMsg("");
+        setShowAddDetails(false);
+      }
+    } else {
+      // Clear contact fields when no contact person is selected
+      update("contactName", "");
+      update("email", "");
+      update("mobile", "");
+      update("officeMobile", "");
+      update("title", "Mr.");
+      update("searchMobile", "");
+    }
+  };
+
+  const onSearchContact = async () => {
+    const searchValue = searchType === 'mobile' ? form.searchMobile : nameSearch;
+
+    if (!searchValue) {
+      setNotFoundMsg(`Please enter a ${searchType === 'mobile' ? 'mobile number' : 'name'} to search.`);
+      setSearchResult(null);
+      return;
+    }
+
+    // Clear previous states
+    setNotFoundMsg("");
+    setSearchResult(null);
+    setShowAddDetails(false);
+
+    try {
+      let searchUrl = 'http://localhost:44354/api/organization-contact-persons';
+      let searchParams = `?search=${encodeURIComponent(searchValue)}&limit=50`;
+
+      if (searchType === 'mobile') {
+        // For mobile search, use the existing search-or-create endpoint
+        const response = await fetch('http://localhost:44354/api/organization-contact-persons/search-or-create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mobileNumber: searchValue,
+            contactData: newContactData,
+            organizationId: null,
+            createdBy: 'complaint_system',
+            createdByName: 'Complaint Management System'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          if (data.found) {
+            setSearchResult('found');
+            update("contactName", data.data.name);
+            update("email", data.data.email);
+            update("mobile", data.data.mobileNumber);
+            update("officeMobile", data.data.officeContactNumber);
+            update("title", data.data.title);
+          } else {
+            setSearchResult('not_found');
+            update("contactName", "");
+            update("email", "");
+            update("mobile", searchValue);
+            update("officeMobile", "");
+            update("title", "Mr.");
+          }
+        } else {
+          setNotFoundMsg(data.message || "Error searching contact.");
+          setSearchResult('not_found');
+        }
+      } else {
+        // For name search, use the dedicated name search endpoint
+        const nameResponse = await fetch(`http://localhost:44354/api/organization-contact-persons/search-by-name?name=${encodeURIComponent(searchValue)}&limit=20`);
+        const nameData = await nameResponse.json();
+
+        if (nameData.success && nameData.data.length > 0) {
+          // If multiple results found, show the first one or handle selection
+          const contact = nameData.data[0];
+          setSearchResult('found');
+          update("contactName", contact.name);
+          update("email", contact.email);
+          update("mobile", contact.mobileNumber);
+          update("officeMobile", contact.officeContactNumber);
+          update("title", contact.title);
+
+          if (nameData.data.length > 1) {
+            setNotFoundMsg(`Found ${nameData.data.length} contacts. Showing first match: ${contact.name}`);
+          }
+        } else {
+          setSearchResult('not_found');
+          update("contactName", searchValue);
+          update("email", "");
+          update("mobile", "");
+          update("officeMobile", "");
+          update("title", "Mr.");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      setNotFoundMsg("Error searching contact.");
+      setSearchResult('not_found');
+    }
+  };
 
   const onReset = () => {
     // Generate new reference number on reset

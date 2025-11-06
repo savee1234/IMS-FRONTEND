@@ -21,6 +21,7 @@ const Navbar = () => {
     '/my-tasks',
     '/main-assignment',
     '/sub-assignment',
+    '/all-assignments',
   ];
 
   const handleLogout = () => {
@@ -96,6 +97,7 @@ const Navbar = () => {
                   <Link to="/my-tasks" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>View Tasks</Link>
                   <Link to="/main-assignment" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Main Assignment</Link>
                   <Link to="/sub-assignment" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Sub Assignment</Link>
+                  <Link to="/all-assignments" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>All Assignments</Link>
                 </div>
               )}
             </div>

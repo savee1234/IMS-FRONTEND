@@ -26,6 +26,7 @@ const modules = [
   { name: 'View My Tasks', img: tasksImg, path: '/my-tasks' },
   { name: 'Main Assignment', img: tasksImg, path: '/main-assignment' },
   { name: 'Sub Assignment', img: tasksImg, path: '/sub-assignment' },
+  { name: 'All Assignments', img: reportsImg, path: '/all-assignments' },
 ];
 
 const styles = {

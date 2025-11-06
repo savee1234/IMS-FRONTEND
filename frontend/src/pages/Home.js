@@ -26,6 +26,8 @@ const modules = [
   { name: 'Reporting', img: reportsImg, path: '/reporting' },
   { name: 'Pending Assignments', img: pendingImg, path: '/pending-assignments' },
   { name: 'View My Tasks', img: tasksImg, path: '/my-tasks' },
+  { name: 'Main Assignment', img: pendingImg, path: '/main-assignment' },
+  { name: 'Sub Assignment', img: tasksImg, path: '/sub-assignment' },
 ];
 
 const styles = {

@@ -18,8 +18,9 @@ const Navbar = () => {
     '/configuration',
     '/dashboard',
     '/reporting',
-    '/pending-assignments',
     '/my-tasks',
+    '/main-assignment',
+    '/sub-assignment',
   ];
 
   const handleLogout = () => {
@@ -92,8 +93,9 @@ const Navbar = () => {
                   <Link to="/configuration" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Configuration</Link>
                   <Link to="/dashboard" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Dashboard</Link>
                   <Link to="/reporting" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Reporting</Link>
-                  <Link to="/pending-assignments" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Pending Assignments</Link>
                   <Link to="/my-tasks" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>View Tasks</Link>
+                  <Link to="/main-assignment" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Main Assignment</Link>
+                  <Link to="/sub-assignment" onClick={() => setIsModulesOpen(false)} style={styles.dropdownItem}>Sub Assignment</Link>
                 </div>
               )}
             </div>

@@ -26,6 +26,8 @@ import Workflow from './pages/Workflow';
 import SelectAssigner from './pages/SelectAssigner';
 import PendingAssignments from './pages/PendingAssignments';
 import MyTasks from './pages/MyTasks';
+import MainAssignment from './pages/MainAssignment';
+import SubAssignment from './pages/SubAssignment';
 
 // Import the ComplaintView component
 
@@ -61,6 +63,8 @@ function App() {
         <Route path="/select-assigner" element={<PrivateRoute><SelectAssigner /></PrivateRoute>} />
         <Route path="/pending-assignments" element={<PrivateRoute><PendingAssignments /></PrivateRoute>} />
         <Route path="/my-tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
+        <Route path="/main-assignment" element={<PrivateRoute><MainAssignment /></PrivateRoute>} />
+        <Route path="/sub-assignment" element={<PrivateRoute><SubAssignment /></PrivateRoute>} />
 
         {/* Public pages */}
         <Route path="/about" element={<About />} />

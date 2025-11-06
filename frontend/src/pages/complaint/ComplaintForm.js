@@ -95,6 +95,8 @@ export default function ComplaintOnboarding() {
   const [filteredSolutions, setFilteredSolutions] = useState([]);
   const [solutionTypes, setSolutionTypes] = useState([]);
   const [solutions, setSolutions] = useState([]);
+  const [searchType, setSearchType] = useState('mobile'); // Add this line
+  const [nameSearch, setNameSearch] = useState(''); // Add this line
 
   // Generate reference number when component mounts
   useEffect(() => {

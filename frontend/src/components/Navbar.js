@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { logout } from '../utils/auth';
 import sltLogo from '../assets/slt-logo.png';
 
 const Navbar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
   const dropdownRef = useRef(null);
 

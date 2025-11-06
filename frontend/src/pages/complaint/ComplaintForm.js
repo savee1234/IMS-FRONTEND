@@ -95,8 +95,6 @@ export default function ComplaintOnboarding() {
   const [filteredSolutions, setFilteredSolutions] = useState([]);
   const [solutionTypes, setSolutionTypes] = useState([]);
   const [solutions, setSolutions] = useState([]);
-  const [searchType, setSearchType] = useState('mobile'); // Add this line
-  const [nameSearch, setNameSearch] = useState(''); // Add this line
 
   // Generate reference number when component mounts
   useEffect(() => {
@@ -266,6 +264,8 @@ export default function ComplaintOnboarding() {
     }
   };
 
+<<<<<<< HEAD
+=======
   const updateStaffAssignment = (empNo, assignment) => {
     setStaffAssignments(prev => {
       const next = { ...prev };
@@ -410,6 +410,7 @@ export default function ComplaintOnboarding() {
       setSearchResult('not_found');
     }
   };
+>>>>>>> ff9482767b87c982a95a905ae91077c0236ca2ce
 
   const onReset = () => {
     // Generate new reference number on reset

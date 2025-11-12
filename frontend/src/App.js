@@ -27,7 +27,7 @@ import SelectAssigner from './pages/SelectAssigner';
 import MyTasks from './pages/MyTasks';
 import MainAssignment from './pages/MainAssignment';
 import SubAssignment from './pages/SubAssignment';
-import AllAssignments from './pages/AllAssignments';
+import AllAssignments from './pages/AllAssignments.js';
 
 // Import the ComplaintView component
 

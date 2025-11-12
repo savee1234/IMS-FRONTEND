@@ -1,0 +1,17 @@
+.pm-overlay{
+  position: fixed; inset:0; background: rgba(0,0,0,0.45); display:flex; align-items:flex-start; justify-content:center; padding:2.5rem; z-index:11000;
+}
+.pm-modal{ width:100%; max-width:920px; background:white; border-radius:8px; overflow:hidden; box-shadow:0 20px 40px rgba(2,6,23,0.2)}
+.pm-header{ background:#0ea5e9; color:white; padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center}
+.pm-close{ background: rgba(255,255,255,0.12); border:none; color:white; font-size:1.1rem; padding:8px 10px; border-radius:8px; cursor:pointer }
+.pm-body{ padding:1.25rem }
+.pm-chip-row{ display:flex; gap:1rem; padding:0.75rem; background:#e6f0ff; border-radius:6px }
+.pm-chip{ padding:0.8rem 1rem; border-radius:6px; min-width:140px; text-align:center }
+.pm-chip .pm-chip-title{ font-weight:700; color:#0b2f5a }
+.pm-chip .pm-chip-sub{ color:#c6bf1a; font-weight:700 }
+.pm-detail{ margin-top:1rem; border:1px solid #eef2f7; border-radius:6px; padding:1rem }
+.pm-detail-row{ display:flex; gap:1rem; padding:0.6rem 0 }
+.pm-detail-key{ min-width:220px; font-weight:700; color:#1f2937 }
+.pm-detail-val{ color:#374151 }
+
+@media (max-width:880px){ .pm-detail-row{ flex-direction:column; align-items:flex-start } .pm-detail-key{ min-width:0 } }

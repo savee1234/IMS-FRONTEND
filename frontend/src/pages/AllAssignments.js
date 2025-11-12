@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { FaEye, FaInfoCircle, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
+import AssignmentView from './AllAssignments/AssignmentView';
+import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
+import ProgressModal from './AllAssignments/ProgressModal';
 
 const AllAssignments = () => {
   const [filters, setFilters] = useState({
@@ -13,6 +16,10 @@ const AllAssignments = () => {
   });
 
   const [search, setSearch] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [statusAssignment, setStatusAssignment] = useState(null);
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -21,6 +28,45 @@ const AllAssignments = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Intentionally left blank for now (no API). Keeps UI consistent with images.
+  };
+
+  const openView = (assignment) => {
+    setSelectedAssignment(assignment);
+    setModalOpen(true);
+  };
+
+  const closeView = () => {
+    setModalOpen(false);
+    setSelectedAssignment(null);
+  };
+
+  const openStatus = (assignment) => {
+    setStatusAssignment(assignment);
+    setStatusModalOpen(true);
+  };
+
+  const closeStatus = () => {
+    setStatusModalOpen(false);
+    setStatusAssignment(null);
+  };
+
+  const handleStatusSubmit = (payload) => {
+    console.log('Status update payload:', payload);
+    // TODO: call API to submit status update
+    closeStatus();
+  };
+
+  const [progressOpen, setProgressOpen] = useState(false);
+  const [progressAssignment, setProgressAssignment] = useState(null);
+
+  const openProgress = (assignment) => {
+    setProgressAssignment(assignment);
+    setProgressOpen(true);
+  };
+
+  const closeProgress = () => {
+    setProgressOpen(false);
+    setProgressAssignment(null);
   };
   const styles = {
     page: {
@@ -320,14 +366,44 @@ const AllAssignments = () => {
                 <div style={styles.td}>—</div>
                 <div style={{ ...styles.td, borderRight: 'none' }}>
                   <div style={styles.actionsCell}>
-                    <button title="View" style={{ ...styles.actionBtn, backgroundColor: '#4CAF50' }}>
+                    <button
+                      title="View"
+                      style={{ ...styles.actionBtn, backgroundColor: '#4CAF50' }}
+                      onClick={() => openView({
+                        requestRef: '25-10-23-0001',
+                        categoryType: 'INTERNAL',
+                        documentSubject: 'gdfgd gdfgf g',
+                        mediumSource: '657645374',
+                        projectType: 'Type 1',
+                        contactPerson: 'Chandima Dunuwila',
+                        criticality: 'MEDIUM',
+                        documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
+                        medium: 'Call Centre (Test)',
+                        organization: 'DEF',
+                        projectName: 'NCPA',
+                        remarks: 'd fd gdfg fd',
+                        mainAssignment: [
+                          { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
+                        ],
+                        subAssignments: [
+                          { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
+                          { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
+                        ]
+                      })}
+                    >
                       <FaEye />
                     </button>
-                    <button title="Status" style={{ ...styles.actionBtn, backgroundColor: '#10b981' }}>
-                      <FaInfoCircle />
-                    </button>
-                    <button title="Update" style={{ ...styles.actionBtn, backgroundColor: '#FFB300' }}>
+                    <button title="Update" style={{ ...styles.actionBtn, backgroundColor: '#FFB300' }} onClick={() => {
+                      openStatus({
+                        id: '25-10-23-0001',
+                        requestRef: '25-10-23-0001',
+                        contactPerson: 'Chandima Dunuwila'
+                      });
+                    }}>
                       <FaEdit />
+                    </button>
+                    <button title="Progress" style={{ ...styles.actionBtn, backgroundColor: '#2563eb' }} onClick={() => openProgress({ requestRef: '25-10-23-0001' })}>
+                      <FaTasks />
                     </button>
                     <button title="Delete" style={{ ...styles.actionBtn, backgroundColor: '#F44336' }}>
                       <FaTrash />
@@ -344,6 +420,18 @@ const AllAssignments = () => {
             </div>
           </div>
         </div>
+
+        {modalOpen && (
+          <AssignmentView assignment={selectedAssignment} onClose={closeView} />
+        )}
+
+        {statusModalOpen && (
+          <UpdateStatusModal assignment={statusAssignment} onClose={closeStatus} onSubmit={handleStatusSubmit} />
+        )}
+
+        {progressOpen && (
+          <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
+        )}
 
         <Footer />
       </div>

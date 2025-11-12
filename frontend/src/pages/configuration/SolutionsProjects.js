@@ -44,7 +44,7 @@ const SolutionsProjects = () => {
 
   useEffect(() => {
     fetchSolutions();
-  }, [fetchSolutions]);
+  }, []);
 
   const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
   

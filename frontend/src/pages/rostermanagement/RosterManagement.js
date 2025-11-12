@@ -73,6 +73,27 @@ const RosterManagement = () => {
       return;
     }
 
+    // Check if a roster already exists for this month
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/rosters?month=${month}`);
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.length > 0) {
+        const confirmReplace = window.confirm(
+          `A roster for ${new Date(month + "-01").toLocaleString("en-US", {
+            month: "long",
+            year: "numeric"
+          })} already exists. Creating a new roster will replace the existing one. Do you want to continue?`
+        );
+        
+        if (!confirmReplace) {
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn('Could not check for existing roster:', error);
+    }
+
     setLoading(true);
     setError('');
 
@@ -101,7 +122,7 @@ const RosterManagement = () => {
       const data = await response.json();
 
       if (data.success) {
-        alert("✅ Roster saved successfully!");
+        alert(`✅ ${data.message}`);
         navigate("/roster-view");
       } else {
         setError(data.message || 'Failed to save roster');

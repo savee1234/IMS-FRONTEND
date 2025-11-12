@@ -106,16 +106,19 @@ router.post('/', async (req, res) => {
     }
     
     // Check for duplicate roster for the same month
+    // If exists, we'll soft-delete it and create a new one (allowing roster updates)
     const existingRoster = await Roster.findOne({
       month: month,
       isActive: true
     });
     
     if (existingRoster) {
-      return res.status(400).json({
-        success: false,
-        message: 'A roster for this month already exists'
-      });
+      // Soft delete the existing roster
+      existingRoster.isActive = false;
+      existingRoster.endedBy = createdBy;
+      existingRoster.endedByName = createdByName;
+      existingRoster.endDtm = new Date();
+      await existingRoster.save();
     }
     
     // Validate roster data structure
@@ -155,9 +158,13 @@ router.post('/', async (req, res) => {
     
     await newRoster.save();
     
+    const message = existingRoster 
+      ? 'Roster updated successfully (previous roster for this month was replaced)' 
+      : 'Roster created successfully';
+      
     res.status(201).json({
       success: true,
-      message: 'Roster created successfully',
+      message,
       data: newRoster
     });
   } catch (error) {

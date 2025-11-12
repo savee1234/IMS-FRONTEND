@@ -472,6 +472,28 @@ export default function ComplaintOnboarding() {
       return;
     }
 
+    // Additional validation for other required fields
+    if (!form.organization) {
+      alert("Please select an organization.");
+      return;
+    }
+
+    if (!form.medium) {
+      alert("Please select a medium.");
+      return;
+    }
+
+    if (!form.mediumSource) {
+      alert("Please select a medium source.");
+      return;
+    }
+
+    // solutionName is required but only if solutionType is selected
+    if (form.solutionType && !form.solutionName) {
+      alert("Please select a solution name.");
+      return;
+    }
+
     try {
       // If contact not found, create new contact first
       if (searchResult === 'not_found' && newContactData.name && newContactData.email) {
@@ -525,6 +547,7 @@ export default function ComplaintOnboarding() {
 
       // Submit complaint - prepare clean submission data
       const submissionData = { ...form };
+      console.log('Submitting complaint data:', JSON.stringify(submissionData, null, 2));
 
       // Remove empty fields that might cause issues
       Object.keys(submissionData).forEach(key => {
@@ -533,18 +556,31 @@ export default function ComplaintOnboarding() {
         }
       });
 
+      // Ensure solutionName is not required if solutionType is not selected
+      if (!submissionData.solutionType) {
+        delete submissionData.solutionName;
+      }
+
+      console.log('Cleaned submission data:', JSON.stringify(submissionData, null, 2));
+
       const response = await fetch("http://localhost:44354/api/complaints", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submissionData),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok?', response.ok);
+
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Submission failed: ${response.status} ${errorText}`);
+        console.error('Response error text:', errorText);
+        throw new Error(`Submission failed: ${response.status} - ${errorText}`);
       }
 
       const savedComplaint = await response.json();
+      console.log('Saved complaint response:', savedComplaint);
+      
       setComplaintId(savedComplaint.data._id);
       setSubmitted(true);
       // Use the reference number from the backend response, or fall back to the generated one

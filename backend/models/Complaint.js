@@ -15,10 +15,7 @@ const complaintSchema = new mongoose.Schema(
       required: true
     },
     solutionType: String,
-    solutionName: {
-      type: String,
-      required: true
-    },
+    solutionName: String,
     medium: {
       type: String,
       required: true

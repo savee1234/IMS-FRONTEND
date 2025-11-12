@@ -21,7 +21,7 @@ export default function ContactPersonSelect({
     }
 
     const searchLower = search.toLowerCase();
-    const filtered = contacts.filter(contact => 
+    const filtered = contacts.filter(contact =>
       contact.name.toLowerCase().includes(searchLower) ||
       contact.mobileNumber?.toLowerCase().includes(searchLower) ||
       contact.officeContactNumber?.toLowerCase().includes(searchLower)
@@ -88,7 +88,7 @@ export default function ContactPersonSelect({
                 <div className="contact-name">{contact.name}</div>
                 <div className="contact-details">
                   {contact.mobileNumber && <span>{contact.mobileNumber}</span>}
-                  {contact.organization && <span>{contact.organization}</span>}
+                  {contact.organizationName && <span>{contact.organizationName}</span>}
                 </div>
               </div>
             ))

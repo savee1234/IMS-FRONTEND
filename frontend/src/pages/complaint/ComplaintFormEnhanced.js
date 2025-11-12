@@ -13,11 +13,7 @@ export default function ComplaintFormEnhanced() {
   const titles = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."];
 
   const staff = useMemo(
-    () => [
-      { empNo: "E001", name: "Kumara Perera", designation: "Engineer", availability: "Office" },
-      { empNo: "E014", name: "R. Silva", designation: "Technician", availability: "Roster" },
-      { empNo: "E023", name: "Anjalika D.", designation: "Coordinator", availability: "None" }
-    ],
+    
     []
   );
 

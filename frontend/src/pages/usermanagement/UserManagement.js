@@ -31,7 +31,7 @@ const UserManagement = () => {
     { key: 'dataAnalysis', title: 'Data Analysis', component: DataAnalysis },
     { key: 'accessLogs', title: 'Access Logs', component: AccessLogs },
     { key: 'auditTrails', title: 'Audit Trails', component: AuditTrails },
-  ];
+  ];   
 
   const handleUpdateEmployee = (employee) => {
     setSelectedEmployee(employee);

@@ -49,14 +49,18 @@ export default function ComplaintOnboarding() {
     organizationContactPersonId: "",
 
     // assignment
-    mainAssignment: "",
-    subAssignment: "",
+    assignment: "",
     docRef: "",
     docSubject: "",
     remarks: ""
   });
-
-  const [notFoundMsg, setNotFoundMsg] = useState("");
+  
+  // New state for solution types and solutions
+  const [solutionTypes, setSolutionTypes] = useState([]);
+  const [solutions, setSolutions] = useState([]);
+  const [filteredSolutions, setFilteredSolutions] = useState([]);
+  const [loadingSolutionData, setLoadingSolutionData] = useState(false);
+  const [generatedRef, setGeneratedRef] = useState("");
 
   // Function to generate reference number in format YY-MM-DD-XXXX
   const generateReferenceNumber = () => {
@@ -64,21 +68,23 @@ export default function ComplaintOnboarding() {
     const year = now.getFullYear().toString().slice(-2); // Last 2 digits of year
     const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Month with leading zero
     const day = now.getDate().toString().padStart(2, '0'); // Day with leading zero
-
+    
     // For now, we'll use a simple counter. In a real system, you might want to fetch the last number from the database
     const sequence = Math.floor(Math.random() * 9999) + 1; // Random number between 1-9999
     const sequenceStr = sequence.toString().padStart(4, '0'); // Pad to 4 digits
-
+    
     return `${year}-${month}-${day}-${sequenceStr}`;
   };
 
+  const [notFoundMsg, setNotFoundMsg] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [complaintId, setComplaintId] = useState(null);
   const [mobileOptions, setMobileOptions] = useState([]);
   const [loadingMobiles, setLoadingMobiles] = useState(false);
   const [searchResult, setSearchResult] = useState(null); // null, 'found', or 'not_found'
   const [showAddDetails, setShowAddDetails] = useState(false);
-  const [staffAssignments, setStaffAssignments] = useState({});
+  const [searchType, setSearchType] = useState('mobile'); // 'mobile' or 'name'
+  const [nameSearch, setNameSearch] = useState('');
   const [newContactData, setNewContactData] = useState({
     name: "",
     email: "",
@@ -91,16 +97,19 @@ export default function ComplaintOnboarding() {
   const [loadingContactPersons, setLoadingContactPersons] = useState(false);
   const [organizations, setOrganizations] = useState([]);
   const [loadingOrganizations, setLoadingOrganizations] = useState(false);
-  const [loadingSolutionData, setLoadingSolutionData] = useState(false);
-  const [filteredSolutions, setFilteredSolutions] = useState([]);
-  const [solutionTypes, setSolutionTypes] = useState([]);
-  const [solutions, setSolutions] = useState([]);
-  const [searchType, setSearchType] = useState('mobile'); // Add this line
-  const [nameSearch, setNameSearch] = useState(''); // Add this line
+
+  // State for staff assignments (each row has independent selection)
+  const [staffAssignments, setStaffAssignments] = useState({});
+
+  // Track which empNo is currently marked as Main Assignment (if any)
+  const mainAssignedEmp = React.useMemo(() => {
+    return Object.keys(staffAssignments).find(emp => staffAssignments[emp] === 'Main Assignment');
+  }, [staffAssignments]);
 
   // Generate reference number when component mounts
   useEffect(() => {
     const refNumber = generateReferenceNumber();
+    setGeneratedRef(refNumber);
     update("requestRef", refNumber);
   }, []);
 
@@ -414,7 +423,7 @@ export default function ComplaintOnboarding() {
   const onReset = () => {
     // Generate new reference number on reset
     const newRefNumber = generateReferenceNumber();
-
+    
     setForm({
       requestRef: newRefNumber,
       categoryType: "",
@@ -431,13 +440,27 @@ export default function ComplaintOnboarding() {
       officeMobile: "",
       title: "Mr.",
       organizationContactPersonId: "",
-      mainAssignment: "",
-      subAssignment: "",
+      assignment: "",
       docRef: "",
       docSubject: "",
       remarks: ""
     });
     setNotFoundMsg("");
+    setGeneratedRef(newRefNumber);
+    setSubmitted(false);
+    setComplaintId(null);
+    setSearchResult(null);
+    setShowAddDetails(false);
+    setSelectedContactPerson("");
+    setSearchType('mobile');
+    setNameSearch("");
+    setNewContactData({
+      name: "",
+      email: "",
+      organization: "",
+      title: "Mr."
+    });
+    setStaffAssignments({});
   };
 
   const onSubmit = async (e) => {
@@ -446,6 +469,28 @@ export default function ComplaintOnboarding() {
     // Basic form validation
     if (!form.categoryType || !form.complaint) {
       alert("Please fill in all required fields (Category Type and Complaint).");
+      return;
+    }
+
+    // Additional validation for other required fields
+    if (!form.organization) {
+      alert("Please select an organization.");
+      return;
+    }
+
+    if (!form.medium) {
+      alert("Please select a medium.");
+      return;
+    }
+
+    if (!form.mediumSource) {
+      alert("Please select a medium source.");
+      return;
+    }
+
+    // solutionName is required but only if solutionType is selected
+    if (form.solutionType && !form.solutionName) {
+      alert("Please select a solution name.");
       return;
     }
 
@@ -472,10 +517,8 @@ export default function ComplaintOnboarding() {
 
         if (createResponse.ok) {
           const createData = await createResponse.json();
-          console.log('New contact created:', createData.data);
-
-          // Update form with the created contact details
-          if (createData.created) {
+          if (createData.success && createData.data) {
+            // Update form with the created contact details
             update("contactName", createData.data.name);
             update("email", createData.data.email);
             update("mobile", createData.data.mobileNumber);
@@ -504,6 +547,7 @@ export default function ComplaintOnboarding() {
 
       // Submit complaint - prepare clean submission data
       const submissionData = { ...form };
+      console.log('Submitting complaint data:', JSON.stringify(submissionData, null, 2));
 
       // Remove empty fields that might cause issues
       Object.keys(submissionData).forEach(key => {
@@ -512,7 +556,12 @@ export default function ComplaintOnboarding() {
         }
       });
 
-      console.log('Submitting complaint data:', submissionData);
+      // Ensure solutionName is not required if solutionType is not selected
+      if (!submissionData.solutionType) {
+        delete submissionData.solutionName;
+      }
+
+      console.log('Cleaned submission data:', JSON.stringify(submissionData, null, 2));
 
       const response = await fetch("http://localhost:44354/api/complaints", {
         method: "POST",
@@ -520,28 +569,28 @@ export default function ComplaintOnboarding() {
         body: JSON.stringify(submissionData),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok?', response.ok);
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Submission failed:', response.status, errorText);
-        throw new Error(`Submission failed: ${response.status} ${errorText}`);
+        console.error('Response error text:', errorText);
+        throw new Error(`Submission failed: ${response.status} - ${errorText}`);
       }
 
       const savedComplaint = await response.json();
-      console.log('Complaint saved successfully:', savedComplaint);
+      console.log('Saved complaint response:', savedComplaint);
+      
       setComplaintId(savedComplaint.data._id);
       setSubmitted(true);
+      // Use the reference number from the backend response, or fall back to the generated one
+      const finalRef = savedComplaint.data.requestRef || form.requestRef;
+      setGeneratedRef(finalRef);
+      alert(`✅ Complaint submitted successfully! Reference: ${finalRef}`);
 
-      // The backend should generate and return the requestRef
-      const referenceNumber = savedComplaint.data.requestRef || "Generated";
-      // setGeneratedRef(referenceNumber);
-
-      alert(`Complaint submitted successfully! Reference: ${referenceNumber}`);
-
-      // Don't reset form if you want to show the success state
-      // onReset();
     } catch (error) {
       console.error('Submission error:', error);
-      alert(`Error submitting complaint: ${error.message}`);
+      alert(`❌ Error submitting complaint: ${error.message}`);
     }
   };
 
@@ -587,6 +636,26 @@ export default function ComplaintOnboarding() {
         </p>
       </header>
 
+      {/* Success Message with Generated Reference - Only show after submission */}
+      {submitted && generatedRef && (
+        <div style={{
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          color: 'white',
+          padding: '1rem 1.5rem',
+          borderRadius: '8px',
+          marginBottom: '1.5rem',
+          textAlign: 'center',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.1rem' }}>
+            ✅ Complaint Submitted Successfully!
+          </h3>
+          <p style={{ margin: 0, fontSize: '1.2rem', fontWeight: '600' }}>
+            Reference Number: {generatedRef}
+          </p>
+        </div>
+      )}
+
       <form className="config-content" style={{
         background: 'white',
         borderRadius: '12px',
@@ -630,8 +699,10 @@ export default function ComplaintOnboarding() {
               <input
                 className="input"
                 value={form.requestRef}
-                onChange={(e) => update("requestRef", e.target.value)}
-                placeholder="REQ-0001"
+                readOnly
+                placeholder="Auto-generated reference number"
+                title="This reference number is automatically generated"
+                style={{ backgroundColor: '#f3f4f6', color: '#6b7280', cursor: 'not-allowed' }}
               />
             </Field>
 
@@ -655,11 +726,33 @@ export default function ComplaintOnboarding() {
                 onChange={(e) => update("organization", e.target.value)}
               >
                 <option value="">Select…</option>
-                {organizations.map((org) => (
-                  <option key={org._id} value={org._id}>
-                    {typeof org.organization === 'string' ? org.organization : 'Invalid Organization'}
-                  </option>
-                ))}
+                {loadingOrganizations ? (
+                  <option disabled>Loading organizations...</option>
+                ) : (
+                  organizations.map((org) => (
+                    <option key={org._id} value={org.organization}>{org.organization}</option>
+                  ))
+                )}
+              </select>
+            </Field>
+
+            <Field label="Solution Type">
+              <select
+                className="input"
+                value={form.solutionType}
+                onChange={(e) => update("solutionType", e.target.value)}
+                disabled={loadingSolutionData}
+              >
+                <option value="">Select…</option>
+                {loadingSolutionData ? (
+                  <option disabled>Loading...</option>
+                ) : solutionTypes.length > 0 ? (
+                  solutionTypes.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))
+                ) : (
+                  <option disabled>No solution types available</option>
+                )}
               </select>
             </Field>
 
@@ -899,7 +992,7 @@ export default function ComplaintOnboarding() {
                       <option disabled>Loading organizations...</option>
                     ) : (
                       organizations.map((org) => (
-                        <option key={org._id} value={org._id}>{typeof org.organization === 'string' ? org.organization : 'Invalid Organization'}</option>
+                        <option key={org._id} value={org.organization}>{org.organization}</option>
                       ))
                     )}
                   </select>
@@ -1052,26 +1145,19 @@ export default function ComplaintOnboarding() {
                     <td style={{ verticalAlign: 'middle' }}>
                       <select
                         className="input"
-                        value={form.mainAssignment}
-                        onChange={(e) => update("mainAssignment", e.target.value)}
+                        value={staffAssignments[s.empNo] || ""}
+                        onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}
+                        style={{ 
+                          paddingTop: '4px',
+                          paddingBottom: '4px',
+                          lineHeight: '1.2',
+                          marginTop: '-2px',
+                          verticalAlign: 'middle'
+                        }}
                       >
                         <option value="">Select…</option>
-                        <option>Field Visit</option>
-                        <option>Remote Fix</option>
-                        <option>Call Back</option>
-                        <option>Escalate L2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        className="input"
-                        value={form.subAssignment}
-                        onChange={(e) => update("subAssignment", e.target.value)}
-                      >
-                        <option value="">Select…</option>
-                        <option>Fiber Team</option>
-                        <option>Billing Team</option>
-                        <option>Tech Support</option>
+                        <option value="Main Assignment" disabled={mainAssignedEmp && mainAssignedEmp !== s.empNo}>Main Assignment</option>
+                        <option value="Sub Assignment">Sub Assignment</option>
                       </select>
                     </td>
                   </tr>

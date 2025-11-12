@@ -4,15 +4,44 @@ const Complaint = require('../models/Complaint');
 
 // Create a new complaint
 router.post('/', async (req, res) => {
+  console.log('=== Incoming Complaint POST Request ===');
+  console.log('Request headers:', req.headers);
+  console.log('Request body:', JSON.stringify(req.body, null, 2));
+  
   try {
     const complaint = new Complaint(req.body);
+    console.log('Complaint object created:', complaint);
+    
     await complaint.save();
+    console.log('Complaint saved successfully:', complaint);
+    
     res.status(201).json({
       success: true,
       message: 'Complaint submitted successfully',
       data: complaint
     });
   } catch (error) {
+    console.error("Error in complaints route:", error);
+    
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: errors
+      });
+    }
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "A complaint with this reference already exists",
+        error: "Duplicate reference number"
+      });
+    }
+    
     res.status(400).json({
       success: false,
       message: 'Error submitting complaint',
@@ -83,6 +112,16 @@ router.put('/:id', async (req, res) => {
       data: complaint
     });
   } catch (error) {
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: errors
+      });
+    }
+    
     res.status(400).json({
       success: false,
       message: 'Error updating complaint',

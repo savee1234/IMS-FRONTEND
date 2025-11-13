@@ -29,6 +29,29 @@ const Organizations = () => {
     ? '' 
     : 'http://localhost:44354';
 
+  // Helper function to safely get organization name
+  const getOrganizationName = (contact) => {
+    if (!contact) return 'N/A';
+    
+    // If contact is actually an organization object itself
+    if (contact.organization && typeof contact.organization === 'string') {
+      return contact.organization;
+    }
+    
+    // If organizationId is a populated object
+    if (contact.organizationId && typeof contact.organizationId === 'object') {
+      return contact.organizationId.organization || 'N/A';
+    }
+    
+    // If organizationName is available
+    if (contact.organizationName) {
+      return contact.organizationName;
+    }
+    
+    // If nothing else works, return N/A
+    return 'N/A';
+  };
+
   // Fetch organizations for dropdown
   const fetchOrganizations = async () => {
     try {
@@ -195,7 +218,7 @@ const Organizations = () => {
   const handleEdit = (contact) => {
     setOrgFormData({
       organizationId: contact.organizationId?._id || contact.organizationId,
-      organization: contact.organizationId?.organization || contact.organizationName,
+      organization: getOrganizationName(contact),
       title: contact.title || '',
       mobileNo: contact.mobileNumber || '',
       contactPersonName: contact.name,
@@ -211,7 +234,7 @@ const Organizations = () => {
   const ContactDetailsModal = () => {
     if (!viewModalOpen || !selectedContact) return null;
 
-    const orgName = selectedContact.organizationId?.organization || selectedContact.organizationName;
+    const orgName = getOrganizationName(selectedContact);
 
     return (
       <div style={{
@@ -635,7 +658,7 @@ const Organizations = () => {
               >
                 <option value="">Select Organization</option>
                 {organizations.map(org => (
-                  <option key={org._id} value={org._id}>{org.organization}</option>
+                  <option key={org._id} value={org._id}>{getOrganizationName(org)}</option>
                 ))}   
               </select>
             </div>
@@ -954,7 +977,7 @@ const Organizations = () => {
                     border: '1px solid #d1d5db',
                     color: '#374151'
                   }}>
-                    {contact.organizationId?.organization || contact.organizationName}
+                    {getOrganizationName(contact)}
                   </td>
                   <td style={{ 
                     padding: '1rem',

@@ -554,8 +554,10 @@ export default function ComplaintFormEnhanced() {
                 {loadingOrganizations ? (
                   <option disabled>Loading organizations...</option>
                 ) : (
-                  organizations.map((org) => (
-                    <option key={org._id} value={org.organization}>{org.organization}</option>
+                  (organizations || []).map((org) => (
+                    <option key={org._id || org.id || org.organization} value={org.organization || org.name || ''}>
+                      {org.organization || org.name || 'Unnamed Organization'}
+                    </option>
                   ))
                 )}
               </select>
@@ -773,8 +775,10 @@ export default function ComplaintFormEnhanced() {
                     {loadingOrganizations ? (
                       <option disabled>Loading organizations...</option>
                     ) : (
-                      organizations.map((org) => (
-                        <option key={org._id} value={org.organization}>{org.organization}</option>
+                      (organizations || []).map((org) => (
+                        <option key={org._id || org.id || org.organization} value={org.organization || org.name || ''}>
+                          {org.organization || org.name || 'Unnamed Organization'}
+                        </option>
                       ))
                     )}
                   </select>

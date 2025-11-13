@@ -13,7 +13,7 @@ const solutionProjectsRoutes = require('./routes/solutionProjects');
 const organizationRoutes = require('./routes/organizations');
 const organizationContactPersonRoutes = require('./routes/organizationContactPersons');
 const rosterRoutes = require('./routes/rosters');
-const complaintRoutes = require('./routes/complaintRoutes');
+const complaintRoutes = require('./routes/complaints');
 const contactRoutes = require('./routes/contactRoutes');
 const userManagementRoutes = require('./routes/UserManagementRoute');
 

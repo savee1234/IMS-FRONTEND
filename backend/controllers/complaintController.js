@@ -4,6 +4,9 @@ const OrganizationContactPerson = require("../models/OrganizationContactPerson")
 // Create Complaint
 const createComplaint = async (req, res) => {
   try {
+    console.log('=== Complaint Creation Request ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    
     const complaintData = { ...req.body };
     console.log('Received complaint data:', complaintData);
 
@@ -75,9 +78,10 @@ const createComplaint = async (req, res) => {
       }
     }
 
-    console.log('Creating complaint with data:', complaintData);
+    console.log('Creating complaint with data:', JSON.stringify(complaintData, null, 2));
     const complaint = await Complaint.create(complaintData);
     console.log('Complaint created successfully:', complaint);
+    
     res.status(201).json({
       success: true,
       message: "Complaint created successfully",
@@ -85,10 +89,32 @@ const createComplaint = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating complaint:", error);
+    console.error("Error stack:", error.stack);
+    
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: errors
+      });
+    }
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "A complaint with this reference already exists",
+        error: "Duplicate reference number"
+      });
+    }
+    
     res.status(500).json({
+      success: false,
       message: "Error creating complaint",
       error: error.message,
-      details: error.stack
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 };

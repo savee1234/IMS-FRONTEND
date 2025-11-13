@@ -1,10 +1,10 @@
 import React from 'react';
 import SimplifiedComplaintForm from './SimplifiedComplaintForm';
-import './ComplaintForm.css';
+import './Complaint.css';
 
 function Complaint() {
   return (
-    <div className="complaint-bg-wrapper">
+    <div className="complaint-wrapper">
       <SimplifiedComplaintForm />
     </div>
   );

@@ -6,6 +6,7 @@ import { isAuthenticated } from './utils/auth';
 
 import Login from './pages/Login';
 import Home from './pages/Home';
+import HomeModern from './pages/HomeModern';
 import Complaint from './pages/Complaint';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
@@ -44,7 +45,8 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         {/* Private routes protected by PrivateRoute */}
-        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
+        <Route path="/home-modern" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
         <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />

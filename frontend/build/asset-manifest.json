@@ -1,26 +1,32 @@
 {
   "files": {
-    "main.css": "/static/css/main.8a4636d4.css",
-    "main.js": "/static/js/main.b1a31686.js",
+    "main.css": "/static/css/main.86cc82c5.css",
+    "main.js": "/static/js/main.05d33304.js",
     "static/js/453.239560d4.chunk.js": "/static/js/453.239560d4.chunk.js",
     "static/media/Background.mp4": "/static/media/Background.938cd958a519dfe9fd8e.mp4",
+    "static/media/Login.jpg": "/static/media/Login.964518f6852c9c68042d.jpg",
+    "static/media/contact.jpg": "/static/media/contact.a942be4b18668f58d30e.jpg",
     "static/media/RosterManagement.jpg": "/static/media/RosterManagement.39f9bdc0931a44a088a1.jpg",
     "static/media/slt-logo.png": "/static/media/slt-logo.260c9ac5dcf18e17b25e.png",
     "static/media/complaint.jpg": "/static/media/complaint.debf14695c2162b6b31b.jpg",
     "static/media/Reports.jpg": "/static/media/Reports.1dcaadd28e6b4e137856.jpg",
+    "static/media/image.jpg": "/static/media/image.ceb47faff4a3181526ef.jpg",
     "static/media/Configuration.jpg": "/static/media/Configuration.922a9d35711f646fb926.jpg",
+    "static/media/newone.jpg": "/static/media/newone.eea65f54d0fe5b70acda.jpg",
+    "static/media/PendingAssignments.jpg": "/static/media/PendingAssignments.e59b4cda9f38af77df2e.jpg",
     "static/media/Workflow.jpg": "/static/media/Workflow.60bba17f961d9c1af06a.jpg",
     "static/media/AttendanceOT.jpg": "/static/media/AttendanceOT.9325cdb87b52387352d9.jpg",
     "static/media/UserManagement.jpg": "/static/media/UserManagement.f55349877f65c17d4cbd.jpg",
     "static/media/Notification.jpg": "/static/media/Notification.8965fbf5bc41d70c687f.jpg",
     "static/media/MyTasks.jpg": "/static/media/MyTasks.95297b6901c13e6a2f6d.jpg",
+    "static/media/newbg.jpg": "/static/media/newbg.f078a6b391013f79e03d.jpg",
     "index.html": "/index.html",
-    "main.8a4636d4.css.map": "/static/css/main.8a4636d4.css.map",
-    "main.b1a31686.js.map": "/static/js/main.b1a31686.js.map",
+    "main.86cc82c5.css.map": "/static/css/main.86cc82c5.css.map",
+    "main.05d33304.js.map": "/static/js/main.05d33304.js.map",
     "453.239560d4.chunk.js.map": "/static/js/453.239560d4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8a4636d4.css",
-    "static/js/main.b1a31686.js"
+    "static/css/main.86cc82c5.css",
+    "static/js/main.05d33304.js"
   ]
 }

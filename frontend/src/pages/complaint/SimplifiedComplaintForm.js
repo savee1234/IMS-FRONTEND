@@ -3,6 +3,19 @@ import { useNavigate } from "react-router-dom";
 import "./SimplifiedComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
 
+// Add font link for modern fonts
+const addFontLink = () => {
+  if (!document.getElementById('complaint-form-fonts')) {
+    const link = document.createElement('link');
+    link.id = 'complaint-form-fonts';
+    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+};
+
+addFontLink();
+
 export default function SimplifiedComplaintForm() {
   const navigate = useNavigate();
   

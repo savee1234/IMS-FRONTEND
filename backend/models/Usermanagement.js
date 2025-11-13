@@ -21,4 +21,7 @@ const mongoose = require('mongoose');
         default: true
     }
 
-    }, { timestamps: true });
+    }, 
+    { timestamps: true });
+
+module.exports = mongoose.model('Usermanagement', userManangementSchema);

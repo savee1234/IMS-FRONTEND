@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -19,11 +19,46 @@ const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [employees, setEmployees] = useState([
-    { id: 'EMP001', name: 'John Doe', designation: 'Manager', contact: '+94 11 234 5678', status: 'Active', email: 'john.doe@company.com', department: 'IT', joiningDate: '2023-01-15', address: '123 Main St, Colombo' },
-    { id: 'EMP002', name: 'Jane Smith', designation: 'Developer', contact: '+94 11 234 5679', status: 'Active', email: 'jane.smith@company.com', department: 'IT', joiningDate: '2023-02-20', address: '456 Oak Ave, Kandy' },
-    { id: 'EMP003', name: 'Mark Taylor', designation: 'Analyst', contact: '+94 11 234 5680', status: 'Inactive', email: 'mark.taylor@company.com', department: 'Finance', joiningDate: '2022-11-10', address: '789 Pine Rd, Galle' },
-  ]);
+  const [employees, setEmployees] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(false);
+  const [employeesError, setEmployeesError] = useState(null);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      setLoadingEmployees(true);
+      setEmployeesError(null);
+      try {
+        const res = await fetch('http://localhost:44354/api/user-management');
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const data = await res.json();
+
+        // Assume API returns { success: true, data: [...] } or directly an array
+        const raw = Array.isArray(data) ? data : (data.data || []);
+
+        // Map API fields to the table shape. Adjust field names if your API differs.
+        const mapped = raw.map(u => ({
+          id: u.userId || u.id || u._id || u.empNo || '',
+          name: u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.username || '',
+          designation: u.designation || u.role || u.position || '',
+          contact: u.contactNumber || u.mobile || u.phone || '',
+          status: u.status || (u.isActive ? 'Active' : 'Inactive') || 'Unknown',
+          email: u.email || u.userEmail || '',
+          department: u.department || u.unit || '',
+          joiningDate: u.joiningDate || u.createdAt || '',
+          address: u.address || ''
+        }));
+
+        setEmployees(mapped);
+      } catch (err) {
+        console.error('Failed to load user-management:', err);
+        setEmployeesError(err.message || String(err));
+      } finally {
+        setLoadingEmployees(false);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
 
   const sections = [
     { key: 'complaintManagement', title: 'Complaint Management', component: ComplaintManagement },
@@ -206,45 +241,59 @@ const UserManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employee, index) => (
-                    <tr key={employee.id} style={{
-                      backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
-                      borderBottom: '1px solid #e5e7eb'
-                    }}>
-                      <td style={tableCellStyle}>{employee.id}</td>
-                      <td style={tableCellStyle}>{employee.name}</td>
-                      <td style={tableCellStyle}>{employee.designation}</td>
-                      <td style={tableCellStyle}>{employee.contact}</td>
-                      <td style={tableCellStyle}>
-                        <span style={{
-                          padding: '0.25rem 0.75rem',
-          borderRadius: '12px',
-                          fontSize: '0.875rem',
-                          fontWeight: '500',
-                          backgroundColor: employee.status === 'Active' ? '#dcfce7' : '#fef2f2',
-                          color: employee.status === 'Active' ? '#166534' : '#dc2626'
-                        }}>
-                          {employee.status}
-                        </span>
-                      </td>
-                      <td style={tableCellStyle}>
-                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                          <button 
-                            style={viewButtonStyle}
-                            onClick={() => handleViewEmployee(employee)}
-                          >
-                            👁️ View
-                          </button>
-                          <button 
-                            style={updateButtonStyle}
-                            onClick={() => handleUpdateEmployee(employee)}
-                          >
-                            ✏️ Update
-                          </button>
-                        </div>
-                      </td>
+                  {loadingEmployees ? (
+                    <tr>
+                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center' }}>Loading employees...</td>
                     </tr>
-                  ))}
+                  ) : employeesError ? (
+                    <tr>
+                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
+                    </tr>
+                  ) : employees.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center' }}>No employees found.</td>
+                    </tr>
+                  ) : (
+                    employees.map((employee, index) => (
+                      <tr key={employee.id || index} style={{
+                        backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
+                        borderBottom: '1px solid #e5e7eb'
+                      }}>
+                        <td style={tableCellStyle}>{employee.id}</td>
+                        <td style={tableCellStyle}>{employee.name}</td>
+                        <td style={tableCellStyle}>{employee.designation}</td>
+                        <td style={tableCellStyle}>{employee.contact}</td>
+                        <td style={tableCellStyle}>
+                          <span style={{
+                            padding: '0.25rem 0.75rem',
+            borderRadius: '12px',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            backgroundColor: employee.status === 'Active' ? '#dcfce7' : '#fef2f2',
+                            color: employee.status === 'Active' ? '#166534' : '#dc2626'
+                          }}>
+                            {employee.status}
+                          </span>
+                        </td>
+                        <td style={tableCellStyle}>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                            <button 
+                              style={viewButtonStyle}
+                              onClick={() => handleViewEmployee(employee)}
+                            >
+                              👁️ View
+                            </button>
+                            <button 
+                              style={updateButtonStyle}
+                              onClick={() => handleUpdateEmployee(employee)}
+                            >
+                              ✏️ Update
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

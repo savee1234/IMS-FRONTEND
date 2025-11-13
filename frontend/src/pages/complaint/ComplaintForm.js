@@ -1,11 +1,9 @@
-// ComplaintOnboarding.jsx
-// Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
-// Then import and render <ComplaintOnboarding />
-// -------------------------------------------------
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 // Add font link for modern fonts
 const addFontLink = () => {
@@ -628,533 +626,454 @@ export default function ComplaintForm() {
     }
   };
 
-  return (
-    <div className="content-wrapper" style={{
-      position: 'relative',
-      zIndex: 1,
-      padding: '15px',
-      marginTop: '1rem',
-      maxWidth: '1200px',
-      margin: '1rem auto 0 auto',
-      fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif"
+  // Field component for form inputs
+  const Field = ({ label, children, className = "", required = false }) => (
+    <div className={`field ${className}`} style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      gap: '0.75rem',
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
     }}>
-      {/* Modern Header without Hero Section */}
-      <div style={{
-        textAlign: 'center',
-        marginBottom: '20px',
-        padding: '15px 0'
-      }}>
-        <h1 style={{
-          fontSize: '1.8rem',
-          fontWeight: 700,
-          color: '#0E3A7C',
-          margin: '0 0 8px 0',
-          fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif"
-        }}>
-          Complaint Onboard
-        </h1>
-        <p style={{
-          fontSize: '0.95rem',
-          color: '#64748b',
+      <label 
+        className="label" 
+        style={{ 
+          fontWeight: required ? 600 : 500, 
+          color: '#0f172a', 
+          fontSize: '1rem',
           margin: 0,
           fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-        }}>
-          Submit and manage customer complaints efficiently
-        </p>
-      </div>
-      
-      {/* Modern Tab Navigation */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginBottom: '20px',
-        backgroundColor: '#f8fafc',
-        padding: '5px',
-        borderRadius: '12px',
-        boxShadow: '0 1px 6px rgba(0, 0, 0, 0.03)',
-        border: '1px solid #e2e8f0'
+        }}
+      >
+        {label}
+        {required && <span style={{ color: '#ef4444' }}> *</span>}
+      </label>
+      {children}
+    </div>
+  );
+
+  return (
+    <div className="complaint-form-page">
+      <Navbar />
+      <div className="content-wrapper" style={{
+        position: 'relative',
+        zIndex: 1,
+        padding: '15px',
+        marginTop: '1rem',
+        maxWidth: '1200px',
+        margin: '1rem auto 0 auto',
+        fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
       }}>
-        {['Request Details', 'Contact Person', 'Assignment'].map((tab, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveTab(index)}
-            style={{
-              flex: 1,
-              padding: '12px 5px',
-              borderRadius: '8px',
-              backgroundColor: activeTab === index ? '#0E3A7C' : 'transparent',
-              color: activeTab === index ? 'white' : '#64748b',
-              fontWeight: activeTab === index ? '600' : '500',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-              fontSize: '0.9rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              border: activeTab === index ? 'none' : '1px solid transparent'
-            }}
-          >
-            <span style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '20px',
-              height: '20px',
-              borderRadius: '50%',
-              backgroundColor: activeTab === index ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-              fontWeight: '600',
-              fontSize: '0.75rem'
-            }}>
-              {index + 1}
-            </span>
-            <span>{tab}</span>
-          </div>
-        ))}
-      </div>
-      
-      {/* Success Message with Generated Reference - Only show after submission */}
-      {submitted && generatedRef && (
+        {/* Modern Header without Hero Section */}
         <div style={{
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          color: 'white',
-          padding: '1.5rem',
-          borderRadius: '12px',
-          marginBottom: '20px',
           textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-          border: 'none',
-          position: 'relative',
-          overflow: 'hidden'
+          marginBottom: '20px',
+          padding: '15px 0'
         }}>
-          <h3 style={{ 
-            margin: '0 0 0.75rem 0', 
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            margin: '0 0 8px 0',
+            fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+            background: 'linear-gradient(90deg, #1e40af, #3b82f6, #000000)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
+            Complaint Onboard
+          </h1>
+          <p style={{
             fontSize: '1.25rem',
-            fontWeight: '700',
-            fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+            color: '#64748b',
+            margin: 0,
+            fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+            fontWeight: 400
           }}>
-            ✅ Complaint Submitted Successfully!
-          </h3>
-          <p style={{ 
-            margin: 0, 
-            fontSize: '1.5rem', 
-            fontWeight: '800',
-            fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-          }}>
-            Reference Number: {generatedRef}
+            Submit and manage customer complaints efficiently
           </p>
         </div>
-      )}
-      
-      <form className="config-content" onSubmit={onSubmit} style={{
-        backgroundColor: 'white',
-        borderRadius: '12px',
-        padding: '20px',
-        boxShadow: '0 1px 8px rgba(0, 0, 0, 0.03)',
-        border: '1px solid rgba(0, 0, 0, 0.02)'
-      }}>
         
-        {/* ======= TAB 0: Request Details ======= */}
-        <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2 style={{
-                fontSize: '1.3rem',
-                fontWeight: 600,
-                color: '#0E3A7C',
-                margin: '0 0 20px 0',
-                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+        {/* Modern Tab Navigation */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '20px',
+          backgroundColor: '#ffffff',
+          padding: '5px',
+          borderRadius: '16px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+          border: '1px solid #e2e8f0'
+        }}>
+          {['Request Details', 'Contact Person', 'Assignment'].map((tab, index) => (
+            <div
+              key={index}
+              onClick={() => setActiveTab(index)}
+              style={{
+                flex: 1,
+                padding: '16px 5px',
+                borderRadius: '12px',
+                background: activeTab === index ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' : 'transparent',
+                color: activeTab === index ? 'white' : '#64748b',
+                fontWeight: activeTab === index ? '700' : '500',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', sans-serif",
+                fontSize: '1rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px'
+                justifyContent: 'center',
+                gap: '8px',
+                border: activeTab === index ? 'none' : '1px solid transparent',
+                boxShadow: activeTab === index ? '0 4px 8px rgba(59, 130, 246, 0.3)' : 'none'
+              }}
+            >
+              <span style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                background: activeTab === index ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                fontWeight: '600',
+                fontSize: '0.875rem'
               }}>
-                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Request Details
-              </h2>
+                {index + 1}
+              </span>
+              <span>{tab}</span>
             </div>
-
-            <div className="grid grid-2" style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '15px',
-              marginBottom: '10px'
-            }}>
-              <Field label="Request Reference">
-                <input
-                  className="input"
-                  value={form.requestRef}
-                  readOnly
-                  placeholder="Auto-generated reference number"
-                  title="This reference number is automatically generated"
-                  style={{ backgroundColor: '#f1f5f9', color: '#64748b', cursor: 'not-allowed' }}
-                />
-              </Field>
-
-              <Field label="Category Type">
-                <select
-                  className="input"
-                  value={form.categoryType}
-                  onChange={(e) => update("categoryType", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Organization">
-                <select
-                  className="input"
-                  value={form.organization}
-                  onChange={(e) => update("organization", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {loadingOrganizations ? (
-                    <option disabled>Loading organizations...</option>
-                  ) : (
-                    organizations.map((org) => (
-                      <option key={org._id} value={org.organization}>{org.organization}</option>
-                    ))
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Solution Type">
-                <select
-                  className="input"
-                  value={form.solutionType}
-                  onChange={(e) => update("solutionType", e.target.value)}
-                  disabled={loadingSolutionData}
-                >
-                  <option value="">Select…</option>
-                  {loadingSolutionData ? (
-                    <option disabled>Loading...</option>
-                  ) : solutionTypes.length > 0 ? (
-                    solutionTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))
-                  ) : (
-                    <option disabled>No solution types available</option>
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Solution Name">
-                <select
-                  className="input"
-                  value={form.solutionName}
-                  onChange={(e) => update("solutionName", e.target.value)}
-                  disabled={!form.solutionType || loadingSolutionData}
-                >
-                  <option value="">Select…</option>
-                  {loadingSolutionData ? (
-                    <option disabled>Loading...</option>
-                  ) : form.solutionType ? (
-                    filteredSolutions.length > 0 ? (
-                      filteredSolutions.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))
-                    ) : (
-                      <option disabled>No solutions available for this type</option>
-                    )
-                  ) : (
-                    <option disabled>Please select a solution type first</option>
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Medium">
-                <select
-                  className="input"
-                  value={form.medium}
-                  onChange={(e) => update("medium", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {mediums.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Medium Source">
-                <select
-                  className="input"
-                  value={form.mediumSource}
-                  onChange={(e) => update("mediumSource", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {mediumSources.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Complaint" className="full">
-                <textarea
-                  className="input textarea"
-                  rows={4}
-                  value={form.complaint}
-                  onChange={(e) => update("complaint", e.target.value)}
-                  placeholder="Type the complaint here…"
-                />
-              </Field>
-            </div>
-            
-            {/* Navigation Buttons */}
-            <div className="actions" style={{ 
-              display: 'flex', 
-              justifyContent: 'flex-end',
-              marginTop: '20px',
-              paddingTop: '20px',
-              borderTop: '1px solid #e2e8f0'
-            }}>
-              <button 
-                type="button" 
-                onClick={nextTab}
-                style={{
-                  padding: '10px 24px',
-                  backgroundColor: '#0E3A7C',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-                  boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#0b2f64';
-                  e.target.style.transform = 'translateY(-1px)';
-                  e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = '#0E3A7C';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
-                }}
-              >
-                Next →
-              </button>
-            </div>
-          </section>
+          ))}
         </div>
         
-        {/* ======= TAB 1: Contact Person Details ======= */}
-        <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2 style={{
-                fontSize: '1.3rem',
-                fontWeight: 600,
-                color: '#0E3A7C',
-                margin: '0 0 20px 0',
-                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}>
-                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
-                </svg>
-                Contact Person Details
-              </h2>
-            </div>
-
-            {/* Contact Person Searchable Dropdown */}
-            <div className="search-row">
-              <div className="search-inline">
-                <label className="label">Search Contact Person:</label>
-                <ContactPersonSelect
-                  contacts={organizationContactPersons}
-                  onSelect={handleContactSelect}
-                  isLoading={loadingContactPersons}
-                  selectedPerson={selectedContactPerson}
-                  placeholder="Search by name or mobile number..."
-                />
-              </div>
-              {notFoundMsg && (
-                <div className="note">
-                  {notFoundMsg}
-                </div>
-              )}
-            </div>
-
-            {/* Contact Search Results */}
-            {searchResult === 'found' && (
-              <div className="contact-found" style={{
-                marginTop: '1.5rem',
+        {/* Success Message with Generated Reference - Only show after submission */}
+        {submitted && generatedRef && (
+          <div style={{
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            color: 'white',
+            padding: '2rem',
+            borderRadius: '16px',
+            marginBottom: '20px',
+            textAlign: 'center',
+            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
+            border: 'none',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <h3 style={{ 
+              margin: '0 0 1rem 0', 
+              fontSize: '1.5rem',
+              fontWeight: '800',
+              fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+            }}>
+              ✅ Complaint Submitted Successfully!
+            </h3>
+            <p style={{ 
+              margin: 0, 
+              fontSize: '2rem', 
+              fontWeight: '800',
+              fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+            }}>
+              Reference Number: {generatedRef}
+            </p>
+          </div>
+        )}
+        
+        <form className="config-content" onSubmit={onSubmit} style={{
+          backgroundColor: 'white',
+          borderRadius: '16px',
+          padding: '2rem',
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
+          border: '1px solid #e2e8f0'
+        }}>
+          
+          {/* ======= TAB 0: Request Details ======= */}
+          <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
+            <section className="config-section">
+              <div className="section-header" style={{
+                marginBottom: '1.5rem',
                 padding: '1.5rem',
-                backgroundColor: '#d1fae5',
-                borderRadius: '10px',
-                border: '1px solid #6ee7b7',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                borderRadius: '12px',
+                color: 'white',
+                textAlign: 'center',
+                boxShadow: '0 4px 8px rgba(59, 130, 246, 0.2)',
+                fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', sans-serif"
               }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  marginBottom: '1rem' 
+                <h2 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  margin: '0',
+                  fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', sans-serif",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px'
                 }}>
-                  <div style={{ 
-                    fontWeight: '600',
-                    color: '#065f46',
-                    fontSize: '1.1rem'
-                  }}>
-                    <strong>Contact Found:</strong> {form.contactName} ({form.mobile})
-                  </div>
-                  <div>
-                    <button type="button" className="btn ghost" style={{ 
-                      height: '40px',
-                      padding: '0.5rem 1rem',
-                      fontSize: '0.9rem'
-                    }} onClick={() => {
-                      setSearchResult(null);
-                      setNotFoundMsg("");
-                      setShowAddDetails(false);
-                    }}>
-                      Clear
-                    </button>
-                  </div>
-                </div>
-
-                {/* Contact Details View */}
-                <div style={{
-                  backgroundColor: '#f0fdf4',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  border: '1px solid #bbf7d0',
-                  fontSize: '0.95rem'
-                }}>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                    gap: '0.75rem' 
-                  }}>
-                    <div><strong>Email:</strong> {form.email || 'N/A'}</div>
-                    <div><strong>Office Mobile:</strong> {form.officeMobile || 'N/A'}</div>
-                    <div><strong>Title:</strong> {form.title || 'N/A'}</div>
-                  </div>
-                </div>
+                  <svg style={{ width: '24px', height: '24px', color: 'white' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Request Details
+                </h2>
               </div>
-            )}
 
-            {searchResult === 'not_found' && (
-              <div className="contact-not-found" style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
-                backgroundColor: '#fffbeb',
-                borderRadius: '10px',
-                border: '1px solid #fde68a',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
+              <div className="grid grid-2" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '15px',
+                marginBottom: '10px'
               }}>
-                <div style={{
-                  fontWeight: '600',
-                  color: '#92400e',
-                  fontSize: '1.1rem'
-                }}>
-                  <strong>Contact not found.</strong> Click "Add Details" to create new contact.
-                </div>
-                <button type="button" className="btn primary" style={{ 
-                  height: '40px',
-                  padding: '0.5rem 1rem',
-                  fontSize: '0.9rem'
-                }} onClick={() => {
-                  setShowAddDetails(true);
-                  setSearchResult(null);
-                }}>
-                  Add Details
+                <Field label="Request Reference">
+                  <input
+                    className="input"
+                    value={form.requestRef}
+                    readOnly
+                    placeholder="Auto-generated reference number"
+                    title="This reference number is automatically generated"
+                    style={{ backgroundColor: '#f1f5f9', color: '#64748b', cursor: 'not-allowed' }}
+                  />
+                </Field>
+
+                <Field label="Category Type" required>
+                  <select
+                    className="input"
+                    value={form.categoryType}
+                    onChange={(e) => update("categoryType", e.target.value)}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {categories.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label="Organization" required>
+                  <select
+                    className="input"
+                    value={form.organization}
+                    onChange={(e) => update("organization", e.target.value)}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {loadingOrganizations ? (
+                      <option disabled>Loading organizations...</option>
+                    ) : (
+                      organizations.map((org) => (
+                        <option key={org._id} value={org.organization}>{org.organization}</option>
+                      ))
+                    )}
+                  </select>
+                </Field>
+
+                <Field label="Solution Type">
+                  <select
+                    className="input"
+                    value={form.solutionType}
+                    onChange={(e) => update("solutionType", e.target.value)}
+                    disabled={loadingSolutionData}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {loadingSolutionData ? (
+                      <option disabled>Loading...</option>
+                    ) : solutionTypes.length > 0 ? (
+                      solutionTypes.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))
+                    ) : (
+                      <option disabled>No solution types available</option>
+                    )}
+                  </select>
+                </Field>
+
+                <Field label="Solution Name">
+                  <select
+                    className="input"
+                    value={form.solutionName}
+                    onChange={(e) => update("solutionName", e.target.value)}
+                    disabled={!form.solutionType || loadingSolutionData}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {loadingSolutionData ? (
+                      <option disabled>Loading...</option>
+                    ) : form.solutionType ? (
+                      filteredSolutions.length > 0 ? (
+                        filteredSolutions.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))
+                      ) : (
+                        <option disabled>No solutions available for this type</option>
+                      )
+                    ) : (
+                      <option disabled>Please select a solution type first</option>
+                    )}
+                  </select>
+                </Field>
+
+                <Field label="Medium" required>
+                  <select
+                    className="input"
+                    value={form.medium}
+                    onChange={(e) => update("medium", e.target.value)}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {mediums.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label="Medium Source" required>
+                  <select
+                    className="input"
+                    value={form.mediumSource}
+                    onChange={(e) => update("mediumSource", e.target.value)}
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    <option value="">Select…</option>
+                    {mediumSources.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label="Complaint" className="full" required>
+                  <textarea
+                    className="input textarea"
+                    rows={4}
+                    value={form.complaint}
+                    onChange={(e) => update("complaint", e.target.value)}
+                    placeholder="Type the complaint here…"
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  />
+                </Field>
+              </div>
+              
+              {/* Navigation Buttons */}
+              <div className="actions" style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-end',
+                marginTop: '20px',
+                paddingTop: '20px',
+                borderTop: '1px solid #e2e8f0'
+              }}>
+                <button 
+                  type="button" 
+                  onClick={nextTab}
+                  style={{
+                    padding: '10px 24px',
+                    backgroundColor: '#0E3A7C',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                    boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#0b2f64';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#0E3A7C';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
+                  }}
+                >
+                  Next →
                 </button>
               </div>
-            )}
-
-            {/* Manual Contact Entry Fields - Show when "Add Details" is clicked */}
-            {showAddDetails && (
-              <div className="manual-contact-entry" style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
-                backgroundColor: '#f0f9ff',
-                borderRadius: '10px',
-                border: '1px solid #93c5fd',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-              }}>
-                <h4 style={{
-                  margin: '0 0 1.25rem 0',
-                  color: '#1e40af',
-                  fontSize: '1.25rem',
-                  fontWeight: '700',
-                  fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+            </section>
+          </div>
+          
+          {/* ======= TAB 1: Contact Person Details ======= */}
+          <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
+            <section className="config-section">
+              <div className="section-header">
+                <h2 style={{
+                  fontSize: '1.3rem',
+                  fontWeight: 600,
+                  color: '#0E3A7C',
+                  margin: '0 0 20px 0',
+                  fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px'
                 }}>
-                  👤 New Contact Information
-                </h4>
+                  <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                  Contact Person Details
+                </h2>
+              </div>
 
-                <div className="grid grid-2">
-                  <Field label="Contact Name">
-                    <input
-                      className="input"
-                      value={newContactData.name}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, name: value});
-                        update("contactName", value);
-                      }}
-                      placeholder="Enter full name"
-                      required={searchResult === 'not_found'}
-                    />
-                  </Field>
+              {/* Contact Person Searchable Dropdown */}
+              <div className="search-row">
+                <div className="search-inline">
+                  <label className="label">Search Contact Person:</label>
+                  <ContactPersonSelect
+                    contacts={organizationContactPersons}
+                    onSelect={handleContactSelect}
+                    isLoading={loadingContactPersons}
+                    selectedPerson={selectedContactPerson}
+                    placeholder="Search by name or mobile number..."
+                  />
+                </div>
+                {notFoundMsg && (
+                  <div className="note" style={{ color: '#ef4444' }}>{notFoundMsg}</div>
+                )}
+              </div>
 
-                  <Field label="Email">
-                    <input
-                      className="input"
-                      value={newContactData.email}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, email: value});
-                        update("email", value);
-                      }}
-                      placeholder="Enter email address"
-                      type="email"
-                      required={searchResult === 'not_found'}
-                    />
-                  </Field>
-
-                  <Field label="Organization">
-                    <select
-                      className="input"
-                      value={newContactData.organization}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, organization: value});
-                      }}
-                    >
-                      <option value="">Select Organization</option>
-                      {loadingOrganizations ? (
-                        <option disabled>Loading organizations...</option>
-                      ) : (
-                        organizations.map((org) => (
-                          <option key={org._id} value={org.organization}>{org.organization}</option>
-                        ))
-                      )}
-                    </select>
-                  </Field>
-
+              {/* Manual Contact Entry Section */}
+              <div style={{ 
+                background: '#f0f9ff', 
+                padding: '1.5rem', 
+                borderRadius: '12px', 
+                border: '1px solid #93c5fd',
+                marginBottom: '1.5rem'
+              }}>
+                <h3 style={{ 
+                  margin: '0 0 1rem 0', 
+                  color: '#0E3A7C', 
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif"
+                }}>
+                  Manual Contact Entry
+                </h3>
+                
+                <div className="grid grid-2" style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                  gap: '15px'
+                }}>
                   <Field label="Title">
                     <select
                       className="input"
-                      value={newContactData.title}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, title: value});
-                        update("title", value);
+                      value={form.title}
+                      onChange={(e) => update("title", e.target.value)}
+                      style={{
+                        fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
                       }}
                     >
                       <option value="Mr.">Mr.</option>
@@ -1164,290 +1083,76 @@ export default function ComplaintForm() {
                       <option value="Prof.">Prof.</option>
                     </select>
                   </Field>
-                </div>
 
-                <div style={{
-                  marginTop: '1.25rem',
-                  padding: '1rem',
-                  backgroundColor: '#dbeafe',
-                  borderRadius: '8px',
-                  border: '1px solid #93c5fd',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  color: '#1e40af'
-                }}>
-                  ℹ️ This new contact will be automatically saved to the organization contact person database when you submit the complaint.
+                  <Field label="Name" required>
+                    <input
+                      className="input"
+                      value={form.contactName}
+                      onChange={(e) => update("contactName", e.target.value)}
+                      placeholder="Enter full name"
+                      style={{
+                        fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                      }}
+                    />
+                  </Field>
+
+                  <Field label="Email">
+                    <input
+                      className="input"
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => update("email", e.target.value)}
+                      placeholder="Enter email address"
+                      style={{
+                        fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                      }}
+                    />
+                  </Field>
+
+                  <Field label="Mobile Number" required>
+                    <input
+                      className="input"
+                      type="tel"
+                      value={form.mobile}
+                      onChange={(e) => update("mobile", e.target.value)}
+                      placeholder="Enter mobile number"
+                      style={{
+                        fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                      }}
+                    />
+                  </Field>
+
+                  <Field label="Office Contact Number">
+                    <input
+                      className="input"
+                      type="tel"
+                      value={form.officeMobile}
+                      onChange={(e) => update("officeMobile", e.target.value)}
+                      placeholder="Enter office contact number"
+                      style={{
+                        fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                      }}
+                    />
+                  </Field>
                 </div>
               </div>
-            )}
 
-            {/* Manual Contact Entry Fields */}
-            <div className="grid grid-2" style={{ marginTop: '1.5rem' }}>
-              <Field label="Contact Person Name">
-                <input
-                  className="input"
-                  value={form.contactName}
-                  onChange={(e) => update("contactName", e.target.value)}
-                  placeholder="Full name"
-                />
-              </Field>
-              
-              <Field label="Email">
-                <input
-                  className="input"
-                  value={form.email}
-                  onChange={(e) => update("email", e.target.value)}
-                  placeholder="name@example.com"
-                  type="email"
-                />
-              </Field>
-
-              <Field label="Mobile No">
-                <input
-                  className="input"
-                  value={form.mobile}
-                  onChange={(e) => update("mobile", e.target.value)}
-                  placeholder="07XXXXXXXX"
-                />
-              </Field>
-
-              <Field label="Office Mobile No">
-                <input
-                  className="input"
-                  value={form.officeMobile}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    update("officeMobile", value);
-                    if (searchResult === 'not_found') {
-                      setNewContactData({...newContactData, officeMobile: value});
-                    }
-                  }}
-                  placeholder="011XXXXXXX"
-                />
-              </Field>
-
-              <Field label="Title">
-                <select
-                  className="input"
-                  value={form.title}
-                  onChange={(e) => update("title", e.target.value)}
-                >
-                  <option value="Mr.">Mr.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                </select>
-              </Field>
-            </div>
-            
-            {/* Navigation Buttons */}
-            <div className="actions" style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between',
-              marginTop: '20px',
-              paddingTop: '20px',
-              borderTop: '1px solid #e2e8f0'
-            }}>
-              <button 
-                type="button" 
-                onClick={prevTab}
-                style={{
-                  padding: '10px 24px',
-                  backgroundColor: '#94a3b8',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#64748b';
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = '#94a3b8';
-                }}
-              >
-                ← Previous
-              </button>
-              <button 
-                type="button" 
-                onClick={nextTab}
-                style={{
-                  padding: '10px 24px',
-                  backgroundColor: '#0E3A7C',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-                  boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#0b2f64';
-                  e.target.style.transform = 'translateY(-1px)';
-                  e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = '#0E3A7C';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
-                }}
-              >
-                Next →
-              </button>
-            </div>
-          </section>
-        </div>
-        
-        {/* ======= TAB 2: Assignment ======= */}
-        <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2 style={{
-                fontSize: '1.3rem',
-                fontWeight: 600,
-                color: '#0E3A7C',
-                margin: '0 0 20px 0',
-                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
+              {/* Navigation Buttons */}
+              <div className="actions" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between',
+                marginTop: '20px',
+                paddingTop: '20px',
+                borderTop: '1px solid #e2e8f0'
               }}>
-                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Assignment
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Emp No</th>
-                    <th>Name</th>
-                    <th>Designation</th>
-                    <th>Availability</th>
-                    <th>Assignment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staff.map((s) => (
-                    <tr key={s.empNo}>
-                      <td>{s.empNo}</td>
-                      <td>{s.name}</td>
-                      <td>{s.designation}</td>
-                      <td>{s.availability}</td>
-                      <td>
-                        <select
-                          className="input"
-                          value={staffAssignments[s.empNo] || ""}
-                          onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}
-                          style={{ 
-                            height: '40px',
-                            padding: '0.5rem',
-                            minWidth: '160px'
-                          }}
-                        >
-                          <option value="">Select Assignment</option>
-                          <option value="Main Assignment">Main Assignment</option>
-                          <option value="Sub Assignment">Sub Assignment</option>
-                        </select>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="grid grid-2" style={{ marginTop: '1.5rem' }}>
-              <Field label="Document Reference">
-                <div className="inline">
-                  <input
-                    className="input"
-                    value={form.docRef}
-                    onChange={(e) => update("docRef", e.target.value)}
-                    placeholder="DOC-REF"
-                    style={{ flex: 1 }}
-                  />
-                  <label className="upload">
-                    <input 
-                      type="file" 
-                      onChange={() => {}} 
-                    />
-                    Upload
-                  </label>
-                </div>
-              </Field>
-
-              <Field label="Document Subject">
-                <input
-                  className="input"
-                  value={form.docSubject}
-                  onChange={(e) => update("docSubject", e.target.value)}
-                  placeholder="Subject"
-                />
-              </Field>
-
-              <Field label="Remarks" className="full">
-                <textarea
-                  className="input textarea"
-                  rows={4}
-                  value={form.remarks}
-                  onChange={(e) => update("remarks", e.target.value)}
-                  placeholder="Any special notes…"
-                />
-              </Field>
-            </div>
-            
-            {/* Navigation Buttons */}
-            <div className="actions" style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between',
-              marginTop: '20px',
-              paddingTop: '20px',
-              borderTop: '1px solid #e2e8f0'
-            }}>
-              <button 
-                type="button" 
-                onClick={prevTab}
-                style={{
-                  padding: '10px 24px',
-                  backgroundColor: '#94a3b8',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-                }}
-                onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#64748b';
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.backgroundColor = '#94a3b8';
-                }}
-              >
-                ← Previous
-              </button>
-              <div style={{ display: 'flex', gap: '12px' }}>
                 <button 
                   type="button" 
-                  onClick={onReset}
+                  onClick={prevTab}
                   style={{
                     padding: '10px 24px',
-                    backgroundColor: '#64748b',
-                    color: 'white',
-                    border: 'none',
+                    backgroundColor: '#f1f5f9',
+                    color: '#64748b',
+                    border: '1px solid #e2e8f0',
                     borderRadius: '6px',
                     fontSize: '0.95rem',
                     fontWeight: '500',
@@ -1456,51 +1161,266 @@ export default function ComplaintForm() {
                     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
                   }}
                   onMouseOver={(e) => {
-                    e.target.style.backgroundColor = '#475569';
+                    e.target.style.backgroundColor = '#e2e8f0';
+                    e.target.style.transform = 'translateY(-1px)';
                   }}
                   onMouseOut={(e) => {
-                    e.target.style.backgroundColor = '#64748b';
+                    e.target.style.backgroundColor = '#f1f5f9';
+                    e.target.style.transform = 'translateY(0)';
                   }}
                 >
-                  Reset Form
+                  ← Previous
                 </button>
                 <button 
-                  type="submit" 
+                  type="button" 
+                  onClick={nextTab}
                   style={{
                     padding: '10px 24px',
-                    backgroundColor: '#F8991D',
-                    color: '#0E3A7C',
+                    backgroundColor: '#0E3A7C',
+                    color: 'white',
                     border: 'none',
                     borderRadius: '6px',
                     fontSize: '0.95rem',
-                    fontWeight: '600',
+                    fontWeight: '500',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-                    boxShadow: '0 2px 4px rgba(248, 153, 29, 0.3)'
+                    boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
                   }}
                   onMouseOver={(e) => {
-                    e.target.style.backgroundColor = '#e68a0d';
+                    e.target.style.backgroundColor = '#0b2f64';
                     e.target.style.transform = 'translateY(-1px)';
-                    e.target.style.boxShadow = '0 4px 8px rgba(248, 153, 29, 0.4)';
+                    e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
                   }}
                   onMouseOut={(e) => {
-                    e.target.style.backgroundColor = '#F8991D';
+                    e.target.style.backgroundColor = '#0E3A7C';
                     e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 2px 4px rgba(248, 153, 29, 0.3)';
+                    e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
                   }}
                 >
-                  Submit Complaint
+                  Next →
                 </button>
-                {submitted && (
+              </div>
+            </section>
+          </div>
+
+          {/* ======= TAB 2: Assignment Details ======= */}
+          <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
+            <section className="config-section">
+              <div className="section-header">
+                <h2 style={{
+                  fontSize: '1.3rem',
+                  fontWeight: 600,
+                  color: '#0E3A7C',
+                  margin: '0 0 20px 0',
+                  fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px'
+                }}>
+                  <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Assignment Details
+                </h2>
+              </div>
+
+              <div className="grid grid-2" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '15px',
+                marginBottom: '20px'
+              }}>
+                <Field label="Assignment">
+                  <input
+                    className="input"
+                    value={form.assignment}
+                    onChange={(e) => update("assignment", e.target.value)}
+                    placeholder="Enter assignment details"
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  />
+                </Field>
+
+                <Field label="Document Reference">
+                  <input
+                    className="input"
+                    value={form.docRef}
+                    onChange={(e) => update("docRef", e.target.value)}
+                    placeholder="Enter document reference"
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  />
+                </Field>
+
+                <Field label="Document Subject">
+                  <input
+                    className="input"
+                    value={form.docSubject}
+                    onChange={(e) => update("docSubject", e.target.value)}
+                    placeholder="Enter document subject"
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  />
+                </Field>
+
+                <Field label="Remarks">
+                  <textarea
+                    className="input textarea"
+                    rows={3}
+                    value={form.remarks}
+                    onChange={(e) => update("remarks", e.target.value)}
+                    placeholder="Enter any additional remarks"
+                    style={{
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  />
+                </Field>
+              </div>
+
+              {/* Staff Assignment Table */}
+              <div className="table-wrap" style={{
+                overflow: 'auto',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                background: '#ffffff',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                marginBottom: '20px'
+              }}>
+                <table className="table" style={{
+                  width: '100%',
+                  borderCollapse: 'separate',
+                  borderSpacing: 0
+                }}>
+                  <thead>
+                    <tr>
+                      <th style={{
+                        borderBottom: '2px solid #e2e8f0',
+                        padding: '1rem',
+                        textAlign: 'left',
+                        background: '#f1f5f9',
+                        fontWeight: 700,
+                        color: '#0f172a'
+                      }}>Employee No</th>
+                      <th style={{
+                        borderBottom: '2px solid #e2e8f0',
+                        padding: '1rem',
+                        textAlign: 'left',
+                        background: '#f1f5f9',
+                        fontWeight: 700,
+                        color: '#0f172a'
+                      }}>Name</th>
+                      <th style={{
+                        borderBottom: '2px solid #e2e8f0',
+                        padding: '1rem',
+                        textAlign: 'left',
+                        background: '#f1f5f9',
+                        fontWeight: 700,
+                        color: '#0f172a'
+                      }}>Designation</th>
+                      <th style={{
+                        borderBottom: '2px solid #e2e8f0',
+                        padding: '1rem',
+                        textAlign: 'left',
+                        background: '#f1f5f9',
+                        fontWeight: 700,
+                        color: '#0f172a'
+                      }}>Availability</th>
+                      <th style={{
+                        borderBottom: '2px solid #e2e8f0',
+                        padding: '1rem',
+                        textAlign: 'left',
+                        background: '#f1f5f9',
+                        fontWeight: 700,
+                        color: '#0f172a'
+                      }}>Assignment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {staff.map((s) => (
+                      <tr key={s.empNo} style={{ 
+                        borderBottom: '1px solid #e2e8f0',
+                        transition: 'background-color 0.2s ease'
+                      }}>
+                        <td style={{ padding: '1rem' }}>{s.empNo}</td>
+                        <td style={{ padding: '1rem' }}>{s.name}</td>
+                        <td style={{ padding: '1rem' }}>{s.designation}</td>
+                        <td style={{ padding: '1rem' }}>{s.availability}</td>
+                        <td style={{ padding: '1rem' }}>
+                          <select
+                            className="input"
+                            value={staffAssignments[s.empNo] || ""}
+                            onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}
+                            style={{
+                              width: '100%',
+                              height: '40px',
+                              padding: '0.5rem',
+                              borderRadius: '6px',
+                              border: '2px solid #e2e8f0',
+                              background: '#ffffff',
+                              color: '#0f172a',
+                              outline: 'none',
+                              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                              fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                            }}
+                          >
+                            <option value="">Select Assignment</option>
+                            <option value="Main Assignment">Main Assignment</option>
+                            <option value="Sub Assignment">Sub Assignment</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Navigation Buttons */}
+              <div className="actions" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between',
+                marginTop: '20px',
+                paddingTop: '20px',
+                borderTop: '1px solid #e2e8f0'
+              }}>
+                <button 
+                  type="button" 
+                  onClick={prevTab}
+                  style={{
+                    padding: '10px 24px',
+                    backgroundColor: '#f1f5f9',
+                    color: '#64748b',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#e2e8f0';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#f1f5f9';
+                    e.target.style.transform = 'translateY(0)';
+                  }}
+                >
+                  ← Previous
+                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
                   <button 
                     type="button" 
-                    onClick={onViewComplaint}
+                    onClick={onReset}
                     style={{
                       padding: '10px 24px',
-                      background: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
-                      color: 'white',
-                      border: 'none',
+                      backgroundColor: '#f8fafc',
+                      color: '#64748b',
+                      border: '1px solid #e2e8f0',
                       borderRadius: '6px',
                       fontSize: '0.95rem',
                       fontWeight: '500',
@@ -1508,33 +1428,52 @@ export default function ComplaintForm() {
                       transition: 'all 0.2s ease',
                       fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
                     }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = '#f1f5f9';
+                      e.target.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = '#f8fafc';
+                      e.target.style.transform = 'translateY(0)';
+                    }}
                   >
-                    View Complaint
+                    Reset
                   </button>
-                )}
+                  <button 
+                    type="submit"
+                    style={{
+                      padding: '10px 24px',
+                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                      boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)'
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                      e.target.style.transform = 'translateY(-1px)';
+                      e.target.style.boxShadow = '0 4px 8px rgba(16, 185, 129, 0.3)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 2px 4px rgba(16, 185, 129, 0.2)';
+                    }}
+                  >
+                    Submit Complaint
+                  </button>
+                </div>
               </div>
-            </div>
-          </section>
-        </div>
-      </form>
-    </div>
-  );
-}
-
-function Field({ label, children, className = "" }) {
-  return (
-    <div className={`field ${className}`} style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    }}>
-      <label className="label" style={{
-        fontSize: '0.875rem',
-        fontWeight: '600',
-        color: '#374151',
-        marginBottom: '0.25rem'
-      }}>{label}</label>
-      <div className="control">{children}</div>
+            </section>
+          </div>
+        </form>
+      </div>
+      <Footer />
     </div>
   );
 }

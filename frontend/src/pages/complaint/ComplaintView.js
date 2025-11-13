@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import backgroundVideo from "../../assets/Background.mp4";
 import "./ComplaintForm.css";
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 const ComplaintView = () => {
   const { id } = useParams();
@@ -122,9 +124,13 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
+        <Navbar />
+
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
           <p>Loading complaint details...</p>
         </div>
+        
+        <Footer />
       </div>
     );
   }
@@ -159,9 +165,13 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
+        <Navbar />
+
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
           <p>Error: {error}</p>
         </div>
+        
+        <Footer />
       </div>
     );
   }
@@ -196,19 +206,16 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
+        <Navbar />
+
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
-          <p>Complaint not found</p>
+          <p>No complaint found.</p>
         </div>
+        
+        <Footer />
       </div>
     );
   }
-
-  // Format date for display
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-  };
 
   return (
     <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
@@ -238,676 +245,439 @@ const ComplaintView = () => {
         background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
         zIndex: -1,
       }}></div>
+      
+      <Navbar />
 
-      <div className="content-wrapper" style={{
-        position: 'relative',
-        zIndex: 1,
-        padding: '1rem',
-        marginTop: '1rem',
-        maxWidth: '1400px',
-        margin: '1rem auto 0 auto'
-      }}>
-        {/* Page Header */}
-        <header className="page-header" style={{
+      <div className="content-wrapper">
+        {/* Modern Header */}
+        <div style={{
           textAlign: 'center',
-          marginBottom: '1rem',
-          padding: '1.5rem',
-          background: 'white',
-          borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb'
+          marginBottom: '20px',
+          padding: '15px 0'
         }}>
           <h1 style={{
             fontSize: '2.5rem',
-            fontWeight: '700',
-            color: '#1f2937',
-            margin: '0 0 0.5rem 0',
-            textAlign: 'center'
+            fontWeight: 800,
+            margin: '0 0 8px 0',
+            fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', sans-serif",
+            background: 'linear-gradient(90deg, #1e40af, #3b82f6, #000000)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
           }}>
             Complaint Details
           </h1>
-          <p style={{ 
-            color: '#6b7280', 
-            fontSize: '1.1rem',
+          <p style={{
+            fontSize: '1.25rem',
+            color: '#64748b',
             margin: 0,
-            fontWeight: '400'
+            fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+            fontWeight: 400
           }}>
-            {isEditing ? "Edit complaint information" : "View complaint information"}
+            View and manage complaint information
           </p>
-        </header>
-
-        <div className="config-content" style={{
-          background: 'white',
-          borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb',
-          overflow: 'hidden',
-          padding: '2rem'
-        }}>
-          {/* Success Message */}
-          {updateSuccess && (
-            <div style={{
-              padding: '1rem',
-              backgroundColor: '#d1fae5',
-              border: '1px solid #10b981',
-              borderRadius: '6px',
-              marginBottom: '1rem',
-              color: '#065f46',
-              textAlign: 'center'
-            }}>
-              Complaint updated successfully!
-            </div>
-          )}
-
-          {/* Action Buttons */}
+        </div>
+        
+        {/* Success Message */}
+        {updateSuccess && (
           <div style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: '12px',
-            marginBottom: '1rem'
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            color: 'white',
+            padding: '1.5rem',
+            borderRadius: '12px',
+            marginBottom: '20px',
+            textAlign: 'center',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            border: 'none'
           }}>
-            {isEditing ? (
-              <>
+            <p style={{ margin: 0, fontWeight: '600' }}>✅ Complaint updated successfully!</p>
+          </div>
+        )}
+        
+        <div className="config-content">
+          {!isEditing ? (
+            // View Mode
+            <div>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-end', 
+                marginBottom: '20px' 
+              }}>
                 <button 
-                  className="btn ghost" 
+                  onClick={handleEditToggle}
+                  style={{
+                    padding: '10px 20px',
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                    boxShadow: '0 2px 4px rgba(59, 130, 246, 0.2)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.background = 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 8px rgba(59, 130, 246, 0.3)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 2px 4px rgba(59, 130, 246, 0.2)';
+                  }}
+                >
+                  Edit Complaint
+                </button>
+              </div>
+              
+              <div className="grid grid-2">
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Request Reference</label>
+                  <div className="view-field">{complaint.requestRef}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Category Type</label>
+                  <div className="view-field">{complaint.categoryType}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Organization</label>
+                  <div className="view-field">{complaint.organization}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Solution Type</label>
+                  <div className="view-field">{complaint.solutionType || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Solution Name</label>
+                  <div className="view-field">{complaint.solutionName || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Medium</label>
+                  <div className="view-field">{complaint.medium}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Medium Source</label>
+                  <div className="view-field">{complaint.mediumSource}</div>
+                </div>
+                
+                <div className="field full">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Complaint</label>
+                  <div className="view-field" style={{ minHeight: '100px', display: 'flex', alignItems: 'center' }}>
+                    {complaint.complaint}
+                  </div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Contact Name</label>
+                  <div className="view-field">{complaint.contactName}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Email</label>
+                  <div className="view-field">{complaint.email || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Mobile</label>
+                  <div className="view-field">{complaint.mobile}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Office Mobile</label>
+                  <div className="view-field">{complaint.officeMobile || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Title</label>
+                  <div className="view-field">{complaint.title}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Assignment</label>
+                  <div className="view-field">{complaint.assignment || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Document Reference</label>
+                  <div className="view-field">{complaint.docRef || 'N/A'}</div>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Document Subject</label>
+                  <div className="view-field">{complaint.docSubject || 'N/A'}</div>
+                </div>
+                
+                <div className="field full">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Remarks</label>
+                  <div className="view-field" style={{ minHeight: '80px', display: 'flex', alignItems: 'center' }}>
+                    {complaint.remarks || 'N/A'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Edit Mode
+            <form onSubmit={handleUpdate}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-end', 
+                marginBottom: '20px',
+                gap: '10px'
+              }}>
+                <button 
+                  type="button"
                   onClick={handleCancel}
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.9rem',
+                    padding: '10px 20px',
+                    backgroundColor: '#f1f5f9',
+                    color: '#64748b',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
                     fontWeight: '500',
-                    borderRadius: '6px'
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#e2e8f0';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#f1f5f9';
+                    e.target.style.transform = 'translateY(0)';
                   }}
                 >
                   Cancel
                 </button>
                 <button 
-                  className="btn primary" 
-                  onClick={handleUpdate}
+                  type="submit"
                   style={{
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.9rem',
+                    padding: '10px 20px',
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
                     fontWeight: '500',
-                    borderRadius: '6px'
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                    boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 8px rgba(16, 185, 129, 0.3)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 2px 4px rgba(16, 185, 129, 0.2)';
                   }}
                 >
                   Save Changes
                 </button>
-              </>
-            ) : (
-              <button 
-                className="btn primary" 
-                onClick={handleEditToggle}
-                style={{
-                  padding: '0.5rem 1rem',
-                  fontSize: '0.9rem',
-                  fontWeight: '500',
-                  borderRadius: '6px'
-                }}
-              >
-                Edit Complaint
-              </button>
-            )}
-          </div>
-
-          {/* Complaint Information Table */}
-          <section className="config-section" style={{
-            marginBottom: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(248, 250, 252, 0.5)',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <div style={{
-              marginBottom: '1.5rem',
-              padding: '1rem 1.5rem',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              borderRadius: '8px',
-              color: 'white',
-              textAlign: 'center'
-            }}>
-              <h2 style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}>
-                📋 Complaint Information
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '30%' }}>Field</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Complaint ID</strong></td>
-                    <td>{complaint._id}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Created At</strong></td>
-                    <td>{formatDate(complaint.createdAt)}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Last Updated</strong></td>
-                    <td>{formatDate(complaint.updatedAt)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Request Details Table */}
-          <section className="config-section" style={{
-            marginBottom: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(248, 250, 252, 0.5)',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <div style={{
-              marginBottom: '1.5rem',
-              padding: '1rem 1.5rem',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              borderRadius: '8px',
-              color: 'white',
-              textAlign: 'center'
-            }}>
-              <h2 style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}>
-                📋 Request Details
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '30%' }}>Field</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Request Reference</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.requestRef || ""}
-                          onChange={(e) => handleInputChange("requestRef", e.target.value)}
-                          placeholder="REQ-0001"
-                        />
-                      ) : (
-                        complaint.requestRef || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Category Type</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.categoryType || ""}
-                          onChange={(e) => handleInputChange("categoryType", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {categories.map((c) => (
-                            <option key={c} value={c}>{c}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.categoryType || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Organization</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.organization || ""}
-                          onChange={(e) => handleInputChange("organization", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {organizations.map((o) => (
-                            <option key={o} value={o}>{o}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.organization || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Solution Name</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.solutionName || ""}
-                          onChange={(e) => handleInputChange("solutionName", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {solutions.map((s) => (
-                            <option key={s} value={s}>{s}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.solutionName || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Medium</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.medium || ""}
-                          onChange={(e) => handleInputChange("medium", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {mediums.map((m) => (
-                            <option key={m} value={m}>{m}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.medium || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Medium Source</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.mediumSource || ""}
-                          onChange={(e) => handleInputChange("mediumSource", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {mediumSources.map((m) => (
-                            <option key={m} value={m}>{m}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.mediumSource || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Complaint</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <textarea
-                          className="input textarea"
-                          rows={4}
-                          value={editedComplaint.complaint || ""}
-                          onChange={(e) => handleInputChange("complaint", e.target.value)}
-                          placeholder="Type the complaint here…"
-                        />
-                      ) : (
-                        <div style={{ whiteSpace: "pre-wrap" }}>
-                          {complaint.complaint || "N/A"}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Contact Person Details Table */}
-          <section className="config-section" style={{
-            marginBottom: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(248, 250, 252, 0.5)',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <div style={{
-              marginBottom: '1.5rem',
-              padding: '1rem 1.5rem',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              borderRadius: '8px',
-              color: 'white',
-              textAlign: 'center'
-            }}>
-              <h2 style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}>
-                👤 Contact Person Details
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '30%' }}>Field</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Contact Person Name</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.contactName || ""}
-                          onChange={(e) => handleInputChange("contactName", e.target.value)}
-                          placeholder="Full name"
-                        />
-                      ) : (
-                        complaint.contactName || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Email</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          type="email"
-                          value={editedComplaint.email || ""}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          placeholder="name@example.com"
-                        />
-                      ) : (
-                        complaint.email || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Mobile No</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.mobile || ""}
-                          onChange={(e) => handleInputChange("mobile", e.target.value)}
-                          placeholder="07XXXXXXXX"
-                        />
-                      ) : (
-                        complaint.mobile || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Office Mobile No</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.officeMobile || ""}
-                          onChange={(e) => handleInputChange("officeMobile", e.target.value)}
-                          placeholder="011XXXXXXX"
-                        />
-                      ) : (
-                        complaint.officeMobile || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Title</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.title || "Mr."}
-                          onChange={(e) => handleInputChange("title", e.target.value)}
-                        >
-                          {titles.map((t) => (
-                            <option key={t} value={t}>{t}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.title || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Search Mobile</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.searchMobile || ""}
-                          onChange={(e) => handleInputChange("searchMobile", e.target.value)}
-                          placeholder="Type here"
-                        />
-                      ) : (
-                        complaint.searchMobile || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Assignment Details Table */}
-          <section className="config-section" style={{
-            marginBottom: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(248, 250, 252, 0.5)',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <div style={{
-              marginBottom: '1.5rem',
-              padding: '1rem 1.5rem',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-              borderRadius: '8px',
-              color: 'white',
-              textAlign: 'center'
-            }}>
-              <h2 style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}>
-                👥 Assignment Details
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '30%' }}>Field</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><strong>Main Assignment</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.mainAssignment || ""}
-                          onChange={(e) => handleInputChange("mainAssignment", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {mainAssignments.map((m) => (
-                            <option key={m} value={m}>{m}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.mainAssignment || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Sub Assignment</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <select
-                          className="input"
-                          value={editedComplaint.subAssignment || ""}
-                          onChange={(e) => handleInputChange("subAssignment", e.target.value)}
-                        >
-                          <option value="">Select…</option>
-                          {subAssignments.map((s) => (
-                            <option key={s} value={s}>{s}</option>
-                          ))}
-                        </select>
-                      ) : (
-                        complaint.subAssignment || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Document Reference</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.docRef || ""}
-                          onChange={(e) => handleInputChange("docRef", e.target.value)}
-                          placeholder="DOC-REF"
-                        />
-                      ) : (
-                        complaint.docRef || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Document Subject</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <input
-                          className="input"
-                          value={editedComplaint.docSubject || ""}
-                          onChange={(e) => handleInputChange("docSubject", e.target.value)}
-                          placeholder="Subject"
-                        />
-                      ) : (
-                        complaint.docSubject || "N/A"
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>Remarks</strong></td>
-                    <td>
-                      {isEditing ? (
-                        <textarea
-                          className="input textarea"
-                          rows={4}
-                          value={editedComplaint.remarks || ""}
-                          onChange={(e) => handleInputChange("remarks", e.target.value)}
-                          placeholder="Any special notes…"
-                        />
-                      ) : (
-                        <div style={{ whiteSpace: "pre-wrap" }}>
-                          {complaint.remarks || "N/A"}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Action Buttons */}
-          <div className="actions" style={{
-            display: 'flex', 
-            gap: '12px', 
-            justifyContent: 'center', 
-            marginTop: '2rem',
-            padding: '1.5rem',
-            background: 'rgba(248, 250, 252, 0.3)',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <button 
-              className="btn ghost" 
-              onClick={() => navigate(-1)}
-              style={{
-                padding: '0.75rem 2rem',
-                fontSize: '1rem',
-                fontWeight: '600',
-                borderRadius: '8px'
-              }}
-            >
-              Back
-            </button>
-            {isEditing ? (
-              <>
-                <button 
-                  className="btn ghost" 
-                  onClick={handleCancel}
-                  style={{
-                    padding: '0.75rem 2rem',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    borderRadius: '8px'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button 
-                  className="btn primary" 
-                  onClick={handleUpdate}
-                  style={{
-                    padding: '0.75rem 2rem',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    borderRadius: '8px'
-                  }}
-                >
-                  Save Changes
-                </button>
-              </>
-            ) : (
-              <button 
-                className="btn primary" 
-                onClick={handleEditToggle}
-                style={{
-                  padding: '0.75rem 2rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  borderRadius: '8px'
-                }}
-              >
-                Edit Complaint
-              </button>
-            )}
-          </div>
+              </div>
+              
+              <div className="grid grid-2">
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Request Reference</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.requestRef || ''}
+                    onChange={(e) => handleInputChange('requestRef', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Category Type</label>
+                  <select
+                    className="input"
+                    value={editedComplaint.categoryType || ''}
+                    onChange={(e) => handleInputChange('categoryType', e.target.value)}
+                  >
+                    <option value="">Select…</option>
+                    {categories.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Organization</label>
+                  <select
+                    className="input"
+                    value={editedComplaint.organization || ''}
+                    onChange={(e) => handleInputChange('organization', e.target.value)}
+                  >
+                    <option value="">Select…</option>
+                    {organizations.map((org) => (
+                      <option key={org} value={org}>{org}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Solution Type</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.solutionType || ''}
+                    onChange={(e) => handleInputChange('solutionType', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Solution Name</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.solutionName || ''}
+                    onChange={(e) => handleInputChange('solutionName', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Medium</label>
+                  <select
+                    className="input"
+                    value={editedComplaint.medium || ''}
+                    onChange={(e) => handleInputChange('medium', e.target.value)}
+                  >
+                    <option value="">Select…</option>
+                    {mediums.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Medium Source</label>
+                  <select
+                    className="input"
+                    value={editedComplaint.mediumSource || ''}
+                    onChange={(e) => handleInputChange('mediumSource', e.target.value)}
+                  >
+                    <option value="">Select…</option>
+                    {mediumSources.map((ms) => (
+                      <option key={ms} value={ms}>{ms}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="field full">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Complaint</label>
+                  <textarea
+                    className="input textarea"
+                    rows={4}
+                    value={editedComplaint.complaint || ''}
+                    onChange={(e) => handleInputChange('complaint', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Contact Name</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.contactName || ''}
+                    onChange={(e) => handleInputChange('contactName', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Email</label>
+                  <input
+                    className="input"
+                    type="email"
+                    value={editedComplaint.email || ''}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Mobile</label>
+                  <input
+                    className="input"
+                    type="tel"
+                    value={editedComplaint.mobile || ''}
+                    onChange={(e) => handleInputChange('mobile', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Office Mobile</label>
+                  <input
+                    className="input"
+                    type="tel"
+                    value={editedComplaint.officeMobile || ''}
+                    onChange={(e) => handleInputChange('officeMobile', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Title</label>
+                  <select
+                    className="input"
+                    value={editedComplaint.title || 'Mr.'}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                  >
+                    {titles.map((title) => (
+                      <option key={title} value={title}>{title}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Assignment</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.assignment || ''}
+                    onChange={(e) => handleInputChange('assignment', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Document Reference</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.docRef || ''}
+                    onChange={(e) => handleInputChange('docRef', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Document Subject</label>
+                  <input
+                    className="input"
+                    value={editedComplaint.docSubject || ''}
+                    onChange={(e) => handleInputChange('docSubject', e.target.value)}
+                  />
+                </div>
+                
+                <div className="field full">
+                  <label className="label" style={{ fontWeight: 600, color: '#0f172a' }}>Remarks</label>
+                  <textarea
+                    className="input textarea"
+                    rows={3}
+                    value={editedComplaint.remarks || ''}
+                    onChange={(e) => handleInputChange('remarks', e.target.value)}
+                  />
+                </div>
+              </div>
+            </form>
+          )}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import HomeModern from './pages/HomeModern';
 import Complaint from './pages/Complaint';
+import { ComplaintForm } from './pages/complaint/index.js';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page
@@ -47,7 +48,7 @@ function App() {
         {/* Private routes protected by PrivateRoute */}
         <Route path="/" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
         <Route path="/home-modern" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
-        <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
+        <Route path="/complaint" element={<PrivateRoute><ComplaintForm /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />

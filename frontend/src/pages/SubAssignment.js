@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaComments } from 'react-icons/fa';
 
 const SubAssignment = () => {
+  const navigate = useNavigate();
+  
   const data = [
     {
       requestReference: '25-11-10-0002',
@@ -18,155 +21,176 @@ const SubAssignment = () => {
   ];
 
   const styles = {
-    page: {
-      position: 'relative',
+    pageContainer: {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      overflowX: 'hidden',
+      fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
+      backgroundColor: '#f8fafc'
     },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
+    
+    // Content Section
+    contentSection: {
+      padding: '30px 20px',
+      flex: 1
     },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(5px)',
-      zIndex: -1,
+    contentContainer: {
+      maxWidth: '1200px',
+      margin: '0 auto'
     },
-    contentWrapper: {
+    formCard: {
+      background: 'white',
+      borderRadius: '16px',
+      padding: '30px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+      border: '1px solid rgba(0, 0, 0, 0.05)',
       position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '2rem 1rem',
+      overflow: 'hidden'
     },
-    container: {
-      width: '90%',
-      maxWidth: '1400px',
-      background: 'rgba(255, 255, 255, 0.12)',
-      backdropFilter: 'blur(12px)',
-      borderRadius: '20px',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-      border: '1px solid rgba(255, 255, 255, 0.18)',
-      overflow: 'hidden',
-      padding: '2rem',
-      marginTop: '2rem',
-    },
-    heading: {
+    formTitle: {
+      fontSize: '1.8rem',
+      fontWeight: 700,
+      color: '#0E3A7C',
+      marginBottom: '20px',
       textAlign: 'center',
-      fontSize: '2.5rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #1c3d91 0%, #3b82f6 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      marginBottom: '2rem',
-      textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
     },
+    
+    // Table Styles
     tableContainer: {
       overflowX: 'auto',
       borderRadius: '12px',
-      background: 'rgba(255, 255, 255, 0.1)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border: '1px solid #e2e8f0',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
     },
     table: {
       width: '100%',
       borderCollapse: 'separate',
       borderSpacing: 0,
-      textAlign: 'left',
-      minWidth: '1200px',
+      textAlign: 'left'
     },
     thead: {
-      background: 'linear-gradient(135deg, #1c3d91 0%, #2563eb 100%)',
-      color: 'white',
+      background: 'linear-gradient(135deg, #0E3A7C 0%, #1e40af 100%)',
+      color: 'white'
     },
     th: {
       padding: '16px 20px',
       fontWeight: '600',
-      fontSize: '0.95rem',
-      borderBottom: '1px solid rgba(255,255,255,0.2)',
-      position: 'relative',
-      whiteSpace: 'nowrap',
-    },
-    tr: {
-      transition: 'all 0.3s ease',
+      fontSize: '0.9rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px',
+      border: 'none'
     },
     td: {
-      padding: '14px 20px',
-      backgroundColor: 'rgba(255,255,255,0.95)',
+      padding: '16px 20px',
+      borderBottom: '1px solid #e2e8f0',
       fontSize: '0.9rem',
-      color: '#1f2937',
-      borderBottom: '1px solid rgba(0,0,0,0.08)',
-      fontWeight: '500',
-      transition: 'all 0.3s ease',
+      color: '#334155',
+      backgroundColor: 'white',
+      transition: 'all 0.2s ease'
+    },
+    tr: {
+      '&:hover td': {
+        backgroundColor: '#f8fafc'
+      }
     },
     actionCell: {
       display: 'flex',
       gap: '8px',
-      alignItems: 'center',
+      alignItems: 'center'
     },
-    actionBtn: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+    actionButton: {
+      backgroundColor: '#0E3A7C',
       color: 'white',
       border: 'none',
-      borderRadius: '10px',
-      width: '40px',
-      height: '40px',
-      fontSize: '1.1rem',
       cursor: 'pointer',
+      fontSize: '1rem',
+      width: '36px',
+      height: '36px',
+      borderRadius: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       transition: 'all 0.3s ease',
-      boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+      boxShadow: '0 2px 6px rgba(14, 58, 124, 0.2)'
     },
-    messageBtn: {
-      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    actionButtonHover: {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 10px rgba(14, 58, 124, 0.3)'
+    },
+    orangeButton: {
+      backgroundColor: '#F8991D',
+      color: '#0E3A7C'
+    },
+    blueButton: {
+      backgroundColor: '#3b82f6',
+      color: 'white'
     },
     dateTimeCell: {
-      lineHeight: '1.4',
+      lineHeight: '1.4'
     },
     emptyRemarks: {
-      color: '#6b7280',
-      fontStyle: 'italic',
+      color: '#94a3b8',
+      fontStyle: 'italic'
     },
-  };
-
-  // Add hover effects
-  const enhancedStyles = {
-    ...styles,
-    trHover: {
-      ...styles.tr,
-      ':hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      }
+    
+    // Pagination
+    pagination: {
+      marginTop: '25px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '12px'
     },
-    tdHover: {
-      ...styles.td,
-      ':hover': {
-        backgroundColor: 'rgba(248, 250, 252, 0.95)',
-        transform: 'scale(1.02)',
-      }
+    pageButton: {
+      backgroundColor: '#0E3A7C',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '8px',
+      padding: '10px 20px',
+      cursor: 'pointer',
+      fontWeight: '600',
+      fontSize: '0.9rem',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 2px 8px rgba(14, 58, 124, 0.2)'
     },
-    actionBtnHover: {
-      ...styles.actionBtn,
-      ':hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
+    pageButtonHover: {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 12px rgba(14, 58, 124, 0.3)'
+    },
+    pageInfo: {
+      color: '#0E3A7C',
+      fontWeight: '600',
+      fontSize: '0.9rem',
+      padding: '10px 20px',
+      backgroundColor: 'rgba(14, 58, 124, 0.1)',
+      borderRadius: '8px'
+    },
+    
+    // Responsive
+    '@media (max-width: 768px)': {
+      formCard: {
+        padding: '20px'
+      },
+      tableContainer: {
+        fontSize: '0.8rem'
+      },
+      th: {
+        padding: '12px 15px'
+      },
+      td: {
+        padding: '12px 15px'
+      },
+      pagination: {
+        flexDirection: 'column',
+        gap: '10px'
+      },
+      pageButton: {
+        padding: '8px 16px',
+        fontSize: '0.8rem'
       }
     }
   };
@@ -181,151 +205,135 @@ const SubAssignment = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div style={styles.gradientOverlay}></div>
-
-      <div style={styles.contentWrapper}>
-        <Navbar />
-
-        <div style={styles.container}>
-          <h2 style={styles.heading}>My Sub Assignments</h2>
-
-          <div style={styles.tableContainer}>
-            <table style={styles.table}>
-              <thead style={styles.thead}>
-                <tr>
-                  <th style={styles.th}>Request Reference</th>
-                  <th style={styles.th}>Entered Date</th>
-                  <th style={styles.th}>Assigned By Name</th>
-                  <th style={styles.th}>Assigned By Designation</th>
-                  <th style={styles.th}>Assigned To Name</th>
-                  <th style={styles.th}>Assigned To Designation</th>
-                  <th style={styles.th}>Remarks</th>
-                  <th style={styles.th}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr 
-                    key={index}
-                    style={{
-                      ...enhancedStyles.tr,
-                      transform: 'translateY(0)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    <td style={{
-                      ...enhancedStyles.td,
-                      fontWeight: '600',
-                      color: '#1c3d91',
-                    }}>
-                      {item.requestReference}
-                    </td>
-                    <td style={{
-                      ...enhancedStyles.td,
-                      ...styles.dateTimeCell
-                    }}>
-                      <div style={{ fontWeight: '600' }}>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{item.enteredTime}</div>
-                    </td>
-                    <td style={enhancedStyles.td}>{item.assignedByName}</td>
-                    <td style={enhancedStyles.td}>
-                      <span style={{
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                        color: 'white',
-                        padding: '4px 12px',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                      }}>
-                        {item.assignedByDesignation}
-                      </span>
-                    </td>
-                    <td style={enhancedStyles.td}>{item.assignedToName}</td>
-                    <td style={enhancedStyles.td}>
-                      <span style={{
-                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                        color: 'white',
-                        padding: '4px 12px',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                      }}>
-                        {item.assignedToDesignation}
-                      </span>
-                    </td>
-                    <td style={{
-                      ...enhancedStyles.td,
-                      ...(item.remarks ? {} : styles.emptyRemarks)
-                    }}>
-                      {item.remarks || 'No remarks'}
-                    </td>
-                    <td style={enhancedStyles.td}>
-                      <div style={styles.actionCell}>
-                        <button
-                          style={enhancedStyles.actionBtnHover}
-                          onClick={() => handleRefresh(item.requestReference)}
-                          title="Refresh"
-                          onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.3)';
-                          }}
-                        >
-                          🔄
-                        </button>
-                        <button
-                          style={{
-                            ...enhancedStyles.actionBtnHover,
-                            ...styles.messageBtn
-                          }}
-                          onClick={() => handleMessage(item.requestReference)}
-                          title="Message"
-                          onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.3)';
-                          }}
-                        >
-                          💬
-                        </button>
-                      </div>
-                    </td>
+    <div style={styles.pageContainer}>
+      <Navbar />
+      
+      {/* Content Section */}
+      <section style={styles.contentSection}>
+        <div style={styles.contentContainer}>
+          <div style={styles.formCard}>
+            <h2 style={styles.formTitle}>My Sub Assignments</h2>
+            
+            <div style={styles.tableContainer}>
+              <table style={styles.table}>
+                <thead style={styles.thead}>
+                  <tr>
+                    <th style={styles.th}>Request Reference</th>
+                    <th style={styles.th}>Entered Date & Time</th>
+                    <th style={styles.th}>Assigned By</th>
+                    <th style={styles.th}>Assigned To</th>
+                    <th style={styles.th}>Remarks</th>
+                    <th style={styles.th}>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index} style={styles.tr}>
+                      <td style={styles.td}>
+                        <strong style={{ color: '#0E3A7C' }}>{item.requestReference}</strong>
+                      </td>
+                      <td style={{...styles.td, ...styles.dateTimeCell}}>
+                        <div>{item.enteredDate}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.enteredTime}</div>
+                      </td>
+                      <td style={styles.td}>
+                        <div>{item.assignedByName}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.assignedByDesignation}</div>
+                      </td>
+                      <td style={styles.td}>
+                        <div>{item.assignedToName}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{item.assignedToDesignation}</div>
+                      </td>
+                      <td style={styles.td}>
+                        {item.remarks || <span style={styles.emptyRemarks}>No remarks</span>}
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.actionCell}>
+                          <button 
+                            style={styles.actionButton}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = styles.actionButtonHover.boxShadow;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = styles.actionButton.boxShadow;
+                            }}
+                          >
+                            <FaEye />
+                          </button>
+                          <button 
+                            style={{...styles.actionButton, ...styles.orangeButton}}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = '0 4px 10px rgba(248, 153, 29, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = '0 2px 6px rgba(248, 153, 29, 0.2)';
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button 
+                            style={{...styles.actionButton, ...styles.blueButton}}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = '0 4px 10px rgba(59, 130, 246, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = '0 2px 6px rgba(59, 130, 246, 0.2)';
+                            }}
+                          >
+                            <FaComments />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style={styles.pagination}>
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                <FaChevronLeft /> Previous
+              </button>
+              
+              <div style={styles.pageInfo}>
+                Page 1 of 1
+              </div>
+              
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                Next <FaChevronRight />
+              </button>
+            </div>
           </div>
         </div>
-
-        <Footer />
-      </div>
+      </section>
+      
+      <Footer />
     </div>
   );
 };

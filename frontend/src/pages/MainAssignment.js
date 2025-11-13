@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const MainAssignment = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
   const assignments = [
@@ -18,270 +19,290 @@ const MainAssignment = () => {
   ];
 
   const styles = {
-    page: {
-      position: 'relative',
+    pageContainer: {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      overflowX: 'hidden',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif",
+      backgroundColor: '#f8fafc'
     },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
+    
+    // Content Section
+    contentSection: {
+      padding: '30px 20px',
+      flex: 1
     },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(26, 58, 140, 0.1) 0%, rgba(74, 107, 202, 0.08) 100%)',
-      backdropFilter: 'blur(8px)',
-      zIndex: -1,
-    },
-    contentWrapper: {
-      position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '2rem 1rem',
-    },
-    tableContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      borderRadius: '20px',
-      padding: '2rem',
-      boxShadow: '0 20px 40px rgba(26, 58, 140, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08)',
-      width: '95%',
+    contentContainer: {
       maxWidth: '1200px',
-      textAlign: 'center',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
+      margin: '0 auto'
     },
-    title: {
-      fontSize: '2.2rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      marginBottom: '1.5rem',
-      letterSpacing: '-0.5px',
+    formCard: {
+      background: 'white',
+      borderRadius: '16px',
+      padding: '30px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+      border: '1px solid rgba(0, 0, 0, 0.05)',
+      position: 'relative',
+      overflow: 'hidden'
+    },
+    formTitle: {
+      fontSize: '1.8rem',
+      fontWeight: 700,
+      color: '#0E3A7C',
+      marginBottom: '20px',
+      textAlign: 'center',
+      fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+    
+    // Table Styles
+    tableContainer: {
+      overflowX: 'auto',
+      borderRadius: '12px',
+      border: '1px solid #e2e8f0',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
     },
     table: {
       width: '100%',
       borderCollapse: 'separate',
-      borderSpacing: '0',
-      borderRadius: '12px',
-      overflow: 'hidden',
+      borderSpacing: 0,
+      textAlign: 'left'
     },
     th: {
-      backgroundColor: '#1a3a8c',
+      backgroundColor: '#0E3A7C',
       color: 'white',
-      padding: '1rem 1.2rem',
+      padding: '16px 20px',
       fontWeight: '600',
       fontSize: '0.9rem',
       textTransform: 'uppercase',
       letterSpacing: '0.5px',
-      border: 'none',
+      border: 'none'
     },
     td: {
-      padding: '1.2rem',
-      borderBottom: '1px solid rgba(26, 58, 140, 0.1)',
-      fontSize: '0.95rem',
-      color: '#333',
+      padding: '16px 20px',
+      borderBottom: '1px solid #e2e8f0',
+      fontSize: '0.9rem',
+      color: '#334155',
       backgroundColor: 'white',
-      transition: 'all 0.2s ease',
+      transition: 'all 0.2s ease'
     },
     tr: {
       '&:hover td': {
-        backgroundColor: '#f8faff',
-        transform: 'translateY(-2px)',
-      },
+        backgroundColor: '#f8fafc'
+      }
     },
     actions: {
       display: 'flex',
       justifyContent: 'center',
-      gap: '0.8rem',
+      gap: '0.8rem'
     },
-    button: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
+    actionButton: {
+      backgroundColor: '#0E3A7C',
+      color: 'white',
       border: 'none',
       cursor: 'pointer',
-      color: 'white',
-      fontSize: '1.2rem',
-      width: '40px',
-      height: '40px',
-      borderRadius: '10px',
+      fontSize: '1rem',
+      width: '36px',
+      height: '36px',
+      borderRadius: '8px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.2)',
+      boxShadow: '0 2px 6px rgba(14, 58, 124, 0.2)'
+    },
+    actionButtonHover: {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 10px rgba(14, 58, 124, 0.3)'
+    },
+    orangeButton: {
+      backgroundColor: '#F8991D',
+      color: '#0E3A7C'
     },
     pagination: {
-      marginTop: '2rem',
+      marginTop: '25px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      gap: '1rem',
+      gap: '12px'
     },
     pageButton: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
+      backgroundColor: '#0E3A7C',
       color: '#fff',
       border: 'none',
-      borderRadius: '12px',
-      padding: '0.8rem 1.5rem',
+      borderRadius: '8px',
+      padding: '10px 20px',
       cursor: 'pointer',
       fontWeight: '600',
       fontSize: '0.9rem',
       display: 'flex',
       alignItems: 'center',
-      gap: '0.5rem',
+      gap: '8px',
       transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.3)',
+      boxShadow: '0 2px 8px rgba(14, 58, 124, 0.2)'
+    },
+    pageButtonHover: {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 12px rgba(14, 58, 124, 0.3)'
     },
     pageInfo: {
-      color: '#1a3a8c',
+      color: '#0E3A7C',
       fontWeight: '600',
       fontSize: '0.9rem',
-      padding: '0.8rem 1.5rem',
-      backgroundColor: 'rgba(26, 58, 140, 0.1)',
-      borderRadius: '10px',
+      padding: '10px 20px',
+      backgroundColor: 'rgba(14, 58, 124, 0.1)',
+      borderRadius: '8px'
     },
+    
+    // Responsive
+    '@media (max-width: 768px)': {
+      formCard: {
+        padding: '20px'
+      },
+      tableContainer: {
+        fontSize: '0.8rem'
+      },
+      th: {
+        padding: '12px 15px'
+      },
+      td: {
+        padding: '12px 15px'
+      },
+      pagination: {
+        flexDirection: 'column',
+        gap: '10px'
+      },
+      pageButton: {
+        padding: '8px 16px',
+        fontSize: '0.8rem'
+      }
+    }
   };
 
   return (
-    <div style={styles.page}>
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div style={styles.gradientOverlay}></div>
-
-      <div style={styles.contentWrapper}>
-        <Navbar />
-
-        <div style={styles.tableContainer}>
-          <h2 style={styles.title}>My Main Assignments</h2>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Request Reference</th>
-                <th style={styles.th}>Entered Date</th>
-                <th style={styles.th}>Assigned By Name</th>
-                <th style={styles.th}>Assigned To Name</th>
-                <th style={styles.th}>Remark</th>
-                <th style={styles.th}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.map((item, index) => (
-                <tr key={index} style={styles.tr}>
-                  <td style={styles.td}>
-                    <strong style={{ color: '#1a3a8c' }}>{item.requestReference}</strong>
-                  </td>
-                  <td style={styles.td}>{item.enteredDate}</td>
-                  <td style={styles.td}>{item.assignedBy}</td>
-                  <td style={styles.td}>{item.assignedTo}</td>
-                  <td style={styles.td}>{item.remark}</td>
-                  <td style={styles.td}>
-                    <div style={styles.actions}>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        🔄
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        ✅
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        👁️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div style={styles.pagination}>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
-              <FaChevronLeft /> Previous
-            </button>
-            <span style={styles.pageInfo}>Page 1 of 1</span>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
-              Next <FaChevronRight />
-            </button>
+    <div style={styles.pageContainer}>
+      <Navbar />
+      
+      {/* Content Section */}
+      <section style={styles.contentSection}>
+        <div style={styles.contentContainer}>
+          <div style={styles.formCard}>
+            <h2 style={styles.formTitle}>My Main Assignments</h2>
+            
+            <div style={styles.tableContainer}>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={styles.th}>Request Reference</th>
+                    <th style={styles.th}>Entered Date</th>
+                    <th style={styles.th}>Assigned By Name</th>
+                    <th style={styles.th}>Assigned To Name</th>
+                    <th style={styles.th}>Remark</th>
+                    <th style={styles.th}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assignments.map((item, index) => (
+                    <tr key={index} style={styles.tr}>
+                      <td style={styles.td}>
+                        <strong style={{ color: '#0E3A7C' }}>{item.requestReference}</strong>
+                      </td>
+                      <td style={styles.td}>{item.enteredDate}</td>
+                      <td style={styles.td}>{item.assignedBy}</td>
+                      <td style={styles.td}>{item.assignedTo}</td>
+                      <td style={styles.td}>
+                        {item.remark || (
+                          <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>
+                            No remarks
+                          </span>
+                        )}
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.actions}>
+                          <button 
+                            style={styles.actionButton}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = styles.actionButtonHover.boxShadow;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = styles.actionButton.boxShadow;
+                            }}
+                          >
+                            <FaEye />
+                          </button>
+                          <button 
+                            style={{...styles.actionButton, ...styles.orangeButton}}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = '0 4px 10px rgba(248, 153, 29, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = '0 2px 6px rgba(248, 153, 29, 0.2)';
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button 
+                            style={styles.actionButton}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = styles.actionButtonHover.boxShadow;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = styles.actionButton.boxShadow;
+                            }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style={styles.pagination}>
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                <FaChevronLeft /> Previous
+              </button>
+              
+              <div style={styles.pageInfo}>
+                Page {currentPage} of 1
+              </div>
+              
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                Next <FaChevronRight />
+              </button>
+            </div>
           </div>
         </div>
-
-        <Footer />
-      </div>
+      </section>
+      
+      <Footer />
     </div>
   );
 };

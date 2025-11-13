@@ -9,9 +9,9 @@ import ContactPersonSelect from "../../components/ContactPersonSelect";
 
 // Add font link for modern fonts
 const addFontLink = () => {
-  if (!document.getElementById('complaint-form-fonts')) {
+  if (!document.getElementById('complaint-form-modern-fonts')) {
     const link = document.createElement('link');
-    link.id = 'complaint-form-fonts';
+    link.id = 'complaint-form-modern-fonts';
     link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
@@ -20,7 +20,7 @@ const addFontLink = () => {
 
 addFontLink();
 
-export default function ComplaintOnboarding() {
+export default function ComplaintForm() {
   const navigate = useNavigate();
   
   // Add state for tab navigation
@@ -632,80 +632,96 @@ export default function ComplaintOnboarding() {
     <div className="content-wrapper" style={{
       position: 'relative',
       zIndex: 1,
-      padding: '2rem',
+      padding: '15px',
       marginTop: '1rem',
-      maxWidth: '1400px',
-      margin: '1rem auto 0 auto'
+      maxWidth: '1200px',
+      margin: '1rem auto 0 auto',
+      fontFamily: "'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif"
     }}>
-      {/* Page Header */}
-      <header className="page-header">
-        <h1>
+      {/* Modern Header without Hero Section */}
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '20px',
+        padding: '15px 0'
+      }}>
+        <h1 style={{
+          fontSize: '1.8rem',
+          fontWeight: 700,
+          color: '#0E3A7C',
+          margin: '0 0 8px 0',
+          fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif"
+        }}>
           Complaint Onboard
         </h1>
-        <p>
+        <p style={{
+          fontSize: '0.95rem',
+          color: '#64748b',
+          margin: 0,
+          fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+        }}>
           Submit and manage customer complaints efficiently
         </p>
-      </header>
-
-      {/* Tab Navigation */}
+      </div>
+      
+      {/* Modern Tab Navigation */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
-        marginBottom: '2rem',
-        backgroundColor: 'white',
-        padding: '0.5rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+        marginBottom: '20px',
+        backgroundColor: '#f8fafc',
+        padding: '5px',
+        borderRadius: '12px',
+        boxShadow: '0 1px 6px rgba(0, 0, 0, 0.03)',
         border: '1px solid #e2e8f0'
       }}>
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          width: '100%',
-          maxWidth: '600px'
-        }}>
-          {['Request Details', 'Contact Person', 'Assignment'].map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              style={{
-                flex: 1,
-                padding: '1rem',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: activeTab === index ? '#3b82f6' : '#f1f5f9',
-                color: activeTab === index ? 'white' : '#64748b',
-                fontWeight: activeTab === index ? '600' : '500',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-                fontSize: '0.95rem'
-              }}
-              onMouseOver={(e) => {
-                if (activeTab !== index) {
-                  e.target.style.backgroundColor = '#e2e8f0';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (activeTab !== index) {
-                  e.target.style.backgroundColor = '#f1f5f9';
-                }
-              }}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+        {['Request Details', 'Contact Person', 'Assignment'].map((tab, index) => (
+          <div
+            key={index}
+            onClick={() => setActiveTab(index)}
+            style={{
+              flex: 1,
+              padding: '12px 5px',
+              borderRadius: '8px',
+              backgroundColor: activeTab === index ? '#0E3A7C' : 'transparent',
+              color: activeTab === index ? 'white' : '#64748b',
+              fontWeight: activeTab === index ? '600' : '500',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+              fontSize: '0.9rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              border: activeTab === index ? 'none' : '1px solid transparent'
+            }}
+          >
+            <span style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '20px',
+              height: '20px',
+              borderRadius: '50%',
+              backgroundColor: activeTab === index ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+              fontWeight: '600',
+              fontSize: '0.75rem'
+            }}>
+              {index + 1}
+            </span>
+            <span>{tab}</span>
+          </div>
+        ))}
       </div>
-
+      
       {/* Success Message with Generated Reference - Only show after submission */}
       {submitted && generatedRef && (
         <div style={{
           background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
           color: 'white',
           padding: '1.5rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
+          borderRadius: '12px',
+          marginBottom: '20px',
           textAlign: 'center',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
           border: 'none',
@@ -730,19 +746,42 @@ export default function ComplaintOnboarding() {
           </p>
         </div>
       )}
-
-      <form className="config-content" onSubmit={onSubmit}>
+      
+      <form className="config-content" onSubmit={onSubmit} style={{
+        backgroundColor: 'white',
+        borderRadius: '12px',
+        padding: '20px',
+        boxShadow: '0 1px 8px rgba(0, 0, 0, 0.03)',
+        border: '1px solid rgba(0, 0, 0, 0.02)'
+      }}>
         
         {/* ======= TAB 0: Request Details ======= */}
         <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
           <section className="config-section">
             <div className="section-header">
-              <h2>
-                📋 Request Details
+              <h2 style={{
+                fontSize: '1.3rem',
+                fontWeight: 600,
+                color: '#0E3A7C',
+                margin: '0 0 20px 0',
+                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Request Details
               </h2>
             </div>
 
-            <div className="grid grid-2">
+            <div className="grid grid-2" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '15px',
+              marginBottom: '10px'
+            }}>
               <Field label="Request Reference">
                 <input
                   className="input"
@@ -864,29 +903,67 @@ export default function ComplaintOnboarding() {
                 />
               </Field>
             </div>
+            
+            {/* Navigation Buttons */}
+            <div className="actions" style={{ 
+              display: 'flex', 
+              justifyContent: 'flex-end',
+              marginTop: '20px',
+              paddingTop: '20px',
+              borderTop: '1px solid #e2e8f0'
+            }}>
+              <button 
+                type="button" 
+                onClick={nextTab}
+                style={{
+                  padding: '10px 24px',
+                  backgroundColor: '#0E3A7C',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                  boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = '#0b2f64';
+                  e.target.style.transform = 'translateY(-1px)';
+                  e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = '#0E3A7C';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
+                }}
+              >
+                Next →
+              </button>
+            </div>
           </section>
-
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'flex-end' }}>
-            <button 
-              type="button" 
-              className="btn primary"
-              onClick={nextTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              Next →
-            </button>
-          </div>
         </div>
-
+        
         {/* ======= TAB 1: Contact Person Details ======= */}
         <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
           <section className="config-section">
             <div className="section-header">
-              <h2>
-                👤 Contact Person Details
+              <h2 style={{
+                fontSize: '1.3rem',
+                fontWeight: 600,
+                color: '#0E3A7C',
+                margin: '0 0 20px 0',
+                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+                Contact Person Details
               </h2>
             </div>
 
@@ -1163,39 +1240,90 @@ export default function ComplaintOnboarding() {
                 </select>
               </Field>
             </div>
+            
+            {/* Navigation Buttons */}
+            <div className="actions" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              marginTop: '20px',
+              paddingTop: '20px',
+              borderTop: '1px solid #e2e8f0'
+            }}>
+              <button 
+                type="button" 
+                onClick={prevTab}
+                style={{
+                  padding: '10px 24px',
+                  backgroundColor: '#94a3b8',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = '#64748b';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = '#94a3b8';
+                }}
+              >
+                ← Previous
+              </button>
+              <button 
+                type="button" 
+                onClick={nextTab}
+                style={{
+                  padding: '10px 24px',
+                  backgroundColor: '#0E3A7C',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                  boxShadow: '0 2px 4px rgba(14, 58, 124, 0.2)'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = '#0b2f64';
+                  e.target.style.transform = 'translateY(-1px)';
+                  e.target.style.boxShadow = '0 4px 8px rgba(14, 58, 124, 0.3)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = '#0E3A7C';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 4px rgba(14, 58, 124, 0.2)';
+                }}
+              >
+                Next →
+              </button>
+            </div>
           </section>
-
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'space-between' }}>
-            <button 
-              type="button" 
-              className="btn ghost"
-              onClick={prevTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              ← Previous
-            </button>
-            <button 
-              type="button" 
-              className="btn primary"
-              onClick={nextTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              Next →
-            </button>
-          </div>
         </div>
-
+        
         {/* ======= TAB 2: Assignment ======= */}
         <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
           <section className="config-section">
             <div className="section-header">
-              <h2>
-                👥 Assignment
+              <h2 style={{
+                fontSize: '1.3rem',
+                fontWeight: 600,
+                color: '#0E3A7C',
+                margin: '0 0 20px 0',
+                fontFamily: "'Poppins', 'Inter', 'Roboto', sans-serif",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <svg style={{ width: '24px', height: '24px', color: '#0E3A7C' }} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Assignment
               </h2>
             </div>
 
@@ -1278,55 +1406,115 @@ export default function ComplaintOnboarding() {
                 />
               </Field>
             </div>
-          </section>
-
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'space-between' }}>
-            <button 
-              type="button" 
-              className="btn ghost"
-              onClick={prevTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              ← Previous
-            </button>
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            
+            {/* Navigation Buttons */}
+            <div className="actions" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              marginTop: '20px',
+              paddingTop: '20px',
+              borderTop: '1px solid #e2e8f0'
+            }}>
               <button 
                 type="button" 
-                className="btn ghost"
-                onClick={onReset}
+                onClick={prevTab}
                 style={{
-                  padding: '0.875rem 2rem'
+                  padding: '10px 24px',
+                  backgroundColor: '#94a3b8',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = '#64748b';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = '#94a3b8';
                 }}
               >
-                Reset Form
+                ← Previous
               </button>
-              <button 
-                type="submit" 
-                className="btn primary"
-                style={{
-                  padding: '0.875rem 2rem'
-                }}
-              >
-                Submit Complaint
-              </button>
-              {submitted && (
+              <div style={{ display: 'flex', gap: '12px' }}>
                 <button 
                   type="button" 
-                  className="btn"
-                  onClick={onViewComplaint}
+                  onClick={onReset}
                   style={{
-                    background: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
-                    padding: '0.875rem 2rem'
+                    padding: '10px 24px',
+                    backgroundColor: '#64748b',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#475569';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#64748b';
                   }}
                 >
-                  View Complaint
+                  Reset Form
                 </button>
-              )}
+                <button 
+                  type="submit" 
+                  style={{
+                    padding: '10px 24px',
+                    backgroundColor: '#F8991D',
+                    color: '#0E3A7C',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+                    boxShadow: '0 2px 4px rgba(248, 153, 29, 0.3)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#e68a0d';
+                    e.target.style.transform = 'translateY(-1px)';
+                    e.target.style.boxShadow = '0 4px 8px rgba(248, 153, 29, 0.4)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#F8991D';
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.boxShadow = '0 2px 4px rgba(248, 153, 29, 0.3)';
+                  }}
+                >
+                  Submit Complaint
+                </button>
+                {submitted && (
+                  <button 
+                    type="button" 
+                    onClick={onViewComplaint}
+                    style={{
+                      padding: '10px 24px',
+                      background: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+                    }}
+                  >
+                    View Complaint
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </form>
     </div>

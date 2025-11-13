@@ -264,9 +264,6 @@ const HomeModern = () => {
       <section style={styles.modulesSection}>
         <div style={styles.modulesContent}>
           <h2 style={styles.sectionTitle}>Available Modules</h2>
-          <p style={styles.modulesSubtitle}>
-            Explore our comprehensive suite of tools designed to streamline your incident management workflow
-          </p>
           <div style={styles.modulesGrid}>
             {modules.map((module, index) => (
               <div 
@@ -503,9 +500,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundImage: 'linear-gradient(rgba(14, 58, 124, 0.8), rgba(14, 58, 124, 0.6)), url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80")',
+    backgroundImage: 'linear-gradient(rgba(14, 58, 124, 0.7), rgba(14, 58, 124, 0.7)), url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',
     textAlign: 'center',
     color: 'white'
   },
@@ -515,7 +513,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.9) 0%, rgba(14, 58, 124, 0.85) 100%)',
+    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.75) 0%, rgba(14, 58, 124, 0.75) 100%)',
     zIndex: 1
   },
   heroContent: {
@@ -529,9 +527,9 @@ const styles = {
     fontWeight: 800,
     marginBottom: '20px',
     lineHeight: 1.2,
-    textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)',
+    textShadow: '4px 4px 8px rgba(0, 0, 0, 0.9)',
     fontFamily: "'Poppins', 'Inter', 'Segoe UI', 'Roboto', sans-serif",
-    WebkitTextStroke: '1px rgba(255, 255, 255, 0.5)'
+    WebkitTextStroke: '1.5px rgba(255, 255, 255, 0.8)'
   },
   heroSubtitle: {
     fontSize: '1.25rem',
@@ -540,8 +538,8 @@ const styles = {
     maxWidth: '700px',
     margin: '0 auto 30px',
     fontFamily: "'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif",
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-    WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.3)'
+    textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)',
+    WebkitTextStroke: '0.8px rgba(255, 255, 255, 0.5)'
   },
   heroButton: {
     backgroundColor: '#F8991D',
@@ -870,9 +868,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80")',
+    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',
     textAlign: 'center',
     color: 'white'
   },
@@ -882,7 +881,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.85) 0%, rgba(14, 58, 124, 0.7) 100%)',
+    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.75) 0%, rgba(14, 58, 124, 0.75) 100%)',
     zIndex: 1
   },
   ctaContent: {

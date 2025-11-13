@@ -38,10 +38,10 @@ const UserManagement = () => {
         // Map API fields to the table shape. Adjust field names if your API differs.
         const mapped = raw.map(u => ({
           id: u.userId || u.id || u._id || u.empNo || '',
-          name: u.name || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.username || '',
-          designation: u.designation || u.role || u.position || '',
-          contact: u.contactNumber || u.mobile || u.phone || '',
-          status: u.status || (u.isActive ? 'Active' : 'Inactive') || 'Unknown',
+          name: u.userName,
+          designation: u.Designation,
+          contact: u.ContactNumber,
+          status: u.ActiveStatus ? 'Active' : 'Inactive',
           email: u.email || u.userEmail || '',
           department: u.department || u.unit || '',
           joiningDate: u.joiningDate || u.createdAt || '',

@@ -4,6 +4,8 @@ import "./ComplaintForm.css";
 
 export default function ComplaintOnboarding() {
   const navigate = useNavigate();
+
+
   
   // ------- Dummy data (replace with real API data) --------
   // const organizations = ["SLT", "Mobitel", "ABC Pvt Ltd", "Other"]; // Removed hardcoded data

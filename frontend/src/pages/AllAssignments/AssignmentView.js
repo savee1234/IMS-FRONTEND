@@ -68,19 +68,21 @@ export default function AssignmentView({ assignment, onClose }) {
 
         <div className="av-section">
           <h3>Sub Assignments</h3>
-          <div className="av-table">
-            <div className="av-tr av-th">
-              <div>Emp No</div>
-              <div>Name</div>
-              <div>Designation</div>
-              <div></div>
-            </div>
+          <div className="av-sub-list">
+            {subAssign.length === 0 && (
+              <div className="av-empty">No sub assignments</div>
+            )}
+
             {subAssign.map((r, idx) => (
-              <div key={idx} className="av-tr">
-                <div>{r.empNo ?? '—'}</div>
-                <div>{r.name ?? r.contactName ?? '—'}</div>
-                <div>{r.designation ?? '—'}</div>
-                <div>{r.remarks ?? ' '}</div>
+              <div key={idx} className="av-sub-card">
+                <div className="av-sub-left">
+                  <div className="av-badge">{r.empNo ?? '—'}</div>
+                </div>
+                <div className="av-sub-main">
+                  <div className="av-sub-name">{r.name ?? r.contactName ?? '—'}</div>
+                  <div className="av-sub-designation">{r.designation ?? '—'}</div>
+                </div>
+                <div className="av-sub-remarks">{r.remarks ?? ''}</div>
               </div>
             ))}
           </div>

@@ -10,17 +10,20 @@
 
 .search-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Inter', 'Roboto', 'Helvetica Neue', sans-serif;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  transform: translateY(-1px);
 }
 
 .dropdown-list {
@@ -31,16 +34,19 @@
   max-height: 300px;
   overflow-y: auto;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  margin-top: 0.25rem;
 }
 
 .dropdown-item {
-  padding: 0.75rem;
+  padding: 0.875rem 1rem;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+  font-family: 'Inter', 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
 .dropdown-item:last-child {
@@ -48,26 +54,37 @@
 }
 
 .dropdown-item:hover {
-  background-color: #f5f8ff;
+  background-color: #f0f9ff;
+  transform: translateX(3px);
 }
 
 .dropdown-item.loading,
 .dropdown-item.no-results {
-  color: #666;
+  color: #64748b;
   font-style: italic;
   cursor: default;
+  font-weight: 500;
+}
+
+.dropdown-item.loading:hover,
+.dropdown-item.no-results:hover {
+  background-color: transparent;
+  transform: none;
 }
 
 .contact-name {
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 0.25rem;
+  color: #0f172a;
+  font-size: 1rem;
 }
 
 .contact-details {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.9rem;
+  color: #64748b;
   display: flex;
   gap: 1rem;
+  font-weight: 500;
 }
 
 .contact-details span {
@@ -82,7 +99,12 @@
 }
 
 .selected-contact {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: #4a90e2;
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  color: #3b82f6;
+  font-weight: 600;
+  padding: 0.75rem;
+  background: #f0f9ff;
+  border-radius: 6px;
+  border: 1px solid #93c5fd;
 }

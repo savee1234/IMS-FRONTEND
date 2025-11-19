@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import backgroundVideo from '../assets/Background.mp4';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const HomeModern = () => {
 
   // State for hero button hover
   const [heroButtonHover, setHeroButtonHover] = useState(false);
+  const [moduleHoverIndex, setModuleHoverIndex] = useState(null);
   
   // State for CTA button hover
   const [ctaButtonHover, setCtaButtonHover] = useState(false);
@@ -196,57 +198,19 @@ const HomeModern = () => {
     <div style={styles.pageContainer}>
       <Navbar />
       
-      {/* Top Contact Strip */}
-      <div style={styles.topStrip}>
-        <div style={styles.stripContent}>
-          <div style={styles.contactInfo}>
-            <span style={styles.contactItem}>
-              <svg style={styles.contactIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              support@slt.lk
-            </span>
-            <span style={styles.contactItem}>
-              <svg style={styles.contactIcon} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 4H9L11 9L8.5 10.5C9.57096 12.6715 11.3285 14.429 13.5 15.5L15 13L20 15V19C20 19.5304 19.7893 20.0391 19.4142 20.4142C19.0391 20.7893 18.5304 21 18 21C14.0993 20.763 10.4202 19.1065 7.65683 16.3432C4.8935 13.5798 3.23705 9.90074 3 6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              +94 11 234 5678
-            </span>
-          </div>
-          <div style={styles.socialIcons}>
-            <a href="https://www.facebook.com/slt" style={styles.socialIcon}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-            <a href="https://www.twitter.com/slt" style={styles.socialIcon}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M23 3.00005C22.0424 3.67552 20.9821 4.19216 19.86 4.53005C19.2577 3.83756 18.4573 3.34674 17.567 3.12397C16.6767 2.90121 15.7395 2.95724 14.8821 3.2845C14.0247 3.61176 13.2884 4.19445 12.773 4.95376C12.2575 5.71308 11.9877 6.61238 12 7.53005V8.53005C10.2426 8.57561 8.50127 8.18586 6.93101 7.39549C5.36074 6.60513 4.01032 5.43868 3 4.00005C3 4.00005 -1 13 8 17C5.94053 18.398 3.48716 19.099 1 19C10 24 21 19 21 7.50005C20.9991 7.2215 20.9723 6.94364 20.92 6.67005C21.9406 5.66354 22.6608 4.39276 23 3.00005Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-            <a href="https://www.linkedin.com/company/slt" style={styles.socialIcon}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8V8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M6 9H2V21H6V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2.89543 4 2C2.89543 2 2 2.89543 2 4C2 5.10457 2.89543 6 4 6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
 
       {/* Hero Section */}
       <section style={styles.heroSection}>
+        <video autoPlay loop muted playsInline style={styles.videoBackground}>
+          <source src={backgroundVideo} type="video/mp4" />
+        </video>
         <div style={styles.heroOverlay}></div>
         <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>SLT Incident Management System</h1>
+          <h1 style={styles.heroTitle}>Incident Management System</h1>
           <p style={styles.heroSubtitle}>
-            Streamline your incident reporting and management processes with our comprehensive platform. 
-            Efficiently handle complaints, manage workflows, and track resolutions in real-time with our 
-            state-of-the-art incident management solution.
+            Streamline your incident reporting and management processes with our comprehensive platform. Efficiently handle complaints, manage workflows, and track resolutions in real-time.
           </p>
-          <button 
+          <button
             style={{
               ...styles.heroButton,
               ...(heroButtonHover ? styles.heroButtonHover : {})
@@ -255,7 +219,7 @@ const HomeModern = () => {
             onMouseEnter={() => setHeroButtonHover(true)}
             onMouseLeave={() => setHeroButtonHover(false)}
           >
-            Report an Incident
+            Get Started
           </button>
         </div>
       </section>
@@ -272,9 +236,20 @@ const HomeModern = () => {
               <div 
                 key={index}
                 onClick={() => navigate(module.path)}
-                style={styles.moduleCard}
+                onMouseEnter={() => setModuleHoverIndex(index)}
+                onMouseLeave={() => setModuleHoverIndex(null)}
+                style={{
+                  ...styles.moduleCard,
+                  background: `linear-gradient(180deg, ${module.color}18, #ffffff 70%)`,
+                  border: `1px solid ${module.color}66`,
+                  outline: 'none',
+                  boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+                  ...(moduleHoverIndex === index
+                    ? { transform: 'translateY(-6px)', boxShadow: `0 24px 48px ${module.color}40`, borderColor: `${module.color}` }
+                    : {})
+                }}
               >
-                <div style={{ ...styles.moduleIconContainer, background: `linear-gradient(135deg, ${module.color}20, ${module.color}10)` }}>
+                <div style={{ ...styles.moduleIconContainer, background: `linear-gradient(135deg, ${module.color}1F, ${module.color}0D)` }}>
                   {getModuleIcon(module.name, module.color)}
                 </div>
                 <h3 style={{ ...styles.moduleName, color: module.color }}>
@@ -339,7 +314,7 @@ const HomeModern = () => {
       <section style={styles.valuesSection}>
         <div style={styles.valuesContent}>
           <div style={styles.valuesHeader}>
-            <h2 style={styles.sectionTitleLight}>Our Core Principles</h2>
+            <h2 style={styles.sectionTitle}>Our Core Principles</h2>
             <p style={styles.valuesSubtitle}>
               Fundamental values that guide our approach to incident management and customer satisfaction
             </p>
@@ -385,37 +360,7 @@ const HomeModern = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section style={styles.teamSection}>
-        <div style={styles.teamContent}>
-          <h2 style={styles.sectionTitle}>Our Support Team</h2>
-          <p style={styles.teamSubtitle}>
-            Meet the experts who ensure smooth operation of our incident management system
-          </p>
-          <div style={styles.teamGrid}>
-            <div style={styles.teamMember}>
-              <div style={styles.memberImage}>JD</div>
-              <h3 style={styles.memberName}>John Doe</h3>
-              <p style={styles.memberRole}>System Administrator</p>
-            </div>
-            <div style={styles.teamMember}>
-              <div style={styles.memberImage}>AS</div>
-              <h3 style={styles.memberName}>Alice Smith</h3>
-              <p style={styles.memberRole}>Support Lead</p>
-            </div>
-            <div style={styles.teamMember}>
-              <div style={styles.memberImage}>MJ</div>
-              <h3 style={styles.memberName}>Mike Johnson</h3>
-              <p style={styles.memberRole}>Technical Specialist</p>
-            </div>
-            <div style={styles.teamMember}>
-              <div style={styles.memberImage}>ER</div>
-              <h3 style={styles.memberName}>Emma Roberts</h3>
-              <p style={styles.memberRole}>Quality Assurance</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Call to Action Section */}
       <section style={styles.ctaSection}>
@@ -499,15 +444,24 @@ const styles = {
   // Hero Section
   heroSection: {
     position: 'relative',
-    height: '80vh',
+    height: 'calc(100vh + 40px)',
+    marginTop: '-68px',
+    paddingTop: '68px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundImage: 'linear-gradient(rgba(14, 58, 124, 0.8), rgba(14, 58, 124, 0.6)), url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
     textAlign: 'center',
-    color: 'white'
+    color: 'white',
+    overflow: 'hidden'
+  },
+  videoBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    zIndex: 0
   },
   heroOverlay: {
     position: 'absolute',
@@ -515,7 +469,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.9) 0%, rgba(14, 58, 124, 0.85) 100%)',
+    background: 'linear-gradient(135deg, rgba(12, 18, 26, 0.55) 0%, rgba(59, 130, 246, 0.25) 60%, rgba(12, 18, 26, 0.75) 100%)',
     zIndex: 1
   },
   heroContent: {
@@ -525,49 +479,48 @@ const styles = {
     padding: '0 20px'
   },
   heroTitle: {
-    fontSize: '3.5rem',
+    fontSize: '2.8rem',
     fontWeight: 800,
-    marginBottom: '20px',
-    lineHeight: 1.2,
-    textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)',
-    fontFamily: "'Poppins', 'Inter', 'Segoe UI', 'Roboto', sans-serif",
-    WebkitTextStroke: '1px rgba(255, 255, 255, 0.5)'
+    marginBottom: '12px',
+    lineHeight: 1.1,
+    letterSpacing: '-0.02em',
+    textShadow: '0 8px 32px rgba(0,0,0,0.45)',
+    fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif",
+    color: '#ffffff',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   heroSubtitle: {
-    fontSize: '1.25rem',
-    marginBottom: '30px',
-    lineHeight: 1.6,
-    maxWidth: '700px',
-    margin: '0 auto 30px',
-    fontFamily: "'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif",
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-    WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.3)'
+    fontSize: '1.1rem',
+    margin: '0 auto 24px',
+    lineHeight: 1.7,
+    maxWidth: '720px',
+    color: '#e5e7eb',
+    fontFamily: "'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif"
   },
   heroButton: {
-    backgroundColor: '#F8991D',
-    color: '#0E3A7C',
+    backgroundColor: '#3b82f6',
+    color: '#ffffff',
     border: 'none',
-    padding: '15px 40px',
+    padding: '14px 36px',
     fontSize: '1.1rem',
     fontWeight: 600,
-    borderRadius: '50px',
+    borderRadius: '999px',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif",
-    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)'
+    boxShadow: '0 10px 24px rgba(59, 130, 246, 0.35)',
+    fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif"
   },
   heroButtonHover: {
-    transform: 'translateY(-3px)',
-    boxShadow: '0 6px 20px rgba(0,0,0,0.3)'
+    transform: 'translateY(-2px)',
+    boxShadow: '0 16px 32px rgba(59, 130, 246, 0.45)'
   },
 
   // Modules Section
   modulesSection: {
     padding: '80px 20px',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#ffffff'
   },
   modulesContent: {
     maxWidth: '1200px',
@@ -587,45 +540,48 @@ const styles = {
     gap: '30px'
   },
   moduleCard: {
-    background: 'white',
-    borderRadius: '16px',
+    background: '#ffffff',
+    borderRadius: '18px',
     padding: '30px 25px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+    boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
     cursor: 'pointer',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    border: '1px solid rgba(0, 0, 0, 0.05)',
+    border: 'none',
+    outline: 'none',
     position: 'relative',
     overflow: 'hidden',
     transform: 'translateY(0)',
     fontFamily: "'Inter', 'Poppins', 'Roboto', 'Helvetica Neue', sans-serif"
   },
   moduleCardHover: {
-    transform: 'translateY(-8px)',
-    boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)'
+    transform: 'translateY(-6px)',
+    boxShadow: '0 24px 48px rgba(59,130,246,0.25)'
   },
   moduleIconContainer: {
-    width: '70px',
-    height: '70px',
-    borderRadius: '16px',
+    width: '72px',
+    height: '72px',
+    borderRadius: '18px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '20px',
-    transition: 'all 0.3s ease'
+    marginBottom: '18px',
+    transition: 'all 0.3s ease',
+    boxShadow: 'inset 0 0 0 1px rgba(148,163,184,0.25), 0 8px 24px rgba(59,130,246,0.15)'
   },
   moduleName: {
-    fontSize: '1.3rem',
+    fontSize: '1.25rem',
     fontWeight: 700,
     textAlign: 'center',
-    margin: '0 0 15px 0',
+    margin: '0 0 12px 0',
     transition: 'color 0.3s ease',
+    color: '#0f172a',
     fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
   moduleDescription: {
-    fontSize: '1rem',
+    fontSize: '0.95rem',
     color: '#64748b',
     textAlign: 'center',
     lineHeight: 1.6,
@@ -636,7 +592,10 @@ const styles = {
   // About Section
   aboutSection: {
     padding: '80px 20px',
-    backgroundColor: '#fff'
+    backgroundImage: 'linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url("https://images.unsplash.com/photo-1581091012184-23aca9f10741?auto=format&fit=crop&w=1600&q=80")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
   },
   aboutContent: {
     maxWidth: '1200px',
@@ -666,16 +625,16 @@ const styles = {
     padding: '20px 0'
   },
   sectionTitle: {
-    fontSize: '2.5rem',
+    fontSize: '2.2rem',
     fontWeight: 800,
-    color: '#0E3A7C',
+    color: '#1e3a8a',
     marginBottom: '20px',
     position: 'relative',
     display: 'inline-block',
     fontFamily: "'Poppins', 'Inter', 'Segoe UI', 'Roboto', sans-serif"
   },
   sectionTitleLight: {
-    fontSize: '2.5rem',
+    fontSize: '2.2rem',
     fontWeight: 800,
     color: 'white',
     marginBottom: '20px',
@@ -684,9 +643,9 @@ const styles = {
     fontFamily: "'Poppins', 'Inter', 'Segoe UI', 'Roboto', sans-serif"
   },
   aboutDescription: {
-    fontSize: '1.1rem',
+    fontSize: '1rem',
     lineHeight: 1.7,
-    color: '#555',
+    color: '#334155',
     marginBottom: '30px',
     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
@@ -725,8 +684,8 @@ const styles = {
   // Values Section
   valuesSection: {
     padding: '80px 20px',
-    backgroundColor: '#0E3A7C',
-    color: 'white',
+    background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
+    color: '#0f172a',
     position: 'relative',
     overflow: 'hidden'
   },
@@ -741,11 +700,11 @@ const styles = {
     marginBottom: '60px'
   },
   valuesSubtitle: {
-    fontSize: '1.2rem',
+    fontSize: '1.1rem',
     maxWidth: '700px',
     margin: '0 auto',
-    color: '#e2e8f0',
-    lineHeight: 1.6,
+    color: '#334155',
+    lineHeight: 1.7,
     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
   valuesGrid: {
@@ -755,14 +714,13 @@ const styles = {
     marginBottom: '60px'
   },
   valueCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
+    backgroundColor: '#ffffff',
     borderRadius: '16px',
     padding: '40px 30px',
     textAlign: 'center',
     transition: 'all 0.3s ease',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+    border: '1px solid rgba(148, 163, 184, 0.25)',
+    boxShadow: '0 8px 24px rgba(2,6,23,0.12)'
   },
   valueIcon: {
     width: '60px',
@@ -774,13 +732,13 @@ const styles = {
     fontSize: '1.5rem',
     fontWeight: 700,
     marginBottom: '15px',
-    color: 'white',
+    color: '#0f172a',
     fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
   valueDescription: {
     fontSize: '1rem',
     lineHeight: 1.6,
-    color: '#e2e8f0',
+    color: '#64748b',
     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
   countersContainer: {
@@ -796,11 +754,11 @@ const styles = {
     fontSize: '3rem',
     fontWeight: 800,
     margin: '0 0 10px 0',
-    color: '#F8991D'
+    color: '#2563eb'
   },
   counterLabel: {
     fontSize: '1.1rem',
-    color: '#e2e8f0',
+    color: '#64748b',
     margin: 0,
     fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
   },
@@ -882,7 +840,7 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.85) 0%, rgba(14, 58, 124, 0.7) 100%)',
+    background: 'linear-gradient(135deg, rgba(14, 58, 124, 0.5) 0%, rgba(14, 58, 124, 0.4) 100%)',
     zIndex: 1
   },
   ctaContent: {

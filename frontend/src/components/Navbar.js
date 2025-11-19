@@ -65,13 +65,13 @@ const Navbar = () => {
               }
               onMouseOver={(e) => {
                 if (location.pathname !== '/') {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                  e.target.style.color = '#93c5fd';
                   e.target.style.transform = 'translateY(-2px)';
                 }
               }}
               onMouseOut={(e) => {
                 if (location.pathname !== '/') {
-                  e.target.style.backgroundColor = '';
+                  e.target.style.color = styles.link.color;
                   e.target.style.transform = 'translateY(0)';
                 }
               }}
@@ -112,181 +112,181 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Complaint Onboard
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Complaint Onboard
+                </Link>
                   <Link 
                     to="/workflow" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Workflow
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Workflow
+                </Link>
                   <Link 
                     to="/roster" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Roster Management
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Roster Management
+                </Link>
                   <Link 
                     to="/users" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    User Management
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  User Management
+                </Link>
                   <Link 
                     to="/attendance" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Attendance
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Attendance
+                </Link>
                   <Link 
                     to="/configuration" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Configuration
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Configuration
+                </Link>
                   <Link 
                     to="/dashboard" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Dashboard
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Dashboard
+                </Link>
                   <Link 
                     to="/reporting" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Reporting
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Reporting
+                </Link>
                   <Link 
                     to="/my-tasks" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    View Tasks
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  View Tasks
+                </Link>
                   <Link 
                     to="/main-assignment" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Main Assignment
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Main Assignment
+                </Link>
                   <Link 
                     to="/sub-assignment" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    Sub Assignment
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  Sub Assignment
+                </Link>
                   <Link 
                     to="/all-assignments" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
-                      e.target.style.color = '#000000';
-                    }}
-                    onMouseOut={(e) => {
+                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
+                  e.target.style.color = '#ffffff';
+                  }}
+                  onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#1e293b';
-                    }}
-                  >
-                    All Assignments
-                  </Link>
+                      e.target.style.color = '#e5e7eb';
+                  }}
+                >
+                  All Assignments
+                </Link>
                 </div>
               )}
             </div>
@@ -370,17 +370,17 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    color: '#000000',
+    backgroundColor: '#0b1220',
+    color: '#e5e7eb',
     padding: '12px 30px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 10px 24px rgba(2,6,23,0.45)',
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
     width: '100%',
     zIndex: 1000,
-    borderBottom: '1px solid #e2e8f0',
+    borderBottom: '1px solid rgba(255,255,255,0.06)',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   leftSection: {
@@ -398,15 +398,10 @@ const styles = {
     fontSize: '18px',
     fontWeight: 600,
     letterSpacing: '0.3px',
-    color: '#3b82f6',
+    color: '#ffffff',
     margin: 0,
     fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Segoe UI', sans-serif",
-    textShadow: '0 1px 1px rgba(59, 130, 246, 0.1)',
-    whiteSpace: 'nowrap',
-    background: 'linear-gradient(90deg, #3b82f6, #2563eb)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
+    whiteSpace: 'nowrap'
   },
   rightSection: {
     display: 'flex',
@@ -420,7 +415,7 @@ const styles = {
     
   },
   link: {
-    color: '#1e293b',
+    color: '#cbd5e1',
     textDecoration: 'none',
     fontSize: '15px',
     fontWeight: 500,
@@ -431,9 +426,9 @@ const styles = {
   },
   activeLink: {
     fontWeight: 600,
-    color: '#000000',
-    backgroundColor: 'rgba(59, 130, 246, 0.15)',
-    border: '1px solid rgba(59, 130, 246, 0.3)'
+    color: '#ffffff',
+    backgroundColor: 'transparent',
+    border: 'none'
   },
   actions: {
     display: 'flex',
@@ -447,8 +442,8 @@ const styles = {
   },
   dropdownButton: {
     background: 'transparent',
-    border: '1px solid rgba(0, 0, 0, 0.1)',
-    color: '#1e293b',
+    border: '1px solid rgba(255,255,255,0.12)',
+    color: '#cbd5e1',
     cursor: 'pointer',
     fontSize: '15px',
     fontWeight: 500,
@@ -463,19 +458,19 @@ const styles = {
     position: 'absolute',
     top: '100%',
     left: 0,
-    backgroundColor: '#ffffff',
-    color: '#000000',
+    backgroundColor: '#0f172a',
+    color: '#e5e7eb',
     minWidth: '220px',
-    boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+    boxShadow: '0 16px 32px rgba(2,6,23,0.45)',
     borderRadius: '8px',
     padding: '8px 0',
     zIndex: 1001,
-    border: '1px solid rgba(59, 130, 246, 0.2)'
+    border: '1px solid rgba(255,255,255,0.08)'
   },
   dropdownItem: {
     display: 'block',
     padding: '12px 16px',
-    color: '#1e293b',
+    color: '#e5e7eb',
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: 500,
@@ -494,7 +489,7 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'rgba(59,130,246,0.25)',
     marginRight: '20px',
   },
   userIcon: {
@@ -512,7 +507,7 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.3s ease-in-out',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif",
-    boxShadow: '0 2px 6px rgba(59, 130, 246, 0.3)'
+    boxShadow: '0 6px 12px rgba(59, 130, 246, 0.35)'
   },
   logoutBtnHover: {
     backgroundColor: '#2563eb',

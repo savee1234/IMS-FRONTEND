@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const MainAssignment = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
   const assignments = [
@@ -15,273 +16,313 @@ const MainAssignment = () => {
       assignedTo: 'Romaine Murcott',
       remark: '',
     },
+    {
+      requestReference: '25-10-23-0002',
+      enteredDate: '10/24/2025 09:15:32 AM',
+      assignedBy: 'John Smith',
+      assignedTo: 'Sarah Johnson',
+      remark: 'Urgent follow-up required',
+    },
+    {
+      requestReference: '25-10-23-0003',
+      enteredDate: '10/24/2025 02:45:17 PM',
+      assignedBy: 'Emily Davis',
+      assignedTo: 'Michael Brown',
+      remark: 'Awaiting customer response',
+    },
   ];
 
   const styles = {
-    page: {
-      position: 'relative',
+    pageContainer: {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      overflowX: 'hidden',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      fontFamily: "'Inter', 'Poppins', 'Roboto', sans-serif",
+      background: 'linear-gradient(135deg, #f0f4ff 0%, #e0eafc 100%)',
     },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(26, 58, 140, 0.1) 0%, rgba(74, 107, 202, 0.08) 100%)',
-      backdropFilter: 'blur(8px)',
-      zIndex: -1,
-    },
-    contentWrapper: {
-      position: 'relative',
-      zIndex: 1,
+    contentSection: {
+      padding: '60px 20px',
       flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '2rem 1rem',
+      background: 'url("data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M0 50c0-27.614 22.386-50 50-50s50 22.386 50 50-22.386 50-50 50S0 77.614 0 50z"/%3E%3C/g%3E%3C/svg%3E")',
     },
-    tableContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      borderRadius: '20px',
-      padding: '2rem',
-      boxShadow: '0 20px 40px rgba(26, 58, 140, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08)',
-      width: '95%',
-      maxWidth: '1200px',
+    contentContainer: {
+      maxWidth: '1280px',
+      margin: '0 auto',
+    },
+    formCard: {
+      background: 'rgba(255, 255, 255, 0.92)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      borderRadius: '24px',
+      padding: '48px',
+      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5)',
+      border: '1px solid rgba(255, 255, 255, 0.6)',
+    },
+    formHeader: {
       textAlign: 'center',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
+      marginBottom: '30px',
+      padding: '20px',
+      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+      borderRadius: '12px',
+      color: 'white',
+      boxShadow: '0 4px 8px rgba(59, 130, 246, 0.2)',
+      position: 'relative',
+      overflow: 'hidden'
     },
-    title: {
-      fontSize: '2.2rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
+    formTitle: {
+      fontSize: '2.5rem',
+      fontWeight: 800,
+      margin: '0',
+      background: 'linear-gradient(90deg, #1e40af, #3b82f6, #000000)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
-      marginBottom: '1.5rem',
-      letterSpacing: '-0.5px',
+      backgroundClip: 'text',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+    formSubtitle: {
+      fontSize: '1.25rem',
+      color: '#e2e8f0',
+      margin: '10px 0 0 0',
+      fontWeight: 400,
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+    topicBadge: {
+      display: 'inline-block',
+      padding: '8px 20px',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: '24px',
+      fontSize: '1.2rem',
+      fontWeight: '700',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.3)',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+    tableContainer: {
+      overflowX: 'auto',
+      borderRadius: '18px',
+      background: 'rgba(255, 255, 255, 0.95)',
+      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.06)',
+      border: '1px solid #e2e8f0',
     },
     table: {
       width: '100%',
       borderCollapse: 'separate',
       borderSpacing: '0',
-      borderRadius: '12px',
-      overflow: 'hidden',
+      fontSize: '0.95rem',
+    },
+    thead: {
+      background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 100%)',
+      color: 'white',
+      textTransform: 'none',
+      fontWeight: 600,
     },
     th: {
-      backgroundColor: '#1a3a8c',
-      color: 'white',
-      padding: '1rem 1.2rem',
-      fontWeight: '600',
-      fontSize: '0.9rem',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      border: 'none',
+      padding: '20px 28px',
+      fontSize: '1rem',
+      fontWeight: 600,
+      letterSpacing: '0.4px',
+      textAlign: 'left',
+      whiteSpace: 'nowrap',
     },
     td: {
-      padding: '1.2rem',
-      borderBottom: '1px solid rgba(26, 58, 140, 0.1)',
+      padding: '18px 28px',
+      borderBottom: '1px solid #e2e8f0',
+      color: '#1e293b',
       fontSize: '0.95rem',
-      color: '#333',
-      backgroundColor: 'white',
-      transition: 'all 0.2s ease',
+      transition: 'background 0.25s ease',
     },
-    tr: {
-      '&:hover td': {
-        backgroundColor: '#f8faff',
-        transform: 'translateY(-2px)',
-      },
+    trHover: {
+      background: 'linear-gradient(to right, #f8fafc, #f1f5f9)',
+    },
+    referenceCell: {
+      fontWeight: 700,
+      color: '#2563eb',
+      fontSize: '1rem',
+    },
+    remarkCell: {
+      fontStyle: 'italic',
+      color: '#475569',
+      maxWidth: '240px',
+      wordBreak: 'break-word',
+      lineHeight: '1.5',
+    },
+    noRemark: {
+      color: '#94a3b8',
+      fontStyle: 'italic',
     },
     actions: {
       display: 'flex',
       justifyContent: 'center',
-      gap: '0.8rem',
+      gap: '10px',
     },
-    button: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      border: 'none',
-      cursor: 'pointer',
-      color: 'white',
-      fontSize: '1.2rem',
-      width: '40px',
-      height: '40px',
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.2)',
-    },
-    pagination: {
-      marginTop: '2rem',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '1rem',
-    },
-    pageButton: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      color: '#fff',
+    actionButton: {
       border: 'none',
       borderRadius: '12px',
-      padding: '0.8rem 1.5rem',
-      cursor: 'pointer',
-      fontWeight: '600',
-      fontSize: '0.9rem',
+      padding: '10px',
+      width: '44px',
+      height: '44px',
       display: 'flex',
       alignItems: 'center',
-      gap: '0.5rem',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      color: 'white',
+      fontSize: '1rem',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    },
+    viewButton: {
+      background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+    },
+    editButton: {
+      background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+    },
+    deleteButton: {
+      background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+    },
+    pagination: {
+      marginTop: '48px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '24px',
+    },
+    pageButton: {
+      background: 'linear-gradient(135deg, #2563eb, #1e40af)',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '14px',
+      padding: '14px 28px',
+      cursor: 'pointer',
+      fontWeight: 600,
+      fontSize: '1rem',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
       transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.3)',
+      boxShadow: '0 8px 20px rgba(37, 99, 235, 0.3)',
+      fontFamily: 'inherit',
+    },
+    pageButtonHover: {
+      transform: 'translateY(-4px)',
+      boxShadow: '0 12px 28px rgba(37, 99, 235, 0.4)',
     },
     pageInfo: {
-      color: '#1a3a8c',
-      fontWeight: '600',
-      fontSize: '0.9rem',
-      padding: '0.8rem 1.5rem',
-      backgroundColor: 'rgba(26, 58, 140, 0.1)',
-      borderRadius: '10px',
+      color: '#1e293b',
+      fontWeight: 700,
+      fontSize: '1.05rem',
+      padding: '14px 32px',
+      backgroundColor: '#eff6ff',
+      borderRadius: '14px',
+      border: '1px solid #bfdbfe',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
     },
   };
 
   return (
-    <div style={styles.page}>
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
+    <div style={styles.pageContainer}>
+      <Navbar />
 
-      <div style={styles.gradientOverlay}></div>
+      <section style={styles.contentSection}>
+        <div style={styles.contentContainer}>
+          <div style={styles.formCard}>
+            {/* Modern Header */}
+            <div style={styles.formHeader}>
+              <div style={styles.topicBadge}>Main Assignments</div>
+            </div>
 
-      <div style={styles.contentWrapper}>
-        <Navbar />
+            <div style={styles.tableContainer}>
+              <table style={styles.table}>
+                <thead style={styles.thead}>
+                  <tr>
+                    <th style={styles.th}>Request Reference</th>
+                    <th style={styles.th}>Entered Date</th>
+                    <th style={styles.th}>Assigned By</th>
+                    <th style={styles.th}>Assigned To</th>
+                    <th style={styles.th}>Remark</th>
+                    <th style={styles.th}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assignments.map((item, index) => (
+                    <tr
+                      key={index}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = styles.trHover.background)}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <td style={{ ...styles.td, ...styles.referenceCell }}>{item.requestReference}</td>
+                      <td style={styles.td}>{item.enteredDate}</td>
+                      <td style={styles.td}>{item.assignedBy}</td>
+                      <td style={styles.td}>{item.assignedTo}</td>
+                      <td style={{ ...styles.td, ...styles.remarkCell }}>
+                        {item.remark ? item.remark : <span style={styles.noRemark}>No remarks</span>}
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.actions}>
+                          <button
+                            style={{ ...styles.actionButton, ...styles.viewButton }}
+                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
+                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            style={{ ...styles.actionButton, ...styles.editButton }}
+                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
+                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            style={{ ...styles.actionButton, ...styles.deleteButton }}
+                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
+                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-        <div style={styles.tableContainer}>
-          <h2 style={styles.title}>My Main Assignments</h2>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Request Reference</th>
-                <th style={styles.th}>Entered Date</th>
-                <th style={styles.th}>Assigned By Name</th>
-                <th style={styles.th}>Assigned To Name</th>
-                <th style={styles.th}>Remark</th>
-                <th style={styles.th}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.map((item, index) => (
-                <tr key={index} style={styles.tr}>
-                  <td style={styles.td}>
-                    <strong style={{ color: '#1a3a8c' }}>{item.requestReference}</strong>
-                  </td>
-                  <td style={styles.td}>{item.enteredDate}</td>
-                  <td style={styles.td}>{item.assignedBy}</td>
-                  <td style={styles.td}>{item.assignedTo}</td>
-                  <td style={styles.td}>{item.remark}</td>
-                  <td style={styles.td}>
-                    <div style={styles.actions}>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        🔄
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        ✅
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        👁️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            <div style={styles.pagination}>
+              <button
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = '0 8px 20px rgba(37, 99, 235, 0.3)';
+                }}
+              >
+                <FaChevronLeft /> Previous
+              </button>
 
-          <div style={styles.pagination}>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
-              <FaChevronLeft /> Previous
-            </button>
-            <span style={styles.pageInfo}>Page 1 of 1</span>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
-              Next <FaChevronRight />
-            </button>
+              <div style={styles.pageInfo}>Page {currentPage} of 1</div>
+
+              <button
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = '0 8px 20px rgba(37, 99, 235, 0.3)';
+                }}
+              >
+                Next <FaChevronRight />
+              </button>
+            </div>
           </div>
         </div>
+      </section>
 
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

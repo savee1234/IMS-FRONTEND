@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaComments } from 'react-icons/fa';
 
 const SubAssignment = () => {
+  const navigate = useNavigate();
+  
   const data = [
     {
       requestReference: '25-11-10-0002',
@@ -15,158 +18,290 @@ const SubAssignment = () => {
       assignedToDesignation: 'TTO',
       remarks: '',
     },
+    {
+      requestReference: '25-11-10-0003',
+      enteredDate: '11/10/2025',
+      enteredTime: '11:30:45 AM',
+      assignedByName: 'John Smith',
+      assignedByDesignation: 'Manager',
+      assignedToName: 'Sarah Johnson',
+      assignedToDesignation: 'Engineer',
+      remarks: 'Urgent follow-up required',
+    },
+    {
+      requestReference: '25-11-10-0004',
+      enteredDate: '11/10/2025',
+      enteredTime: '02:15:33 PM',
+      assignedByName: 'Emily Davis',
+      assignedByDesignation: 'Supervisor',
+      assignedToName: 'Michael Brown',
+      assignedToDesignation: 'Technician',
+      remarks: 'Awaiting customer response',
+    },
   ];
 
   const styles = {
-    page: {
-      position: 'relative',
+    pageContainer: {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      overflowX: 'hidden',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+      background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+      backgroundAttachment: 'fixed'
     },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
+    
+    // Content Section
+    contentSection: {
+      padding: '30px 20px',
+      flex: 1
     },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(5px)',
-      zIndex: -1,
+    contentContainer: {
+      maxWidth: '1200px',
+      margin: '0 auto'
     },
-    contentWrapper: {
+    formCard: {
+      background: 'white',
+      borderRadius: '16px',
+      padding: '30px',
+      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
+      border: '1px solid #e2e8f0',
       position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '2rem 1rem',
+      overflow: 'hidden'
     },
-    container: {
-      width: '90%',
-      maxWidth: '1400px',
-      background: 'rgba(255, 255, 255, 0.12)',
-      backdropFilter: 'blur(12px)',
-      borderRadius: '20px',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-      border: '1px solid rgba(255, 255, 255, 0.18)',
-      overflow: 'hidden',
-      padding: '2rem',
-      marginTop: '2rem',
-    },
-    heading: {
+    formHeader: {
       textAlign: 'center',
+      marginBottom: '30px',
+      padding: '20px',
+      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+      borderRadius: '12px',
+      color: 'white',
+      boxShadow: '0 4px 8px rgba(59, 130, 246, 0.2)',
+      position: 'relative',
+      overflow: 'hidden'
+    },
+    formTitle: {
       fontSize: '2.5rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #1c3d91 0%, #3b82f6 100%)',
+      fontWeight: 800,
+      margin: '0',
+      background: 'linear-gradient(90deg, #1e40af, #3b82f6, #000000)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
-      marginBottom: '2rem',
-      textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      backgroundClip: 'text',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
     },
+    formSubtitle: {
+      fontSize: '1.25rem',
+      color: '#e2e8f0',
+      margin: '10px 0 0 0',
+      fontWeight: 400,
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+    topicBadge: {
+      display: 'inline-block',
+      padding: '8px 20px',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      borderRadius: '24px',
+      fontSize: '1.2rem',
+      fontWeight: '700',
+      backdropFilter: 'blur(10px)',
+      border: '1px solid rgba(255, 255, 255, 0.3)',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
+    },
+
+    // Enhanced Table Styles
     tableContainer: {
       overflowX: 'auto',
-      borderRadius: '12px',
-      background: 'rgba(255, 255, 255, 0.1)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      borderRadius: '16px',
+      border: '1px solid #e2e8f0',
+      boxShadow: '0 12px 24px rgba(0, 0, 0, 0.08)',
+      background: 'white',
+      marginTop: '20px'
     },
     table: {
       width: '100%',
       borderCollapse: 'separate',
-      borderSpacing: 0,
-      textAlign: 'left',
-      minWidth: '1200px',
+      borderSpacing: '0',
+      textAlign: 'left'
     },
     thead: {
-      background: 'linear-gradient(135deg, #1c3d91 0%, #2563eb 100%)',
-      color: 'white',
+      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
     },
     th: {
-      padding: '16px 20px',
-      fontWeight: '600',
-      fontSize: '0.95rem',
-      borderBottom: '1px solid rgba(255,255,255,0.2)',
-      position: 'relative',
-      whiteSpace: 'nowrap',
-    },
-    tr: {
-      transition: 'all 0.3s ease',
+      backgroundColor: 'transparent',
+      color: 'white',
+      padding: '20px 24px',
+      fontWeight: '700',
+      fontSize: '1.1rem',
+      textTransform: 'none',
+      letterSpacing: '0',
+      border: 'none',
+      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', sans-serif",
+      textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
     },
     td: {
-      padding: '14px 20px',
-      backgroundColor: 'rgba(255,255,255,0.95)',
-      fontSize: '0.9rem',
-      color: '#1f2937',
-      borderBottom: '1px solid rgba(0,0,0,0.08)',
-      fontWeight: '500',
+      padding: '20px 24px',
+      borderBottom: '1px solid #e2e8f0',
+      fontSize: '1.05rem',
+      color: '#0f172a',
+      backgroundColor: 'white',
       transition: 'all 0.3s ease',
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
     },
-    actionCell: {
-      display: 'flex',
-      gap: '8px',
-      alignItems: 'center',
+    tr: {
+      '&:hover td': {
+        backgroundColor: '#f0f9ff'
+      }
     },
-    actionBtn: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-      color: 'white',
-      border: 'none',
-      borderRadius: '10px',
-      width: '40px',
-      height: '40px',
+    trEven: {
+      backgroundColor: '#f8fafc'
+    },
+    trEvenHover: {
+      backgroundColor: '#f0f9ff'
+    },
+    // Enhanced table cell styling
+    referenceCell: {
+      fontWeight: '700',
+      color: '#1d4ed8',
       fontSize: '1.1rem',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+      position: 'relative',
+      paddingLeft: '20px'
     },
-    messageBtn: {
-      background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+    referenceCellBefore: {
+      content: '""',
+      position: 'absolute',
+      left: '0',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '10px',
+      height: '10px',
+      borderRadius: '50%',
+      backgroundColor: '#3b82f6'
     },
     dateTimeCell: {
-      lineHeight: '1.4',
+      color: '#475569',
+      fontWeight: '500',
+      lineHeight: '1.6'
     },
-    emptyRemarks: {
-      color: '#6b7280',
+    nameCell: {
+      fontWeight: '600',
+      color: '#0f172a',
+      lineHeight: '1.6'
+    },
+    designationCell: {
+      fontSize: '0.9rem',
+      color: '#64748b',
+      fontWeight: '400'
+    },
+    remarkCell: {
       fontStyle: 'italic',
+      color: '#64748b',
+      maxWidth: '200px',
+      wordWrap: 'break-word'
     },
-  };
+    noRemark: {
+      color: '#94a3b8',
+      fontStyle: 'italic'
+    },
+    
+    // Enhanced Action Buttons
+    actionCell: {
+      display: 'flex',
+      gap: '1rem',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    actionButton: {
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '1.1rem',
+      width: '44px',
+      height: '44px',
+      borderRadius: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      boxShadow: '0 4px 8px rgba(59, 130, 246, 0.2)',
+      position: 'relative',
+      overflow: 'hidden'
+    },
+    actionButtonHover: {
+      transform: 'translateY(-3px) scale(1.05)',
+      boxShadow: '0 8px 16px rgba(59, 130, 246, 0.3)'
+    },
+    editButton: {
+      backgroundColor: '#f59e0b',
+      color: 'white'
+    },
+    deleteButton: {
+      backgroundColor: '#ef4444',
+      color: 'white'
+    },
 
-  // Add hover effects
-  const enhancedStyles = {
-    ...styles,
-    trHover: {
-      ...styles.tr,
-      ':hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      }
+    // Enhanced Pagination
+    pagination: {
+      marginTop: '40px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '20px'
     },
-    tdHover: {
-      ...styles.td,
-      ':hover': {
-        backgroundColor: 'rgba(248, 250, 252, 0.95)',
-        transform: 'scale(1.02)',
-      }
+    pageButton: {
+      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '12px',
+      padding: '14px 28px',
+      cursor: 'pointer',
+      fontWeight: '700',
+      fontSize: '1.1rem',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      boxShadow: '0 6px 12px rgba(59, 130, 246, 0.25)',
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
     },
-    actionBtnHover: {
-      ...styles.actionBtn,
-      ':hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)',
+    pageButtonHover: {
+      transform: 'translateY(-4px)',
+      boxShadow: '0 10px 20px rgba(59, 130, 246, 0.35)'
+    },
+    pageInfo: {
+      color: '#0f172a',
+      fontWeight: '700',
+      fontSize: '1.1rem',
+      padding: '14px 28px',
+      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+      borderRadius: '12px',
+      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+    },
+    
+    // Responsive
+    '@media (max-width: 768px)': {
+      formCard: {
+        padding: '20px'
+      },
+      tableContainer: {
+        fontSize: '0.9rem'
+      },
+      th: {
+        padding: '16px 18px',
+        fontSize: '0.95rem'
+      },
+      td: {
+        padding: '16px 18px',
+        fontSize: '0.95rem'
+      },
+      pagination: {
+        flexDirection: 'column',
+        gap: '15px'
+      },
+      pageButton: {
+        padding: '12px 24px',
+        fontSize: '1rem'
       }
     }
   };
@@ -181,151 +316,151 @@ const SubAssignment = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div style={styles.gradientOverlay}></div>
-
-      <div style={styles.contentWrapper}>
-        <Navbar />
-
-        <div style={styles.container}>
-          <h2 style={styles.heading}>My Sub Assignments</h2>
-
-          <div style={styles.tableContainer}>
-            <table style={styles.table}>
-              <thead style={styles.thead}>
-                <tr>
-                  <th style={styles.th}>Request Reference</th>
-                  <th style={styles.th}>Entered Date</th>
-                  <th style={styles.th}>Assigned By Name</th>
-                  <th style={styles.th}>Assigned By Designation</th>
-                  <th style={styles.th}>Assigned To Name</th>
-                  <th style={styles.th}>Assigned To Designation</th>
-                  <th style={styles.th}>Remarks</th>
-                  <th style={styles.th}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr 
-                    key={index}
-                    style={{
-                      ...enhancedStyles.tr,
-                      transform: 'translateY(0)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }}
-                  >
-                    <td style={{
-                      ...enhancedStyles.td,
-                      fontWeight: '600',
-                      color: '#1c3d91',
-                    }}>
-                      {item.requestReference}
-                    </td>
-                    <td style={{
-                      ...enhancedStyles.td,
-                      ...styles.dateTimeCell
-                    }}>
-                      <div style={{ fontWeight: '600' }}>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{item.enteredTime}</div>
-                    </td>
-                    <td style={enhancedStyles.td}>{item.assignedByName}</td>
-                    <td style={enhancedStyles.td}>
-                      <span style={{
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                        color: 'white',
-                        padding: '4px 12px',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                      }}>
-                        {item.assignedByDesignation}
-                      </span>
-                    </td>
-                    <td style={enhancedStyles.td}>{item.assignedToName}</td>
-                    <td style={enhancedStyles.td}>
-                      <span style={{
-                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                        color: 'white',
-                        padding: '4px 12px',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                      }}>
-                        {item.assignedToDesignation}
-                      </span>
-                    </td>
-                    <td style={{
-                      ...enhancedStyles.td,
-                      ...(item.remarks ? {} : styles.emptyRemarks)
-                    }}>
-                      {item.remarks || 'No remarks'}
-                    </td>
-                    <td style={enhancedStyles.td}>
-                      <div style={styles.actionCell}>
-                        <button
-                          style={enhancedStyles.actionBtnHover}
-                          onClick={() => handleRefresh(item.requestReference)}
-                          title="Refresh"
-                          onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(37, 99, 235, 0.3)';
-                          }}
-                        >
-                          🔄
-                        </button>
-                        <button
-                          style={{
-                            ...enhancedStyles.actionBtnHover,
-                            ...styles.messageBtn
-                          }}
-                          onClick={() => handleMessage(item.requestReference)}
-                          title="Message"
-                          onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.3)';
-                          }}
-                        >
-                          💬
-                        </button>
-                      </div>
-                    </td>
+    <div style={styles.pageContainer}>
+      <Navbar />
+      
+      {/* Content Section */}
+      <section style={styles.contentSection}>
+        <div style={styles.contentContainer}>
+          <div style={styles.formCard}>
+            {/* Modern Header */}
+            <div style={styles.formHeader}>
+              <div style={styles.topicBadge}>Sub Assignments</div>
+            </div>
+            
+            <div style={styles.tableContainer}>
+              <table style={styles.table}>
+                <thead style={styles.thead}>
+                  <tr>
+                    <th style={styles.th}>Request Reference</th>
+                    <th style={styles.th}>Entered Date & Time</th>
+                    <th style={styles.th}>Assigned By</th>
+                    <th style={styles.th}>Assigned To</th>
+                    <th style={styles.th}>Remarks</th>
+                    <th style={styles.th}>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr 
+                      key={index} 
+                      style={index % 2 === 0 ? styles.trEven : styles.tr}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = index % 2 === 0 ? styles.trEvenHover.backgroundColor : styles.tr['&:hover td'].backgroundColor;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = index % 2 === 0 ? styles.trEven.backgroundColor : styles.td.backgroundColor;
+                      }}
+                    >
+                      <td style={{...styles.td, ...styles.referenceCell}}>
+                        <span style={{ position: 'relative' }}>
+                          {item.requestReference}
+                        </span>
+                      </td>
+                      <td style={{...styles.td, ...styles.dateTimeCell}}>
+                        <div>{item.enteredDate}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '400' }}>{item.enteredTime}</div>
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.nameCell}>{item.assignedByName}</div>
+                        <div style={styles.designationCell}>{item.assignedByDesignation}</div>
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.nameCell}>{item.assignedToName}</div>
+                        <div style={styles.designationCell}>{item.assignedToDesignation}</div>
+                      </td>
+                      <td style={{...styles.td, ...styles.remarkCell}}>
+                        {item.remarks ? item.remarks : (
+                          <span style={styles.noRemark}>No remarks</span>
+                        )}
+                      </td>
+                      <td style={styles.td}>
+                        <div style={styles.actionCell}>
+                          <button 
+                            style={styles.actionButton}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = styles.actionButtonHover.boxShadow;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = styles.actionButton.boxShadow;
+                            }}
+                          >
+                            <FaEye />
+                          </button>
+                          <button 
+                            style={{...styles.actionButton, ...styles.editButton}}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = '0 8px 16px rgba(245, 158, 11, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = '0 4px 8px rgba(245, 158, 11, 0.2)';
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button 
+                            style={{...styles.actionButton, ...styles.deleteButton}}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = styles.actionButtonHover.transform;
+                              e.target.style.boxShadow = '0 8px 16px rgba(239, 68, 68, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'none';
+                              e.target.style.boxShadow = '0 4px 8px rgba(239, 68, 68, 0.2)';
+                            }}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div style={styles.pagination}>
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                <FaChevronLeft /> Previous
+              </button>
+              
+              <div style={styles.pageInfo}>
+                Page 1 of 1
+              </div>
+              
+              <button 
+                style={styles.pageButton}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = styles.pageButtonHover.transform;
+                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'none';
+                  e.target.style.boxShadow = styles.pageButton.boxShadow;
+                }}
+              >
+                Next <FaChevronRight />
+              </button>
+            </div>
           </div>
         </div>
-
-        <Footer />
-      </div>
+      </section>
+      
+      <Footer />
     </div>
   );
 };

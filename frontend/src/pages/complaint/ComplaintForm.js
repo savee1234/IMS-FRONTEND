@@ -2,7 +2,7 @@
 // Drop this file into your React app (e.g., src/pages/ComplaintOnboarding.jsx)
 // Then import and render <ComplaintOnboarding />
 // -------------------------------------------------
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
@@ -58,14 +58,41 @@ export default function ComplaintOnboarding() {
   const mediums = ["Hotline", "Email", "WhatsApp", "SMS", "Walk-in"];
   const mediumSources = ["Customer", "Field Ops", "Retail", "Corporate"];
 
-  const staff = useMemo(
-    () => [
-      { empNo: "E001", name: "Kumara Perera", designation: "Engineer", availability: "Office" },
-      { empNo: "E014", name: "R. Silva", designation: "Technician", availability: "Roster" },
-      { empNo: "E023", name: "Anjalika D.", designation: "Coordinator", availability: "None" }
-    ],
-    []
-  );
+  const [staff, setStaff] = useState([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
+  const [staffError, setStaffError] = useState(null);
+
+  useEffect(() => {
+    const fetchStaff = async () => {
+      setLoadingStaff(true);
+      setStaffError(null);
+      try {
+        const res = await fetch('http://localhost:44354/api/user-management');
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const data = await res.json();
+
+        // API might return { success: true, data: [...] } or an array directly
+        const raw = Array.isArray(data) ? data : (data.data || []);
+
+        // Map API users to staff shape. Availability should be empty as requested.
+        const mapped = raw.map(u => ({
+          empNo: u.userId,
+          name: u.userName,
+          designation: u.Designation,
+          availability: 'office'
+        }));
+
+        setStaff(mapped);
+      } catch (err) {
+        console.error('Failed to fetch staff:', err);
+        setStaffError(err.message || String(err));
+      } finally {
+        setLoadingStaff(false);
+      }
+    };
+
+    fetchStaff();
+  }, []);
 
   // ------- Form state --------
   const [form, setForm] = useState({

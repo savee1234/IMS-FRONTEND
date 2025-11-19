@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 7));
@@ -94,37 +93,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-      </video>
-
-      {/* Overlay */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
-          zIndex: -1,
-        }}
-      ></div>
+    <div className="page-container" style={{ position: 'relative', minHeight: '100vh', background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)' }}>
 
       <Navbar />
 
@@ -146,17 +115,17 @@ const Dashboard = () => {
             textAlign: 'center',
             marginBottom: '1rem',
             padding: '1rem 1.5rem',
-            background: 'white',
+            background: 'rgba(255,255,255,0.9)',
             borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e5e7eb',
+            boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+            border: '1px solid rgba(148,163,184,0.25)',
           }}
         >
           <h1
             style={{
-              fontSize: '2.5rem',
+              fontSize: '2.2rem',
               fontWeight: '700',
-              color: '#1f2937',
+              color: '#0f172a',
               margin: '0 0 0.25rem 0',
               textAlign: 'center',
             }}
@@ -165,8 +134,8 @@ const Dashboard = () => {
           </h1>
           <p
             style={{
-              color: '#6b7280',
-              fontSize: '0.875rem',
+              color: '#64748b',
+              fontSize: '0.85rem',
               margin: 0,
               fontWeight: '400',
             }}
@@ -187,11 +156,11 @@ const Dashboard = () => {
           {/* Monthly Count Card */}
           <div
             style={{
-              background: 'white',
+              background: '#ffffff',
               borderRadius: '8px',
               padding: '1.5rem',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              border: '1px solid #d1d5db',
+              boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+              border: '1px solid rgba(148,163,184,0.25)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -201,9 +170,9 @@ const Dashboard = () => {
             <h2
               style={{
                 margin: '0 0 1rem 0',
-                fontSize: '1.25rem',
+                fontSize: '1.2rem',
                 fontWeight: 'bold',
-                color: '#000000',
+                color: '#0f172a',
                 textAlign: 'left',
                 width: '100%',
               }}
@@ -219,7 +188,7 @@ const Dashboard = () => {
                 width: '100%',
                 padding: '0.5rem',
                 marginBottom: '0.75rem',
-                border: '1px solid #d1d5db',
+                border: '1px solid rgba(148,163,184,0.35)',
                 borderRadius: '4px',
                 fontSize: '0.875rem',
               }}
@@ -228,7 +197,7 @@ const Dashboard = () => {
             <div
               style={{
                 fontSize: '0.875rem',
-                color: '#6b7280',
+                color: '#64748b',
                 marginBottom: '1rem',
                 textAlign: 'center',
               }}
@@ -240,7 +209,7 @@ const Dashboard = () => {
               style={{
                 fontSize: '3rem',
                 fontWeight: 'bold',
-                color: '#000000',
+                color: '#0f172a',
                 textAlign: 'center',
                 marginTop: 'auto',
               }}
@@ -252,41 +221,41 @@ const Dashboard = () => {
           {/* Counts With Status Card */}
           <div
             style={{
-              background: 'white',
+              background: '#ffffff',
               borderRadius: '8px',
               padding: '1.5rem',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-              border: '1px solid #d1d5db',
+              boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+              border: '1px solid rgba(148,163,184,0.25)',
             }}
           >
             <h2
               style={{
                 margin: '0 0 1rem 0',
-                fontSize: '1.25rem',
+                fontSize: '1.2rem',
                 fontWeight: 'bold',
-                color: '#000000',
+                color: '#0f172a',
               }}
             >
               Counts With Status
             </h2>
 
             <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '1rem',
-              }}
-            >
-              <span
                 style={{
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  color: '#000000',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '1rem',
                 }}
               >
-                OPEN
-              </span>
+                <span
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    color: '#0f172a',
+                  }}
+                >
+                  OPEN
+                </span>
 
               <div
                 style={{
@@ -306,7 +275,7 @@ const Dashboard = () => {
                   style={{
                     fontSize: '2.5rem',
                     fontWeight: 'bold',
-                    color: '#000000',
+                    color: '#0f172a',
                     lineHeight: '1',
                   }}
                 >
@@ -329,20 +298,20 @@ const Dashboard = () => {
         {/* Top 5 Pending Complaints Section */}
         <div
           style={{
-            background: 'white',
+            background: '#ffffff',
             borderRadius: '12px',
             padding: '2rem',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-            border: '1px solid #e5e7eb',
+            boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+            border: '1px solid rgba(148,163,184,0.25)',
             marginBottom: '2rem',
           }}
         >
           <h2
             style={{
               margin: '0 0 1.5rem 0',
-              fontSize: '1.5rem',
+              fontSize: '1.35rem',
               fontWeight: 'bold',
-              color: '#1f2937',
+              color: '#0f172a',
               textAlign: 'center',
             }}
           >
@@ -354,14 +323,14 @@ const Dashboard = () => {
             style={{
               width: '100%',
               borderCollapse: 'collapse',
-              border: '1px solid #d1d5db',
+              border: '1px solid rgba(148,163,184,0.35)',
             }}
           >
             <thead>
               <tr
                 style={{
-                  backgroundColor: '#1a237e',
-                  borderBottom: '2px solid #1a237e',
+                  backgroundColor: '#0E3A7C',
+                  borderBottom: '2px solid #0E3A7C',
                 }}
               >
                 <th style={thStyle}>Request Reference</th>
@@ -371,7 +340,7 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+              <tr style={{ borderBottom: '1px solid rgba(148,163,184,0.25)', backgroundColor: '#f8fafc' }}>
                 <td style={tdStyle}>25-10-23-0001</td>
                 <td style={tdStyle}>015777 - Romaine Murcott</td>
                 <td style={{ ...tdStyle, textAlign: 'center' }}>22 H 35 M</td>
@@ -384,19 +353,19 @@ const Dashboard = () => {
         {/* Complaint Counts Pending With Employees Section */}
         <div
           style={{
-            background: 'white',
+            background: '#ffffff',
             borderRadius: '12px',
             padding: '2rem',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-            border: '1px solid #e5e7eb',
+            boxShadow: '0 8px 24px rgba(2,6,23,0.12)',
+            border: '1px solid rgba(148,163,184,0.25)',
           }}
         >
           <h2
             style={{
               margin: '0 0 1.5rem 0',
-              fontSize: '1.5rem',
+              fontSize: '1.35rem',
               fontWeight: 'bold',
-              color: '#1f2937',
+              color: '#0f172a',
               textAlign: 'center',
             }}
           >
@@ -407,14 +376,14 @@ const Dashboard = () => {
             style={{
               width: '100%',
               borderCollapse: 'collapse',
-              border: '1px solid #d1d5db',
+              border: '1px solid rgba(148,163,184,0.35)',
             }}
           >
             <thead>
               <tr
                 style={{
-                  backgroundColor: '#1a237e',
-                  borderBottom: '2px solid #1a237e',
+                  backgroundColor: '#0E3A7C',
+                  borderBottom: '2px solid #0E3A7C',
                 }}
               >
                 <th style={thStyle}>Employee</th>
@@ -447,14 +416,14 @@ const thStyle = {
   fontWeight: '600',
   color: '#ffffff',
   fontSize: '0.875rem',
-  borderRight: '1px solid #d1d5db',
+  borderRight: '1px solid rgba(255,255,255,0.15)',
 };
 
 const tdStyle = {
   padding: '1rem',
-  color: '#374151',
+  color: '#0f172a',
   fontSize: '0.875rem',
-  borderRight: '1px solid #d1d5db',
+  borderRight: '1px solid rgba(148,163,184,0.25)',
 };
 
 const tdCenter = {

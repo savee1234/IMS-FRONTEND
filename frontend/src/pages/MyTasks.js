@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
 import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
+import './complaint/ComplaintForm.css';
 
 const fetchTasks = async () => {
   try {
@@ -349,10 +350,10 @@ const MyTasks = () => {
     },
     modalContent: {
       backgroundColor: 'white',
-      padding: '2rem',
+      padding: '15rem',
       borderRadius: '12px',
-      maxWidth: '600px',
-      width: '90%',
+      maxWidth: '1100px',
+      width: '100%',
       maxHeight: '80vh',
       overflowY: 'auto',
       boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
@@ -525,95 +526,84 @@ const MyTasks = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <video autoPlay loop muted style={styles.videoBackground}>
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      <div style={styles.gradientOverlay}></div>
+    <div className="complaint-onboard-wrapper assignments-page my-tasks-page">
       <Navbar />
-      
-      <div style={styles.contentWrapper}>
-        {/* Page Header */}
-        <header style={styles.pageHeader}>
-          <h1 style={styles.pageTitle}>
-            My Tasks
-          </h1>
-          <p style={styles.pageSubtitle}>
-            View and manage your assigned tasks and complaints
-          </p>
-        </header>
 
-        <div style={styles.contentContainer}>
-          {/* Action Bar */}
-          <div style={styles.actionBar}>
-            <button
-              onClick={() => window.location.reload()}
-              style={styles.refreshButton}
-            >
-              {loading ? 'Loading...' : 'Refresh Tasks'}
-            </button>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>My Tasks</h1>
+              <p>View and manage your assigned tasks and complaints</p>
+            </div>
+          </div>
 
-            <div style={styles.exportButtons}>
-              <button style={styles.exportButton}>
-                CSV
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => window.location.reload()}
+                className="btn btn-primary"
+              >
+                {loading ? 'Loading...' : 'Refresh'}
               </button>
-              <button style={styles.exportButton}>
-                Excel
-              </button>
-              <button style={styles.exportButton}>
-                PDF
-              </button>
-              <button style={styles.exportButton}>
-                Print
-              </button>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="btn" style={{ backgroundColor: '#2563eb', color: '#fff' }}>CSV</button>
+              <button className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>Excel</button>
+              <button className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>PDF</button>
+              <button className="btn" style={{ backgroundColor: '#6b7280', color: '#fff' }}>Print</button>
             </div>
           </div>
 
           {error && (
-            <div style={styles.errorMessage}>
+            <div style={{ color: '#dc2626', backgroundColor: '#fee2e2', padding: '0.75rem 1rem', borderRadius: '6px', marginBottom: '1rem', border: '1px solid #fecaca' }}>
               {error}
             </div>
           )}
 
-          <div style={styles.tableContainer}>
-            <table style={styles.table}>
-              <thead style={styles.tableHeader}>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="modern-table">
+              <thead>
                 <tr>
-                  <th style={styles.tableHeaderCell}>Reference</th>
-                  <th style={styles.tableHeaderCell}>Requester</th>
-                  <th style={styles.tableHeaderCell}>Priority</th>
-                  <th style={styles.tableHeaderCell}>Status</th>
-                  <th style={styles.tableHeaderCell}>Issue</th>
-                  <th style={styles.tableHeaderCell}>Phone</th>
-                  <th style={styles.tableHeaderCell}>Email</th>
-                  <th style={styles.tableHeaderCell}>Created</th>
-                  <th style={styles.tableHeaderCell}>Actions</th>
+                  <th>Reference</th>
+                  <th>Requester</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Issue</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Created</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="9" style={styles.loadingContainer}>
+                    <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
                       Loading complaints...
                     </td>
                   </tr>
                 ) : tasks.length === 0 ? (
                   <tr>
-                    <td colSpan="9" style={styles.emptyState}>
+                    <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
                       No complaints found. Submit a complaint to see it here.
                     </td>
                   </tr>
                 ) : (
                   tasks.map((task) => (
-                    <tr key={task.id} style={styles.tableRow}>
-                      <td style={styles.tableCell}>{task.reference}</td>
-                      <td style={styles.tableCell}>{task.requester}</td>
-                      <td style={styles.tableCell}>{task.priority}</td>
-                      <td style={styles.tableCell}>
+                    <tr key={task.id}>
+                      <td>{task.reference}</td>
+                      <td>{task.requester}</td>
+                      <td>{task.priority}</td>
+                      <td>
                         <span
                           style={{
-                            ...styles.statusBadge,
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
                             backgroundColor: task.status === 'Open'
                               ? '#fee2e2'
                               : task.status === 'Ongoing'
@@ -629,74 +619,38 @@ const MyTasks = () => {
                           {task.status}
                         </span>
                       </td>
-                      <td style={styles.tableCell}>{task.issue}</td>
-                      <td style={styles.tableCell}>{task.phone}</td>
-                      <td style={styles.tableCell}>{task.email}</td>
-                      <td style={styles.tableCell}>{task.created}</td>
-                      <td style={styles.tableCell}>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                      <td>{task.issue}</td>
+                      <td>{task.phone}</td>
+                      <td>{task.email}</td>
+                      <td>{task.created}</td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
                           <button
-                            title="Details"
+                            title="View Details"
+                            className="btn"
+                            style={{ backgroundColor: '#2563eb', color: '#fff' }}
                             onClick={() => handleViewDetails(task)}
-                            style={{
-                              color: '#2563eb',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '4px',
-                              transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                           >
                             <FaFileAlt />
                           </button>
-                          <button 
-                            title="History" 
-                            style={{
-                              color: '#4b5563',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '4px',
-                              transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          <button
+                            title="History"
+                            className="btn"
+                            style={{ backgroundColor: '#4b5563', color: '#fff' }}
                           >
                             <FaHistory />
                           </button>
-                          <button 
-                            title="Comments" 
-                            style={{
-                              color: '#7c3aed',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '4px',
-                              transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          <button
+                            title="Comments"
+                            className="btn"
+                            style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                           >
                             <FaComments />
                           </button>
-                          <button 
-                            title="Done" 
-                            style={{
-                              color: '#059669',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '4px',
-                              transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          <button
+                            title="Done"
+                            className="btn"
+                            style={{ backgroundColor: '#059669', color: '#fff' }}
                           >
                             <FaCheck />
                           </button>
@@ -710,7 +664,7 @@ const MyTasks = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Complaint Details Modal */}
       {showModal && selectedComplaint && (
         <div style={styles.modalOverlay}>
@@ -722,8 +676,6 @@ const MyTasks = () => {
               <button
                 onClick={closeModal}
                 style={styles.closeButton}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
               >
                 ×
               </button>

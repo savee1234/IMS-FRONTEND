@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -16,6 +16,38 @@ const HomeModern = () => {
   
   // State for CTA button hover
   const [ctaButtonHover, setCtaButtonHover] = useState(false);
+
+  const slides = [
+    {
+      title: 'We Solve Incidents Fast',
+      subtitle: 'Modern UI, analytics, and workflows in one platform.',
+      imageUrl: 'https://images.unsplash.com/photo-1556157382-97eda2ad27ed?q=80&w=1600&auto=format&fit=crop'
+    },
+    {
+      title: 'Blue & Bold Experience',
+      subtitle: 'A colorful, engaging hero that matches your brand.',
+      imageUrl: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&w=1600&auto=format&fit=crop'
+    },
+    {
+      title: 'Technology That Empowers',
+      subtitle: 'Coordinate teams, track tasks, and report with ease.',
+      imageUrl: 'https://images.unsplash.com/photo-1525186402429-8f57f44cd2d1?q=80&w=1600&auto=format&fit=crop'
+    },
+    {
+      title: 'Act Fast, Resolve Faster',
+      subtitle: 'Real-time insights to reduce response times.',
+      imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop'
+    }
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -200,16 +232,16 @@ const HomeModern = () => {
       
 
       {/* Hero Section */}
-      <section style={styles.heroSection}>
-        <video autoPlay loop muted playsInline style={styles.videoBackground}>
-          <source src={backgroundVideo} type="video/mp4" />
-        </video>
+      <section style={{
+        ...styles.heroSection,
+        backgroundImage: `url('${slides[currentSlide].imageUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}>
         <div style={styles.heroOverlay}></div>
         <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>Incident Management System</h1>
-          <p style={styles.heroSubtitle}>
-            Streamline your incident reporting and management processes with our comprehensive platform. Efficiently handle complaints, manage workflows, and track resolutions in real-time.
-          </p>
+          <h1 style={styles.heroTitle}>{slides[currentSlide].title}</h1>
+          <p style={styles.heroSubtitle}>{slides[currentSlide].subtitle}</p>
           <button
             style={{
               ...styles.heroButton,
@@ -221,6 +253,32 @@ const HomeModern = () => {
           >
             Get Started
           </button>
+          <button
+            style={styles.heroButtonSecondary}
+            onClick={() => navigate('/dashboard')}
+          >
+            View Dashboard
+          </button>
+          <div style={styles.sliderControls}>
+            <button aria-label="Previous" style={styles.sliderNavButton} onClick={() => setCurrentSlide((currentSlide - 1 + slides.length) % slides.length)}>
+              ‹
+            </button>
+            <div style={styles.sliderDots}>
+              {slides.map((_, i) => (
+                <span
+                  key={i}
+                  onClick={() => setCurrentSlide(i)}
+                  style={{
+                    ...styles.sliderDot,
+                    ...(currentSlide === i ? styles.sliderDotActive : {})
+                  }}
+                />
+              ))}
+            </div>
+            <button aria-label="Next" style={styles.sliderNavButton} onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)}>
+              ›
+            </button>
+          </div>
         </div>
       </section>
 
@@ -444,13 +502,14 @@ const styles = {
   // Hero Section
   heroSection: {
     position: 'relative',
-    height: 'calc(100vh + 40px)',
+    height: '65vh',
     marginTop: '-68px',
     paddingTop: '68px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: 'flex-start',
+    textAlign: 'left',
+    paddingLeft: '5%',
     color: 'white',
     overflow: 'hidden'
   },
@@ -469,17 +528,18 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    background: 'linear-gradient(135deg, rgba(12, 18, 26, 0.55) 0%, rgba(59, 130, 246, 0.25) 60%, rgba(12, 18, 26, 0.75) 100%)',
+    background: 'none',
     zIndex: 1
   },
   heroContent: {
     position: 'relative',
     zIndex: 2,
     maxWidth: '800px',
-    padding: '0 20px'
+    padding: '0 20px',
+    alignSelf: 'center'
   },
   heroTitle: {
-    fontSize: '2.8rem',
+    fontSize: '2.6rem',
     fontWeight: 800,
     marginBottom: '12px',
     lineHeight: 1.1,
@@ -487,9 +547,7 @@ const styles = {
     textShadow: '0 8px 32px rgba(0,0,0,0.45)',
     fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif",
     color: '#ffffff',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    whiteSpace: 'normal'
   },
   heroSubtitle: {
     fontSize: '1.1rem',
@@ -500,7 +558,7 @@ const styles = {
     fontFamily: "'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif"
   },
   heroButton: {
-    backgroundColor: '#3b82f6',
+    backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
     color: '#ffffff',
     border: 'none',
     padding: '14px 36px',
@@ -515,6 +573,55 @@ const styles = {
   heroButtonHover: {
     transform: 'translateY(-2px)',
     boxShadow: '0 16px 32px rgba(59, 130, 246, 0.45)'
+  },
+  heroButtonSecondary: {
+    backgroundColor: 'transparent',
+    color: '#ffffff',
+    border: '2px solid rgba(255,255,255,0.8)',
+    padding: '14px 26px',
+    fontSize: '1.05rem',
+    fontWeight: 600,
+    borderRadius: '999px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    marginLeft: '12px'
+  },
+  sliderControls: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '16px',
+    marginTop: '24px'
+  },
+  sliderDots: {
+    display: 'flex',
+    gap: '10px'
+  },
+  sliderDot: {
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease'
+  },
+  sliderDotActive: {
+    backgroundColor: '#ffffff',
+    transform: 'scale(1.2)'
+  },
+  sliderNavButton: {
+    background: 'rgba(255,255,255,0.15)',
+    color: '#ffffff',
+    border: '1px solid rgba(255,255,255,0.3)',
+    borderRadius: '999px',
+    width: '36px',
+    height: '36px',
+    cursor: 'pointer',
+    fontSize: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease'
   },
 
   // Modules Section

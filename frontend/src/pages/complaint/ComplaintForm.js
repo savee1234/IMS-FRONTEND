@@ -6,31 +6,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
-import { 
-  FaFileAlt, 
-  FaUser, 
-  FaUserFriends, 
-  FaHashtag, 
-  FaFolderOpen, 
-  FaBuilding, 
-  FaLayerGroup, 
-  FaCog, 
-  FaPhone, 
-  FaEnvelope, 
-  FaMobileAlt, 
-  FaIdCard,
-  FaPaperPlane,
-  FaSearch,
-  FaCheckCircle,
-  FaExclamationTriangle,
-  FaUpload,
-  FaFile,
-  FaStickyNote,
-  FaArrowRight,
-  FaArrowLeft,
-  FaRedo,
-  FaEye
-} from "react-icons/fa";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import newbg1 from "../../assets/newbg1.jpg";
+ 
 
 // Add font link for modern fonts
 const addFontLink = () => {
@@ -681,50 +660,85 @@ export default function ComplaintOnboarding() {
   };
 
   const tabs = [
-    { name: 'Request Details', icon: FaFileAlt },
-    { name: 'Contact Person', icon: FaUser },
-    { name: 'Assignment', icon: FaUserFriends }
+    { name: 'Request Details' },
+    { name: 'Contact Person' },
+    { name: 'Assignment' }
   ];
 
   return (
+    <>
+    <Navbar />
     <div className="complaint-onboard-wrapper">
-      <div className="complaint-onboard-background"></div>
+      <div className="complaint-onboard-background" style={{
+        backgroundImage: `url(${newbg1})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}></div>
       <div className="content-wrapper">
         <form className="complaint-form-container" onSubmit={onSubmit}>
           {/* Page Header - Inside Card */}
           <header className="page-header">
             <div className="page-header-content">
-              <h1>
-                <FaFileAlt className="header-icon" />
-                Complaint Onboard
-              </h1>
+              <h1>Complaint Onboard</h1>
+              <div className="header-actions">
+                <label className="add-photo" title="Add Photo">
+                  <input type="file" accept="image/*" onChange={() => {}} />
+                  Add Photo
+                </label>
+              </div>
             </div>
           </header>
 
-          {/* Tab Navigation - Progress Indicator Style */}
-          <div className="tab-navigation">
-            {tabs.map((tab, index) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={index}
-                  onClick={() => setActiveTab(index)}
-                  className={`tab-button ${activeTab === index ? 'active' : ''}`}
-                >
-                  <div className="tab-step-circle">
-                    <span className="tab-step-number">{index + 1}</span>
-                    <Icon className="tab-icon" />
-                  </div>
-                  <span className="tab-step-label">{tab.name}</span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Layout: Left sidebar steps + Right content */}
+          <div className="form-layout">
+            <aside className="form-sidebar">
+              <div className="sidebar-title">Create Complaint</div>
+              <ul className="sidebar-list">
+                {tabs.map((tab, index) => {
+                  const isActive = activeTab === index;
+                  return (
+                    <li key={index}>
+                      <button
+                        type="button"
+                        className={`sidebar-item ${isActive ? 'active' : ''}`}
+                        onClick={() => setActiveTab(index)}
+                        title={tab.name}
+                      >
+                        <span className="sidebar-step">
+                          {index + 1}
+                        </span>
+                        <span className="sidebar-label">
+                          {tab.name}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </aside>
+            <div className="form-content">
+              {/* Mobile Tab Navigation */}
+              <div className="tab-navigation mobile-only">
+                {tabs.map((tab, index) => {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setActiveTab(index)}
+                      className={`tab-button ${activeTab === index ? 'active' : ''}`}
+                    >
+                      <div className="tab-step-circle">
+                        <span className="tab-step-number">{index + 1}</span>
+                      </div>
+                      <span className="tab-step-label">{tab.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
 
           {/* Success Message with Generated Reference - Only show after submission */}
           {submitted && generatedRef && (
             <div className="success-message-card">
-              <FaCheckCircle className="success-icon" />
               <div className="success-content">
                 <h3>Complaint Submitted Successfully!</h3>
                 <p className="reference-number">Reference Number: <strong>{generatedRef}</strong></p>
@@ -862,8 +876,7 @@ export default function ComplaintOnboarding() {
                   className="btn btn-primary"
                   onClick={nextTab}
                 >
-                  <span>Next</span>
-                  <FaArrowRight />
+                  <span>Save & Continue</span>
                 </button>
               </div>
             </section>
@@ -1088,7 +1101,6 @@ export default function ComplaintOnboarding() {
                   className="btn btn-ghost"
                   onClick={prevTab}
                 >
-                  <FaArrowLeft />
                   <span>Previous</span>
                 </button>
                 <button 
@@ -1097,7 +1109,6 @@ export default function ComplaintOnboarding() {
                   onClick={nextTab}
                 >
                   <span>Next</span>
-                  <FaArrowRight />
                 </button>
               </div>
             </section>
@@ -1187,7 +1198,6 @@ export default function ComplaintOnboarding() {
                   className="btn btn-ghost"
                   onClick={prevTab}
                 >
-                  <FaArrowLeft />
                   <span>Previous</span>
                 </button>
                 <div className="action-buttons-group">
@@ -1196,14 +1206,12 @@ export default function ComplaintOnboarding() {
                     className="btn btn-ghost"
                     onClick={onReset}
                   >
-                    <FaRedo />
                     <span>Reset Form</span>
                   </button>
                   <button 
                     type="submit" 
                     className="btn btn-primary"
                   >
-                    <FaPaperPlane />
                     <span>Submit Complaint</span>
                   </button>
                   {submitted && (
@@ -1212,7 +1220,6 @@ export default function ComplaintOnboarding() {
                       className="btn btn-secondary"
                       onClick={onViewComplaint}
                     >
-                      <FaEye />
                       <span>View Complaint</span>
                     </button>
                   )}
@@ -1220,9 +1227,13 @@ export default function ComplaintOnboarding() {
               </div>
             </section>
           </div>
+            </div>
+          </div>
         </form>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
 

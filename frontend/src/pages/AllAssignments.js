@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
 import ProgressModal from './AllAssignments/ProgressModal';
+import './complaint/ComplaintForm.css';
 
 const AllAssignments = () => {
   const [filters, setFilters] = useState({
@@ -68,247 +68,40 @@ const AllAssignments = () => {
     setProgressOpen(false);
     setProgressAssignment(null);
   };
-  const styles = {
-    page: {
-      position: 'relative',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-    },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(5px)',
-      zIndex: -1,
-    },
-    contentWrapper: {
-      position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    container: {
-      position: 'relative',
-      zIndex: 1,
-      padding: '1.5rem',
-      marginTop: '1rem',
-      width: '95vw',
-      maxWidth: 'none',
-      margin: '1rem auto 0 auto'
-    },
-    headerCard: {
-      background: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e5e7eb',
-      padding: '1.25rem 1.5rem',
-      marginBottom: '1rem'
-    },
-    card: {
-      background: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e5e7eb',
-      overflow: 'hidden',
-      padding: '2rem'
-    },
-    pageTitle: {
-      textAlign: 'center',
-      margin: 0,
-      fontSize: '2rem',
-      fontWeight: 700,
-      color: '#1f2937'
-    },
-    formGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))',
-      gap: '1.25rem',
-      alignItems: 'end',
-      marginBottom: '0.75rem'
-    },
-    label: {
-      display: 'block',
-      marginBottom: '0.35rem',
-      color: '#374151',
-      fontWeight: 600,
-      fontSize: '0.95rem'
-    },
-    input: {
-      width: '100%',
-      padding: '0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem',
-      color: '#374151',
-      background: 'white'
-    },
-    select: {
-      width: '100%',
-      padding: '0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem',
-      color: '#374151',
-      background: 'white'
-    },
-    submitRow: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      marginBottom: '1rem'
-    },
-    submitBtn: {
-      backgroundColor: '#3b82f6',
-      color: 'white',
-      padding: '0.75rem 1.5rem',
-      borderRadius: '8px',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '1rem',
-      fontWeight: 600
-    },
-    tableHeaderRow: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(6, 1fr)',
-      gap: '0',
-      border: '1px solid #d1d5db',
-      backgroundColor: '#1a237e',
-      color: '#ffffff'
-    },
-    th: {
-      padding: '1rem',
-      borderRight: '1px solid #d1d5db',
-      fontWeight: 600,
-      fontSize: '0.95rem'
-    },
-    tableBody: {
-      border: '1px solid #d1d5db',
-      borderTop: 'none'
-    },
-    tableRow: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(6, 1fr)',
-      gap: '0',
-      borderTop: '1px solid #e5e7eb'
-    },
-    td: {
-      padding: '1rem',
-      borderRight: '1px solid #f3f4f6',
-      color: '#374151',
-      fontSize: '0.95rem'
-    },
-    tableTopBar: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      padding: '0.75rem 0'
-    },
-    searchInput: {
-      width: '360px',
-      padding: '0.6rem 0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem'
-    },
-    pagination: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '0.75rem',
-      padding: '1rem 0'
-    },
-    pagerBtn: {
-      backgroundColor: '#3b82f6',
-      color: 'white',
-      border: 'none',
-      borderRadius: '4px',
-      padding: '0.5rem 0.9rem',
-      cursor: 'pointer',
-      fontWeight: 600
-    },
-    actionsCell: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '0.5rem'
-    },
-    actionBtn: {
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '6px 8px',
-      color: 'white'
-    },
-    submitRow: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      marginBottom: '1rem',
-      paddingRight: '1rem'
-    },
-  };
 
   return (
-    <div style={styles.page}>
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
-      
-      <div style={styles.gradientOverlay}></div>
+    <div className="complaint-onboard-wrapper assignments-page">
+      <Navbar />
 
-      <div style={styles.contentWrapper}>
-        <Navbar />
-
-        <div style={styles.container}>
-          <div style={styles.headerCard}>
-            <h1 style={styles.pageTitle}>All Assignments</h1>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>All Assignments</h1>
+            </div>
           </div>
 
-          <div style={styles.card}>
-
-            <form onSubmit={handleSubmit}>
-              <div style={styles.formGrid}>
-                <div>
-                  <label style={styles.label}>Employee</label>
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid assignments-form-grid">
+              <div className="form-field">
+                <label className="field-label">Employee</label>
+                <div className="field-control input-wrapper">
                   <select
                     value={filters.employee}
                     onChange={(e) => handleChange('employee', e.target.value)}
-                    style={styles.select}
                   >
                     <option value="">Select Employees</option>
                     <option value="john.doe">John Doe</option>
                     <option value="jane.smith">Jane Smith</option>
                   </select>
                 </div>
-                <div>
-                  <label style={styles.label}>Status</label>
+              </div>
+              <div className="form-field">
+                <label className="field-label">Status</label>
+                <div className="field-control input-wrapper">
                   <select
                     value={filters.status}
                     onChange={(e) => handleChange('status', e.target.value)}
-                    style={styles.select}
                   >
                     <option value="">Select Status</option>
                     <option value="Pending">Pending</option>
@@ -316,125 +109,153 @@ const AllAssignments = () => {
                     <option value="Resolved">Resolved</option>
                   </select>
                 </div>
-                <div>
-                  <label style={styles.label}>From Date</label>
+              </div>
+              <div className="form-field">
+                <label className="field-label">From Date</label>
+                <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.fromDate}
                     onChange={(e) => handleChange('fromDate', e.target.value)}
-                    style={styles.input}
+                    className="input"
                   />
                 </div>
-                <div>
-                  <label style={styles.label}>To Date</label>
+              </div>
+              <div className="form-field">
+                <label className="field-label">To Date</label>
+                <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.toDate}
                     onChange={(e) => handleChange('toDate', e.target.value)}
-                    style={styles.input}
+                    className="input"
                   />
                 </div>
               </div>
-              <div style={styles.submitRow}>
-                <button type="submit" style={styles.submitBtn}>Submit</button>
-              </div>
-            </form>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+          </form>
 
-            <div style={styles.tableTopBar}>
+          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
+            <label className="field-label">Search</label>
+            <div className="field-control input-wrapper">
               <input
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={styles.searchInput}
+                className="input input-sm"
               />
             </div>
+          </div>
 
-            <div style={styles.tableHeaderRow}>
-              <div style={styles.th}>Request Reference</div>
-              <div style={styles.th}>Entered Date</div>
-              <div style={styles.th}>Assigned By Name</div>
-              <div style={styles.th}>Assigned To Name</div>
-              <div style={styles.th}>Days Pending</div>
-              <div style={styles.th}>Actions</div>
-            </div>
-            <div style={styles.tableBody}>
-              <div style={styles.tableRow}>
-                <div style={styles.td}>REQ/—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={{ ...styles.td, borderRight: 'none' }}>
-                  <div style={styles.actionsCell}>
-                    <button
-                      title="View"
-                      style={{ ...styles.actionBtn, backgroundColor: '#4CAF50' }}
-                      onClick={() => openView({
-                        requestRef: '25-10-23-0001',
-                        categoryType: 'INTERNAL',
-                        documentSubject: 'gdfgd gdfgf g',
-                        mediumSource: '657645374',
-                        projectType: 'Type 1',
-                        contactPerson: 'Chandima Dunuwila',
-                        criticality: 'MEDIUM',
-                        documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
-                        medium: 'Call Centre (Test)',
-                        organization: 'DEF',
-                        projectName: 'NCPA',
-                        remarks: 'd fd gdfg fd',
-                        mainAssignment: [
-                          { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
-                        ],
-                        subAssignments: [
-                          { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
-                          { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
-                        ]
-                      })}
-                    >
-                      <FaEye />
-                    </button>
-                    <button title="Update" style={{ ...styles.actionBtn, backgroundColor: '#FFB300' }} onClick={() => {
-                      openStatus({
-                        id: '25-10-23-0001',
-                        requestRef: '25-10-23-0001',
-                        contactPerson: 'Chandima Dunuwila'
-                      });
-                    }}>
-                      <FaEdit />
-                    </button>
-                    <button title="Progress" style={{ ...styles.actionBtn, backgroundColor: '#2563eb' }} onClick={() => openProgress({ requestRef: '25-10-23-0001' })}>
-                      <FaTasks />
-                    </button>
-                    <button title="Delete" style={{ ...styles.actionBtn, backgroundColor: '#F44336' }}>
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>Request Reference</th>
+                  <th>Entered Date</th>
+                  <th>Assigned By Name</th>
+                  <th>Assigned To Name</th>
+                  <th>Days Pending</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>REQ/—</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                      <button
+                        title="View"
+                        className="btn"
+                        style={{ backgroundColor: '#4CAF50', color: '#fff' }}
+                        onClick={() => openView({
+                          requestRef: '25-10-23-0001',
+                          categoryType: 'INTERNAL',
+                          documentSubject: 'gdfgd gdfgf g',
+                          mediumSource: '657645374',
+                          projectType: 'Type 1',
+                          contactPerson: 'Chandima Dunuwila',
+                          criticality: 'MEDIUM',
+                          documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
+                          medium: 'Call Centre (Test)',
+                          organization: 'DEF',
+                          projectName: 'NCPA',
+                          remarks: 'd fd gdfg fd',
+                          mainAssignment: [
+                            { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
+                          ],
+                          subAssignments: [
+                            { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
+                            { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
+                          ]
+                        })}
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        title="Update"
+                        className="btn"
+                        style={{ backgroundColor: '#FFB300', color: '#fff' }}
+                        onClick={() => {
+                          openStatus({
+                            id: '25-10-23-0001',
+                            requestRef: '25-10-23-0001',
+                            contactPerson: 'Chandima Dunuwila'
+                          });
+                        }}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        title="Progress"
+                        className="btn"
+                        style={{ backgroundColor: '#2563eb', color: '#fff' }}
+                        onClick={() => openProgress({ requestRef: '25-10-23-0001' })}
+                      >
+                        <FaTasks />
+                      </button>
+                      <button
+                        title="Delete"
+                        className="btn"
+                        style={{ backgroundColor: '#F44336', color: '#fff' }}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-            <div style={styles.pagination}>
-              <button type="button" style={styles.pagerBtn}>Previous</button>
-              <button type="button" style={styles.pagerBtn}>Next</button>
-              <span style={{ marginLeft: '0.5rem', color: '#374151' }}>Page 1 of 0</span>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
+            <button type="button" className="btn btn-primary">Previous</button>
+            <button type="button" className="btn btn-primary">Next</button>
+            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page 1 of 0</span>
           </div>
         </div>
-
-        {modalOpen && (
-          <AssignmentView assignment={selectedAssignment} onClose={closeView} />
-        )}
-
-        {statusModalOpen && (
-          <UpdateStatusModal assignment={statusAssignment} onClose={closeStatus} onSubmit={handleStatusSubmit} />
-        )}
-
-        {progressOpen && (
-          <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
-        )}
-
-        <Footer />
       </div>
+
+      {modalOpen && (
+        <AssignmentView assignment={selectedAssignment} onClose={closeView} />
+      )}
+
+      {statusModalOpen && (
+        <UpdateStatusModal assignment={statusAssignment} onClose={closeStatus} onSubmit={handleStatusSubmit} />
+      )}
+
+      {progressOpen && (
+        <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
+      )}
+
+      <Footer />
     </div>
   );
 };

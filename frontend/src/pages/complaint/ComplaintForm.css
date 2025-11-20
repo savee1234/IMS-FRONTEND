@@ -838,13 +838,13 @@
 }
 
 .modern-table thead th {
-  background: var(--light-gray);
+  background: #1e3a8a;
   padding: 0.75rem 0.75rem;
   text-align: left;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #ffffff;
   font-size: 0.875rem;
-  border-bottom: 2px solid var(--medium-gray);
+  border-bottom: 2px solid #1e3a8a;
   font-family: 'Inter', 'Poppins', sans-serif;
   white-space: nowrap;
 }

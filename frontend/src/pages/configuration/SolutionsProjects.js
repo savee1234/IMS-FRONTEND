@@ -954,146 +954,41 @@ const SolutionsProjects = () => {
         </div>
       </div>
 
-      <div className="solutions-table" style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '8px',
-        padding: '1.25rem',
-        border: '1px solid #d1d5db',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-      }}>
-        <table style={{ 
-          width: '100%', 
-          borderCollapse: 'collapse',
-          border: '1px solid #d1d5db'
-        }}>
+      <div className="table-container" style={{ marginTop: '1rem' }}>
+        <table className="modern-table">
           <thead>
             <tr>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Employee
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Solution Type
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Solution
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Created By
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Created Dtm
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Actions
-              </th>
+              <th>Employee</th>
+              <th>Solution Type</th>
+              <th>Solution</th>
+              <th>Created By</th>
+              <th>Created Dtm</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {solutionResponsibleData.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ 
-                  padding: '1.5rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
+                <td colSpan="6" style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                   No solutions assigned yet
                 </td>
               </tr>
             ) : (
               solutionResponsibleData.map(item => (
                 <tr key={item._id}>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.employee}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.solutionType}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.solution}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.createdByName}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.createdDtm ? (
                       <>
                         {new Date(item.createdDtm).toLocaleDateString()}
@@ -1102,46 +997,15 @@ const SolutionsProjects = () => {
                       </>
                     ) : ''}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    textAlign: 'center'
-                  }}>
-                    <button
-                      onClick={() => handleSolutionEdit(item)}
-                      style={{
-                        backgroundColor: '#FFB300',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '5px 6px',
-                        marginRight: '5px'
-                      }}
-                      title="Update"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleSolutionDelete(item._id)}
-                      style={{
-                        backgroundColor: '#F44336',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '5px 6px'
-                      }}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                      <button title="Update" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleSolutionEdit(item)}>
+                        <FaEdit />
+                      </button>
+                      <button title="Delete" className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} onClick={() => handleSolutionDelete(item._id)}>
+                        <FaTrash />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

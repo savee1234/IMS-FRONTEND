@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
   const navigate = useNavigate();
@@ -32,295 +33,161 @@ const MainAssignment = () => {
     },
   ];
 
-  const styles = {
-    pageContainer: {
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      fontFamily: "'Inter', 'Poppins', 'Roboto', sans-serif",
-      background: 'linear-gradient(135deg, #f0f4ff 0%, #e0eafc 100%)',
-    },
-    contentSection: {
-      padding: '60px 20px',
-      flex: 1,
-      background: 'url("data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M0 50c0-27.614 22.386-50 50-50s50 22.386 50 50-22.386 50-50 50S0 77.614 0 50z"/%3E%3C/g%3E%3C/svg%3E")',
-    },
-    contentContainer: {
-      maxWidth: '1280px',
-      margin: '0 auto',
-    },
-    formCard: {
-      background: 'rgba(255, 255, 255, 0.92)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      borderRadius: '24px',
-      padding: '48px',
-      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5)',
-      border: '1px solid rgba(255, 255, 255, 0.6)',
-    },
-    formHeader: {
-      textAlign: 'center',
-      marginBottom: '30px',
-      padding: '20px',
-      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-      borderRadius: '12px',
-      color: 'white',
-      boxShadow: '0 4px 8px rgba(59, 130, 246, 0.2)',
-      position: 'relative',
-      overflow: 'hidden'
-    },
-    formTitle: {
-      fontSize: '2.5rem',
-      fontWeight: 800,
-      margin: '0',
-      background: 'linear-gradient(90deg, #1e40af, #3b82f6, #000000)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text',
-      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-    },
-    formSubtitle: {
-      fontSize: '1.25rem',
-      color: '#e2e8f0',
-      margin: '10px 0 0 0',
-      fontWeight: 400,
-      fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-    },
-    topicBadge: {
-      display: 'inline-block',
-      padding: '8px 20px',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      borderRadius: '24px',
-      fontSize: '1.2rem',
-      fontWeight: '700',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
-      fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-    },
-    tableContainer: {
-      overflowX: 'auto',
-      borderRadius: '18px',
-      background: 'rgba(255, 255, 255, 0.95)',
-      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.06)',
-      border: '1px solid #e2e8f0',
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'separate',
-      borderSpacing: '0',
-      fontSize: '0.95rem',
-    },
-    thead: {
-      background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 100%)',
-      color: 'white',
-      textTransform: 'none',
-      fontWeight: 600,
-    },
-    th: {
-      padding: '20px 28px',
-      fontSize: '1rem',
-      fontWeight: 600,
-      letterSpacing: '0.4px',
-      textAlign: 'left',
-      whiteSpace: 'nowrap',
-    },
-    td: {
-      padding: '18px 28px',
-      borderBottom: '1px solid #e2e8f0',
-      color: '#1e293b',
-      fontSize: '0.95rem',
-      transition: 'background 0.25s ease',
-    },
-    trHover: {
-      background: 'linear-gradient(to right, #f8fafc, #f1f5f9)',
-    },
-    referenceCell: {
-      fontWeight: 700,
-      color: '#2563eb',
-      fontSize: '1rem',
-    },
-    remarkCell: {
-      fontStyle: 'italic',
-      color: '#475569',
-      maxWidth: '240px',
-      wordBreak: 'break-word',
-      lineHeight: '1.5',
-    },
-    noRemark: {
-      color: '#94a3b8',
-      fontStyle: 'italic',
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '10px',
-    },
-    actionButton: {
-      border: 'none',
-      borderRadius: '12px',
-      padding: '10px',
-      width: '44px',
-      height: '44px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      color: 'white',
-      fontSize: '1rem',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    },
-    viewButton: {
-      background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-    },
-    editButton: {
-      background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    },
-    deleteButton: {
-      background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-    },
-    pagination: {
-      marginTop: '48px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '24px',
-    },
-    pageButton: {
-      background: 'linear-gradient(135deg, #2563eb, #1e40af)',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '14px',
-      padding: '14px 28px',
-      cursor: 'pointer',
-      fontWeight: 600,
-      fontSize: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 8px 20px rgba(37, 99, 235, 0.3)',
-      fontFamily: 'inherit',
-    },
-    pageButtonHover: {
-      transform: 'translateY(-4px)',
-      boxShadow: '0 12px 28px rgba(37, 99, 235, 0.4)',
-    },
-    pageInfo: {
-      color: '#1e293b',
-      fontWeight: 700,
-      fontSize: '1.05rem',
-      padding: '14px 32px',
-      backgroundColor: '#eff6ff',
-      borderRadius: '14px',
-      border: '1px solid #bfdbfe',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-    },
+  const [filters, setFilters] = useState({
+    employee: '',
+    status: '',
+    fromDate: new Date().toISOString().slice(0, 10),
+    toDate: new Date().toISOString().slice(0, 10)
+  });
+
+  const [search, setSearch] = useState('');
+
+  const handleChange = (field, value) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
-    <div style={styles.pageContainer}>
+    <div
+      className="complaint-onboard-wrapper assignments-page"
+      style={{
+        minHeight: '100vh',
+        background: `url(${process.env.PUBLIC_URL}/new.jpg) center center / cover no-repeat fixed`
+      }}
+    >
       <Navbar />
 
-      <section style={styles.contentSection}>
-        <div style={styles.contentContainer}>
-          <div style={styles.formCard}>
-            {/* Modern Header */}
-            <div style={styles.formHeader}>
-              <div style={styles.topicBadge}>Main Assignments</div>
-            </div>
-
-            <div style={styles.tableContainer}>
-              <table style={styles.table}>
-                <thead style={styles.thead}>
-                  <tr>
-                    <th style={styles.th}>Request Reference</th>
-                    <th style={styles.th}>Entered Date</th>
-                    <th style={styles.th}>Assigned By</th>
-                    <th style={styles.th}>Assigned To</th>
-                    <th style={styles.th}>Remark</th>
-                    <th style={styles.th}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {assignments.map((item, index) => (
-                    <tr
-                      key={index}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = styles.trHover.background)}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                    >
-                      <td style={{ ...styles.td, ...styles.referenceCell }}>{item.requestReference}</td>
-                      <td style={styles.td}>{item.enteredDate}</td>
-                      <td style={styles.td}>{item.assignedBy}</td>
-                      <td style={styles.td}>{item.assignedTo}</td>
-                      <td style={{ ...styles.td, ...styles.remarkCell }}>
-                        {item.remark ? item.remark : <span style={styles.noRemark}>No remarks</span>}
-                      </td>
-                      <td style={styles.td}>
-                        <div style={styles.actions}>
-                          <button
-                            style={{ ...styles.actionButton, ...styles.viewButton }}
-                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
-                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
-                          >
-                            <FaEye />
-                          </button>
-                          <button
-                            style={{ ...styles.actionButton, ...styles.editButton }}
-                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
-                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            style={{ ...styles.actionButton, ...styles.deleteButton }}
-                            onMouseEnter={(e) => (e.target.style.opacity = 0.9)}
-                            onMouseLeave={(e) => (e.target.style.opacity = 1)}
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div style={styles.pagination}>
-              <button
-                style={styles.pageButton}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = styles.pageButtonHover.transform;
-                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'none';
-                  e.target.style.boxShadow = '0 8px 20px rgba(37, 99, 235, 0.3)';
-                }}
-              >
-                <FaChevronLeft /> Previous
-              </button>
-
-              <div style={styles.pageInfo}>Page {currentPage} of 1</div>
-
-              <button
-                style={styles.pageButton}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = styles.pageButtonHover.transform;
-                  e.target.style.boxShadow = styles.pageButtonHover.boxShadow;
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'none';
-                  e.target.style.boxShadow = '0 8px 20px rgba(37, 99, 235, 0.3)';
-                }}
-              >
-                Next <FaChevronRight />
-              </button>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>Main Assignments</h1>
             </div>
           </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid assignments-form-grid">
+              <div className="form-field">
+                <label className="field-label">Employee</label>
+                <div className="field-control input-wrapper">
+                  <select
+                    value={filters.employee}
+                    onChange={(e) => handleChange('employee', e.target.value)}
+                  >
+                    <option value="">Select Employees</option>
+                    <option value="romaine.murcott">Romaine Murcott</option>
+                    <option value="john.smith">John Smith</option>
+                    <option value="sarah.johnson">Sarah Johnson</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">Status</label>
+                <div className="field-control input-wrapper">
+                  <select
+                    value={filters.status}
+                    onChange={(e) => handleChange('status', e.target.value)}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">From Date</label>
+                <div className="field-control input-wrapper">
+                  <input
+                    type="date"
+                    value={filters.fromDate}
+                    onChange={(e) => handleChange('fromDate', e.target.value)}
+                    className="input"
+                  />
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">To Date</label>
+                <div className="field-control input-wrapper">
+                  <input
+                    type="date"
+                    value={filters.toDate}
+                    onChange={(e) => handleChange('toDate', e.target.value)}
+                    className="input"
+                  />
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+          </form>
+
+          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
+            <label className="field-label">Search</label>
+            <div className="field-control input-wrapper">
+              <input
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="input input-sm"
+              />
+            </div>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>Request Reference</th>
+                  <th>Entered Date</th>
+                  <th>Assigned By</th>
+                  <th>Assigned To</th>
+                  <th>Remark</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {assignments.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.requestReference}</td>
+                    <td>{item.enteredDate}</td>
+                    <td>{item.assignedBy}</td>
+                    <td>{item.assignedTo}</td>
+                    <td>{item.remark || 'No remarks'}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                        <button title="View" className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>
+                          <FaEye />
+                        </button>
+                        <button title="Update" className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
+                          <FaEdit />
+                        </button>
+                        <button title="Delete" className="btn" style={{ backgroundColor: '#F44336', color: '#fff' }}>
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
+            <button type="button" className="btn btn-primary">
+              <FaChevronLeft /> Previous
+            </button>
+            <button type="button" className="btn btn-primary">
+              Next <FaChevronRight />
+            </button>
+            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>
+          </div>
         </div>
-      </section>
+      </div>
 
       <Footer />
     </div>

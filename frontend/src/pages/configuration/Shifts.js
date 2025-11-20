@@ -307,22 +307,11 @@ const Shifts = () => {
           </div>
         </div>
 
-        <div style={styles.buttonContainer}>
-          <button 
-            type="button" 
-            onClick={handleReset}
-            style={styles.resetButton}
-          >
-            Reset
-          </button>
-          <button 
-            type="submit" 
-            onClick={handleSubmit}
-            disabled={loading}
-            style={{ ...styles.saveButton, backgroundColor: loading ? '#9ca3af' : '#2196F3', border: loading ? '1px solid #9ca3af' : 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
-          >
-            {loading ? 'Saving...' : (editMode ? 'Update' : 'Save')}
-          </button>
+        <div className="form-actions">
+          <div className="action-buttons-group">
+            <button type="button" onClick={handleReset} className="btn btn-secondary">Reset</button>
+            <button type="submit" onClick={handleSubmit} disabled={loading} className="btn btn-primary">{loading ? 'Saving...' : (editMode ? 'Update' : 'Save')}</button>
+          </div>
         </div>
       </div>
 
@@ -332,31 +321,31 @@ const Shifts = () => {
             <h3 style={styles.cardTitle}>Shift List</h3>
             <div style={styles.headerAccent} />
           </div>
-          <div style={styles.tableResponsive}>
-            <table style={styles.table}>
+          <div className="table-container" style={{ marginTop: '1rem' }}>
+            <table className="modern-table">
               <thead>
                 <tr>
-                  <th style={{...styles.th, ...styles.thCenter, ...styles.thFirst}}>Shift Name</th>
-                  <th style={{...styles.th, ...styles.thCenter}}>Start Time</th>
-                  <th style={{...styles.th, ...styles.thCenter}}>To Time</th>
-                  <th style={{...styles.th, ...styles.thCenter}}>Created By Name</th>
-                  <th style={{...styles.th, ...styles.thCenter}}>Created DTM</th>
-                  <th style={{...styles.th, ...styles.thCenter, ...styles.thLast}}>Actions</th>
+                  <th>Shift Name</th>
+                  <th>Start Time</th>
+                  <th>To Time</th>
+                  <th>Created By Name</th>
+                  <th>Created DTM</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {shifts.length === 0 ? (
                   <tr>
-                    <td colSpan="6" style={{ ...styles.td, ...styles.tdCenter }}>No shifts found</td>
+                    <td colSpan="6" style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)' }}>No shifts found</td>
                   </tr>
                 ) : (
                   shifts.map((shift) => (
-                    <tr key={shift._id} style={styles.tr}>
-                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack, ...styles.tdFirst}}>{shift.name}</td>
-                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.fromTime}</td>
-                      <td style={{...styles.td, ...styles.tdCenter, ...styles.tdBlack}}>{shift.toTime}</td>
-                      <td style={{...styles.td, ...styles.tdCenter}}>{shift.createdByName}</td>
-                      <td style={{...styles.td, ...styles.tdCenter}}>
+                    <tr key={shift._id}>
+                      <td>{shift.name}</td>
+                      <td>{shift.fromTime}</td>
+                      <td>{shift.toTime}</td>
+                      <td>{shift.createdByName}</td>
+                      <td>
                         {shift.createdDtm ? (
                           <>
                             {new Date(shift.createdDtm).toLocaleDateString()}
@@ -365,21 +354,11 @@ const Shifts = () => {
                           </>
                         ) : ''}
                       </td>
-                      <td style={{...styles.tdAction, ...styles.tdLast}}>
-                        <div style={styles.actionIcons}>
-                          <button onClick={() => handleView(shift)} style={{...styles.iconButton, ...styles.viewBtn}} title="View">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8 3C4.667 3 1.82 5.073 0.666992 8C1.82099 10.927 4.66699 13 8.00033 13C11.3337 13 14.18 10.927 15.3337 8C14.1797 5.073 11.333 3 8 3ZM8 11.3333C6.16004 11.3333 4.66667 9.83996 4.66667 8C4.66667 6.16004 6.16004 4.66667 8 4.66667C9.83996 4.66667 11.3333 6.16004 11.3333 8C11.3333 9.83996 9.83996 11.3333 8 11.3333ZM8 6C6 6.89543 6 6 6 8C6 9.10457 6.89543 10 8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6Z" fill="#FFFFFF"/>
-                            </svg>
-                          </button>
-                          <button onClick={() => handleEdit(shift)} style={{...styles.iconButton, ...styles.editBtn}} title="Update">
-                            <FaEdit />
-                          </button>
-                          <button onClick={() => handleDelete(shift._id)} style={{...styles.iconButton, ...styles.deleteBtn}} title="Delete">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M4.66667 12.6667C4.66667 13.4 5.26667 14 6 14H10C10.7333 14 11.3333 13.4 11.3333 12.6667V5.33333H4.66667V12.6667ZM12.6667 3.33333H10.3333L9.66667 2.66667H6.33333L5.66667 3.33333H3.33333V5H12.6667V3.33333Z" fill="#FFFFFF"/>
-                            </svg>
-                          </button>
+                      <td>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                          <button onClick={() => handleView(shift)} className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} title="View">View</button>
+                          <button onClick={() => handleEdit(shift)} className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} title="Update"><FaEdit /></button>
+                          <button onClick={() => handleDelete(shift._id)} className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} title="Delete">Delete</button>
                         </div>
                       </td>
                     </tr>

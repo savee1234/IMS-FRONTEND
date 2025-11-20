@@ -70,7 +70,13 @@ const AllAssignments = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
+    <div
+      className="complaint-onboard-wrapper assignments-page"
+      style={{
+        minHeight: '100vh',
+        background: `url(${process.env.PUBLIC_URL}/new.jpg) center center / cover no-repeat fixed`
+      }}
+    >
       <Navbar />
 
       <div className="content-wrapper">

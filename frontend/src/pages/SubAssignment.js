@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaComments } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const SubAssignment = () => {
   const navigate = useNavigate();
-  
+
   const data = [
     {
       requestReference: '25-11-10-0002',
@@ -50,13 +50,9 @@ const SubAssignment = () => {
   });
   const [search, setSearch] = useState('');
 
-  // Example button click handlers
-  const handleRefresh = (ref) => {
-    alert(`Refreshing request ${ref}`);
-  };
-
-  const handleMessage = (ref) => {
-    alert(`Opening chat for request ${ref}`);
+  const styles = {
+    pagination: { display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' },
+    pageInfo: { marginLeft: '0.5rem', color: 'var(--text-primary)' }
   };
 
   return (
@@ -68,7 +64,6 @@ const SubAssignment = () => {
       }}
     >
       <Navbar />
-
       <div className="content-wrapper">
         <div className="complaint-form-container assignments-wide">
           <div className="page-header">
@@ -152,10 +147,10 @@ const SubAssignment = () => {
               <thead>
                 <tr>
                   <th>Request Reference</th>
-                  <th>Entered Date</th>
+                  <th>Entered Date & Time</th>
                   <th>Assigned By</th>
                   <th>Assigned To</th>
-                  <th>Remark</th>
+                  <th>Remarks</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -163,19 +158,32 @@ const SubAssignment = () => {
                 {data.map((item, index) => (
                   <tr key={index}>
                     <td>{item.requestReference}</td>
-                    <td>{item.enteredDate} {item.enteredTime}</td>
-                    <td>{item.assignedByName}</td>
-                    <td>{item.assignedToName}</td>
-                    <td>{item.remarks || 'No remarks'}</td>
+                    <td>
+                      <div>{item.enteredDate}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
+                    </td>
+                    <td>
+                      {item.remarks ? item.remarks : (
+                        <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
+                      )}
+                    </td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                        <button title="View" className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>
+                        <button className="btn" title="View" style={{ backgroundColor: '#2563eb', color: '#fff' }}>
                           <FaEye />
                         </button>
-                        <button title="Update" className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
+                        <button className="btn" title="Update" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
                           <FaEdit />
                         </button>
-                        <button title="Delete" className="btn" style={{ backgroundColor: '#F44336', color: '#fff' }}>
+                        <button className="btn" title="Delete" style={{ backgroundColor: '#F44336', color: '#fff' }}>
                           <FaTrash />
                         </button>
                       </div>
@@ -186,18 +194,13 @@ const SubAssignment = () => {
             </table>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="btn btn-primary">
-              <FaChevronLeft /> Previous
-            </button>
-            <button type="button" className="btn btn-primary">
-              Next <FaChevronRight />
-            </button>
-            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>
+          <div style={styles.pagination}>
+            <button type="button" className="btn btn-primary"><FaChevronLeft /> Previous</button>
+            <button type="button" className="btn btn-primary">Next <FaChevronRight /></button>
+            <span style={styles.pageInfo}>Page {currentPage} of 1</span>
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import backgroundVideo from '../assets/Background.mp4';
+import hero1 from '../assets/newbg.jpg';
+import hero2 from '../assets/newbg1.jpg';
+import hero3 from '../assets/image.jpg';
+import hero4 from '../assets/newone.jpg';
+import aboutPhoto from '../assets/PendingAssignments.jpg';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -21,22 +26,22 @@ const HomeModern = () => {
     {
       title: 'We Solve Incidents Fast',
       subtitle: 'Modern UI, analytics, and workflows in one platform.',
-      imageUrl: 'https://images.unsplash.com/photo-1556157382-97eda2ad27ed?q=80&w=1600&auto=format&fit=crop'
+      imageUrl: hero1
     },
     {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&w=1600&auto=format&fit=crop'
+      imageUrl: hero2
     },
     {
       title: 'Technology That Empowers',
       subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: 'https://images.unsplash.com/photo-1525186402429-8f57f44cd2d1?q=80&w=1600&auto=format&fit=crop'
+      imageUrl: hero3
     },
     {
       title: 'Act Fast, Resolve Faster',
       subtitle: 'Real-time insights to reduce response times.',
-      imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop'
+      imageUrl: hero4
     }
   ];
 
@@ -326,7 +331,7 @@ const HomeModern = () => {
       <section style={styles.aboutSection}>
         <div style={styles.aboutContent}>
           <div style={styles.aboutImage}>
-            <div style={styles.imagePlaceholder}>Team Collaboration</div>
+            <img src={aboutPhoto} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
           </div>
           <div style={styles.aboutText}>
             <h2 style={styles.sectionTitle}>About Our System</h2>
@@ -699,7 +704,7 @@ const styles = {
   // About Section
   aboutSection: {
     padding: '80px 20px',
-    backgroundImage: 'linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url("https://images.unsplash.com/photo-1581091012184-23aca9f10741?auto=format&fit=crop&w=1600&q=80")',
+    backgroundImage: `linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url(${hero3})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat'
@@ -935,7 +940,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80")',
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${hero2})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     textAlign: 'center',

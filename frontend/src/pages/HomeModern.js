@@ -8,6 +8,7 @@ import hero2 from '../assets/newbg1.jpg';
 import hero3 from '../assets/image.jpg';
 import hero4 from '../assets/newone.jpg';
 import aboutPhoto from '../assets/PendingAssignments.jpg';
+import im1 from '../assets/im1.jpg';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const HomeModern = () => {
     {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: hero2
+      imageUrl: im1
     },
     {
       title: 'Technology That Empowers',

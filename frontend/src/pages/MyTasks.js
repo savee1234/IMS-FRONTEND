@@ -350,11 +350,11 @@ const MyTasks = () => {
     },
     modalContent: {
       backgroundColor: 'white',
-      padding: '15rem',
+      padding: '2rem',
       borderRadius: '12px',
-      maxWidth: '1100px',
+      maxWidth: '1400px',
       width: '100%',
-      maxHeight: '80vh',
+      maxHeight: '85vh',
       overflowY: 'auto',
       boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
     },

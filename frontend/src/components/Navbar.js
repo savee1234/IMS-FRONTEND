@@ -327,14 +327,14 @@ const Navbar = () => {
               >
                 <path 
                   d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" 
-                  stroke="white" 
+                  stroke="#0f172a" 
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
                 />
                 <path 
                   d="M20 21C20 16.5817 16.4183 13 12 13C7.58172 13 4 16.5817 4 21" 
-                  stroke="white" 
+                  stroke="#0f172a" 
                   strokeWidth="2" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
@@ -370,17 +370,17 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0b1220',
-    color: '#e5e7eb',
+    backgroundColor: '#ffffff',
+    color: '#1f2937',
     padding: '12px 30px',
-    boxShadow: '0 10px 24px rgba(2,6,23,0.45)',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
     width: '100%',
     zIndex: 1000,
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: '1px solid #e5e7eb',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   leftSection: {
@@ -398,7 +398,7 @@ const styles = {
     fontSize: '18px',
     fontWeight: 600,
     letterSpacing: '0.3px',
-    color: '#ffffff',
+    color: '#0f172a',
     margin: 0,
     fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Segoe UI', sans-serif",
     whiteSpace: 'nowrap'
@@ -415,7 +415,7 @@ const styles = {
     
   },
   link: {
-    color: '#cbd5e1',
+    color: '#374151',
     textDecoration: 'none',
     fontSize: '15px',
     fontWeight: 500,
@@ -426,7 +426,7 @@ const styles = {
   },
   activeLink: {
     fontWeight: 600,
-    color: '#ffffff',
+    color: '#111827',
     backgroundColor: 'transparent',
     border: 'none'
   },
@@ -442,8 +442,8 @@ const styles = {
   },
   dropdownButton: {
     background: 'transparent',
-    border: '1px solid rgba(255,255,255,0.12)',
-    color: '#cbd5e1',
+    border: '1px solid #e5e7eb',
+    color: '#374151',
     cursor: 'pointer',
     fontSize: '15px',
     fontWeight: 500,
@@ -458,19 +458,19 @@ const styles = {
     position: 'absolute',
     top: '100%',
     left: 0,
-    backgroundColor: '#0f172a',
-    color: '#e5e7eb',
+    backgroundColor: '#ffffff',
+    color: '#374151',
     minWidth: '220px',
-    boxShadow: '0 16px 32px rgba(2,6,23,0.45)',
+    boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
     borderRadius: '8px',
     padding: '8px 0',
     zIndex: 1001,
-    border: '1px solid rgba(255,255,255,0.08)'
+    border: '1px solid #e5e7eb'
   },
   dropdownItem: {
     display: 'block',
     padding: '12px 16px',
-    color: '#e5e7eb',
+    color: '#374151',
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: 500,
@@ -489,7 +489,7 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: 'rgba(59,130,246,0.25)',
+    backgroundColor: 'rgba(59,130,246,0.15)',
     marginRight: '20px',
   },
   userIcon: {

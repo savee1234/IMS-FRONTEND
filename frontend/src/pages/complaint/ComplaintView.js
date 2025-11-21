@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import backgroundVideo from "../../assets/Background.mp4";
+ 
 import "./ComplaintForm.css";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -111,7 +111,7 @@ const ComplaintView = () => {
             zIndex: -1,
           }}
         >
-          <source src={backgroundVideo} type="video/mp4" />
+          
         </video>
 
         <div style={{
@@ -152,7 +152,7 @@ const ComplaintView = () => {
             zIndex: -1,
           }}
         >
-          <source src={backgroundVideo} type="video/mp4" />
+          
         </video>
 
         <div style={{
@@ -193,7 +193,7 @@ const ComplaintView = () => {
             zIndex: -1,
           }}
         >
-          <source src={backgroundVideo} type="video/mp4" />
+          
         </video>
 
         <div style={{
@@ -233,7 +233,7 @@ const ComplaintView = () => {
           zIndex: -1,
         }}
       >
-        <source src={backgroundVideo} type="video/mp4" />
+        
       </video>
 
       <div style={{

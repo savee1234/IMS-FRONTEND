@@ -4,7 +4,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
-import backgroundVideo from '../../assets/Background.mp4';
+ 
 
 // Import sub-components
 import ComplaintManagement from './ComplaintManagement';
@@ -110,22 +110,7 @@ const UserManagement = () => {
 
   return (
     <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-      </video>
+      
 
       <div style={{
         position: 'fixed',

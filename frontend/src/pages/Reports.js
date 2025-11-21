@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Bar, Pie, Line } from 'react-chartjs-2';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
+ 
 import { Chart as ChartJS, 
   CategoryScale, 
   LinearScale, 
@@ -193,23 +193,7 @@ const Reports = () => {
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
       {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: -2
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      
       
       {/* Overlay */}
       <div style={{

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
 import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 

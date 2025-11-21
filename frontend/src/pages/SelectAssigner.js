@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import backgroundVideo from '../assets/Background.mp4';
+ 
 
 const employees = [
   { empNo: 'E001', name: 'Alice Johnson', designation: 'Technician', status: 'Available', solutions: ['Reset Password', 'Check Connectivity', 'Assign Engineer'] },
@@ -42,24 +42,7 @@ const SelectAssigner = () => {
       position: 'relative',
       minHeight: '100vh'
     }}>
-      {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: -2
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      
       
       {/* Overlay */}
       <div style={{

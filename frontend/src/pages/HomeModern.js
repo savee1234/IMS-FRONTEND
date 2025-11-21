@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
-import hero1 from '../assets/newbg.jpg';
-import hero2 from '../assets/newbg1.jpg';
-import hero3 from '../assets/image.jpg';
-import hero4 from '../assets/newone.jpg';
-import aboutPhoto from '../assets/PendingAssignments.jpg';
-import im1 from '../assets/im1.jpg';
+import img12 from '../assets/12.jpg';
+import img13 from '../assets/13.jpg';
+import img11 from '../assets/11.jpg';
+import img10 from '../assets/10.jpg';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -27,22 +24,22 @@ const HomeModern = () => {
     {
       title: 'We Solve Incidents Fast',
       subtitle: 'Modern UI, analytics, and workflows in one platform.',
-      imageUrl: hero1
+      imageUrl: img12
     },
     {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: im1
+      imageUrl: img13
     },
     {
       title: 'Technology That Empowers',
       subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: hero3
+      imageUrl: img11
     },
     {
       title: 'Act Fast, Resolve Faster',
       subtitle: 'Real-time insights to reduce response times.',
-      imageUrl: hero4
+      imageUrl: img10
     }
   ];
 
@@ -332,7 +329,7 @@ const HomeModern = () => {
       <section style={styles.aboutSection}>
         <div style={styles.aboutContent}>
           <div style={styles.aboutImage}>
-            <img src={aboutPhoto} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
+            <img src={img13} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
           </div>
           <div style={styles.aboutText}>
             <h2 style={styles.sectionTitle}>About Our System</h2>
@@ -508,7 +505,7 @@ const styles = {
   // Hero Section
   heroSection: {
     position: 'relative',
-    height: '65vh',
+    height: '60vh',
     marginTop: '-68px',
     paddingTop: '68px',
     display: 'flex',
@@ -705,7 +702,7 @@ const styles = {
   // About Section
   aboutSection: {
     padding: '80px 20px',
-    backgroundImage: `linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url(${hero3})`,
+    backgroundImage: `linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url(${img11})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat'
@@ -941,7 +938,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${hero2})`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${img12})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     textAlign: 'center',

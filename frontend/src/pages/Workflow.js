@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
+ 
 
 const Workflow = () => {
   
@@ -72,10 +72,7 @@ const Workflow = () => {
 
   return (
     <div style={styles.page}>
-              <video autoPlay loop muted style={styles.videoBackground}>
-                <source src={backgroundVideo} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+      
               <div style={styles.gradientOverlay}></div>
       <Navbar />
       <div style={containerStyle}>

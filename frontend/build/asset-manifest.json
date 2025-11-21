@@ -1,9 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.ef72a7ea.css",
-    "main.js": "/static/js/main.fe8df442.js",
+    "main.css": "/static/css/main.26092872.css",
+    "main.js": "/static/js/main.240a21b2.js",
     "static/js/453.239560d4.chunk.js": "/static/js/453.239560d4.chunk.js",
-    "static/media/Background.mp4": "/static/media/Background.938cd958a519dfe9fd8e.mp4",
     "static/media/Login.jpg": "/static/media/Login.964518f6852c9c68042d.jpg",
     "static/media/contact.jpg": "/static/media/contact.a942be4b18668f58d30e.jpg",
     "static/media/RosterManagement.jpg": "/static/media/RosterManagement.39f9bdc0931a44a088a1.jpg",
@@ -14,21 +13,24 @@
     "static/media/Configuration.jpg": "/static/media/Configuration.922a9d35711f646fb926.jpg",
     "static/media/newone.jpg": "/static/media/newone.eea65f54d0fe5b70acda.jpg",
     "static/media/PendingAssignments.jpg": "/static/media/PendingAssignments.e59b4cda9f38af77df2e.jpg",
+    "static/media/10.jpg": "/static/media/10.31131151b7cd2549940f.jpg",
     "static/media/Workflow.jpg": "/static/media/Workflow.60bba17f961d9c1af06a.jpg",
+    "static/media/13.jpg": "/static/media/13.cbf8bb54595a18d749e0.jpg",
     "static/media/AttendanceOT.jpg": "/static/media/AttendanceOT.9325cdb87b52387352d9.jpg",
+    "static/media/11.jpg": "/static/media/11.d4e76ed4ea04ddf17309.jpg",
     "static/media/UserManagement.jpg": "/static/media/UserManagement.f55349877f65c17d4cbd.jpg",
     "static/media/Notification.jpg": "/static/media/Notification.8965fbf5bc41d70c687f.jpg",
     "static/media/newbg1.jpg": "/static/media/newbg1.107b0de6e00e5404d116.jpg",
-    "static/media/im1.jpg": "/static/media/im1.75277c2de107f2601079.jpg",
     "static/media/MyTasks.jpg": "/static/media/MyTasks.95297b6901c13e6a2f6d.jpg",
     "static/media/newbg.jpg": "/static/media/newbg.f078a6b391013f79e03d.jpg",
+    "static/media/12.jpg": "/static/media/12.6b286db9f012f911e218.jpg",
     "index.html": "/index.html",
-    "main.ef72a7ea.css.map": "/static/css/main.ef72a7ea.css.map",
-    "main.fe8df442.js.map": "/static/js/main.fe8df442.js.map",
+    "main.26092872.css.map": "/static/css/main.26092872.css.map",
+    "main.240a21b2.js.map": "/static/js/main.240a21b2.js.map",
     "453.239560d4.chunk.js.map": "/static/js/453.239560d4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ef72a7ea.css",
-    "static/js/main.fe8df442.js"
+    "static/css/main.26092872.css",
+    "static/js/main.240a21b2.js"
   ]
 }

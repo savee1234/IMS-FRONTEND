@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import backgroundVideo from "../../assets/Background.mp4";
+ 
 
 const employees = [
   "John Doe",
@@ -137,22 +137,7 @@ const RosterManagement = () => {
 
   return (
     <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-      </video>
+      
 
       <div style={{
         position: 'fixed',

@@ -8,7 +8,7 @@ import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import newbg1 from "../../assets/newbg1.jpg";
+import im1 from "../../assets/im1.jpg";
  
 
 // Add font link for modern fonts
@@ -670,7 +670,7 @@ export default function ComplaintOnboarding() {
     <Navbar />
     <div className="complaint-onboard-wrapper">
       <div className="complaint-onboard-background" style={{
-        backgroundImage: `url(${newbg1})`,
+        backgroundImage: `url(${im1})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'

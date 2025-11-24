@@ -6,6 +6,7 @@ import img12 from '../assets/12.jpg';
 import img13 from '../assets/13.jpg';
 import img11 from '../assets/11.jpg';
 import img10 from '../assets/10.jpg';
+import imageJpg from '../assets/image.jpg';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -329,7 +330,7 @@ const HomeModern = () => {
       <section style={styles.aboutSection}>
         <div style={styles.aboutContent}>
           <div style={styles.aboutImage}>
-            <img src={img13} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
+            <img src={imageJpg} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
           </div>
           <div style={styles.aboutText}>
             <h2 style={styles.sectionTitle}>About Our System</h2>

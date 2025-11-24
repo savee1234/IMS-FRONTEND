@@ -160,7 +160,7 @@ const RosterView = () => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        background: 'linear-gradient(135deg, rgba(0,43,91,0.15) 0%, rgba(59,130,246,0.15) 100%)',
         zIndex: -1,
       }}></div>
       
@@ -186,7 +186,7 @@ const RosterView = () => {
             <div style={{ 
               fontSize: '1.8rem', 
               fontWeight: 'bold', 
-              color: '#1f2937',
+              color: '#0f172a',
               marginBottom: '2rem',
               textAlign: 'left',
               borderBottom: '2px solid #3b82f6',
@@ -200,13 +200,14 @@ const RosterView = () => {
                 onClick={() => navigate("/roster")}
                 style={{
                   padding: '0.75rem 2rem',
-                  backgroundColor: '#10b981',
+                  backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
                   color: 'white',
-                  border: '1px solid #10b981',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  cursor: 'pointer'
+                  border: 'none',
+                  borderRadius: '999px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
                 }}
               >
                 Back
@@ -229,12 +230,12 @@ const RosterView = () => {
 
             {/* Month Filter */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.95)',
+              background: 'white',
               padding: '2rem',
-              borderRadius: '8px',
-              border: '1px solid #d1d5db',
+              borderRadius: '12px',
+              border: '1px solid #e5e7eb',
               marginBottom: '2rem',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 10px 24px rgba(2, 6, 23, 0.08)'
             }}>
               <div style={{ 
                 display: 'flex', 
@@ -259,12 +260,13 @@ const RosterView = () => {
                   }}
                   style={{
                     padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '0.9rem',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '10px',
+                    fontSize: '0.95rem',
                     width: '300px',
                     outline: 'none',
-                    color: '#374151'
+                    color: '#0f172a',
+                    backgroundColor: '#f8fafc'
                   }}
                 />
               </div>
@@ -282,56 +284,56 @@ const RosterView = () => {
                 <table style={{ 
                   width: '100%', 
                   borderCollapse: 'collapse',
-                  border: '1px solid #d1d5db'
+                  border: '1px solid #e5e7eb'
                 }}>
                   <thead>
                     <tr>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Roster Name</th>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Month</th>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Created By</th>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Created By Name</th>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Created DTM</th>
                       <th style={{ 
                         padding: '1rem', 
                         textAlign: 'center',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Actions</th>
                     </tr>
@@ -378,14 +380,15 @@ const RosterView = () => {
                             <button
                               onClick={() => handleViewRoster(roster)}
                               style={{
-                                backgroundColor: '#3b82f6',
+                                backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
                                 color: 'white',
                                 border: 'none',
-                                borderRadius: '4px',
+                                borderRadius: '999px',
                                 cursor: 'pointer',
-                                padding: '6px 12px',
+                                padding: '8px 14px',
                                 marginRight: '6px',
-                                fontSize: '0.875rem'
+                                fontSize: '0.9rem',
+                                boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
                               }}
                             >
                               View
@@ -393,13 +396,14 @@ const RosterView = () => {
                             <button
                               onClick={() => handleUpdateRoster(roster)}
                               style={{
-                                backgroundColor: '#10b981',
+                                backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
                                 color: 'white',
                                 border: 'none',
-                                borderRadius: '4px',
+                                borderRadius: '999px',
                                 cursor: 'pointer',
-                                padding: '6px 12px',
-                                fontSize: '0.875rem'
+                                padding: '8px 14px',
+                                fontSize: '0.9rem',
+                                boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
                               }}
                             >
                               Update
@@ -438,10 +442,11 @@ const RosterView = () => {
                         style={{
                           margin: '0 0.25rem',
                           padding: '0.5rem 1rem',
-                          borderRadius: '4px',
-                          border: currentPage === page ? '2px solid #3b82f6' : '1px solid #d1d5db',
-                          backgroundColor: currentPage === page ? '#3b82f6' : 'white',
-                          color: currentPage === page ? 'white' : '#374151',
+                          borderRadius: '999px',
+                          border: currentPage === page ? 'none' : '1px solid #e5e7eb',
+                          backgroundImage: currentPage === page ? 'linear-gradient(90deg, #06b6d4, #3b82f6)' : 'none',
+                          backgroundColor: currentPage === page ? undefined : 'white',
+                          color: currentPage === page ? 'white' : '#0f172a',
                           cursor: 'pointer'
                         }}
                       >
@@ -454,8 +459,8 @@ const RosterView = () => {
                         style={{
                           marginLeft: '0.5rem',
                           padding: '0.5rem 1rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '4px',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '999px',
                           backgroundColor: 'white',
                           cursor: 'pointer'
                         }}
@@ -493,12 +498,12 @@ const RosterView = () => {
                     onClick={() => setSelectedRoster(null)}
                     style={{
                       padding: '0.5rem 1rem',
-                      backgroundColor: '#6b7280',
+                      backgroundColor: '#475569',
                       color: 'white',
                       border: 'none',
-                      borderRadius: '4px',
+                      borderRadius: '999px',
                       cursor: 'pointer',
-                      fontSize: '0.875rem'
+                      fontSize: '0.9rem'
                     }}
                   >
                     Back to List
@@ -508,45 +513,45 @@ const RosterView = () => {
                 <table style={{
                   width: '100%',
                   borderCollapse: 'collapse',
-                  border: '1px solid #d1d5db'
+                  border: '1px solid #e5e7eb'
                 }}>
                   <thead>
                     <tr>
                       <th style={{
                         padding: '1rem',
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Date</th>
                       <th style={{
                         padding: '1rem',
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Day</th>
                       <th style={{
                         padding: '1rem',
                         textAlign: 'left',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>Shift</th>
                       {["E1", "E2", "E3", "E4", "E5"].map((col) => (
                         <th key={col} style={{
                           padding: '1rem',
                           textAlign: 'center',
-                          border: '1px solid #d1d5db',
-                          fontWeight: '600',
-                          backgroundColor: '#1a237e',
-                          color: '#ffffff'
-                        }}>
-                          {col}
-                        </th>
+                        border: '1px solid #e5e7eb',
+                        fontWeight: '600',
+                        backgroundColor: '#1e3a8a',
+                        color: '#ffffff'
+                      }}>
+                        {col}
+                      </th>
                       ))}
                     </tr>
                   </thead>
@@ -579,14 +584,14 @@ const RosterView = () => {
                               color: '#374151'
                             }}>{shift.shift}</td>
                             {shift.employees.map((emp, empIndex) => (
-                              <td key={empIndex} style={{
-                                padding: '1rem',
-                                border: '1px solid #d1d5db',
-                                textAlign: 'center',
-                                color: '#374151'
-                              }}>
-                                {emp || "Not Assigned"}
-                              </td>
+                            <td key={empIndex} style={{
+                              padding: '1rem',
+                              border: '1px solid #e5e7eb',
+                              textAlign: 'center',
+                              color: '#374151'
+                            }}>
+                              {emp || "Not Assigned"}
+                            </td>
                             ))}
                           </tr>
                         ))}
@@ -618,37 +623,38 @@ const RosterView = () => {
                     fontWeight: '600',
                     color: '#1f2937'
                   }}>Update Roster - {editingRoster.rosterName}</h3>
-                  <div>
-                    <button
-                      onClick={handleSaveUpdate}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#10b981',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem',
-                        marginRight: '0.5rem'
-                      }}
-                    >
-                      Save Changes
-                    </button>
-                    <button
-                      onClick={() => setEditingRoster(null)}
-                      style={{
-                        padding: '0.5rem 1rem',
-                        backgroundColor: '#6b7280',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '0.875rem'
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                    <div>
+                      <button
+                        onClick={handleSaveUpdate}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '999px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem',
+                          marginRight: '0.5rem',
+                          boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
+                        }}
+                      >
+                        Save Changes
+                      </button>
+                      <button
+                        onClick={() => setEditingRoster(null)}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          backgroundColor: '#475569',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '999px',
+                          cursor: 'pointer',
+                          fontSize: '0.9rem'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                 </div>
 
                 {/* Update Form Fields */}
@@ -678,10 +684,11 @@ const RosterView = () => {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '4px',
-                          fontSize: '0.9rem',
-                          outline: 'none'
+                          border: '1px solid #cbd5e1',
+                          borderRadius: '10px',
+                          fontSize: '0.95rem',
+                          outline: 'none',
+                          backgroundColor: '#f8fafc'
                         }}
                       />
                     </div>
@@ -699,10 +706,11 @@ const RosterView = () => {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '4px',
-                          fontSize: '0.9rem',
-                          outline: 'none'
+                          border: '1px solid #cbd5e1',
+                          borderRadius: '10px',
+                          fontSize: '0.95rem',
+                          outline: 'none',
+                          backgroundColor: '#f8fafc'
                         }}
                       />
                     </div>
@@ -799,17 +807,17 @@ const RosterView = () => {
                                       e.target.value
                                     )
                                   }
-                                  style={{
-                                    width: '100%',
-                                    padding: '0.5rem',
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '4px',
-                                    fontSize: '0.9rem',
-                                    backgroundColor: 'white',
-                                    outline: 'none',
-                                    cursor: 'pointer'
-                                  }}
-                                >
+                                style={{
+                                  width: '100%',
+                                  padding: '0.5rem',
+                                  border: '1px solid #cbd5e1',
+                                  borderRadius: '10px',
+                                  fontSize: '0.95rem',
+                                  backgroundColor: '#ffffff',
+                                  outline: 'none',
+                                  cursor: 'pointer'
+                                }}
+                              >
                                   <option value="">Select</option>
                                   {employees.map((employee, i) => (
                                     <option key={i} value={employee}>

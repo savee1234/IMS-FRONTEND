@@ -586,20 +586,10 @@ const Organizations = () => {
   };
 
   return (
-    <div className="organizations-section" style={{ padding: '2rem' }}>
+    <div className="organizations-section">
       {/* Contact Details Modal */}
       <ContactDetailsModal />
-      <h2 style={{ 
-        fontSize: '1.8rem', 
-        fontWeight: 'bold', 
-        color: '#1f2937',
-        marginBottom: '2rem',
-        textAlign: 'left',
-        borderBottom: '2px solid #3b82f6',
-        paddingBottom: '0.5rem'
-      }}>
-        Organization Contact Persons
-      </h2>
+      
       
       {error && (
         <div style={{
@@ -614,334 +604,149 @@ const Organizations = () => {
         </div>
       )}
 
-      <form onSubmit={handleOrgSubmit} style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        padding: '2rem',
-        borderRadius: '8px',
-        border: '1px solid #d1d5db',
-        marginBottom: '2rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '2rem',
-          marginBottom: '2rem'
-        }}>
+      <form onSubmit={handleOrgSubmit}>
+        <div className="form-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '120px'
-              }}>Organization</label>
+            <div className="form-field">
+              <label className="field-label">Organization</label>
+              <div className="field-control input-wrapper">
               <select
                 name="organizationId"
                 value={orgFormData.organizationId}
                 onChange={handleOrgInputChange}
                 required
-                style={{
-                  padding: '0.75rem 2.5rem 0.75rem 0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
-                  width: '250px',
-                  outline: 'none',
-                  cursor: 'pointer',
-                  color: '#374151',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none',
-                  appearance: 'none'
-                }}
               >
                 <option value="">Select Organization</option>
                 {organizations.map(org => (
                   <option key={org._id} value={org._id}>{getOrganizationName(org)}</option>
                 ))}   
               </select>
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '120px'
-              }}>Title</label>
+            <div className="form-field">
+              <label className="field-label">Title</label>
+              <div className="field-control input-wrapper">
               <select
                 name="title"
                 value={orgFormData.title}
                 onChange={handleOrgInputChange}
-                style={{
-                  padding: '0.75rem 2.5rem 0.75rem 0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 16px',
-                  width: '250px',
-                  outline: 'none',
-                  cursor: 'pointer',
-                  color: '#374151',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none',
-                  appearance: 'none'
-                }}
               >
                 <option value="">Select Title</option>
                 {titles.map(title => (
                   <option key={title} value={title}>{title}</option>
                 ))}
               </select>
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '120px'
-              }}>Mobile No</label>
+            <div className="form-field">
+              <label className="field-label">Mobile No</label>
+              <div className="field-control input-wrapper">
               <input
+                className="input"
                 type="tel"
                 name="mobileNo"
                 value={orgFormData.mobileNo}
                 onChange={handleOrgInputChange}
                 placeholder="Enter mobile number"
-                style={{
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  width: '250px',
-                  outline: 'none',
-                  color: '#374151'
-                }}
               />
+              </div>
             </div>
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '160px'
-              }}>Contact Person Name</label>
+            <div className="form-field">
+              <label className="field-label">Contact Person Name</label>
+              <div className="field-control input-wrapper">
               <input
+                className="input"
                 type="text"
                 name="contactPersonName"
                 value={orgFormData.contactPersonName}
                 onChange={handleOrgInputChange}
                 placeholder="Enter contact name"
                 required
-                style={{
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  width: '250px',
-                  outline: 'none',
-                  color: '#374151'
-                }}
               />
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '160px'
-              }}>Email</label>
+            <div className="form-field">
+              <label className="field-label">Email</label>
+              <div className="field-control input-wrapper">
               <input
+                className="input"
                 type="email"
                 name="email"
                 value={orgFormData.email}
                 onChange={handleOrgInputChange}
                 placeholder="Enter email address"
                 required
-                style={{
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  width: '250px',
-                  outline: 'none',
-                  color: '#374151'
-                }}
               />
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '160px'
-              }}>Office No</label>
+            <div className="form-field">
+              <label className="field-label">Office No</label>
+              <div className="field-control input-wrapper">
               <input
+                className="input"
                 type="text"
                 name="officeNo"
                 value={orgFormData.officeNo}
                 onChange={handleOrgInputChange}
                 placeholder="Enter office number"
-                style={{
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  width: '250px',
-                  outline: 'none',
-                  color: '#374151'
-                }}
               />
+              </div>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <label style={{
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '1rem',
-                minWidth: '160px'
-              }}>Calling Name</label>
+            <div className="form-field">
+              <label className="field-label">Calling Name</label>
+              <div className="field-control input-wrapper">
               <input
+                className="input"
                 type="text"
                 name="callingName"
                 value={orgFormData.callingName}
                 onChange={handleOrgInputChange}
                 placeholder="Enter calling name"
-                style={{
-                  padding: '0.75rem',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  width: '250px',
-                  outline: 'none',
-                  color: '#374151'
-                }}
               />
+              </div>
             </div>
           </div>
         </div>
         
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'flex-end',
-          gap: '1rem'
-        }}>
-          <button type="button" onClick={handleReset} style={{
-            padding: '0.75rem 2rem',
-            backgroundColor: '#6b7280',
-            color: 'white',
-            border: '1px solid #6b7280',
-            borderRadius: '4px',
-            fontSize: '0.9rem',
-            fontWeight: '600',
-            cursor: 'pointer'
-          }}>
-            Reset
-          </button>
-          
-          <button type="submit" disabled={loading} style={{
-            padding: '0.75rem 2rem',
-            backgroundColor: loading ? '#9ca3af' : '#3b82f6',
-            color: 'white',
-            border: loading ? '1px solid #9ca3af' : '1px solid #3b82f6',
-            borderRadius: '4px',
-            fontSize: '0.9rem',
-            fontWeight: '600',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}>
-            {loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}
-          </button>
+        <div className="form-actions">
+          <div className="action-buttons-group">
+            <button type="button" onClick={handleReset} className="btn btn-secondary">Reset</button>
+            <button type="submit" disabled={loading} className="btn btn-primary">{loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}</button>
+          </div>
         </div>
       </form>
 
-      <div className="contacts-table" style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        border: '1px solid #d1d5db',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-      }}>
-        <table style={{ 
-          width: '100%', 
-          borderCollapse: 'collapse',
-          border: '1px solid #d1d5db'
-        }}>
+      <div className="table-container" style={{ marginTop: '1rem' }}>
+        <table className="modern-table">
           <thead>
             <tr>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Organization
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Name
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Email
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Mobile
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Created By Name
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Created Dtm
               </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
+              <th>
                 Actions
               </th>
             </tr>
@@ -949,130 +754,49 @@ const Organizations = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="7" style={{ 
-                  padding: '2rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
+                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>
                   Loading...
                 </td>
               </tr>
             ) : orgContacts.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ 
-                  padding: '2rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
+                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>
                   No organization contacts found
                 </td>
               </tr>
             ) : (
               orgContacts.map(contact => (
                 <tr key={contact._id}>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {getOrganizationName(contact)}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {contact.name}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {contact.email}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {contact.mobileNumber || 'N/A'}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {contact.createdByName}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
+                  <td>
                     {new Date(contact.createdDtm).toLocaleString()}
                   </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    textAlign: 'center'
-                  }}>
-                    <button
-                      onClick={() => handleView(contact)}
-                      style={{
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px',
-                        marginRight: '6px'
-                      }}
-                      title="View"
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(contact)}
-                      style={{
-                        backgroundColor: '#FFB300',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px',
-                        marginRight: '6px'
-                      }}
-                      title="Update"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteContact(contact._id)}
-                      disabled={loading}
-                      style={{
-                        backgroundColor: loading ? '#9ca3af' : '#F44336',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px'
-                      }}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                      <button title="View" className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} onClick={() => handleView(contact)}>
+                        <FaEye />
+                      </button>
+                      <button title="Update" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleEdit(contact)}>
+                        <FaEdit />
+                      </button>
+                      <button title="Delete" className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} onClick={() => handleDeleteContact(contact._id)} disabled={loading}>
+                        <FaTrash />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

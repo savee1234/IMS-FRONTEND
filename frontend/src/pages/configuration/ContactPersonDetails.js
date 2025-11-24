@@ -702,9 +702,9 @@ const ContactPersonDetails = () => {
               <th style={{
                 padding: '1rem',
                 textAlign: 'left',
-                border: '1px solid #d1d5db',
+                border: '1px solid #1e3a8a',
                 fontWeight: '600',
-                backgroundColor: '#1a237e',
+                backgroundColor: '#1e3a8a',
                 color: '#ffffff',
                 whiteSpace: 'nowrap'
               }}>
@@ -713,9 +713,9 @@ const ContactPersonDetails = () => {
               <th style={{
                 padding: '1rem',
                 textAlign: 'center',
-                border: '1px solid #d1d5db',
+                border: '1px solid #1e3a8a',
                 fontWeight: '600',
-                backgroundColor: '#1a237e',
+                backgroundColor: '#1e3a8a',
                 color: '#ffffff',
                 whiteSpace: 'nowrap'
               }}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import backgroundVideo from "../../assets/Background.mp4";
+ 
 
 const employees = [
   "John Doe",
@@ -137,22 +137,7 @@ const RosterManagement = () => {
 
   return (
     <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-      </video>
+      
 
       <div style={{
         position: 'fixed',
@@ -160,7 +145,7 @@ const RosterManagement = () => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        background: 'linear-gradient(135deg, rgba(248,250,252,0.3) 0%, rgba(226,232,240,0.3) 100%)',
+        background: 'linear-gradient(135deg, rgba(0,43,91,0.15) 0%, rgba(59,130,246,0.15) 100%)',
         zIndex: -1,
       }}></div>
       
@@ -186,7 +171,7 @@ const RosterManagement = () => {
         <div style={{ 
           fontSize: '1.8rem', 
           fontWeight: 'bold', 
-          color: '#1f2937',
+          color: '#0f172a',
           marginBottom: '2rem',
           textAlign: 'left',
           borderBottom: '2px solid #3b82f6',
@@ -200,13 +185,14 @@ const RosterManagement = () => {
             onClick={() => navigate("/roster-view")}
             style={{
               padding: '0.75rem 2rem',
-              backgroundColor: '#10b981',
+              backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
               color: 'white',
-              border: '1px solid #10b981',
-              borderRadius: '4px',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              cursor: 'pointer'
+              border: 'none',
+              borderRadius: '999px',
+              fontSize: '0.95rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
             }}
           >
             View Rosters
@@ -229,12 +215,12 @@ const RosterManagement = () => {
 
         {/* Form Section */}
         <form style={{
-          background: 'rgba(255, 255, 255, 0.95)',
+          background: 'white',
           padding: '2rem',
-          borderRadius: '8px',
-          border: '1px solid #d1d5db',
+          borderRadius: '12px',
+          border: '1px solid #e5e7eb',
           marginBottom: '2rem',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 10px 24px rgba(2, 6, 23, 0.08)'
         }}>
           {/* Month Picker */}
           <div style={{ 
@@ -260,12 +246,13 @@ const RosterManagement = () => {
               }}
               style={{
                 padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '4px',
-                fontSize: '0.9rem',
+                border: '1px solid #cbd5e1',
+                borderRadius: '10px',
+                fontSize: '0.95rem',
                 width: '300px',
                 outline: 'none',
-                color: '#374151'
+                color: '#0f172a',
+                backgroundColor: '#f8fafc'
               }}
             />
           </div>
@@ -274,51 +261,51 @@ const RosterManagement = () => {
           {/* Roster Table */}
           {roster.length > 0 && (
             <div style={{
-              background: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: '8px',
+              background: 'white',
+              borderRadius: '12px',
               padding: '1.5rem',
-              border: '1px solid #d1d5db',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 10px 24px rgba(2, 6, 23, 0.08)',
               marginBottom: '2rem'
             }}>
               <table style={{ 
                 width: '100%', 
                 borderCollapse: 'collapse',
-                border: '1px solid #d1d5db'
+                border: '1px solid #e5e7eb'
               }}>
                 <thead>
                   <tr>
                     <th style={{
                       padding: '1rem', 
                       textAlign: 'left',
-                      border: '1px solid #d1d5db',
+                      border: '1px solid #e5e7eb',
                       fontWeight: '600',
-                      backgroundColor: '#1a237e',
+                      backgroundColor: '#1e3a8a',
                       color: '#ffffff'
                     }}>Date</th>
                     <th style={{
                       padding: '1rem', 
                       textAlign: 'left',
-                      border: '1px solid #d1d5db',
+                      border: '1px solid #e5e7eb',
                       fontWeight: '600',
-                      backgroundColor: '#1a237e',
+                      backgroundColor: '#1e3a8a',
                       color: '#ffffff'
                     }}>Day</th>
                     <th style={{
                       padding: '1rem', 
                       textAlign: 'left',
-                      border: '1px solid #d1d5db',
+                      border: '1px solid #e5e7eb',
                       fontWeight: '600',
-                      backgroundColor: '#1a237e',
+                      backgroundColor: '#1e3a8a',
                       color: '#ffffff'
                     }}>Shift</th>
                     {["E1", "E2", "E3", "E4", "E5"].map((col) => (
                       <th key={col} style={{
                         padding: '1rem', 
                         textAlign: 'center',
-                        border: '1px solid #d1d5db',
+                        border: '1px solid #e5e7eb',
                         fontWeight: '600',
-                        backgroundColor: '#1a237e',
+                        backgroundColor: '#1e3a8a',
                         color: '#ffffff'
                       }}>
                         {col}
@@ -335,14 +322,14 @@ const RosterManagement = () => {
                             <>
                               <td rowSpan={2} style={{
                                 padding: '1rem',
-                                border: '1px solid #d1d5db',
+                                border: '1px solid #e5e7eb',
                                 color: '#374151'
                               }}>
                                 {new Date(day.date).toLocaleDateString("en-GB")}
                               </td>
                               <td rowSpan={2} style={{
                                 padding: '1rem',
-                                border: '1px solid #d1d5db',
+                                border: '1px solid #e5e7eb',
                                 color: '#374151'
                               }}>
                                 {day.dayName}
@@ -351,13 +338,13 @@ const RosterManagement = () => {
                           )}
                           <td style={{
                             padding: '1rem',
-                            border: '1px solid #d1d5db',
+                            border: '1px solid #e5e7eb',
                             color: '#374151'
                           }}>{shift.shift}</td>
                           {shift.employees.map((emp, empIndex) => (
                             <td key={empIndex} style={{
                               padding: '1rem',
-                              border: '1px solid #d1d5db',
+                              border: '1px solid #e5e7eb',
                               textAlign: 'center'
                             }}>
                               <select
@@ -373,10 +360,10 @@ const RosterManagement = () => {
                                 style={{
                                   width: '100%',
                                   padding: '0.5rem',
-                                  border: '1px solid #d1d5db',
-                                  borderRadius: '4px',
-                                  fontSize: '0.9rem',
-                                  backgroundColor: 'white',
+                                  border: '1px solid #cbd5e1',
+                                  borderRadius: '10px',
+                                  fontSize: '0.95rem',
+                                  backgroundColor: '#ffffff',
                                   outline: 'none',
                                   cursor: 'pointer'
                                 }}
@@ -405,12 +392,12 @@ const RosterManagement = () => {
               }}>
                 <button type="button" onClick={resetRoster} style={{
                   padding: '0.75rem 2rem',
-                  backgroundColor: '#6b7280',
+                  backgroundColor: '#475569',
                   color: 'white',
-                  border: '1px solid #6b7280',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
+                  border: 'none',
+                  borderRadius: '999px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
                   cursor: 'pointer'
                 }}>
                   Reset
@@ -418,13 +405,15 @@ const RosterManagement = () => {
                 
                 <button onClick={submitRoster} disabled={loading} style={{
                   padding: '0.75rem 2rem',
-                  backgroundColor: loading ? '#9ca3af' : '#3b82f6',
+                  backgroundImage: loading ? 'none' : 'linear-gradient(90deg, #06b6d4, #3b82f6)',
+                  backgroundColor: loading ? '#9ca3af' : undefined,
                   color: 'white',
-                  border: `1px solid ${loading ? '#9ca3af' : '#3b82f6'}`,
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  cursor: loading ? 'not-allowed' : 'pointer'
+                  border: 'none',
+                  borderRadius: '999px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  boxShadow: loading ? 'none' : '0 10px 24px rgba(59, 130, 246, 0.25)'
                 }}>
                   {loading ? 'Saving...' : 'Submit'}
                 </button>
@@ -439,51 +428,5 @@ const RosterManagement = () => {
   );
 };
 
-const thStyle = {
-  padding: "0.8rem",
-  border: "1px solid #d1d5db",
-  textAlign: "center",
-};
-
-const tdStyle = {
-  padding: "0.5rem",
-  border: "1px solid #d1d5db",
-  textAlign: "center",
-};
-
-const headerStyle = {
-  ...thStyle,
-  color: "white",
-  fontWeight: "600",
-  textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-  border: "none",
-  padding: "1rem 0.8rem",
-};
-
-const resetBtnStyle = {
-  padding: "0.8rem 1.8rem",
-  background: "linear-gradient(135deg, #6b7280, #4b5563)",
-  color: "#fff",
-  borderRadius: "10px",
-  border: "none",
-  fontSize: "1rem",
-  fontWeight: "600",
-  cursor: "pointer",
-  transition: "all 0.3s ease",
-  boxShadow: "0 4px 15px rgba(107, 114, 128, 0.3)",
-};
-
-const submitBtnStyle = {
-  padding: "0.8rem 1.8rem",
-  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-  color: "#fff",
-  borderRadius: "10px",
-  border: "none",
-  fontSize: "1rem",
-  fontWeight: "600",
-  cursor: "pointer",
-  transition: "all 0.3s ease",
-  boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
-};
 
 export default RosterManagement;

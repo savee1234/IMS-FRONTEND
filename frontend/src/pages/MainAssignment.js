@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
   const assignments = [
@@ -15,273 +17,179 @@ const MainAssignment = () => {
       assignedTo: 'Romaine Murcott',
       remark: '',
     },
+    {
+      requestReference: '25-10-23-0002',
+      enteredDate: '10/24/2025 09:15:32 AM',
+      assignedBy: 'John Smith',
+      assignedTo: 'Sarah Johnson',
+      remark: 'Urgent follow-up required',
+    },
+    {
+      requestReference: '25-10-23-0003',
+      enteredDate: '10/24/2025 02:45:17 PM',
+      assignedBy: 'Emily Davis',
+      assignedTo: 'Michael Brown',
+      remark: 'Awaiting customer response',
+    },
   ];
 
-  const styles = {
-    page: {
-      position: 'relative',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-    },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(26, 58, 140, 0.1) 0%, rgba(74, 107, 202, 0.08) 100%)',
-      backdropFilter: 'blur(8px)',
-      zIndex: -1,
-    },
-    contentWrapper: {
-      position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '2rem 1rem',
-    },
-    tableContainer: {
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-      borderRadius: '20px',
-      padding: '2rem',
-      boxShadow: '0 20px 40px rgba(26, 58, 140, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08)',
-      width: '95%',
-      maxWidth: '1200px',
-      textAlign: 'center',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
-    },
-    title: {
-      fontSize: '2.2rem',
-      fontWeight: '700',
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      marginBottom: '1.5rem',
-      letterSpacing: '-0.5px',
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'separate',
-      borderSpacing: '0',
-      borderRadius: '12px',
-      overflow: 'hidden',
-    },
-    th: {
-      backgroundColor: '#1a3a8c',
-      color: 'white',
-      padding: '1rem 1.2rem',
-      fontWeight: '600',
-      fontSize: '0.9rem',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      border: 'none',
-    },
-    td: {
-      padding: '1.2rem',
-      borderBottom: '1px solid rgba(26, 58, 140, 0.1)',
-      fontSize: '0.95rem',
-      color: '#333',
-      backgroundColor: 'white',
-      transition: 'all 0.2s ease',
-    },
-    tr: {
-      '&:hover td': {
-        backgroundColor: '#f8faff',
-        transform: 'translateY(-2px)',
-      },
-    },
-    actions: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '0.8rem',
-    },
-    button: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      border: 'none',
-      cursor: 'pointer',
-      color: 'white',
-      fontSize: '1.2rem',
-      width: '40px',
-      height: '40px',
-      borderRadius: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.2)',
-    },
-    pagination: {
-      marginTop: '2rem',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '1rem',
-    },
-    pageButton: {
-      background: 'linear-gradient(135deg, #1a3a8c 0%, #4a6bca 100%)',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '12px',
-      padding: '0.8rem 1.5rem',
-      cursor: 'pointer',
-      fontWeight: '600',
-      fontSize: '0.9rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 4px 12px rgba(26, 58, 140, 0.3)',
-    },
-    pageInfo: {
-      color: '#1a3a8c',
-      fontWeight: '600',
-      fontSize: '0.9rem',
-      padding: '0.8rem 1.5rem',
-      backgroundColor: 'rgba(26, 58, 140, 0.1)',
-      borderRadius: '10px',
-    },
+  const [filters, setFilters] = useState({
+    employee: '',
+    status: '',
+    fromDate: new Date().toISOString().slice(0, 10),
+    toDate: new Date().toISOString().slice(0, 10)
+  });
+
+  const [search, setSearch] = useState('');
+
+  const handleChange = (field, value) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
-    <div style={styles.page}>
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
+    <div
+      className="complaint-onboard-wrapper assignments-page"
+      style={{
+        minHeight: '100vh',
+        background: `url(${process.env.PUBLIC_URL}/new.jpg) center center / cover no-repeat fixed`
+      }}
+    >
+      <Navbar />
 
-      <div style={styles.gradientOverlay}></div>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>Main Assignments</h1>
+            </div>
+          </div>
 
-      <div style={styles.contentWrapper}>
-        <Navbar />
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid assignments-form-grid">
+              <div className="form-field">
+                <label className="field-label">Employee</label>
+                <div className="field-control input-wrapper">
+                  <select
+                    value={filters.employee}
+                    onChange={(e) => handleChange('employee', e.target.value)}
+                  >
+                    <option value="">Select Employees</option>
+                    <option value="romaine.murcott">Romaine Murcott</option>
+                    <option value="john.smith">John Smith</option>
+                    <option value="sarah.johnson">Sarah Johnson</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">Status</label>
+                <div className="field-control input-wrapper">
+                  <select
+                    value={filters.status}
+                    onChange={(e) => handleChange('status', e.target.value)}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">From Date</label>
+                <div className="field-control input-wrapper">
+                  <input
+                    type="date"
+                    value={filters.fromDate}
+                    onChange={(e) => handleChange('fromDate', e.target.value)}
+                    className="input"
+                  />
+                </div>
+              </div>
+              <div className="form-field">
+                <label className="field-label">To Date</label>
+                <div className="field-control input-wrapper">
+                  <input
+                    type="date"
+                    value={filters.toDate}
+                    onChange={(e) => handleChange('toDate', e.target.value)}
+                    className="input"
+                  />
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
+          </form>
 
-        <div style={styles.tableContainer}>
-          <h2 style={styles.title}>My Main Assignments</h2>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Request Reference</th>
-                <th style={styles.th}>Entered Date</th>
-                <th style={styles.th}>Assigned By Name</th>
-                <th style={styles.th}>Assigned To Name</th>
-                <th style={styles.th}>Remark</th>
-                <th style={styles.th}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.map((item, index) => (
-                <tr key={index} style={styles.tr}>
-                  <td style={styles.td}>
-                    <strong style={{ color: '#1a3a8c' }}>{item.requestReference}</strong>
-                  </td>
-                  <td style={styles.td}>{item.enteredDate}</td>
-                  <td style={styles.td}>{item.assignedBy}</td>
-                  <td style={styles.td}>{item.assignedTo}</td>
-                  <td style={styles.td}>{item.remark}</td>
-                  <td style={styles.td}>
-                    <div style={styles.actions}>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        🔄
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        ✅
-                      </button>
-                      <button
-                        style={styles.button}
-                        onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-2px) scale(1.05)';
-                          e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.target.style.transform = 'translateY(0) scale(1)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.2)';
-                        }}
-                      >
-                        👁️
-                      </button>
-                    </div>
-                  </td>
+          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
+            <label className="field-label">Search</label>
+            <div className="field-control input-wrapper">
+              <input
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="input input-sm"
+              />
+            </div>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>Request Reference</th>
+                  <th>Entered Date</th>
+                  <th>Assigned By</th>
+                  <th>Assigned To</th>
+                  <th>Remark</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {assignments.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.requestReference}</td>
+                    <td>{item.enteredDate}</td>
+                    <td>{item.assignedBy}</td>
+                    <td>{item.assignedTo}</td>
+                    <td>{item.remark || 'No remarks'}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                        <button title="View" className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>
+                          <FaEye />
+                        </button>
+                        <button title="Update" className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
+                          <FaEdit />
+                        </button>
+                        <button title="Delete" className="btn" style={{ backgroundColor: '#F44336', color: '#fff' }}>
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <div style={styles.pagination}>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
+            <button type="button" className="btn btn-primary">
               <FaChevronLeft /> Previous
             </button>
-            <span style={styles.pageInfo}>Page 1 of 1</span>
-            <button
-              style={styles.pageButton}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 20px rgba(26, 58, 140, 0.4)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 12px rgba(26, 58, 140, 0.3)';
-              }}
-            >
+            <button type="button" className="btn btn-primary">
               Next <FaChevronRight />
             </button>
+            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>
           </div>
         </div>
-
-        <Footer />
       </div>
+
+      <Footer />
     </div>
   );
 };

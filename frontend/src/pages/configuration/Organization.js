@@ -509,323 +509,108 @@ const Organization = () => {
   };
 
   return (
-    <div style={{ padding: '1.5rem' }}>
-      {/* Form Section */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e5e7eb'
-      }}>
-        <h3 style={{
-          margin: '0 0 1rem 0',
-          color: '#1f2937',
-          fontSize: '1.25rem',
-          fontWeight: '600'
-        }}>
-          {editMode ? 'Edit Organization' : 'Add New System Organization'}
-        </h3>
-        
+    <div>
+      <div>
+        <h3>{editMode ? 'Edit Organization' : 'Add New System Organization'}</h3>
         {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            border: '1px solid #fecaca',
-            color: '#dc2626',
-            padding: '1rem',
-            borderRadius: '4px',
-            marginBottom: '1rem'
-          }}>
-            {error}
-          </div>
+          <div className="alert-message error">{error}</div>
         )}
-        
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-              color: '#374151'
-            }}>
-              Organization *
-            </label>
-            <input
-              type="text"
-              name="organization"
-              value={orgFormData.organization}
-              onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '0.875rem'
-              }}
-              required
-            />
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-field">
+              <label className="field-label">Organization *</label>
+              <div className="field-control input-wrapper">
+                <input
+                  type="text"
+                  name="organization"
+                  value={orgFormData.organization}
+                  onChange={handleInputChange}
+                  className="input"
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-field">
+              <label className="field-label">Organization Type *</label>
+              <div className="field-control input-wrapper">
+                <select
+                  name="organizationType"
+                  value={orgFormData.organizationType}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select type</option>
+                  <option value="Type 1">Type 1</option>
+                  <option value="Type 2">Type 2</option>
+                  <option value="Type 3">Type 3</option>
+                </select>
+              </div>
+            </div>
           </div>
-
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-              color: '#374151'
-            }}>
-              Organization Type *
-            </label>
-            <select
-              name="organizationType"
-              value={orgFormData.organizationType}
-              onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                background: 'white'
-              }}
-              required
-            >
-              <option value="">Select type</option>
-              <option value="Type 1">Type 1</option>
-              <option value="Type 2">Type 2</option>
-              <option value="Type 3">Type 3</option>
-            </select>
-          </div>
-
-          <div style={{
-            display: 'flex',
-            gap: '1rem',
-            justifyContent: 'flex-end',
-            marginTop: '1rem'
-          }}>
-            <button
-              type="button"
-              onClick={handleReset}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#6b7280',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s'
-              }}
-            >
-              Reset
-            </button>
-            <button
-              type="submit"
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                cursor: submitting ? 'not-allowed' : 'pointer',
-                opacity: submitting ? 0.7 : 1,
-                transition: 'background-color 0.2s'
-              }}
-              disabled={submitting}
-            >
-              {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
-            </button>
+          <div className="form-actions">
+            <div className="action-buttons-group">
+              <button type="button" onClick={handleReset} className="btn btn-secondary">Reset</button>
+              <button type="submit" disabled={submitting} className="btn btn-primary">
+                {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
+              </button>
+            </div>
           </div>
         </form>
       </div>
 
-      {/* Table Section */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e5e7eb'
-      }}>
-        <h3 style={{
-          margin: '0 0 1rem 0',
-          color: '#1f2937',
-          fontSize: '1.25rem',
-          fontWeight: '600'
-        }}>
-          System Organizations List
-        </h3>
-        
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontSize: '0.875rem'
-          }}>
-            <thead>
+      <div className="table-container" style={{ marginTop: '1rem' }}>
+        <table className="modern-table">
+          <thead>
+            <tr>
+              <th>Organization ID</th>
+              <th>Organization</th>
+              <th>Organization Type</th>
+              <th>Created By</th>
+              <th>Created By Name</th>
+              <th>Created Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
               <tr>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization ID
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization Type
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created By
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created By Name
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created Date
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'center', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Actions
-                </th>
+                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading...</td>
               </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="7" style={{
-                    padding: '2rem',
-                    textAlign: 'center',
-                    color: '#6b7280',
-                    border: '1px solid #d1d5db'
-                  }}>
-                    Loading...
-                  </td>
-                </tr>
-              ) : organizations.length === 0 ? (
-                <tr>
-                  <td colSpan="7" style={{
-                    padding: '2rem',
-                    textAlign: 'center',
-                    color: '#6b7280',
-                    border: '1px solid #d1d5db'
-                  }}>
-                    No organizations found. Add your first organization above.
-                  </td>
-                </tr>
-              ) : (
-                organizations.map(org => (
-                  <tr key={org._id}>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organizationId || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organization || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organizationType || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdBy || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdByName || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}
-                     </td>
-                    <td style={{
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      textAlign: 'center'
-                    }}>
-                      <button
-                        onClick={() => handleView(org)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#10b981',
-                          color: 'white',
-                          border: '1px solid #10b981',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          marginRight: '0.25rem',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="View"
-                      >
+            ) : organizations.length === 0 ? (
+              <tr>
+                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  No organizations found. Add your first organization above.
+                </td>
+              </tr>
+            ) : (
+              organizations.map(org => (
+                <tr key={org._id}>
+                  <td>{org.organizationId || ''}</td>
+                  <td>{org.organization || ''}</td>
+                  <td>{org.organizationType || ''}</td>
+                  <td>{org.createdBy || ''}</td>
+                  <td>{org.createdByName || ''}</td>
+                  <td>{org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                      <button title="View" className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} onClick={() => handleView(org)}>
                         <FaEye />
                       </button>
-                      <button
-                        onClick={() => handleEdit(org)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#f59e0b',
-                          color: 'white',
-                          border: '1px solid #f59e0b',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          marginRight: '0.25rem',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="Edit"
-                      >
+                      <button title="Edit" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleEdit(org)}>
                         <FaEdit />
                       </button>
-                      <button
-                        onClick={() => handleDeleteOrganization(org._id)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#ef4444',
-                          color: 'white',
-                          border: '1px solid #ef4444',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="Delete"
-                      >
+                      <button title="Delete" className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} onClick={() => handleDeleteOrganization(org._id)}>
                         <FaTrash />
                       </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-      
-      {/* Organization Details Modal */}
+
       <OrganizationDetailsModal />
     </div>
   );

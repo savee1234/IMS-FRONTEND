@@ -19,14 +19,17 @@ const Footer = () => {
 const styles = {
   footer: {
     backgroundColor: '#ffffff',
-    color: '#000000',
+    color: '#374151',
     padding: '20px 0',
     textAlign: 'center',
-    position: 'relative',
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
     width: '100%',
     zIndex: 999,
-    boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-    borderTop: '1px solid #e2e8f0',
+    boxShadow: '0 -2px 10px rgba(0,0,0,0.06)',
+    borderTop: '1px solid #e5e7eb',
     marginTop: 'auto'
   },
   content: {
@@ -43,7 +46,7 @@ const styles = {
   text: {
     margin: 0,
     fontSize: '14px',
-    color: '#1e293b',
+    color: '#6b7280',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   links: {
@@ -52,7 +55,7 @@ const styles = {
     alignItems: 'center'
   },
   link: {
-    color: '#3b82f6',
+    color: '#374151',
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: '500',

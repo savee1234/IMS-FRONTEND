@@ -1,185 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 
 const UpdateEmployeeModal = ({ isOpen, onClose, employee, onUpdate }) => {
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    designation: '',
-    contact: '',
-    status: 'Active'
+  
+  const [accordionOpen, setAccordionOpen] = useState({});
+  const [complaintPrivileges, setComplaintPrivileges] = useState({
+    admin: true,
+    create: true,
+    view: true
   });
-
-  // Update form data when employee prop changes
-  useEffect(() => {
-    if (employee) {
-      setFormData({
-        id: employee.id || '',
-        name: employee.name || '',
-        designation: employee.designation || '',
-        contact: employee.contact || '',
-        status: employee.status || 'Active'
-      });
-    }
-  }, [employee]);
-
-  const [selectedSection, setSelectedSection] = useState('citizenManagement');
-  const [userPrivileges, setUserPrivileges] = useState({
-    citizenManagement: {
-      addCitizen: true,
-      updateCitizen: true,
-      deleteCitizen: false,
-      viewCitizen: true,
-      subsidyManagement: false,
-      citizenPayment: false,
-      administration: false,
-      smeManagement: false
-    },
-    serviceManagement: {
-      addService: false,
-      updateService: false,
-      deleteService: false,
-      viewService: true
-    },
-    storesManagement: {
-      addStore: false,
-      updateStore: false,
-      deleteStore: false,
-      viewStore: true
-    },
-    fileManagement: {
-      uploadFile: true,
-      downloadFile: true,
-      deleteFile: false,
-      viewFile: true
-    },
-    recordRoomManagement: {
-      addRecord: false,
-      updateRecord: false,
-      deleteRecord: false,
-      viewRecord: true
-    },
-    postalManagement: {
-      sendMail: false,
-      receiveMail: true,
-      trackMail: true,
-      manageMail: false
-    },
-    userManagement: {
-      addUser: false,
-      updateUser: false,
-      deleteUser: false,
-      viewUser: true
-    },
-    planningManagement: {
-      createPlan: false,
-      updatePlan: false,
-      deletePlan: false,
-      viewPlan: true
-    },
-    trainingManagement: {
-      scheduleTraining: false,
-      conductTraining: false,
-      viewTraining: true,
-      manageTraining: false
-    },
-    certificateManagement: {
-      issueCertificate: false,
-      verifyCertificate: true,
-      revokeCertificate: false,
-      viewCertificate: true
-    }
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleTogglePrivilege = (module, privilege) => {
-    setUserPrivileges(prev => ({
-      ...prev,
-      [module]: {
-        ...prev[module],
-        [privilege]: !prev[module][privilege]
-      }
-    }));
-  };
-
-  const getDisplayName = (key) => {
-    const nameMap = {
-      addCitizen: 'Add Citizen',
-      updateCitizen: 'Update Citizen',
-      deleteCitizen: 'Delete Citizen',
-      viewCitizen: 'View Citizen',
-      subsidyManagement: 'Subsidy Management',
-      citizenPayment: 'Citizen Payment',
-      administration: 'Administration',
-      smeManagement: 'SME Management',
-      addService: 'Add Service',
-      updateService: 'Update Service',
-      deleteService: 'Delete Service',
-      viewService: 'View Service',
-      addStore: 'Add Store',
-      updateStore: 'Update Store',
-      deleteStore: 'Delete Store',
-      viewStore: 'View Store',
-      uploadFile: 'Upload File',
-      downloadFile: 'Download File',
-      deleteFile: 'Delete File',
-      viewFile: 'View File',
-      addRecord: 'Add Record',
-      updateRecord: 'Update Record',
-      deleteRecord: 'Delete Record',
-      viewRecord: 'View Record',
-      sendMail: 'Send Mail',
-      receiveMail: 'Receive Mail',
-      trackMail: 'Track Mail',
-      manageMail: 'Manage Mail',
-      addUser: 'Add User',
-      updateUser: 'Update User',
-      deleteUser: 'Delete User',
-      viewUser: 'View User',
-      createPlan: 'Create Plan',
-      updatePlan: 'Update Plan',
-      deletePlan: 'Delete Plan',
-      viewPlan: 'View Plan',
-      scheduleTraining: 'Schedule Training',
-      conductTraining: 'Conduct Training',
-      viewTraining: 'View Training',
-      manageTraining: 'Manage Training',
-      issueCertificate: 'Issue Certificate',
-      verifyCertificate: 'Verify Certificate',
-      revokeCertificate: 'Revoke Certificate',
-      viewCertificate: 'View Certificate'
-    };
-    return nameMap[key] || key;
-  };
-
-  const getSectionDisplayName = (section) => {
-    const sectionMap = {
-      citizenManagement: 'Citizen Management',
-      serviceManagement: 'Service Management',
-      storesManagement: 'Stores Management',
-      fileManagement: 'File Management',
-      recordRoomManagement: 'Record Room Management',
-      postalManagement: 'Postal Management',
-      userManagement: 'User Management',
-      planningManagement: 'Planning Management',
-      trainingManagement: 'Training Management',
-      certificateManagement: 'Certificate Management'
-    };
-    return sectionMap[section] || section;
-  };
+  
 
   const handleSubmit = () => {
     const updatedEmployee = {
-      ...formData,
-      privileges: userPrivileges
+      ...(employee || {}),
+      privileges: {
+        complaintOnboarding: complaintPrivileges
+      }
     };
-    onUpdate(updatedEmployee);
+    if (onUpdate) onUpdate(updatedEmployee);
     onClose();
   };
 
@@ -192,126 +31,102 @@ const UpdateEmployeeModal = ({ isOpen, onClose, employee, onUpdate }) => {
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
-        <div style={styles.modalHeader}>
-          <h2 style={styles.modalTitle}>Update Employee Details</h2>
-          <button onClick={onClose} style={styles.closeButton}>×</button>
+        <div style={{ ...styles.modalHeader, position: 'relative', justifyContent: 'center' }}>
+          <h2 style={{ ...styles.modalTitle, textAlign: 'center' }}>Update User Privileges</h2>
+                  <button onClick={onClose} style={{
+                    position: 'absolute',
+                    right: '16px',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e5e7eb',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    color: '#111827',
+                    padding: '0',
+                    width: '34px',
+                    height: '34px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '9999px'
+                  }}>×</button>
         </div>
         
         <div style={styles.modalContent}>
-          {/* Personal Details Section */}
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Personal Details</h3>
-            <div style={styles.formGrid}>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Employee ID</label>
-                <input
-                  type="text"
-                  name="id"
-                  value={formData.id}
-                  onChange={handleInputChange}
-                  style={styles.input}
-                  disabled
-                />
-              </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Employee Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  style={styles.input}
-                  placeholder="Enter employee name"
-                />
-              </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Designation</label>
-                <input
-                  type="text"
-                  name="designation"
-                  value={formData.designation}
-                  onChange={handleInputChange}
-                  style={styles.input}
-                  placeholder="Enter designation"
-                />
-              </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Contact No.</label>
-                <input
-                  type="text"
-                  name="contact"
-                  value={formData.contact}
-                  onChange={handleInputChange}
-                  style={styles.input}
-                  placeholder="Enter contact number"
-                />
-              </div>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>Status</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  style={styles.select}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* User Privileges Section */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>User Privileges</h3>
-            <div style={styles.privilegesContainer}>
-              {/* Left Sidebar - Management Sections */}
-              <div style={styles.sidebar}>
-                {Object.keys(userPrivileges).map((sectionKey) => (
-                  <div
-                    key={sectionKey}
-                    style={{
-                      ...styles.sidebarItem,
-                      ...(selectedSection === sectionKey ? styles.sidebarItemActive : {})
-                    }}
-                    onClick={() => setSelectedSection(sectionKey)}
+            <div style={{ borderTop: '1px solid #e5e7eb', marginTop: '8px', marginBottom: '12px' }}></div>
+            <div style={styles.accordion}>
+              {['Complaint On-boarding', 'Roster Administration', 'User Administration', 'Reporting & Dashboard', 'Configuration Administration'].map((title, index) => (
+                <div key={title} style={styles.accordionItem}>
+                  <button
+                    style={styles.accordionHeader}
+                    onClick={() => setAccordionOpen(prev => ({ ...prev, [index]: !prev[index] }))}
                   >
-                    {getSectionDisplayName(sectionKey)}
-                  </div>
-                ))}
-              </div>
-
-              {/* Right Content - Selected Section Details */}
-              <div style={styles.privilegeContent}>
-                <h4 style={styles.privilegeTitle}>{getSectionDisplayName(selectedSection)}</h4>
-                <div style={styles.privilegeTable}>
-                  <div style={styles.tableHeader}>
-                    <div style={styles.tableHeaderCell}>Location</div>
-                    <div style={styles.tableHeaderCell}>Privilege</div>
-                    <div style={styles.tableHeaderCell}>Active</div>
-                  </div>
-                  
-                  {Object.entries(userPrivileges[selectedSection]).map(([key, value]) => (
-                    <div key={key} style={styles.tableRow}>
-                      <div style={styles.tableCell}>{getSectionDisplayName(selectedSection)}</div>
-                      <div style={styles.tableCell}>{getDisplayName(key)}</div>
-                      <div style={styles.tableCell}>
-                        <label style={styles.toggleSwitch}>
-                          <input
-                            type="checkbox"
-                            checked={value}
-                            onChange={() => handleTogglePrivilege(selectedSection, key)}
-                            style={styles.toggleInput}
-                          />
-                          <span style={{...styles.toggleSlider, ...(value ? styles.toggleSliderActive : {})}}>
-                            <span style={{...styles.toggleCircle, ...(value ? styles.toggleCircleActive : {})}}></span>
-                          </span>
-                        </label>
-                      </div>
+                    <span>{title}</span>
+                    <span style={{ transform: accordionOpen[index] ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <FaChevronDown />
+                    </span>
+                  </button>
+                  {accordionOpen[index] && (index === 0 ? (
+                    <div style={styles.accordionContent}>
+                        <div style={{
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '10px',
+                          overflow: 'hidden',
+                          backgroundColor: '#ffffff',
+                          width: '97%',
+                          maxWidth: '900px',
+                          margin: '0 auto'
+                        }}>
+                          <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1.6fr 0.9fr 0.7fr',
+                            backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
+                            color: '#ffffff',
+                            fontWeight: 600,
+                            fontSize: '0.85rem'
+                          }}>
+                            <div style={{ padding: '6px 8px', textAlign: 'left', marginLeft: '8px' }}>AUTHORIZATION ROLE</div>
+                            <div style={{ padding: '6px 8px' }}>STATUS</div>
+                            <div style={{ padding: '8px 10px' }}>ACTION</div>
+                          </div>
+                          <div style={{ maxHeight: '240px', overflowY: 'auto' }}>
+                            {[
+                              { key: 'admin', label: 'ADMIN' },
+                              { key: 'create', label: 'CREATE' },
+                              { key: 'view', label: 'VIEW' }
+                            ].map((row, i) => (
+                              <div key={row.key} style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1.6fr 0.9fr 0.7fr',
+                                borderBottom: '1px solid #e5e7eb',
+                                backgroundColor: i % 2 === 0 ? '#ffffff' : '#f9fafb',
+                                fontSize: '0.8rem'
+                              }}>
+                                <div style={{ padding: '6px 8px', color: '#111827', textAlign: 'left', marginLeft: '8px' }}>{row.label}</div>
+                                <div style={{ padding: '6px 8px', color: complaintPrivileges[row.key] ? '#16a34a' : '#6b7280', fontWeight: 600 }}>
+                                  {complaintPrivileges[row.key] ? 'ACTIVE' : 'INACTIVE'}
+                                </div>
+                                <div style={{ padding: '8px 10px' }}>
+                                  <label style={styles.toggleSwitch}>
+                                    <input
+                                      type="checkbox"
+                                      checked={complaintPrivileges[row.key]}
+                                      onChange={() => setComplaintPrivileges(prev => ({ ...prev, [row.key]: !prev[row.key] }))}
+                                      style={styles.toggleInput}
+                                    />
+                                    <span style={{ ...styles.toggleSlider, ...(complaintPrivileges[row.key] ? styles.toggleSliderActive : {}) }}>
+                                      <span style={{ ...styles.toggleCircle, ...(complaintPrivileges[row.key] ? styles.toggleCircleActive : {}) }}></span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                     </div>
-                  ))}
+                  ) : null)}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -517,8 +332,8 @@ const styles = {
   toggleSwitch: {
     position: 'relative',
     display: 'inline-block',
-    width: '50px',
-    height: '24px',
+    width: '40px',
+    height: '20px',
     cursor: 'pointer'
   },
   toggleInput: {
@@ -533,9 +348,9 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#ccc',
-    borderRadius: '24px',
-    transition: '0.3s',
+    backgroundColor: '#d1d5db',
+    borderRadius: '9999px',
+    transition: '0.2s',
     display: 'flex',
     alignItems: 'center'
   },
@@ -544,16 +359,16 @@ const styles = {
   },
   toggleCircle: {
     position: 'absolute',
-    height: '18px',
-    width: '18px',
-    left: '3px',
+    height: '16px',
+    width: '16px',
+    left: '2px',
     backgroundColor: 'white',
     borderRadius: '50%',
-    transition: '0.3s',
+    transition: '0.2s',
     boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
   },
   toggleCircleActive: {
-    transform: 'translateX(26px)'
+    transform: 'translateX(20px)'
   },
   modalFooter: {
     padding: '20px 24px',
@@ -564,26 +379,52 @@ const styles = {
     backgroundColor: '#f8fafc'
   },
   cancelButton: {
-    padding: '10px 20px',
+    padding: '8px 18px',
     backgroundColor: 'transparent',
     color: '#6b7280',
     border: '1px solid #d1d5db',
-    borderRadius: '6px',
+    borderRadius: '9999px',
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontSize: '0.85rem',
     fontWeight: '500',
     transition: 'all 0.2s ease'
   },
   submitButton: {
-    padding: '10px 20px',
-    backgroundColor: '#1e40af',
+    padding: '10px 22px',
+    backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
     color: 'white',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '9999px',
     cursor: 'pointer',
-    fontSize: '0.875rem',
-    fontWeight: '500',
-    transition: 'background-color 0.2s ease'
+    fontSize: '0.9rem',
+    fontWeight: '600'
+  },
+  accordion: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px'
+  },
+  accordionItem: {
+    border: '1px solid #e5e7eb',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    backgroundColor: '#ffffff'
+  },
+  accordionHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '12px 16px',
+    backgroundColor: '#ffffff',
+    color: '#111827',
+    cursor: 'pointer',
+    border: 'none'
+  },
+  accordionContent: {
+    padding: '12px 16px',
+    backgroundColor: '#f8fafc',
+    borderTop: '1px solid #e5e7eb'
   }
 };
 

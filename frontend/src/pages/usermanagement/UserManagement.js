@@ -4,18 +4,10 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
- 
-
-// Import sub-components
-import ComplaintManagement from './ComplaintManagement';
-import Reporting from './Reporting';
-import DataAnalysis from './DataAnalysis';
-import AccessLogs from './AccessLogs';
-import AuditTrails from './AuditTrails';
+import { FaEye, FaUserCog } from 'react-icons/fa';
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const [expandedSections, setExpandedSections] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -45,7 +37,8 @@ const UserManagement = () => {
           email: u.email || u.userEmail || '',
           department: u.department || u.unit || '',
           joiningDate: u.joiningDate || u.createdAt || '',
-          address: u.address || ''
+          address: u.address || '',
+          callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
         setEmployees(mapped);
@@ -59,14 +52,6 @@ const UserManagement = () => {
 
     fetchEmployees();
   }, []);
-
-  const sections = [
-    { key: 'complaintManagement', title: 'Complaint Management', component: ComplaintManagement },
-    { key: 'reporting', title: 'Reporting', component: Reporting },
-    { key: 'dataAnalysis', title: 'Data Analysis', component: DataAnalysis },
-    { key: 'accessLogs', title: 'Access Logs', component: AccessLogs },
-    { key: 'auditTrails', title: 'Audit Trails', component: AuditTrails },
-  ];   
 
   const handleUpdateEmployee = (employee) => {
     setSelectedEmployee(employee);
@@ -97,12 +82,7 @@ const UserManagement = () => {
     console.log('Employee updated:', updatedEmployee);
   };
 
-  const toggleSection = (key) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
+  
 
   const handleClose = () => {
     navigate('/');
@@ -153,7 +133,7 @@ const UserManagement = () => {
               margin: '0',
             textAlign: 'center'
           }}>
-            User Management Module
+            System Users
           </h1>
           
           {/* Close Button */}
@@ -190,20 +170,10 @@ const UserManagement = () => {
           </button>
           </div>
 
-          {/* Personal Details Section */}
           <div style={{
             padding: '1.5rem',
             borderBottom: '1px solid #e5e7eb'
           }}>
-            <h2 style={{
-              fontSize: '1.4rem',
-              fontWeight: '600',
-              color: '#374151',
-              margin: '0 0 1rem 0',
-              textDecoration: 'underline'
-            }}>
-              Personal Details
-            </h2>
             
             <div style={{ overflowX: 'auto' }}>
               <table style={{
@@ -217,26 +187,27 @@ const UserManagement = () => {
                     backgroundColor: '#1e40af',
                     borderBottom: '2px solid #e5e7eb'
                   }}>
-                    <th style={tableHeaderStyle}>User ID</th>
-                    <th style={tableHeaderStyle}>Employee Name</th>
-                    <th style={tableHeaderStyle}>Designation</th>
+                    <th style={{ ...tableHeaderStyle, padding: '0.6rem 0.5rem' }}>User ID</th>
+                    <th style={{ ...tableHeaderStyle, padding: '0.6rem 0.5rem' }}>Employee Name</th>
+                    <th style={{ ...tableHeaderStyle, padding: '0.6rem 0.5rem' }}>Designation</th>
                     <th style={tableHeaderStyle}>Contact No.</th>
-                    <th style={tableHeaderStyle}>Active Status</th>
+                    <th style={tableHeaderStyle}>Email Address</th>
+                    <th style={tableHeaderStyle}>Location</th>
                     <th style={tableHeaderStyle}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loadingEmployees ? (
                     <tr>
-                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center' }}>Loading employees...</td>
+                      <td colSpan={7} style={{ ...tableCellStyle, textAlign: 'center' }}>Loading employees...</td>
                     </tr>
                   ) : employeesError ? (
                     <tr>
-                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
+                      <td colSpan={7} style={{ ...tableCellStyle, textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
                     </tr>
                   ) : employees.length === 0 ? (
                     <tr>
-                      <td colSpan={6} style={{ ...tableCellStyle, textAlign: 'center' }}>No employees found.</td>
+                      <td colSpan={7} style={{ ...tableCellStyle, textAlign: 'center' }}>No employees found.</td>
                     </tr>
                   ) : (
                     employees.map((employee, index) => (
@@ -244,35 +215,19 @@ const UserManagement = () => {
                         backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
                         borderBottom: '1px solid #e5e7eb'
                       }}>
-                        <td style={tableCellStyle}>{employee.id}</td>
-                        <td style={tableCellStyle}>{employee.name}</td>
-                        <td style={tableCellStyle}>{employee.designation}</td>
+                        <td style={{ ...tableCellStyle, padding: '0.6rem 0.5rem' }}>{employee.id}</td>
+                        <td style={{ ...tableCellStyle, padding: '0.6rem 0.5rem' }}>{employee.name}</td>
+                        <td style={{ ...tableCellStyle, padding: '0.6rem 0.5rem' }}>{employee.designation}</td>
                         <td style={tableCellStyle}>{employee.contact}</td>
-                        <td style={tableCellStyle}>
-                          <span style={{
-                            padding: '0.25rem 0.75rem',
-            borderRadius: '12px',
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            backgroundColor: employee.status === 'Active' ? '#dcfce7' : '#fef2f2',
-                            color: employee.status === 'Active' ? '#166534' : '#dc2626'
-                          }}>
-                            {employee.status}
-                          </span>
-                        </td>
+                        <td style={tableCellStyle}>{employee.email || 'N/A'}</td>
+                        <td style={tableCellStyle}>{employee.address || 'N/A'}</td>
                         <td style={tableCellStyle}>
                           <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
-                            <button 
-                              style={viewButtonStyle}
-                              onClick={() => handleViewEmployee(employee)}
-                            >
-                              👁️ View
+                            <button title="Update Privileges" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleUpdateEmployee(employee)}>
+                              <FaUserCog size={14} />
                             </button>
-                            <button 
-                              style={updateButtonStyle}
-                              onClick={() => handleUpdateEmployee(employee)}
-                            >
-                              ✏️ Update
+                            <button title="View" className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} onClick={() => handleViewEmployee(employee)}>
+                              <FaEye />
                             </button>
                           </div>
                         </td>
@@ -284,56 +239,7 @@ const UserManagement = () => {
             </div>
           </div>
 
-          {/* Collapsible Sections */}
-          <div style={{ padding: '1.5rem' }}>
-            {sections.map((section, index) => (
-              <div key={section.key} style={{ 
-                marginBottom: index < sections.length - 1 ? '0.5rem' : '0'
-              }}>
-                {/* Section Button */}
-            <button
-                  onClick={() => toggleSection(section.key)}
-              style={{
-                    width: '100%',
-                    padding: '1rem 1.5rem',
-                    background: '#3b82f6',
-                    border: 'none',
-                    color: 'white',
-                    fontSize: '1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                    textAlign: 'center',
-                    transition: 'background-color 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                    borderRadius: '8px'
-              }}
-              onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#2563eb';
-              }}
-              onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = '#3b82f6';
-                  }}
-                >
-                  {section.title}
-            </button>
-
-                {/* Collapsible Content */}
-                {expandedSections[section.key] && (
-        <div style={{
-                    padding: '1.5rem',
-                    background: '#f8fafc',
-                    borderTop: '1px solid #e5e7eb',
-                    marginTop: '0.5rem',
-                    borderRadius: '0 0 8px 8px'
-                  }}>
-                    <section.component />
-                  </div>
-                )}
-              </div>
-            ))}
-        </div>
+          
         </div>
       </div>
       <Footer />
@@ -358,51 +264,22 @@ const UserManagement = () => {
 
 // Table Styles
 const tableHeaderStyle = {
-  padding: '0.75rem',
+  padding: '0.85rem',
   border: '1px solid #d1d5db',
   textAlign: 'center',
   fontWeight: '600',
   color: 'white',
-  fontSize: '0.875rem'
+  fontSize: '0.95rem'
 };
 
 const tableCellStyle = {
-  padding: '0.75rem',
+  padding: '0.85rem',
   border: '1px solid #d1d5db',
   textAlign: 'center',
-  fontSize: '0.875rem',
+  fontSize: '0.95rem',
   color: '#374151'
 };
 
-const viewButtonStyle = {
-  padding: '0.375rem 0.75rem',
-  backgroundColor: '#22c55e',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  fontSize: '0.75rem',
-  fontWeight: '500',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s ease',
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.25rem'
-};
-
-const updateButtonStyle = {
-  padding: '0.375rem 0.75rem',
-  backgroundColor: '#f59e0b',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  fontSize: '0.75rem',
-  fontWeight: '500',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s ease',
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: '0.25rem'
-};
 
 export default UserManagement;
 

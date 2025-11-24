@@ -3,34 +3,33 @@ import React from 'react';
 const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
   if (!isOpen) return null;
 
-  // Sample privileges data - in real app this would come from employee data
-  const hasPrivileges = employee?.privileges && Object.keys(employee.privileges).length > 0;
-  
-  const samplePrivileges = [
-    { section: 'Citizen Management', privileges: ['Add Citizen', 'Update Citizen', 'View Citizen'] },
-    { section: 'File Management', privileges: ['Upload File', 'Download File', 'View File'] }
-  ];
+  const handleUpdateClick = () => {
+    console.log('Update clicked for user', employee?.id);
+  };
 
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <div style={styles.modalHeader}>
-          <h2 style={styles.modalTitle}>Employee Details</h2>
+          <h2 style={styles.modalTitle}>User Details</h2>
           <button onClick={onClose} style={styles.closeButton}>×</button>
         </div>
-        
+
         <div style={styles.modalContent}>
-          {/* Personal Details Section */}
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Personal Details</h3>
+            <h3 style={styles.sectionTitle}></h3>
             <div style={styles.detailsGrid}>
               <div style={styles.detailItem}>
-                <span style={styles.label}>Employee ID:</span>
+                <span style={styles.label}>User ID:</span>
                 <span style={styles.value}>{employee?.id || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
                 <span style={styles.label}>Employee Name:</span>
                 <span style={styles.value}>{employee?.name || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Calling Name:</span>
+                <span style={styles.value}>{employee?.callingName || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
                 <span style={styles.label}>Designation:</span>
@@ -41,50 +40,29 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
                 <span style={styles.value}>{employee?.contact || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
-                <span style={styles.label}>Status:</span>
-                <span style={{
-                  ...styles.value,
-                  ...styles.statusBadge,
-                  backgroundColor: employee?.status === 'Active' ? '#dcfce7' : '#fef2f2',
-                  color: employee?.status === 'Active' ? '#166534' : '#dc2626'
-                }}>
-                  {employee?.status || 'N/A'}
-                </span>
+                <span style={styles.label}>Email Address:</span>
+                <span style={styles.value}>{employee?.email || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Location:</span>
+                <span style={styles.value}>{employee?.address || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Supervisor</span>
+                <select style={styles.dropdownSelect} defaultValue="">
+                  <option value="" disabled>Select Supervisor</option>
+                </select>
               </div>
             </div>
           </div>
-
-          {/* Privilege Details Section */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Privilege Details</h3>
-            {hasPrivileges ? (
-              <div style={styles.privilegesContainer}>
-                {samplePrivileges.map((section, index) => (
-                  <div key={index} style={styles.privilegeSection}>
-                    <h4 style={styles.privilegeSectionTitle}>{section.section}</h4>
-                    <div style={styles.privilegeList}>
-                      {section.privileges.map((privilege, privIndex) => (
-                        <div key={privIndex} style={styles.privilegeItem}>
-                          <span style={styles.privilegeBullet}>•</span>
-                          <span style={styles.privilegeText}>{privilege}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={styles.noPrivileges}>
-                <p style={styles.noPrivilegesText}>No Privileges Added</p>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Close Button */}
         <div style={styles.modalFooter}>
           <button onClick={onClose} style={styles.closeModalButton}>
             Close
+          </button>
+          <button onClick={handleUpdateClick} style={styles.updateButton}>
+            Update
           </button>
         </div>
       </div>
@@ -124,9 +102,10 @@ const styles = {
     padding: '20px 24px',
     borderBottom: '1px solid #e5e7eb',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#f8fafc',
+    position: 'relative'
   },
   modalTitle: {
     fontSize: '1.5rem',
@@ -135,18 +114,20 @@ const styles = {
     margin: 0
   },
   closeButton: {
-    background: 'none',
-    border: 'none',
-    fontSize: '24px',
+    position: 'absolute',
+    right: '16px',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    fontSize: '20px',
     cursor: 'pointer',
-    color: '#6b7280',
+    color: '#111827',
     padding: '0',
-    width: '32px',
-    height: '32px',
+    width: '34px',
+    height: '34px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
+    borderRadius: '9999px',
     transition: 'background-color 0.2s ease'
   },
   modalContent: {
@@ -158,34 +139,30 @@ const styles = {
     marginBottom: '32px'
   },
   sectionTitle: {
-    fontSize: '1.2rem',
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: '16px',
-    paddingBottom: '8px',
-    borderBottom: '2px solid #1e40af'
+    display: 'none'
   },
   detailsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '16px'
+    gridTemplateColumns: '1fr 1fr',
+    gap: '12px'
   },
   detailItem: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px',
+    padding: '12px',
     backgroundColor: '#f8fafc',
     borderRadius: '8px',
     border: '1px solid #e5e7eb'
   },
   label: {
-    fontSize: '0.875rem',
+    fontSize: '0.85rem',
     fontWeight: '500',
     color: '#6b7280',
-    marginBottom: '4px'
+    marginBottom: '2px',
+    lineHeight: 1.2
   },
   value: {
-    fontSize: '1rem',
+    fontSize: '0.95rem',
     fontWeight: '500',
     color: '#374151'
   },
@@ -253,19 +230,48 @@ const styles = {
     padding: '20px 24px',
     borderTop: '1px solid #e5e7eb',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    gap: '12px',
     backgroundColor: '#f8fafc'
   },
   closeModalButton: {
-    padding: '10px 24px',
-    backgroundColor: '#1e40af',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
+    padding: '10px 20px',
+    backgroundColor: '#ffffff',
+    color: '#111827',
+    border: '1px solid #e5e7eb',
+    borderRadius: '9999px',
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontSize: '0.85rem',
     fontWeight: '500',
     transition: 'background-color 0.2s ease'
+  },
+  updateButton: {
+    padding: '10px 20px',
+    backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
+    color: 'white',
+    border: 'none',
+    borderRadius: '9999px',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    fontWeight: '600'
+  },
+  dropdownGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px'
+  },
+  dropdownLabel: {
+    color: '#6b7280',
+    fontSize: '0.85rem',
+    fontWeight: '500'
+  },
+  dropdownSelect: {
+    padding: '10px 12px',
+    border: '1px solid #e5e7eb',
+    borderRadius: '8px',
+    backgroundColor: '#edf2f7',
+    fontSize: '0.9rem',
+    color: '#111827'
   }
 };
 

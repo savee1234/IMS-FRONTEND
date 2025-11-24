@@ -12,7 +12,7 @@ import notificationImg from '../assets/Notification.jpg';
 import userManagementImg from '../assets/UserManagement.jpg';
 import attendanceImg from '../assets/AttendanceOT.jpg';
 import workflowImg from '../assets/Workflow.jpg';
-import backgroundVideo from '../assets/Background.mp4';
+ 
 import loginImg from '../assets/Login.jpg';
 import contactImg from '../assets/contact.jpg';
 import pendingImg from '../assets/PendingAssignments.jpg';
@@ -20,8 +20,8 @@ import pendingImg from '../assets/PendingAssignments.jpg';
 const slides = [
   {
     id: 1,
-    type: 'video',
-    content: backgroundVideo,
+    type: 'image',
+    content: pendingImg,
     title: 'Incident Management System',
     subtitle: 'Streamline your incident reporting and management processes with our comprehensive platform. Efficiently handle complaints, manage workflows, and track resolutions in real-time.',
   },

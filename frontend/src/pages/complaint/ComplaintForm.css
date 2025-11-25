@@ -1458,6 +1458,9 @@
 .um-header {
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .um-title {

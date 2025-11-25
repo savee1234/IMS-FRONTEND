@@ -112,12 +112,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Complaint Onboard
@@ -127,12 +127,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Workflow
@@ -142,12 +142,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Roster Management
@@ -157,12 +157,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   User Management
@@ -172,12 +172,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Attendance
@@ -187,12 +187,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Configuration
@@ -202,12 +202,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Dashboard
@@ -217,12 +217,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Reporting
@@ -232,12 +232,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   View Tasks
@@ -247,12 +247,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Main Assignment
@@ -262,12 +262,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   Sub Assignment
@@ -277,12 +277,12 @@ const Navbar = () => {
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
                     onMouseOver={(e) => {
-                  e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.35)';
-                  e.target.style.color = '#ffffff';
+                  e.target.style.backgroundColor = '#ffffff';
+                  e.target.style.color = '#111827';
                   }}
                   onMouseOut={(e) => {
                       e.target.style.backgroundColor = '';
-                      e.target.style.color = '#e5e7eb';
+                      e.target.style.color = '#111827';
                   }}
                 >
                   All Assignments
@@ -459,7 +459,7 @@ const styles = {
     top: '100%',
     left: 0,
     backgroundColor: '#ffffff',
-    color: '#374151',
+    color: '#111827',
     minWidth: '220px',
     boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
     borderRadius: '8px',
@@ -470,7 +470,7 @@ const styles = {
   dropdownItem: {
     display: 'block',
     padding: '12px 16px',
-    color: '#374151',
+    color: '#111827',
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: 500,

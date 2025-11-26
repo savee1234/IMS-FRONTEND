@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
+import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const fetchTasks = async () => {
@@ -50,6 +50,9 @@ const MyTasks = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState({});
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Show 10 items per page
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
@@ -195,7 +198,7 @@ const MyTasks = () => {
       zIndex: 1,
       padding: '1rem',
       marginTop: '1rem',
-      maxWidth: '1400px',
+      maxWidth: '1600px',
       margin: '1rem auto 0 auto'
     },
     pageHeader: {
@@ -589,78 +592,130 @@ const MyTasks = () => {
                     </td>
                   </tr>
                 ) : (
-                  tasks.map((task) => (
-                    <tr key={task.id}>
-                      <td>{task.reference}</td>
-                      <td>{task.requester}</td>
-                      <td>{task.priority}</td>
-                      <td>
-                        <span
-                          style={{
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '9999px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.05em',
-                            backgroundColor: task.status === 'Open'
-                              ? '#fee2e2'
-                              : task.status === 'Ongoing'
-                              ? '#fef3c7'
-                              : '#d1fae5',
-                            color: task.status === 'Open'
-                              ? '#dc2626'
-                              : task.status === 'Ongoing'
-                              ? '#92400e'
-                              : '#065f46'
-                          }}
-                        >
-                          {task.status}
-                        </span>
-                      </td>
-                      <td>{task.issue}</td>
-                      <td>{task.phone}</td>
-                      <td>{task.email}</td>
-                      <td>{task.created}</td>
-                      <td>
-                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                          <button
-                            title="View Details"
-                            className="btn"
-                            style={{ backgroundColor: '#2563eb', color: '#fff' }}
-                            onClick={() => handleViewDetails(task)}
+                  // Pagination logic
+                  (() => {
+                    const indexOfLastItem = currentPage * itemsPerPage;
+                    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+                    const currentTasks = tasks.slice(indexOfFirstItem, indexOfLastItem);
+                    
+                    return currentTasks.map((task) => (
+                      <tr key={task.id}>
+                        <td>{task.reference}</td>
+                        <td>{task.requester}</td>
+                        <td>{task.priority}</td>
+                        <td>
+                          <span
+                            style={{
+                              padding: '0.25rem 0.75rem',
+                              borderRadius: '9999px',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em',
+                              backgroundColor: task.status === 'Open'
+                                ? '#fee2e2'
+                                : task.status === 'Ongoing'
+                                ? '#fef3c7'
+                                : '#d1fae5',
+                              color: task.status === 'Open'
+                                ? '#dc2626'
+                                : task.status === 'Ongoing'
+                                ? '#92400e'
+                                : '#065f46'
+                            }}
                           >
-                            <FaFileAlt />
-                          </button>
-                          <button
-                            title="History"
-                            className="btn"
-                            style={{ backgroundColor: '#4b5563', color: '#fff' }}
-                          >
-                            <FaHistory />
-                          </button>
-                          <button
-                            title="Comments"
-                            className="btn"
-                            style={{ backgroundColor: '#7c3aed', color: '#fff' }}
-                          >
-                            <FaComments />
-                          </button>
-                          <button
-                            title="Done"
-                            className="btn"
-                            style={{ backgroundColor: '#059669', color: '#fff' }}
-                          >
-                            <FaCheck />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            {task.status}
+                          </span>
+                        </td>
+                        <td>{task.issue}</td>
+                        <td>{task.phone}</td>
+                        <td>{task.email}</td>
+                        <td>{task.created}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                            <button
+                              title="View Details"
+                              className="btn"
+                              style={{ backgroundColor: '#2563eb', color: '#fff' }}
+                              onClick={() => handleViewDetails(task)}
+                            >
+                              <FaFileAlt />
+                            </button>
+                            <button
+                              title="History"
+                              className="btn"
+                              style={{ backgroundColor: '#4b5563', color: '#fff' }}
+                            >
+                              <FaHistory />
+                            </button>
+                            <button
+                              title="Comments"
+                              className="btn"
+                              style={{ backgroundColor: '#7c3aed', color: '#fff' }}
+                            >
+                              <FaComments />
+                            </button>
+                            <button
+                              title="Done"
+                              className="btn"
+                              style={{ backgroundColor: '#059669', color: '#fff' }}
+                            >
+                              <FaCheck />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ));
+                  })()
                 )}
               </tbody>
             </table>
           </div>
+          
+          {tasks.length > 0 && !loading && (
+            <div className="pagination-bar">
+              <nav>
+                <ul className="pagination-list">
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className={`page-btn ${currentPage === 1 ? 'disabled' : ''}`}
+                      aria-label="Previous page"
+                    >
+                      <FaChevronLeft />
+                    </button>
+                  </li>
+                  {Array.from({ length: Math.ceil(tasks.length / itemsPerPage) }, (_, i) => i + 1)
+                    .slice(
+                      Math.max(0, currentPage - 3),
+                      Math.min(Math.ceil(tasks.length / itemsPerPage), currentPage + 2)
+                    )
+                    .map(number => (
+                      <li key={number}>
+                        <button
+                          onClick={() => setCurrentPage(number)}
+                          className={`page-number ${number === currentPage ? 'active' : ''}`}
+                          aria-label={`Go to page ${number}`}
+                        >
+                          {number}
+                        </button>
+                      </li>
+                    ))}
+                  <li>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(Math.ceil(tasks.length / itemsPerPage), prev + 1))}
+                      disabled={currentPage === Math.ceil(tasks.length / itemsPerPage)}
+                      className={`page-btn ${currentPage === Math.ceil(tasks.length / itemsPerPage) ? 'disabled' : ''}`}
+                      aria-label="Next page"
+                    >
+                      <FaChevronRight />
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          )}
         </div>
       </div>
 

@@ -1514,7 +1514,7 @@
 }
 
 .um-btn {
-  width: 64px;
+  width: 56px;
   height: 36px;
   display: inline-flex;
   align-items: center;
@@ -1544,6 +1544,202 @@
 
 .um-status-badge.active { background: #d1fae5; color: #065f46; }
 .um-status-badge.inactive { background: #fee2e2; color: #991b1b; }
+
+/* ============================================
+   Configuration Module Layout
+   ============================================ */
+
+.config-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  max-width: 1600px;
+  margin: 1.25rem auto;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgba(2,6,23,0.08);
+  background: #ffffff;
+}
+
+.config-sidebar {
+  background: var(--accent-teal);
+  color: #ffffff;
+  padding: 1rem 0.75rem;
+}
+
+.config-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.config-nav-item {
+  position: relative;
+}
+
+.config-nav-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.5rem 0.75rem;
+}
+
+.config-nav-item.active .config-nav-button {
+  background: rgba(255,255,255,0.22);
+  border-color: #ffffff;
+}
+
+.config-nav-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.config-content {
+  padding: 1rem 1.25rem;
+  background: #ffffff;
+}
+
+.config-card {
+  background: #ffffff;
+  border: 1px solid var(--medium-gray);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1rem;
+}
+
+.config-form {
+  background: #ffffff;
+  border: 1px solid var(--medium-gray);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.config-field-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.config-label {
+  min-width: 180px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.config-input {
+  width: 320px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: var(--text-primary);
+}
+
+.config-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.config-btn-primary,
+.config-btn-secondary {
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  cursor: pointer;
+}
+
+.config-btn-primary {
+  background: var(--accent-teal);
+  border-color: var(--accent-teal);
+  color: #ffffff;
+}
+
+.config-btn-primary:hover {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.config-btn-secondary {
+  background: #eef2f7;
+  color: var(--text-primary);
+  border-color: var(--medium-gray);
+}
+
+.config-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--medium-gray);
+  background: #ffffff;
+}
+
+.config-table thead th {
+  background: var(--accent-teal);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--accent-teal);
+}
+
+.config-table tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--medium-gray);
+  color: var(--text-primary);
+}
+
+.config-table tbody tr:nth-child(even) { background: #f8fafc; }
+.config-table tbody tr:hover { background: #f0f9ff; }
+
+.config-table-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.config-icon-btn {
+  width: 56px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--accent-teal);
+  background: #ffffff;
+  color: var(--accent-teal);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.config-icon-btn:hover {
+  background: var(--accent-teal);
+  color: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .config-layout { grid-template-columns: 1fr; }
+  .config-content { padding: 0.75rem; }
+}
 
 .pagination-bar {
   display: flex;

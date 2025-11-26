@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import img12 from '../assets/12.jpg';
 import img13 from '../assets/13.jpg';
-import img11 from '../assets/11.jpg';
 import img10 from '../assets/10.jpg';
 import imageJpg from '../assets/image.jpg';
 
@@ -25,33 +24,58 @@ const HomeModern = () => {
     {
       title: 'We Solve Incidents Fast',
       subtitle: 'Modern UI, analytics, and workflows in one platform.',
-      imageUrl: img12
+      imageUrl: img12,
+      fallbackUrl: img12
     },
     {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: img13
+      imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
+      fallbackUrl: img13
     },
     {
       title: 'Technology That Empowers',
       subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: img11
+      imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
+      fallbackUrl: img10
     },
     {
       title: 'Act Fast, Resolve Faster',
       subtitle: 'Real-time insights to reduce response times.',
-      imageUrl: img10
+      imageUrl: img10,
+      fallbackUrl: img10
     }
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [displaySlides, setDisplaySlides] = useState(slides.map(s => ({ ...s })));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide((prev) => (prev + 1) % displaySlides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [displaySlides.length]);
+
+  useEffect(() => {
+    const loaders = slides.map((s, idx) => {
+      return new Promise((resolve) => {
+        if (typeof s.imageUrl === 'string' && s.imageUrl.startsWith(process.env.PUBLIC_URL)) {
+          const img = new Image();
+          img.onload = () => resolve({ idx, url: s.imageUrl });
+          img.onerror = () => resolve({ idx, url: s.fallbackUrl });
+          img.src = s.imageUrl;
+        } else {
+          resolve({ idx, url: s.imageUrl });
+        }
+      });
+    });
+    Promise.all(loaders).then(results => {
+      const next = slides.map((s, i) => ({ ...s, imageUrl: s.imageUrl }));
+      results.forEach(r => { next[r.idx].imageUrl = r.url; });
+      setDisplaySlides(next);
+    });
+  }, []);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -238,7 +262,7 @@ const HomeModern = () => {
       {/* Hero Section */}
       <section style={{
         ...styles.heroSection,
-        backgroundImage: `url('${slides[currentSlide].imageUrl}')`,
+        backgroundImage: `url('${displaySlides[currentSlide].imageUrl}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
@@ -703,7 +727,7 @@ const styles = {
   // About Section
   aboutSection: {
     padding: '80px 20px',
-    backgroundImage: `linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url(${img11})`,
+    backgroundImage: `linear-gradient(180deg, rgba(219,234,254,0.85) 0%, rgba(191,219,254,0.85) 50%, rgba(203,213,225,0.85) 100%), url(${process.env.PUBLIC_URL}/new111.jpg)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat'

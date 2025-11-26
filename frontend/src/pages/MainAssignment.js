@@ -51,14 +51,17 @@ const MainAssignment = () => {
   };
 
   return (
-    <div
-      className="complaint-onboard-wrapper assignments-page"
-      style={{
-        minHeight: '100vh',
-        background: `url(${process.env.PUBLIC_URL}/new.jpg) center center / cover no-repeat fixed`
-      }}
-    >
+    <div className="complaint-onboard-wrapper assignments-page">
       <Navbar />
+      <div
+        className="complaint-onboard-background"
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/new.jpg)`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
 
       <div className="content-wrapper">
         <div className="complaint-form-container assignments-wide">
@@ -68,12 +71,13 @@ const MainAssignment = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="config-form">
             <div className="form-grid assignments-form-grid">
               <div className="form-field">
-                <label className="field-label">Employee</label>
+                <label className="config-label">Employee</label>
                 <div className="field-control input-wrapper">
                   <select
+                    className="config-input"
                     value={filters.employee}
                     onChange={(e) => handleChange('employee', e.target.value)}
                   >
@@ -85,9 +89,10 @@ const MainAssignment = () => {
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">Status</label>
+                <label className="config-label">Status</label>
                 <div className="field-control input-wrapper">
                   <select
+                    className="config-input"
                     value={filters.status}
                     onChange={(e) => handleChange('status', e.target.value)}
                   >
@@ -99,47 +104,47 @@ const MainAssignment = () => {
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">From Date</label>
+                <label className="config-label">From Date</label>
                 <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.fromDate}
                     onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="input"
+                    className="config-input"
                   />
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">To Date</label>
+                <label className="config-label">To Date</label>
                 <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.toDate}
                     onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="input"
+                    className="config-input"
                   />
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-              <button type="submit" className="btn btn-primary">Submit</button>
+            <div className="config-actions">
+              <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
           <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="field-label">Search</label>
+            <label className="config-label">Search</label>
             <div className="field-control input-wrapper">
               <input
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="input input-sm"
+                className="config-input"
               />
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table className="modern-table">
+          <div className="config-card">
+            <table className="config-table">
               <thead>
                 <tr>
                   <th>Request Reference</th>
@@ -159,15 +164,15 @@ const MainAssignment = () => {
                     <td>{item.assignedTo}</td>
                     <td>{item.remark || 'No remarks'}</td>
                     <td>
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                        <button title="View" className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>
-                          <FaEye />
+                      <div className="config-table-actions">
+                        <button title="View" type="button" className="config-icon-btn">
+                          <FaEye size={16} />
                         </button>
-                        <button title="Update" className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
-                          <FaEdit />
+                        <button title="Edit" type="button" className="config-icon-btn">
+                          <FaEdit size={16} />
                         </button>
-                        <button title="Delete" className="btn" style={{ backgroundColor: '#F44336', color: '#fff' }}>
-                          <FaTrash />
+                        <button title="Delete" type="button" className="config-icon-btn">
+                          <FaTrash size={16} />
                         </button>
                       </div>
                     </td>
@@ -178,10 +183,10 @@ const MainAssignment = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="config-btn-secondary">
               <FaChevronLeft /> Previous
             </button>
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="config-btn-primary">
               Next <FaChevronRight />
             </button>
             <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>

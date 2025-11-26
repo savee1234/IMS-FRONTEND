@@ -56,14 +56,17 @@ const SubAssignment = () => {
   };
 
   return (
-    <div
-      className="complaint-onboard-wrapper assignments-page"
-      style={{
-        minHeight: '100vh',
-        background: `url(${process.env.PUBLIC_URL}/new.jpg) center center / cover no-repeat fixed`
-      }}
-    >
+    <div className="complaint-onboard-wrapper assignments-page">
       <Navbar />
+      <div
+        className="complaint-onboard-background"
+        style={{
+          backgroundImage: `linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(59,130,246,0.25) 100%), url(${process.env.PUBLIC_URL}/bg12.jpg)`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
       <div className="content-wrapper">
         <div className="complaint-form-container assignments-wide">
           <div className="page-header">
@@ -72,12 +75,13 @@ const SubAssignment = () => {
             </div>
           </div>
 
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form onSubmit={(e) => e.preventDefault()} className="config-form">
             <div className="form-grid assignments-form-grid">
               <div className="form-field">
-                <label className="field-label">Employee</label>
+                <label className="config-label">Employee</label>
                 <div className="field-control input-wrapper">
                   <select
+                    className="config-input"
                     value={filters.employee}
                     onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
                   >
@@ -89,9 +93,10 @@ const SubAssignment = () => {
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">Status</label>
+                <label className="config-label">Status</label>
                 <div className="field-control input-wrapper">
                   <select
+                    className="config-input"
                     value={filters.status}
                     onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
                   >
@@ -103,47 +108,47 @@ const SubAssignment = () => {
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">From Date</label>
+                <label className="config-label">From Date</label>
                 <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.fromDate}
                     onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-                    className="input"
+                    className="config-input"
                   />
                 </div>
               </div>
               <div className="form-field">
-                <label className="field-label">To Date</label>
+                <label className="config-label">To Date</label>
                 <div className="field-control input-wrapper">
                   <input
                     type="date"
                     value={filters.toDate}
                     onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-                    className="input"
+                    className="config-input"
                   />
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-              <button type="submit" className="btn btn-primary">Submit</button>
+            <div className="config-actions">
+              <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
           <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="field-label">Search</label>
+            <label className="config-label">Search</label>
             <div className="field-control input-wrapper">
               <input
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="input input-sm"
+                className="config-input"
               />
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table className="modern-table">
+          <div className="config-card">
+            <table className="config-table">
               <thead>
                 <tr>
                   <th>Request Reference</th>
@@ -176,15 +181,15 @@ const SubAssignment = () => {
                       )}
                     </td>
                     <td>
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                        <button className="btn" title="View" style={{ backgroundColor: '#2563eb', color: '#fff' }}>
-                          <FaEye />
+                      <div className="config-table-actions">
+                        <button className="config-icon-btn" title="View" type="button">
+                          <FaEye size={16} />
                         </button>
-                        <button className="btn" title="Update" style={{ backgroundColor: '#FFB300', color: '#fff' }}>
-                          <FaEdit />
+                        <button className="config-icon-btn" title="Update" type="button">
+                          <FaEdit size={16} />
                         </button>
-                        <button className="btn" title="Delete" style={{ backgroundColor: '#F44336', color: '#fff' }}>
-                          <FaTrash />
+                        <button className="config-icon-btn" title="Delete" type="button">
+                          <FaTrash size={16} />
                         </button>
                       </div>
                     </td>
@@ -195,8 +200,8 @@ const SubAssignment = () => {
           </div>
 
           <div style={styles.pagination}>
-            <button type="button" className="btn btn-primary"><FaChevronLeft /> Previous</button>
-            <button type="button" className="btn btn-primary">Next <FaChevronRight /></button>
+            <button type="button" className="config-btn-secondary"><FaChevronLeft /> Previous</button>
+            <button type="button" className="config-btn-primary">Next <FaChevronRight /></button>
             <span style={styles.pageInfo}>Page {currentPage} of 1</span>
           </div>
         </div>

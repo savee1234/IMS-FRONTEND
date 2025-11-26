@@ -20,7 +20,7 @@ const styles = {
   footer: {
     backgroundColor: '#ffffff',
     color: '#374151',
-    padding: '20px 0',
+    padding: '12px 0',
     textAlign: 'center',
     position: 'fixed',
     bottom: 0,

@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
+import { FaCheck } from "react-icons/fa";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -706,7 +707,7 @@ export default function ComplaintOnboarding() {
                         title={tab.name}
                       >
                         <span className="sidebar-step">
-                          {index + 1}
+                          {isActive ? <FaCheck className="sidebar-check" /> : index + 1}
                         </span>
                         <span className="sidebar-label">
                           {tab.name}
@@ -748,6 +749,7 @@ export default function ComplaintOnboarding() {
           {/* ======= TAB 0: Request Details ======= */}
           <div className={`tab-content ${activeTab === 0 ? 'active' : ''}`}>
             <section className="form-section-card">
+              <div className="section-header"><h2>YOUR COMPLAINT DETAILS</h2></div>
               <div className="form-grid">
                 <Field label="Request Reference">
                   <input
@@ -885,6 +887,7 @@ export default function ComplaintOnboarding() {
           {/* ======= TAB 1: Contact Person Details ======= */}
           <div className={`tab-content ${activeTab === 1 ? 'active' : ''}`}>
             <section className="form-section-card">
+              <div className="section-header"><h2>CONTACT DETAILS</h2></div>
               {/* Contact Person Searchable Dropdown */}
               <div className="search-section">
                 <div className="search-wrapper">
@@ -1117,6 +1120,7 @@ export default function ComplaintOnboarding() {
           {/* ======= TAB 2: Assignment ======= */}
           <div className={`tab-content ${activeTab === 2 ? 'active' : ''}`}>
             <section className="form-section-card">
+              <div className="section-header"><h2>ASSIGNMENT</h2></div>
               <div className="table-container">
                 <table className="modern-table">
                   <thead>

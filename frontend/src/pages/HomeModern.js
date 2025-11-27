@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import img12 from '../assets/12.jpg';
-import img13 from '../assets/13.jpg';
 import img10 from '../assets/10.jpg';
 import imageJpg from '../assets/image.jpg';
 
@@ -31,13 +30,13 @@ const HomeModern = () => {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
       imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
-      fallbackUrl: img13
+      fallbackUrl: img12
     },
     {
       title: 'Technology That Empowers',
       subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
-      fallbackUrl: img10
+      imageUrl: `${process.env.PUBLIC_URL}/new112.jpg`,
+      fallbackUrl: img12
     },
     {
       title: 'Act Fast, Resolve Faster',

@@ -75,7 +75,7 @@ const AllAssignments = () => {
       <div
         className="complaint-onboard-background"
         style={{
-          backgroundImage: `url(${process.env.PUBLIC_URL}/new.jpg)`,
+          backgroundImage: `linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(59,130,246,0.25) 100%), url(${process.env.PUBLIC_URL}/bg12.jpg)`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat'

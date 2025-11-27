@@ -299,46 +299,17 @@ const SolutionsProjects = () => {
   };
 
   return (
-    <div className="solutions-projects-section" style={{ padding: '1.5rem' }}>
+    <div>
 
       
 
       
       {error && (
-        <div style={{
-          backgroundColor: '#fee2e2',
-          border: '1px solid #fecaca',
-          color: '#dc2626',
-          padding: '1rem',
-          borderRadius: '8px',
-          marginBottom: '1.5rem',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '0.75rem',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-        }}>
-          <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>⚠️</span>
-          <div>
-            <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Error</div>
-            <div>{error}</div>
-          </div>
-        </div>
+        <div className="alert-message error">{error}</div>
       )}
 
-      <form onSubmit={handleSolutionSubmit} style={{
-        background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
-        padding: '1.25rem',
-        borderRadius: '12px',
-        border: '1px solid #e5e7eb',
-        marginBottom: '1.25rem',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1.25rem',
-          marginBottom: '1.25rem'
-        }}>
+      <form onSubmit={handleSolutionSubmit} className="config-form">
+        <div className="form-grid">
           <div style={{ 
             display: 'flex', 
             flexDirection: 'column',
@@ -534,104 +505,34 @@ const SolutionsProjects = () => {
         </div>
       </form>
 
-      {/* Solution Management Section */}
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        padding: '1.25rem',
-        borderRadius: '12px',
-        border: '1px solid #e5e7eb',
-        marginBottom: '1.25rem',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-      }}>
+      <div className="config-card">
 
         
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.25rem'
-        }}>
+        <div>
           {/* Combined Solution Type and Solution Management */}
-          <div style={{
-            background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
-            padding: '1.25rem',
-            borderRadius: '12px',
-            border: '1px solid #bae6fd',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-          }}>
+          <div className="config-card">
 
             
             {/* Two-column layout for adding types and solutions */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '1.25rem',
-              marginBottom: '1.25rem'
-            }}>
+            <div className="form-grid">
               {/* Add Solution Type Column */}
-              <div style={{
-                background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
-                padding: '1rem',
-                borderRadius: '10px',
-                border: '1px solid #bbf7d0'
-              }}>
-                <h5 style={{
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: '#065f46',
-                  margin: '0 0 0.8rem 0'
-                }}>
-                  Solution Types
-                </h5>
+              <div>
+                <h5>Solution Types</h5>
                 
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  gap: '0.8rem',
-                  marginBottom: '0.8rem'
-                }}>
+                <div>
                   <div>
-                    <label style={{
-                      display: 'block',
-                      fontWeight: '600',
-                      color: '#065f46',
-                      fontSize: '0.85rem',
-                      marginBottom: '0.35rem'
-                    }}>
-                      Type Name
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.35rem' }}>
+                    <label className="config-label">Type Name</label>
+                    <div className="config-field-row">
                       <input
                         type="text"
                         value={newSolutionType}
                         onChange={(e) => setNewSolutionType(e.target.value)}
                         placeholder="Enter solution type"
-                        style={{
-                          flex: 1,
-                          padding: '0.6rem',
-                          border: '1px solid #bbf7d0',
-                          borderRadius: '6px',
-                          fontSize: '0.85rem',
-                          outline: 'none',
-                          transition: 'border-color 0.2s'
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = '#10b981'}
-                        onBlur={(e) => e.target.style.borderColor = '#bbf7d0'}
+                        className="config-input"
                       />
                       <button
                         onClick={handleAddSolutionType}
-                        style={{
-                          padding: '0.6rem 0.9rem',
-                          backgroundColor: '#10b981',
-                          color: 'white',
-                          border: '1px solid #059669',
-                          borderRadius: '6px',
-                          fontSize: '0.85rem',
-                          fontWeight: '600',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = '#10b981'}
+                        className="config-btn-primary"
                       >
                         Add
                       </button>
@@ -639,82 +540,20 @@ const SolutionsProjects = () => {
                   </div>
                 </div>
                 
-                {/* Current Solution Types */}
                 <div>
-                  <label style={{ 
-                    display: 'block',
-                    fontSize: '0.85rem', 
-                    fontWeight: '600', 
-                    color: '#065f46', 
-                    marginBottom: '0.4rem'
-                  }}>
-                    Current Types ({solutionTypes.length}):
-                  </label>
-                  <div style={{ 
-                    display: 'flex', 
-                    flexWrap: 'wrap', 
-                    gap: '0.35rem',
-                    maxHeight: '100px',
-                    overflowY: 'auto',
-                    padding: '0.35rem',
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                    borderRadius: '6px',
-                    border: '1px dashed #bbf7d0'
-                  }}>
+                  <label className="config-label">Current Types ({solutionTypes.length}):</label>
+                  <ul>
                     {solutionTypes.length === 0 ? (
-                      <div style={{ 
-                        color: '#6b7280', 
-                        fontStyle: 'italic',
-                        padding: '0.35rem'
-                      }}>
-                        No types added
-                      </div>
+                      <li>No types added</li>
                     ) : (
                       solutionTypes.map((type, index) => (
-                        <span
-                          key={index}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            padding: '0.35rem 0.5rem',
-                            backgroundColor: newlyAddedSolutionType === type ? '#a7f3d0' : '#d1fae5',
-                            color: '#065f46',
-                            borderRadius: '16px',
-                            fontSize: '0.75rem',
-                            border: '1px solid #6ee7b7',
-                            transform: newlyAddedSolutionType === type ? 'scale(1.05)' : 'scale(1)',
-                            transition: 'all 0.3s ease'
-                          }}
-                        >
-                          <span>{type}</span>
-                          <button
-                            onClick={() => handleDeleteSolutionType(type)}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#dc2626',
-                              cursor: 'pointer',
-                              fontSize: '0.85rem',
-                              padding: '0',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: '15px',
-                              height: '15px',
-                              borderRadius: '50%',
-                              transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(220, 38, 38, 0.1)'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                            title="Delete solution type"
-                          >
-                            ×
-                          </button>
-                        </span>
+                        <li key={index}>
+                          {type}
+                          <button onClick={() => handleDeleteSolutionType(type)} className="config-icon-btn" title="Delete" style={{ marginLeft: '0.5rem' }}>×</button>
+                        </li>
                       ))
                     )}
-                  </div>
+                  </ul>
                 </div>
               </div>
               
@@ -954,146 +793,41 @@ const SolutionsProjects = () => {
         </div>
       </div>
 
-      <div className="solutions-table" style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '8px',
-        padding: '1.25rem',
-        border: '1px solid #d1d5db',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-      }}>
-        <table style={{ 
-          width: '100%', 
-          borderCollapse: 'collapse',
-          border: '1px solid #d1d5db'
-        }}>
+      <div className="config-card" style={{ marginTop: '1rem' }}>
+        <table className="config-table">
           <thead>
             <tr>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Employee
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Solution Type
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Solution
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Created By
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Created Dtm
-              </th>
-              <th style={{ 
-                padding: '0.75rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff',
-                fontSize: '0.9rem'
-              }}>
-                Actions
-              </th>
+              <th>Employee</th>
+              <th>Solution Type</th>
+              <th>Solution</th>
+              <th>Created By</th>
+              <th>Created Dtm</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {solutionResponsibleData.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ 
-                  padding: '1.5rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
+                <td colSpan="6" style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                   No solutions assigned yet
                 </td>
               </tr>
             ) : (
               solutionResponsibleData.map(item => (
                 <tr key={item._id}>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.employee}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.solutionType}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.solution}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.createdByName}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    textAlign: 'center',
-                    fontSize: '0.9rem'
-                  }}>
+                  <td>
                     {item.createdDtm ? (
                       <>
                         {new Date(item.createdDtm).toLocaleDateString()}
@@ -1102,46 +836,15 @@ const SolutionsProjects = () => {
                       </>
                     ) : ''}
                   </td>
-                  <td style={{ 
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    textAlign: 'center'
-                  }}>
-                    <button
-                      onClick={() => handleSolutionEdit(item)}
-                      style={{
-                        backgroundColor: '#FFB300',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '5px 6px',
-                        marginRight: '5px'
-                      }}
-                      title="Update"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleSolutionDelete(item._id)}
-                      style={{
-                        backgroundColor: '#F44336',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '5px 6px'
-                      }}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+                  <td>
+                    <div className="config-table-actions">
+                      <button title="Update" type="button" className="config-icon-btn" onClick={() => handleSolutionEdit(item)}>
+                        <FaEdit size={16} />
+                      </button>
+                      <button title="Delete" type="button" className="config-icon-btn" onClick={() => handleSolutionDelete(item._id)}>
+                        <FaTrash size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

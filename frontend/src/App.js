@@ -8,14 +8,10 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import HomeModern from './pages/HomeModern';
 import Complaint from './pages/Complaint';
+import { ComplaintForm } from './pages/complaint/index.js';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page
-import ComplaintManagement from './pages/usermanagement/ComplaintManagement';
-import Reporting from './pages/usermanagement/Reporting';
-import DataAnalysis from './pages/usermanagement/DataAnalysis';
-import AccessLogs from './pages/usermanagement/AccessLogs';
-import AuditTrails from './pages/usermanagement/AuditTrails';
 
 import Configuration from './pages/configuration/Configuration';
 import Reports from './pages/Reports';
@@ -47,15 +43,11 @@ function App() {
         {/* Private routes protected by PrivateRoute */}
         <Route path="/" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
         <Route path="/home-modern" element={<PrivateRoute><HomeModern /></PrivateRoute>} />
-        <Route path="/complaint" element={<PrivateRoute><Complaint /></PrivateRoute>} />
+        <Route path="/complaint" element={<PrivateRoute><ComplaintForm /></PrivateRoute>} />
         <Route path="/roster" element={<PrivateRoute><RosterManagement /></PrivateRoute>} />
         <Route path="/roster-view" element={<PrivateRoute><RosterView /></PrivateRoute>} />
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
-        <Route path="/complaint-management" element={<PrivateRoute><ComplaintManagement /></PrivateRoute>} />
-        <Route path="/reporting" element={<PrivateRoute><Reporting /></PrivateRoute>} />
-        <Route path="/data-analysis" element={<PrivateRoute><DataAnalysis /></PrivateRoute>} />
-        <Route path="/access-logs" element={<PrivateRoute><AccessLogs /></PrivateRoute>} />
-        <Route path="/audit-trails" element={<PrivateRoute><AuditTrails /></PrivateRoute>} />
+        {/* Removed legacy user module front collapses and related pages */}
 
         <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
         <Route path="/configuration" element={<PrivateRoute><Configuration /></PrivateRoute>} />

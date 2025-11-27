@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaUserShield, FaLock, FaSignInAlt } from 'react-icons/fa';
 import axios from 'axios';
 import { isAuthenticated } from '../utils/auth';
-import backgroundVideo from '../assets/Background.mp4';
+ 
 import logo from '../assets/slt-logo.png';
 
 const Login = () => {
@@ -74,24 +74,7 @@ const Login = () => {
         overflow: 'hidden',
       }}
     >
-      {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: -2
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      
       {/* Dark overlay for better readability */}
       <div
         style={{

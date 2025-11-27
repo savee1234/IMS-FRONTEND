@@ -8,7 +8,7 @@ const Header = () => {
       left: 0,
       right: 0,
       zIndex: 1000,
-      background: 'linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%)',
+      background: 'linear-gradient(135deg, #0e7490 0%, #2563eb 60%, #1e40af 100%)',
       backdropFilter: 'blur(10px)',
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',

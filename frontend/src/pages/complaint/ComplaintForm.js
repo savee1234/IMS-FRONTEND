@@ -6,6 +6,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import { FaClipboardList, FaUser, FaTasks } from "react-icons/fa";
+ 
 
 // Add font link for modern fonts
 const addFontLink = () => {
@@ -655,725 +659,231 @@ export default function ComplaintOnboarding() {
     }
   };
 
+  const tabs = [
+    { name: 'Request Details' },
+    { name: 'Contact Person' },
+    { name: 'Assignment' }
+  ];
+
   return (
-    <div className="content-wrapper" style={{
-      position: 'relative',
-      zIndex: 1,
-      padding: '2rem',
-      marginTop: '1rem',
-      maxWidth: '1400px',
-      margin: '1rem auto 0 auto'
-    }}>
-      {/* Page Header */}
-      <header className="page-header">
-        <h1>
-          Complaint Onboard
-        </h1>
-        <p>
-          Submit and manage customer complaints efficiently
-        </p>
-      </header>
+    <>
+      <Navbar />
+      <div className="cf-wrapper">
+        <div className="cf-layout">
+          <aside className="cf-sidebar">
+            <ul className="cf-vertical-steps">
+              {tabs.map((tab, index) => (
+                <li
+                  key={index}
+                  className={`cf-vertical-step ${index < activeTab ? 'completed' : index === activeTab ? 'active' : 'upcoming'}`}
+                >
+                  <button
+                    type="button"
+                    className="cf-vertical-button"
+                    onClick={() => setActiveTab(index)}
+                    aria-current={index === activeTab ? 'step' : undefined}
+                  >
+                    <span className="cf-vertical-icon">{activeTab >= index ? '✓' : index + 1}</span>
+                    <span className="cf-vertical-label">
+                      {index === 0 && <FaClipboardList style={{ marginRight: 6 }} />}
+                      {index === 1 && <FaUser style={{ marginRight: 6 }} />}
+                      {index === 2 && <FaTasks style={{ marginRight: 6 }} />}
+                      {tab.name}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
-      {/* Tab Navigation */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginBottom: '2rem',
-        backgroundColor: 'white',
-        padding: '0.5rem',
-        borderRadius: '10px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
-        border: '1px solid #e2e8f0'
-      }}>
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          width: '100%',
-          maxWidth: '600px'
-        }}>
-          {['Request Details', 'Contact Person', 'Assignment'].map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              style={{
-                flex: 1,
-                padding: '1rem',
-                borderRadius: '8px',
-                border: 'none',
-                backgroundColor: activeTab === index ? '#3b82f6' : '#f1f5f9',
-                color: activeTab === index ? 'white' : '#64748b',
-                fontWeight: activeTab === index ? '600' : '500',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontFamily: "'Inter', 'Roboto', 'Helvetica Neue', sans-serif",
-                fontSize: '0.95rem'
-              }}
-              onMouseOver={(e) => {
-                if (activeTab !== index) {
-                  e.target.style.backgroundColor = '#e2e8f0';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (activeTab !== index) {
-                  e.target.style.backgroundColor = '#f1f5f9';
-                }
-              }}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Success Message with Generated Reference - Only show after submission */}
-      {submitted && generatedRef && (
-        <div style={{
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          color: 'white',
-          padding: '1.5rem',
-          borderRadius: '10px',
-          marginBottom: '2rem',
-          textAlign: 'center',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-          border: 'none',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          <h3 style={{ 
-            margin: '0 0 0.75rem 0', 
-            fontSize: '1.25rem',
-            fontWeight: '700',
-            fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-          }}>
-            ✅ Complaint Submitted Successfully!
-          </h3>
-          <p style={{ 
-            margin: 0, 
-            fontSize: '1.5rem', 
-            fontWeight: '800',
-            fontFamily: "'Montserrat', 'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-          }}>
-            Reference Number: {generatedRef}
-          </p>
-        </div>
-      )}
-
-      <form className="config-content" onSubmit={onSubmit}>
-        
-        {/* ======= TAB 0: Request Details ======= */}
-        <div style={{ display: activeTab === 0 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2>
-                📋 Request Details
-              </h2>
+          <form className="cf-container" onSubmit={onSubmit}>
+          {submitted && generatedRef && (
+            <div className="cf-success">
+              <div className="cf-success-text">Reference: {generatedRef}</div>
             </div>
+          )}
 
-            <div className="grid grid-2">
-              <Field label="Request Reference">
-                <input
-                  className="input"
-                  value={form.requestRef}
-                  readOnly
-                  placeholder="Auto-generated reference number"
-                  title="This reference number is automatically generated"
-                  style={{ backgroundColor: '#f1f5f9', color: '#64748b', cursor: 'not-allowed' }}
-                />
-              </Field>
-
-              <Field label="Category Type">
-                <select
-                  className="input"
-                  value={form.categoryType}
-                  onChange={(e) => update("categoryType", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Organization">
-                <select
-                  className="input"
-                  value={form.organization}
-                  onChange={(e) => update("organization", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {loadingOrganizations ? (
-                    <option disabled>Loading organizations...</option>
-                  ) : (
-                    organizations.map((org) => (
-                      <option key={org._id} value={org.organization}>{org.organization}</option>
-                    ))
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Solution Type">
-                <select
-                  className="input"
-                  value={form.solutionType}
-                  onChange={(e) => update("solutionType", e.target.value)}
-                  disabled={loadingSolutionData}
-                >
-                  <option value="">Select…</option>
-                  {loadingSolutionData ? (
-                    <option disabled>Loading...</option>
-                  ) : solutionTypes.length > 0 ? (
-                    solutionTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))
-                  ) : (
-                    <option disabled>No solution types available</option>
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Solution Name">
-                <select
-                  className="input"
-                  value={form.solutionName}
-                  onChange={(e) => update("solutionName", e.target.value)}
-                  disabled={!form.solutionType || loadingSolutionData}
-                >
-                  <option value="">Select…</option>
-                  {loadingSolutionData ? (
-                    <option disabled>Loading...</option>
-                  ) : form.solutionType ? (
-                    filteredSolutions.length > 0 ? (
-                      filteredSolutions.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))
-                    ) : (
-                      <option disabled>No solutions available for this type</option>
-                    )
-                  ) : (
-                    <option disabled>Please select a solution type first</option>
-                  )}
-                </select>
-              </Field>
-
-              <Field label="Medium">
-                <select
-                  className="input"
-                  value={form.medium}
-                  onChange={(e) => update("medium", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {mediums.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Medium Source">
-                <select
-                  className="input"
-                  value={form.mediumSource}
-                  onChange={(e) => update("mediumSource", e.target.value)}
-                >
-                  <option value="">Select…</option>
-                  {mediumSources.map((m) => (
-                    <option key={m} value={m}>{m}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Complaint" className="full">
-                <textarea
-                  className="input textarea"
-                  rows={4}
-                  value={form.complaint}
-                  onChange={(e) => update("complaint", e.target.value)}
-                  placeholder="Type the complaint here…"
-                />
-              </Field>
-            </div>
-          </section>
-
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'flex-end' }}>
-            <button 
-              type="button" 
-              className="btn primary"
-              onClick={nextTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-
-        {/* ======= TAB 1: Contact Person Details ======= */}
-        <div style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2>
-                👤 Contact Person Details
-              </h2>
-            </div>
-
-            {/* Contact Person Searchable Dropdown */}
-            <div className="search-row">
-              <div className="search-inline">
-                <label className="label">Search Contact Person:</label>
-                <ContactPersonSelect
-                  contacts={organizationContactPersons}
-                  onSelect={handleContactSelect}
-                  isLoading={loadingContactPersons}
-                  selectedPerson={selectedContactPerson}
-                  placeholder="Search by name or mobile number..."
-                />
-              </div>
-              {notFoundMsg && (
-                <div className="note">
-                  {notFoundMsg}
-                </div>
-              )}
-            </div>
-
-            {/* Contact Search Results */}
-            {searchResult === 'found' && (
-              <div className="contact-found" style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
-                backgroundColor: '#d1fae5',
-                borderRadius: '10px',
-                border: '1px solid #6ee7b7',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  marginBottom: '1rem' 
-                }}>
-                  <div style={{ 
-                    fontWeight: '600',
-                    color: '#065f46',
-                    fontSize: '1.1rem'
-                  }}>
-                    <strong>Contact Found:</strong> {form.contactName} ({form.mobile})
-                  </div>
-                  <div>
-                    <button type="button" className="btn ghost" style={{ 
-                      height: '40px',
-                      padding: '0.5rem 1rem',
-                      fontSize: '0.9rem'
-                    }} onClick={() => {
-                      setSearchResult(null);
-                      setNotFoundMsg("");
-                      setShowAddDetails(false);
-                    }}>
-                      Clear
-                    </button>
-                  </div>
-                </div>
-
-                {/* Contact Details View */}
-                <div style={{
-                  backgroundColor: '#f0fdf4',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  border: '1px solid #bbf7d0',
-                  fontSize: '0.95rem'
-                }}>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                    gap: '0.75rem' 
-                  }}>
-                    <div><strong>Email:</strong> {form.email || 'N/A'}</div>
-                    <div><strong>Office Mobile:</strong> {form.officeMobile || 'N/A'}</div>
-                    <div><strong>Title:</strong> {form.title || 'N/A'}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {searchResult === 'not_found' && (
-              <div className="contact-not-found" style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
-                backgroundColor: '#fffbeb',
-                borderRadius: '10px',
-                border: '1px solid #fde68a',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{
-                  fontWeight: '600',
-                  color: '#92400e',
-                  fontSize: '1.1rem'
-                }}>
-                  <strong>Contact not found.</strong> Click "Add Details" to create new contact.
-                </div>
-                <button type="button" className="btn primary" style={{ 
-                  height: '40px',
-                  padding: '0.5rem 1rem',
-                  fontSize: '0.9rem'
-                }} onClick={() => {
-                  setShowAddDetails(true);
-                  setSearchResult(null);
-                }}>
-                  Add Details
-                </button>
-              </div>
-            )}
-
-            {/* Manual Contact Entry Fields - Show when "Add Details" is clicked */}
-            {showAddDetails && (
-              <div className="manual-contact-entry" style={{
-                marginTop: '1.5rem',
-                padding: '1.5rem',
-                backgroundColor: '#f0f9ff',
-                borderRadius: '10px',
-                border: '1px solid #93c5fd',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-              }}>
-                <h4 style={{
-                  margin: '0 0 1.25rem 0',
-                  color: '#1e40af',
-                  fontSize: '1.25rem',
-                  fontWeight: '700',
-                  fontFamily: "'Poppins', 'Inter', 'Roboto', 'Helvetica Neue', sans-serif"
-                }}>
-                  👤 New Contact Information
-                </h4>
-
-                <div className="grid grid-2">
-                  <Field label="Contact Name">
-                    <input
-                      className="input"
-                      value={newContactData.name}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, name: value});
-                        update("contactName", value);
-                      }}
-                      placeholder="Enter full name"
-                      required={searchResult === 'not_found'}
-                    />
+          {activeTab === 0 && (
+            <div className="cf-grid">
+              <div className="cf-card">
+                <div className="form-grid">
+                  <Field label="Request Reference">
+                    <input className="input" value={form.requestRef} readOnly />
                   </Field>
-
-                  <Field label="Email">
-                    <input
-                      className="input"
-                      value={newContactData.email}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, email: value});
-                        update("email", value);
-                      }}
-                      placeholder="Enter email address"
-                      type="email"
-                      required={searchResult === 'not_found'}
-                    />
+                  <Field label="Category Type">
+                    <select className="input" value={form.categoryType} onChange={(e) => update('categoryType', e.target.value)}>
+                      <option value="">Select Category</option>
+                      {categories.map(c => (<option key={c} value={c}>{c}</option>))}
+                    </select>
                   </Field>
-
                   <Field label="Organization">
-                    <select
-                      className="input"
-                      value={newContactData.organization}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, organization: value});
-                      }}
-                    >
+                    <select className="input" value={form.organization} onChange={(e) => update('organization', e.target.value)}>
                       <option value="">Select Organization</option>
                       {loadingOrganizations ? (
                         <option disabled>Loading organizations...</option>
                       ) : (
-                        organizations.map((org) => (
-                          <option key={org._id} value={org.organization}>{org.organization}</option>
-                        ))
+                        organizations.map(org => (<option key={org._id} value={org.organization}>{org.organization}</option>))
                       )}
                     </select>
                   </Field>
-
-                  <Field label="Title">
-                    <select
-                      className="input"
-                      value={newContactData.title}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNewContactData({...newContactData, title: value});
-                        update("title", value);
-                      }}
-                    >
-                      <option value="Mr.">Mr.</option>
-                      <option value="Mrs.">Mrs.</option>
-                      <option value="Ms.">Ms.</option>
-                      <option value="Dr.">Dr.</option>
-                      <option value="Prof.">Prof.</option>
+                  <Field label="Solution Type">
+                    <select className="input" value={form.solutionType} onChange={(e) => update('solutionType', e.target.value)} disabled={loadingSolutionData}>
+                      <option value="">Select Solution Type</option>
+                      {solutionTypes.map(type => (<option key={type} value={type}>{type}</option>))}
                     </select>
                   </Field>
+                  <Field label="Solution Name">
+                    <select className="input" value={form.solutionName} onChange={(e) => update('solutionName', e.target.value)} disabled={!form.solutionType || loadingSolutionData}>
+                      <option value="">Select Solution</option>
+                      {filteredSolutions.map(s => (<option key={s} value={s}>{s}</option>))}
+                    </select>
+                  </Field>
+                  <Field label="Medium">
+                    <select className="input" value={form.medium} onChange={(e) => update('medium', e.target.value)}>
+                      <option value="">Select Medium</option>
+                      {mediums.map(m => (<option key={m} value={m}>{m}</option>))}
+                    </select>
+                  </Field>
+                  <Field label="Medium Source">
+                    <select className="input" value={form.mediumSource} onChange={(e) => update('mediumSource', e.target.value)}>
+                      <option value="">Select Source</option>
+                      {mediumSources.map(m => (<option key={m} value={m}>{m}</option>))}
+                    </select>
+                  </Field>
+                  <Field label="Complaint" className="full">
+                    <textarea className="input textarea" rows={3} value={form.complaint} onChange={(e) => update('complaint', e.target.value)} />
+                  </Field>
                 </div>
-
-                <div style={{
-                  marginTop: '1.25rem',
-                  padding: '1rem',
-                  backgroundColor: '#dbeafe',
-                  borderRadius: '8px',
-                  border: '1px solid #93c5fd',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  color: '#1e40af'
-                }}>
-                  ℹ️ This new contact will be automatically saved to the organization contact person database when you submit the complaint.
+                <div className="cf-actions">
+                  <button type="button" className="cf-btn-primary" onClick={nextTab}>Next Step</button>
                 </div>
               </div>
-            )}
-
-            {/* Manual Contact Entry Fields */}
-            <div className="grid grid-2" style={{ marginTop: '1.5rem' }}>
-              <Field label="Contact Person Name">
-                <input
-                  className="input"
-                  value={form.contactName}
-                  onChange={(e) => update("contactName", e.target.value)}
-                  placeholder="Full name"
-                />
-              </Field>
-              
-              <Field label="Email">
-                <input
-                  className="input"
-                  value={form.email}
-                  onChange={(e) => update("email", e.target.value)}
-                  placeholder="name@example.com"
-                  type="email"
-                />
-              </Field>
-
-              <Field label="Mobile No">
-                <input
-                  className="input"
-                  value={form.mobile}
-                  onChange={(e) => update("mobile", e.target.value)}
-                  placeholder="07XXXXXXXX"
-                />
-              </Field>
-
-              <Field label="Office Mobile No">
-                <input
-                  className="input"
-                  value={form.officeMobile}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    update("officeMobile", value);
-                    if (searchResult === 'not_found') {
-                      setNewContactData({...newContactData, officeMobile: value});
-                    }
-                  }}
-                  placeholder="011XXXXXXX"
-                />
-              </Field>
-
-              <Field label="Title">
-                <select
-                  className="input"
-                  value={form.title}
-                  onChange={(e) => update("title", e.target.value)}
-                >
-                  <option value="Mr.">Mr.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                </select>
-              </Field>
             </div>
-          </section>
+          )}
 
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'space-between' }}>
-            <button 
-              type="button" 
-              className="btn ghost"
-              onClick={prevTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              ← Previous
-            </button>
-            <button 
-              type="button" 
-              className="btn primary"
-              onClick={nextTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-
-        {/* ======= TAB 2: Assignment ======= */}
-        <div style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-          <section className="config-section">
-            <div className="section-header">
-              <h2>
-                👥 Assignment
-              </h2>
-            </div>
-
-            <div className="table-wrap">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Emp No</th>
-                    <th>Name</th>
-                    <th>Designation</th>
-                    <th>Availability</th>
-                    <th>Assignment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staff.map((s) => (
-                    <tr key={s.empNo}>
-                      <td>{s.empNo}</td>
-                      <td>{s.name}</td>
-                      <td>{s.designation}</td>
-                      <td>{s.availability}</td>
-                      <td>
-                        <select
-                          className="input"
-                          value={staffAssignments[s.empNo] || ""}
-                          onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}
-                          style={{ 
-                            height: '40px',
-                            padding: '0.5rem',
-                            minWidth: '160px'
-                          }}
-                        >
-                          <option value="">Select Assignment</option>
-                          <option value="Main Assignment">Main Assignment</option>
-                          <option value="Sub Assignment">Sub Assignment</option>
-                        </select>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="grid grid-2" style={{ marginTop: '1.5rem' }}>
-              <Field label="Document Reference">
-                <div className="inline">
-                  <input
-                    className="input"
-                    value={form.docRef}
-                    onChange={(e) => update("docRef", e.target.value)}
-                    placeholder="DOC-REF"
-                    style={{ flex: 1 }}
-                  />
-                  <label className="upload">
-                    <input 
-                      type="file" 
-                      onChange={() => {}} 
-                    />
-                    Upload
-                  </label>
+          {activeTab === 1 && (
+            <div className="cf-grid">
+              <div className="cf-card">
+                <div className="search-wrapper">
+                  <label className="search-label">Search Contact Person</label>
+                  <ContactPersonSelect contacts={organizationContactPersons} onSelect={handleContactSelect} isLoading={loadingContactPersons} selectedPerson={selectedContactPerson} placeholder="Search by name or mobile number" />
                 </div>
-              </Field>
+                {notFoundMsg && (<div className="alert-message error">{notFoundMsg}</div>)}
 
-              <Field label="Document Subject">
-                <input
-                  className="input"
-                  value={form.docSubject}
-                  onChange={(e) => update("docSubject", e.target.value)}
-                  placeholder="Subject"
-                />
-              </Field>
+                {searchResult === 'found' && (
+                  <div className="info-card success">
+                    <div className="info-card-title"><strong>Contact:</strong> {form.contactName} ({form.mobile})</div>
+                  </div>
+                )}
+                {searchResult === 'not_found' && (
+                  <div className="info-card warning">
+                    <div className="info-card-title">Contact not found.</div>
+                    <button type="button" className="cf-btn-primary" onClick={() => { setShowAddDetails(true); setSearchResult(null); }}>Add Details</button>
+                  </div>
+                )}
 
-              <Field label="Remarks" className="full">
-                <textarea
-                  className="input textarea"
-                  rows={4}
-                  value={form.remarks}
-                  onChange={(e) => update("remarks", e.target.value)}
-                  placeholder="Any special notes…"
-                />
-              </Field>
+                {showAddDetails && (
+                  <div className="cf-card">
+                    <div className="form-grid">
+                      <Field label="Contact Name"><input className="input" value={newContactData.name} onChange={(e) => { const v = e.target.value; setNewContactData({ ...newContactData, name: v }); update('contactName', v); }} /></Field>
+                      <Field label="Email"><input className="input" value={newContactData.email} type="email" onChange={(e) => { const v = e.target.value; setNewContactData({ ...newContactData, email: v }); update('email', v); }} /></Field>
+                      <Field label="Organization"><select className="input" value={newContactData.organization} onChange={(e) => setNewContactData({ ...newContactData, organization: e.target.value })}>{loadingOrganizations ? (<option disabled>Loading organizations...</option>) : organizations.map(org => (<option key={org._id} value={org.organization}>{org.organization}</option>))}</select></Field>
+                      <Field label="Title"><select className="input" value={newContactData.title} onChange={(e) => { const v = e.target.value; setNewContactData({ ...newContactData, title: v }); update('title', v); }}><option value="Mr.">Mr.</option><option value="Mrs.">Mrs.</option><option value="Ms.">Ms.</option><option value="Dr.">Dr.</option><option value="Prof.">Prof.</option></select></Field>
+                    </div>
+                  </div>
+                )}
+
+                <div className="form-grid">
+                  <Field label="Contact Person Name"><input className="input" value={form.contactName} onChange={(e) => update('contactName', e.target.value)} /></Field>
+                  <Field label="Email"><input className="input" type="email" value={form.email} onChange={(e) => update('email', e.target.value)} /></Field>
+                  <Field label="Mobile No"><input className="input" value={form.mobile} onChange={(e) => update('mobile', e.target.value)} /></Field>
+                  <Field label="Office Mobile No"><input className="input" value={form.officeMobile} onChange={(e) => { const v = e.target.value; update('officeMobile', v); if (searchResult === 'not_found') setNewContactData({ ...newContactData, officeMobile: v }); }} /></Field>
+                  <Field label="Title"><select className="input" value={form.title} onChange={(e) => update('title', e.target.value)}><option value="Mr.">Mr.</option><option value="Mrs.">Mrs.</option><option value="Ms.">Ms.</option><option value="Dr.">Dr.</option><option value="Prof.">Prof.</option></select></Field>
+                </div>
+                <div className="cf-actions">
+                  <button type="button" className="cf-btn-secondary" onClick={prevTab}>Previous</button>
+                  <button type="button" className="cf-btn-primary" onClick={nextTab}>Next Step</button>
+                </div>
+              </div>
             </div>
-          </section>
+          )}
 
-          {/* Navigation Buttons */}
-          <div className="actions" style={{ justifyContent: 'space-between' }}>
-            <button 
-              type="button" 
-              className="btn ghost"
-              onClick={prevTab}
-              style={{
-                padding: '0.875rem 2rem'
-              }}
-            >
-              ← Previous
-            </button>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button 
-                type="button" 
-                className="btn ghost"
-                onClick={onReset}
-                style={{
-                  padding: '0.875rem 2rem'
-                }}
-              >
-                Reset Form
-              </button>
-              <button 
-                type="submit" 
-                className="btn primary"
-                style={{
-                  padding: '0.875rem 2rem'
-                }}
-              >
-                Submit Complaint
-              </button>
-              {submitted && (
-                <button 
-                  type="button" 
-                  className="btn"
-                  onClick={onViewComplaint}
-                  style={{
-                    background: 'linear-gradient(135deg, #64748b 0%, #475569 100%)',
-                    padding: '0.875rem 2rem'
-                  }}
-                >
-                  View Complaint
-                </button>
-              )}
+          {activeTab === 2 && (
+            <div className="cf-grid">
+              <div className="cf-card">
+                <div className="table-container">
+                  <table className="modern-table">
+                    <thead><tr><th>Emp No</th><th>Name</th><th>Designation</th><th>Availability</th><th>Assignment</th></tr></thead>
+                    <tbody>
+                      {staff.map(s => (
+                        <tr key={s.empNo}>
+                          <td>{s.empNo}</td><td>{s.name}</td><td>{s.designation}</td>
+                          <td><span className={`availability-badge ${s.availability.toLowerCase()}`}>{s.availability}</span></td>
+                          <td>
+                            <select className="input input-sm" value={staffAssignments[s.empNo] || ''} onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}>
+                              <option value="">Select Assignment</option>
+                              <option value="Main Assignment">Main Assignment</option>
+                              <option value="Sub Assignment">Sub Assignment</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="form-grid">
+                  <Field label="Document Reference">
+                    <div className="input-group">
+                      <div className="input-wrapper">
+                        <input
+                          className="input"
+                          value={form.docRef}
+                          onChange={(e) => update('docRef', e.target.value)}
+                        />
+                      </div>
+                      <label className="btn-upload">
+                        <input type="file" onChange={() => {}} />
+                        Upload
+                      </label>
+                    </div>
+                  </Field>
+                  <Field label="Document Subject">
+                    <input
+                      className="input"
+                      value={form.docSubject}
+                      onChange={(e) => update('docSubject', e.target.value)}
+                    />
+                  </Field>
+                  <Field label="Remarks" className="full">
+                    <textarea
+                      className="input textarea"
+                      rows={3}
+                      value={form.remarks}
+                      onChange={(e) => update('remarks', e.target.value)}
+                    />
+                  </Field>
+                </div>
+                <div className="cf-actions">
+                  <button type="button" className="cf-btn-secondary" onClick={prevTab}>Previous</button>
+                  <button type="button" className="cf-btn-secondary" onClick={onReset}>Reset Form</button>
+                  <button type="submit" className="cf-btn-primary">Submit</button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
+          </form>
         </div>
-      </form>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }
 
 function Field({ label, children, className = "" }) {
   return (
-    <div className={`field ${className}`} style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    }}>
-      <label className="label" style={{
-        fontSize: '0.875rem',
-        fontWeight: '600',
-        color: '#374151',
-        marginBottom: '0.25rem'
-      }}>{label}</label>
-      <div className="control">{children}</div>
+    <div className={`form-field ${className}`}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
     </div>
   );
 }

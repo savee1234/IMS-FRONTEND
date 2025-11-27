@@ -15,8 +15,59 @@ const UserManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
   const [employeesError, setEmployeesError] = useState(null);
+  
 
   useEffect(() => {
+    const sampleUsers = [
+      {
+        id: 'USR001',
+        name: 'Raveesha Gimhan',
+        designation: 'Software Engineer',
+        contact: '0771234567',
+        status: 'Active',
+        email: 'raveesha@example.com',
+        department: 'Engineering',
+        joiningDate: '2024-02-15',
+        address: 'Colombo',
+        callingName: 'Raveesha'
+      },
+      {
+        id: 'USR002',
+        name: 'Anushka Perera',
+        designation: 'QA Engineer',
+        contact: '0779876543',
+        status: 'Active',
+        email: 'anushka@example.com',
+        department: 'Quality Assurance',
+        joiningDate: '2023-09-02',
+        address: 'Kandy',
+        callingName: 'Anushka'
+      },
+      {
+        id: 'USR003',
+        name: 'Niroshan Fernando',
+        designation: 'Product Manager',
+        contact: '0712223344',
+        status: 'Inactive',
+        email: 'niroshan@example.com',
+        department: 'Product',
+        joiningDate: '2022-06-11',
+        address: 'Galle',
+        callingName: 'Niro'
+      },
+      {
+        id: 'USR004',
+        name: 'Sashini De Silva',
+        designation: 'UI/UX Designer',
+        contact: '0785556677',
+        status: 'Active',
+        email: 'sashini@example.com',
+        department: 'Design',
+        joiningDate: '2024-12-01',
+        address: 'Negombo',
+        callingName: 'Sashi'
+      }
+    ];
     const fetchEmployees = async () => {
       setLoadingEmployees(true);
       setEmployeesError(null);
@@ -42,10 +93,12 @@ const UserManagement = () => {
           callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
-        setEmployees(mapped);
+        const withSamples = [...mapped, ...sampleUsers];
+        setEmployees(withSamples);
       } catch (err) {
         console.error('Failed to load user-management:', err);
         setEmployeesError(err.message || String(err));
+        setEmployees(sampleUsers);
       } finally {
         setLoadingEmployees(false);
       }
@@ -92,7 +145,7 @@ const UserManagement = () => {
   return (
     <div className="um-wrapper">
       <Navbar />
-      <div className="um-content">
+      <div className={`um-content ${isModalOpen || isViewModalOpen ? 'um-content--blurred' : ''}`}>
         <div className="um-card">
           <div className="um-header">
             <h1 className="um-title">System Users</h1>

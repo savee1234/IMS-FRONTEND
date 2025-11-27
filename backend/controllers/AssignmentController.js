@@ -16,7 +16,6 @@ exports.createAssignment = async (req, res) => {
     res.status(500).json({ message: "Error creating assignment", error });
   }
 };
-    res.status(500).json({ message: "Error creating complaint", error });
 // Get assignments by user ID
 
 

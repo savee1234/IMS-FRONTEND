@@ -148,43 +148,40 @@ const UpdateEmployeeModal = ({ isOpen, onClose, employee, onUpdate }) => {
 const styles = {
   overlay: {
     position: 'fixed',
-    top: 0,
+    top: '72px',
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    bottom: '64px',
+    background: 'rgba(2, 132, 199, 0.08)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
-    padding: '20px'
+    padding: '24px'
   },
   modal: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-    width: '95%',
-    maxWidth: '1167px',
-    height: '77vh',
-    maxHeight: '80vh',
+    backgroundColor: '#ffffff',
+    borderRadius: '20px',
+    boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
+    width: '100%',
+    maxWidth: '960px',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
-    marginTop:'66px',
-    marginBottom:'25px'
+    overflow: 'hidden'
   },
   modalHeader: {
     padding: '20px 24px',
     borderBottom: '1px solid #e5e7eb',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#f0fbff',
+    position: 'relative'
   },
   modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: '600',
-    color: '#1e40af',
+    fontSize: '1.6rem',
+    fontWeight: '700',
+    color: '#0ea5e9',
     margin: 0
   },
   closeButton: {
@@ -376,7 +373,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '12px',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#f0fbff'
   },
   cancelButton: {
     padding: '8px 18px',
@@ -397,7 +394,8 @@ const styles = {
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.9rem',
-    fontWeight: '600'
+    fontWeight: '600',
+    boxShadow: '0 8px 16px rgba(59, 130, 246, 0.25)'
   },
   accordion: {
     display: 'flex',
@@ -405,10 +403,11 @@ const styles = {
     gap: '8px'
   },
   accordionItem: {
-    border: '1px solid #e5e7eb',
-    borderRadius: '8px',
+    border: '1px solid #dbeafe',
+    borderRadius: '14px',
     overflow: 'hidden',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)'
   },
   accordionHeader: {
     width: '100%',

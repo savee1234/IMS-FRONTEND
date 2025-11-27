@@ -17,7 +17,6 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
 
         <div style={styles.modalContent}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}></h3>
             <div style={styles.detailsGrid}>
               <div style={styles.detailItem}>
                 <span style={styles.label}>User ID:</span>
@@ -73,30 +72,26 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
 const styles = {
   overlay: {
     position: 'fixed',
-    top: 0,
+    top: '72px',
     left: 0,
     right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    bottom: '64px',
+    background: 'rgba(2, 132, 199, 0.08)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
-    padding: '20px'
+    padding: '24px'
   },
   modal: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-    width: '95%',
-    maxWidth: '1167px',
-    height: '77vh',
-    maxHeight: '80vh',
+    backgroundColor: '#ffffff',
+    borderRadius: '20px',
+    boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
+    width: '100%',
+    maxWidth: '960px',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
-    marginTop: '66px',
-    marginBottom: '25px'
+    overflow: 'hidden'
   },
   modalHeader: {
     padding: '20px 24px',
@@ -104,13 +99,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#f0fbff',
     position: 'relative'
   },
   modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: '600',
-    color: '#1e40af',
+    fontSize: '1.6rem',
+    fontWeight: '700',
+    color: '#0ea5e9',
     margin: 0
   },
   closeButton: {
@@ -144,27 +139,32 @@ const styles = {
   detailsGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '12px'
+    gap: '16px'
   },
   detailItem: {
     display: 'flex',
     flexDirection: 'column',
     padding: '12px',
-    backgroundColor: '#f8fafc',
-    borderRadius: '8px',
-    border: '1px solid #e5e7eb'
+    backgroundColor: '#ffffff',
+    borderRadius: '14px',
+    border: '1px solid #dbeafe',
+    boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)'
   },
   label: {
     fontSize: '0.85rem',
     fontWeight: '500',
     color: '#6b7280',
-    marginBottom: '2px',
+    marginBottom: '6px',
     lineHeight: 1.2
   },
   value: {
     fontSize: '0.95rem',
     fontWeight: '500',
-    color: '#374151'
+    color: '#374151',
+    backgroundColor: '#f8fafc',
+    border: '1px solid #e5e7eb',
+    borderRadius: '10px',
+    padding: '10px 12px'
   },
   statusBadge: {
     padding: '4px 12px',
@@ -232,7 +232,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '12px',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#f0fbff'
   },
   closeModalButton: {
     padding: '10px 20px',
@@ -253,7 +253,8 @@ const styles = {
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.85rem',
-    fontWeight: '600'
+    fontWeight: '600',
+    boxShadow: '0 8px 16px rgba(59, 130, 246, 0.25)'
   },
   dropdownGroup: {
     display: 'flex',
@@ -268,8 +269,8 @@ const styles = {
   dropdownSelect: {
     padding: '10px 12px',
     border: '1px solid #e5e7eb',
-    borderRadius: '8px',
-    backgroundColor: '#edf2f7',
+    borderRadius: '10px',
+    backgroundColor: '#f8fafc',
     fontSize: '0.9rem',
     color: '#111827'
   }

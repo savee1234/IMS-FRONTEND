@@ -510,33 +510,34 @@ const Organization = () => {
 
   return (
     <div>
-      <div>
+      <div className="config-card">
         <h3>{editMode ? 'Edit Organization' : 'Add New System Organization'}</h3>
         {error && (
           <div className="alert-message error">{error}</div>
         )}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="config-form">
           <div className="form-grid">
             <div className="form-field">
-              <label className="field-label">Organization *</label>
+              <label className="config-label">Organization *</label>
               <div className="field-control input-wrapper">
                 <input
                   type="text"
                   name="organization"
                   value={orgFormData.organization}
                   onChange={handleInputChange}
-                  className="input"
+                  className="config-input"
                   required
                 />
               </div>
             </div>
             <div className="form-field">
-              <label className="field-label">Organization Type *</label>
+              <label className="config-label">Organization Type *</label>
               <div className="field-control input-wrapper">
                 <select
                   name="organizationType"
                   value={orgFormData.organizationType}
                   onChange={handleInputChange}
+                  className="config-input"
                   required
                 >
                   <option value="">Select type</option>
@@ -547,19 +548,17 @@ const Organization = () => {
               </div>
             </div>
           </div>
-          <div className="form-actions">
-            <div className="action-buttons-group">
-              <button type="button" onClick={handleReset} className="btn btn-secondary">Reset</button>
-              <button type="submit" disabled={submitting} className="btn btn-primary">
-                {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
-              </button>
-            </div>
+          <div className="config-actions">
+            <button type="button" onClick={handleReset} className="config-btn-secondary">Reset</button>
+            <button type="submit" disabled={submitting} className="config-btn-primary">
+              {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
+            </button>
           </div>
         </form>
       </div>
 
-      <div className="table-container" style={{ marginTop: '1rem' }}>
-        <table className="modern-table">
+      <div className="config-card" style={{ marginTop: '1rem' }}>
+        <table className="config-table">
           <thead>
             <tr>
               <th>Organization ID</th>
@@ -592,15 +591,15 @@ const Organization = () => {
                   <td>{org.createdByName || ''}</td>
                   <td>{org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}</td>
                   <td>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                      <button title="View" className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} onClick={() => handleView(org)}>
-                        <FaEye />
+                    <div className="config-table-actions">
+                      <button title="View" type="button" className="config-icon-btn" onClick={() => handleView(org)}>
+                        <FaEye size={16} />
                       </button>
-                      <button title="Edit" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleEdit(org)}>
-                        <FaEdit />
+                      <button title="Edit" type="button" className="config-icon-btn" onClick={() => handleEdit(org)}>
+                        <FaEdit size={16} />
                       </button>
-                      <button title="Delete" className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} onClick={() => handleDeleteOrganization(org._id)}>
-                        <FaTrash />
+                      <button title="Delete" type="button" className="config-icon-btn" onClick={() => handleDeleteOrganization(org._id)}>
+                        <FaTrash size={16} />
                       </button>
                     </div>
                   </td>

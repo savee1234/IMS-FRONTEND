@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import '../complaint/ComplaintForm.css';
+import { FaLayerGroup, FaBuilding, FaAddressBook, FaProjectDiagram, FaCalendarAlt } from 'react-icons/fa';
 
 // Import sub-components
 import OnboardMedium from './OnboardMedium';
@@ -21,7 +22,13 @@ const Configuration = () => {
     shifts: 'Roster Shift Periods',
   };
 
-  const categoryIcons = {};
+  const categoryIcons = {
+    onboardMedium: <FaLayerGroup />,
+    organization: <FaBuilding />,
+    organizations: <FaAddressBook />,
+    solutionsPerProject: <FaProjectDiagram />,
+    shifts: <FaCalendarAlt />,
+  };
 
   const renderActiveComponent = () => {
     switch (activeCategory) {
@@ -43,42 +50,28 @@ const Configuration = () => {
   return (
     <div className="complaint-onboard-wrapper assignments-page">
       <Navbar />
-
       <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
-          <div className="page-header">
-            <div className="page-header-content">
-              <h1>Configuration</h1>
-              <p>Manage system settings and lookup values</p>
+        <div className="config-layout">
+          <aside className="config-sidebar">
+            <ul className="config-nav">
+              {Object.keys(categories).map((key) => (
+                <li key={key} className={`config-nav-item ${activeCategory === key ? 'active' : ''}`}>
+                  <button className="config-nav-button" onClick={() => setActiveCategory(key)}>
+                    <span className="config-nav-icon">{categoryIcons[key]}</span>
+                    <span>{categories[key]}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
+
+          <div className="config-content">
+            <div className="config-card">
+              {renderActiveComponent()}
             </div>
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
-            {Object.keys(categories).map((key) => (
-              <button
-                key={key}
-                onClick={() => setActiveCategory(key)}
-                className="btn"
-                style={{
-                  backgroundImage: activeCategory === key ? 'linear-gradient(90deg, var(--accent-teal), var(--primary-blue))' : 'none',
-                  backgroundColor: activeCategory === key ? 'var(--primary-blue)' : 'var(--white)',
-                  color: activeCategory === key ? 'var(--white)' : 'var(--text-primary)',
-                  border: activeCategory === key ? 'none' : '2px solid var(--light-gray)'
-                }}
-              >
-                {categories[key]}
-              </button>
-            ))}
-          </div>
-
-          
-
-          <div style={{ background: 'var(--white)', borderRadius: 'var(--radius-md)', border: '1px solid var(--medium-gray)', boxShadow: 'var(--shadow-sm)' }}>
-            {renderActiveComponent()}
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

@@ -592,19 +592,10 @@ const Organizations = () => {
       
       
       {error && (
-        <div style={{
-          backgroundColor: '#fee2e2',
-          border: '1px solid #fecaca',
-          color: '#dc2626',
-          padding: '1rem',
-          borderRadius: '4px',
-          marginBottom: '1rem'
-        }}>
-          {error}
-        </div>
+        <div className="alert-message error">{error}</div>
       )}
 
-      <form onSubmit={handleOrgSubmit}>
+      <form onSubmit={handleOrgSubmit} className="config-form">
         <div className="form-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div className="form-field">
@@ -716,16 +707,14 @@ const Organizations = () => {
           </div>
         </div>
         
-        <div className="form-actions">
-          <div className="action-buttons-group">
-            <button type="button" onClick={handleReset} className="btn btn-secondary">Reset</button>
-            <button type="submit" disabled={loading} className="btn btn-primary">{loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}</button>
-          </div>
+        <div className="config-actions">
+          <button type="button" onClick={handleReset} className="config-btn-secondary">Reset</button>
+          <button type="submit" disabled={loading} className="config-btn-primary">{loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}</button>
         </div>
       </form>
 
-      <div className="table-container" style={{ marginTop: '1rem' }}>
-        <table className="modern-table">
+      <div className="config-card" style={{ marginTop: '1rem' }}>
+        <table className="config-table">
           <thead>
             <tr>
               <th>
@@ -786,15 +775,15 @@ const Organizations = () => {
                     {new Date(contact.createdDtm).toLocaleString()}
                   </td>
                   <td>
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                      <button title="View" className="btn btn-sm" style={{ backgroundColor: '#4CAF50', color: '#fff' }} onClick={() => handleView(contact)}>
-                        <FaEye />
+                    <div className="config-table-actions">
+                      <button title="View" type="button" className="config-icon-btn" onClick={() => handleView(contact)}>
+                        <FaEye size={16} />
                       </button>
-                      <button title="Update" className="btn btn-sm" style={{ backgroundColor: '#FFB300', color: '#fff' }} onClick={() => handleEdit(contact)}>
-                        <FaEdit />
+                      <button title="Update" type="button" className="config-icon-btn" onClick={() => handleEdit(contact)}>
+                        <FaEdit size={16} />
                       </button>
-                      <button title="Delete" className="btn btn-sm" style={{ backgroundColor: '#F44336', color: '#fff' }} onClick={() => handleDeleteContact(contact._id)} disabled={loading}>
-                        <FaTrash />
+                      <button title="Delete" type="button" className="config-icon-btn" onClick={() => handleDeleteContact(contact._id)} disabled={loading}>
+                        <FaTrash size={16} />
                       </button>
                     </div>
                   </td>

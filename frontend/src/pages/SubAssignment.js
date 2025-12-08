@@ -58,15 +58,7 @@ const SubAssignment = () => {
   return (
     <div className="complaint-onboard-wrapper assignments-page">
       <Navbar />
-      <div
-        className="complaint-onboard-background"
-        style={{
-          backgroundImage: `linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(59,130,246,0.25) 100%), url(${process.env.PUBLIC_URL}/bg12.jpg)`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+      <div className="complaint-onboard-background" />
       <div className="content-wrapper">
         <div className="complaint-form-container assignments-wide">
           <div className="page-header">

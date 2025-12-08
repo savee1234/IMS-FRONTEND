@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import '../complaint/ComplaintForm.css';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
-import { FaEye, FaUserCog } from 'react-icons/fa';
+import { FaEye, FaUserCog, FaSearch } from 'react-icons/fa';
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -18,56 +18,6 @@ const UserManagement = () => {
   
 
   useEffect(() => {
-    const sampleUsers = [
-      {
-        id: 'USR001',
-        name: 'Raveesha Gimhan',
-        designation: 'Software Engineer',
-        contact: '0771234567',
-        status: 'Active',
-        email: 'raveesha@example.com',
-        department: 'Engineering',
-        joiningDate: '2024-02-15',
-        address: 'Colombo',
-        callingName: 'Raveesha'
-      },
-      {
-        id: 'USR002',
-        name: 'Anushka Perera',
-        designation: 'QA Engineer',
-        contact: '0779876543',
-        status: 'Active',
-        email: 'anushka@example.com',
-        department: 'Quality Assurance',
-        joiningDate: '2023-09-02',
-        address: 'Kandy',
-        callingName: 'Anushka'
-      },
-      {
-        id: 'USR003',
-        name: 'Niroshan Fernando',
-        designation: 'Product Manager',
-        contact: '0712223344',
-        status: 'Inactive',
-        email: 'niroshan@example.com',
-        department: 'Product',
-        joiningDate: '2022-06-11',
-        address: 'Galle',
-        callingName: 'Niro'
-      },
-      {
-        id: 'USR004',
-        name: 'Sashini De Silva',
-        designation: 'UI/UX Designer',
-        contact: '0785556677',
-        status: 'Active',
-        email: 'sashini@example.com',
-        department: 'Design',
-        joiningDate: '2024-12-01',
-        address: 'Negombo',
-        callingName: 'Sashi'
-      }
-    ];
     const fetchEmployees = async () => {
       setLoadingEmployees(true);
       setEmployeesError(null);
@@ -93,12 +43,11 @@ const UserManagement = () => {
           callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
-        const withSamples = [...mapped, ...sampleUsers];
-        setEmployees(withSamples);
+        setEmployees(mapped.slice(0, 3));
       } catch (err) {
         console.error('Failed to load user-management:', err);
         setEmployeesError(err.message || String(err));
-        setEmployees(sampleUsers);
+        setEmployees([]);
       } finally {
         setLoadingEmployees(false);
       }
@@ -136,6 +85,18 @@ const UserManagement = () => {
     console.log('Employee updated:', updatedEmployee);
   };
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredEmployees = employees.filter(emp => {
+    const matchesSearch = (
+      emp.id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.designation?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return matchesSearch;
+  });
+
   
 
   const handleClose = () => {
@@ -143,14 +104,30 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="um-wrapper">
-      <Navbar />
-      <div className={`um-content ${isModalOpen || isViewModalOpen ? 'um-content--blurred' : ''}`}>
-        <div className="um-card">
-          <div className="um-header">
-            <h1 className="um-title">System Users</h1>
+    <div className="complaint-onboard-wrapper users-page">
+      <Sidebar />
+      <div className="complaint-onboard-background" />
+      <div className={`content-wrapper ${isModalOpen || isViewModalOpen ? 'um-content--blurred' : ''}`} style={{ marginLeft: '260px' }}>
+        <div className="complaint-form-container users-wide" style={{ marginTop: '64px', maxWidth: '1350px', width: '97%', marginLeft: 'auto', marginRight: 'auto' }}>
+          <div className="page-header">
+            <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
+              <h1>System Users</h1>
+            </div>
           </div>
           <div className="um-body">
+            <div className="um-toolbar">
+              <div className="um-toolbar-left">
+                <div className="um-search-wrapper">
+                  <FaSearch className="um-search-icon" size={16} />
+                  <input
+                    className="um-search-input"
+                    placeholder="Search merchant, Owner, ID etc"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
             <div className="um-table-container">
               <table className="um-table">
                 <thead>
@@ -178,7 +155,7 @@ const UserManagement = () => {
                       <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
                     </tr>
                   ) : (
-                    employees.map((employee, index) => (
+                    filteredEmployees.map((employee, index) => (
                       <tr key={employee.id || index}>
                         <td>{employee.id}</td>
                         <td>{employee.name}</td>
@@ -188,11 +165,11 @@ const UserManagement = () => {
                         <td>{employee.address || 'N/A'}</td>
                         <td>
                           <div className="um-actions">
-                            <button className="um-btn" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
-                              <FaUserCog size={20} />
+                            <button className="um-btn um-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
+                              <FaEye size={22} />
                             </button>
-                            <button className="um-btn" title="View" onClick={() => handleViewEmployee(employee)}>
-                              <FaEye size={20} />
+                            <button className="um-btn um-btn-update" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
+                              <FaUserCog size={22} />
                             </button>
                           </div>
                         </td>
@@ -202,6 +179,7 @@ const UserManagement = () => {
                 </tbody>
               </table>
             </div>
+
           </div>
         </div>
       </div>

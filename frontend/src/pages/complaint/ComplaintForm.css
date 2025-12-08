@@ -1709,8 +1709,8 @@
 }
 
 .um-btn {
-  width: 56px;
-  height: 36px;
+  width: 64px;
+  height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1727,6 +1727,41 @@
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(6, 182, 212, 0.25);
+}
+
+.um-btn-view {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+.um-btn-view:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(29, 78, 216, 0.38);
+}
+
+.um-btn-update {
+  background: #475569;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px rgba(71, 85, 105, 0.35);
+}
+
+.um-btn-update:hover {
+  background: #374151;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(55, 65, 81, 0.38);
+}
+
+.um-btn-view svg,
+.um-btn-update svg {
+  color: #ffffff;
+}
+
+.users-page .complaint-form-container {
+  border-radius: 0;
 }
 
 .um-status-badge {
@@ -1998,4 +2033,135 @@
   background: var(--primary-blue);
   color: var(--white);
   border-color: var(--primary-blue);
+}
+.users-page .um-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.users-page .um-table thead th {
+  background: #eaebec;
+  color: #1e3a8a;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.users-page .um-table thead th:first-child { border-top-left-radius: 0; }
+.users-page .um-table thead th:last-child { border-top-right-radius: 0; }
+
+.complaint-onboard-wrapper.users-page {
+  background: #f4f8ff;
+  padding-top: 8px;
+}
+
+.users-page .complaint-form-container {
+  border-radius: 0;
+  box-shadow: 0 14px 32px rgba(2,6,23,0.12), inset 10px 0 12px -8px rgba(2,6,23,0.12), inset -10px 0 12px -8px rgba(2,6,23,0.12);
+}
+
+.users-page .um-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.um-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+}
+
+.um-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.um-page-btn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.um-entries-select {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+/* User Management search bar refinements */
+.um-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.um-toolbar-left,
+.um-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.um-search-wrapper {
+  position: relative;
+  min-width: 420px;
+}
+
+.um-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 48%;
+  transform: translateY(-48%);
+  color: #9ca3af;
+}
+
+.um-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 0.9rem 0 2.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  display: block;
+  line-height: 42px;
+}
+
+.users-page .um-toolbar {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 1rem;
+}
+.users-page .page-header {
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.users-page .page-header h1 {
+  font-size: 1.85rem;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #111827;
+  margin-left: 8px;
+}
+.um-content--blurred {
+  filter: blur(4px);
+  pointer-events: none;
 }

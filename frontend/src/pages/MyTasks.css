@@ -1,0 +1,26 @@
+@import './complaint/ComplaintForm.css';
+
+.my-tasks-page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--white);
+}
+
+.my-tasks-main-content {
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .my-tasks-main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+

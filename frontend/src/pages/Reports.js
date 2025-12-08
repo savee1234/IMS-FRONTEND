@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Bar, Pie, Line } from 'react-chartjs-2';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
+import './Reports.css';
  
 import { Chart as ChartJS, 
   CategoryScale, 
@@ -93,26 +94,34 @@ const Reports = () => {
 
   if (stats.loading) {
     return (
-      <div>
-        <Navbar />
-        <div className="reports-container">
-          <h1>📊 DP Division - Reports & Dashboard</h1>
-          <div className="loading-message">Loading dashboard data...</div>
+      <div className="reports-page-wrapper">
+        <Sidebar />
+        <div className="reports-main-content">
+          <div className="page-container">
+            <div className="page-header">
+              <h1 className="page-title">📊 DP Division - Reports & Dashboard</h1>
+              <div className="loading-message">Loading dashboard data...</div>
+            </div>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
 
   if (stats.error || !stats.data) {
     return (
-      <div>
-        <Navbar />
-        <div className="reports-container">
-          <h1>📊 DP Division - Reports & Dashboard</h1>
-          <div className="error-message">{stats.error || 'No data available'}</div>
+      <div className="reports-page-wrapper">
+        <Sidebar />
+        <div className="reports-main-content">
+          <div className="page-container">
+            <div className="page-header">
+              <h1 className="page-title">📊 DP Division - Reports & Dashboard</h1>
+              <div className="error-message">{stats.error || 'No data available'}</div>
+            </div>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
@@ -191,24 +200,10 @@ const Reports = () => {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh' }}>
-      {/* Background Video */}
-      
-      
-      {/* Overlay */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        background: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        zIndex: -1
-      }}></div>
-
-      <Navbar />
-      <div className="reports-container" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="reports-page-wrapper">
+      <Sidebar />
+      <div className="reports-main-content">
+        <div className="page-container">
         <h1>📊 DP Division - Reports & Dashboard</h1>
         
         <div className="summary-cards">
@@ -309,8 +304,9 @@ const Reports = () => {
             </div>
           </div>
         </div>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

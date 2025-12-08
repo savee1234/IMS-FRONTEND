@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { logout } from '../utils/auth';
 import sltLogo from '../assets/slt-logo.png';
+import './Navbar.css';
 
 const Navbar = () => {
   const location = useLocation();

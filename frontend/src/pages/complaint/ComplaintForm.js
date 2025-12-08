@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
-import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import { FaClipboardList, FaUser, FaTasks } from "react-icons/fa";
  
@@ -666,10 +666,15 @@ export default function ComplaintOnboarding() {
   ];
 
   return (
-    <>
-      <Navbar />
-      <div className="cf-wrapper">
-        <div className="cf-layout">
+    <div style={{ display: 'flex', minHeight: '100vh', fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif" }}>
+      <Sidebar />
+      <div className="complaint-main-content" style={{ 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%)',
+        minHeight: '100vh',
+        transition: 'all 0.3s ease'
+      }}>
+        <div className="cf-wrapper">
+          <div className="cf-layout">
           <aside className="cf-sidebar">
             <ul className="cf-vertical-steps">
               {tabs.map((tab, index) => (
@@ -872,10 +877,11 @@ export default function ComplaintOnboarding() {
             </div>
           )}
           </form>
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import './complaint/ComplaintForm.css';
+import './MyTasks.css';
 
 const fetchTasks = async () => {
   try {
@@ -528,10 +528,10 @@ const MyTasks = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page my-tasks-page">
-      <Navbar />
-
-      <div className="content-wrapper">
+    <div className="my-tasks-page-wrapper">
+      <Sidebar />
+      <div className="my-tasks-main-content">
+        <div className="page-container">
         <div className="complaint-form-container assignments-wide">
           <div className="page-header">
             <div className="page-header-content">
@@ -1084,9 +1084,9 @@ const MyTasks = () => {
           </div>
         </div>
       )}
-
-      <Footer />
-    </div>
+        </div>
+        <Footer />
+      </div>
   );
 };
 

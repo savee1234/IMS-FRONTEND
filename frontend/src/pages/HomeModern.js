@@ -5,6 +5,8 @@ import Footer from '../components/Footer';
 import img12 from '../assets/12.jpg';
 import img10 from '../assets/10.jpg';
 import imageJpg from '../assets/image.jpg';
+import new111 from '../assets/new111.jpg';
+import new112 from '../assets/new112.jpg';
 import './Home.css';
 
 const HomeModern = () => {
@@ -30,13 +32,13 @@ const HomeModern = () => {
     {
       title: 'Blue & Bold Experience',
       subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
+      imageUrl: new111,
       fallbackUrl: img12
     },
     {
       title: 'Technology That Empowers',
       subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: `${process.env.PUBLIC_URL}/new112.jpg`,
+      imageUrl: new112,
       fallbackUrl: img12
     },
     {

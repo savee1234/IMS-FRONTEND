@@ -65,74 +65,61 @@ const MainAssignment = () => {
 
           <form onSubmit={handleSubmit} className="config-form">
             <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.employee}
-                    onChange={(e) => handleChange('employee', e.target.value)}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="romaine.murcott">Romaine Murcott</option>
-                    <option value="john.smith">John Smith</option>
-                    <option value="sarah.johnson">Sarah Johnson</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => handleChange('employee', e.target.value)}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="romaine.murcott">Romaine Murcott</option>
+                  <option value="john.smith">John Smith</option>
+                  <option value="sarah.johnson">Sarah Johnson</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => handleChange('status', e.target.value)}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => handleChange('fromDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => handleChange('toDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
             </div>
             <div className="config-actions">
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
+          <div style={{ marginBottom: '0.75rem' }}>
+            <Field label="Search" className="full">
               <input
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
+                className="input"
               />
-            </div>
+            </Field>
           </div>
 
           <div className="config-card">
@@ -190,5 +177,14 @@ const MainAssignment = () => {
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
 
 export default MainAssignment;

@@ -59,8 +59,8 @@ const SubAssignment = () => {
     <div className="complaint-onboard-wrapper users-page assignments-page">
       <Sidebar />
       <div className="complaint-onboard-background" />
-      <div className="content-wrapper" style={{ marginLeft: '400px' }}>
-        <div className="complaint-form-container users-wide" style={{ marginTop: '48px', maxWidth: '1720px', width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
+      <div className="content-wrapper" style={{ marginLeft: '280px' }}>
+        <div className="complaint-form-container users-wide" style={{ marginTop: '48px', maxWidth: '1600px', width: '94%', marginLeft: 'auto', marginRight: 'auto' }}>
           <div className="page-header">
             <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
               <h1>Sub Assignments</h1>
@@ -127,7 +127,7 @@ const SubAssignment = () => {
             </div>
           </form>
 
-          <div className="um-toolbar">
+          <div className="um-toolbar" style={{ marginTop: '1.4rem', marginBottom: '0.5rem' }}>
             <div className="um-toolbar-left"></div>
             <div className="um-toolbar-right">
               <div className="um-search-wrapper">
@@ -143,55 +143,51 @@ const SubAssignment = () => {
           </div>
 
           <div className="um-table-container">
-            <table className="um-table">
-              <thead>
-                <tr>
-                  <th>Request Reference</th>
-                  <th>Entered Date & Time</th>
-                  <th>Assigned By</th>
-                  <th>Assigned To</th>
-                  <th>Remarks</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.requestReference}</td>
-                    <td>
-                      <div>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
-                    </td>
-                    <td>
-                      {item.remarks ? item.remarks : (
-                        <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="um-actions">
-                        <button className="um-btn um-btn-view" title="View" type="button">
-                          <FaEye size={16} />
-                        </button>
-                        <button className="um-btn um-btn-update" title="Update" type="button">
-                          <FaEdit size={16} />
-                        </button>
-                        <button className="um-btn um-btn-delete" title="Delete" type="button">
-                          <FaTrash size={16} />
-                        </button>
-                      </div>
-                    </td>
+              <table className="um-table">
+                <thead>
+                  <tr>
+                    <th>Request Reference</th>
+                    <th>Entered Date & Time</th>
+                    <th>Assigned By</th>
+                    <th>Assigned By Designation</th>
+                    <th>Assigned To</th>
+                    <th>Assigned To Designation</th>
+                    <th>Remarks</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.requestReference}</td>
+                      <td>
+                        <div>{item.enteredDate}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                      </td>
+                      <td><div style={{ color: '#0f172a', lineHeight: 1.6, fontWeight: 400 }}>{item.assignedByName}</div></td>
+                      <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByDesignation}</div></td>
+                      <td><div style={{ color: '#0f172a', lineHeight: 1.6, fontWeight: 400 }}>{item.assignedToName}</div></td>
+                      <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedToDesignation}</div></td>
+                      <td>
+                        {item.remarks || ''}
+                      </td>
+                      <td>
+                        <div className="um-actions">
+                          <button className="um-btn um-btn-view" title="View" type="button">
+                            <FaEye size={16} />
+                          </button>
+                          <button className="um-btn um-btn-update" title="Update" type="button">
+                            <FaEdit size={16} />
+                          </button>
+                          <button className="um-btn um-btn-delete" title="Delete" type="button">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
           </div>
 
           <div className="pager" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: '2rem' }}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
+import { FaEye, FaEdit, FaTrash, FaTasks, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
@@ -70,14 +70,14 @@ const AllAssignments = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
-      <Navbar />
+    <div className="complaint-onboard-wrapper users-page assignments-page">
+      <Sidebar />
       <div className="complaint-onboard-background" />
 
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
+      <div className="content-wrapper" style={{ marginLeft: '400px' }}>
+        <div className="complaint-form-container users-wide" style={{ marginTop: '48px', maxWidth: '1720px', width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
           <div className="page-header">
-            <div className="page-header-content">
+            <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
               <h1>All Assignments</h1>
             </div>
           </div>
@@ -88,7 +88,7 @@ const AllAssignments = () => {
                 <label className="config-label">Employee</label>
                 <div className="field-control input-wrapper">
                   <select
-                    className="config-input"
+                    className={`input select-ash ${filters.employee ? '' : 'empty'}`}
                     value={filters.employee}
                     onChange={(e) => handleChange('employee', e.target.value)}
                   >
@@ -102,7 +102,7 @@ const AllAssignments = () => {
                 <label className="config-label">Status</label>
                 <div className="field-control input-wrapper">
                   <select
-                    className="config-input"
+                    className={`input select-ash ${filters.status ? '' : 'empty'}`}
                     value={filters.status}
                     onChange={(e) => handleChange('status', e.target.value)}
                   >
@@ -120,7 +120,7 @@ const AllAssignments = () => {
                     type="date"
                     value={filters.fromDate}
                     onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="config-input"
+                    className="input"
                   />
                 </div>
               </div>
@@ -131,34 +131,37 @@ const AllAssignments = () => {
                     type="date"
                     value={filters.toDate}
                     onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="config-input"
+                    className="input"
                   />
                 </div>
               </div>
             </div>
-            <div className="config-actions">
+            <div className="config-actions" style={{ justifyContent: 'flex-end', paddingRight: '36px' }}>
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
-              />
+          <div className="um-toolbar" style={{ marginTop: '1.4rem', marginBottom: '0.4rem' }}>
+            <div className="um-toolbar-left"></div>
+            <div className="um-toolbar-right">
+              <div className="um-search-wrapper">
+                <FaSearch className="um-search-icon" size={16} />
+                <input
+                  className="um-search-input"
+                  placeholder="Search assignments"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
             </div>
           </div>
 
-          <div className="config-card">
-            <table className="config-table">
+          <div className="um-table-container">
+            <table className="um-table">
               <thead>
                 <tr>
                   <th>Request Reference</th>
-                  <th>Entered Date</th>
+                  <th>Entered Date & Time</th>
                   <th>Assigned By</th>
                   <th>Assigned To</th>
                   <th>Remark</th>
@@ -168,16 +171,19 @@ const AllAssignments = () => {
               <tbody>
                 <tr>
                   <td>25-10-23-0001</td>
-                  <td>10/23/2025 12:24:44 PM</td>
+                  <td>
+                    <div>{'10/23/2025'}</div>
+                    <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{'12:24:44 PM'}</div>
+                  </td>
                   <td>Romaine Murcott</td>
                   <td>Romaine Murcott</td>
                   <td>No remarks</td>
                   <td>
-                    <div className="config-table-actions">
+                    <div className="um-actions">
                       <button
                         title="View"
                         type="button"
-                        className="config-icon-btn"
+                        className="um-btn um-btn-view"
                         onClick={() => openView({
                           requestRef: '25-10-23-0001',
                           categoryType: 'INTERNAL',
@@ -205,7 +211,7 @@ const AllAssignments = () => {
                       <button
                         title="Update"
                         type="button"
-                        className="config-icon-btn"
+                        className="um-btn um-btn-update"
                         onClick={() => {
                           openStatus({
                             id: '25-10-23-0001',
@@ -219,7 +225,7 @@ const AllAssignments = () => {
                       <button
                         title="Progress"
                         type="button"
-                        className="config-icon-btn"
+                        className="um-btn um-btn-progress"
                         onClick={() => openProgress({ requestRef: '25-10-23-0001' })}
                       >
                         <FaTasks size={16} />
@@ -227,7 +233,7 @@ const AllAssignments = () => {
                       <button
                         title="Delete"
                         type="button"
-                        className="config-icon-btn"
+                        className="um-btn um-btn-delete"
                       >
                         <FaTrash size={16} />
                       </button>
@@ -238,9 +244,9 @@ const AllAssignments = () => {
             </table>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="config-btn-secondary">Previous</button>
-            <button type="button" className="config-btn-primary">Next</button>
+          <div className="pager" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: '2rem' }}>
+            <button type="button" className="config-btn-secondary pager-btn"><FaChevronLeft /> Previous</button>
+            <button type="button" className="config-btn-primary next-btn pager-btn">Next <FaChevronRight /></button>
             <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page 1 of 1</span>
           </div>
         </div>
@@ -264,5 +270,3 @@ const AllAssignments = () => {
 };
 
 export default AllAssignments;
-
-

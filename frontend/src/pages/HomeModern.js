@@ -24,26 +24,26 @@ const HomeModern = () => {
 
   const slides = [
     {
-      title: 'We Solve Incidents Fast',
-      subtitle: 'Modern UI, analytics, and workflows in one platform.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: img12,
       fallbackUrl: img12
     },
     {
-      title: 'Blue & Bold Experience',
-      subtitle: 'A colorful, engaging hero that matches your brand.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: new111,
       fallbackUrl: img12
     },
     {
-      title: 'Technology That Empowers',
-      subtitle: 'Coordinate teams, track tasks, and report with ease.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: new112,
       fallbackUrl: img12
     },
     {
-      title: 'Act Fast, Resolve Faster',
-      subtitle: 'Real-time insights to reduce response times.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: img10,
       fallbackUrl: img10
     }
@@ -266,13 +266,14 @@ const HomeModern = () => {
       <section 
         className="hero-section"
         style={{
-          backgroundImage: `url('${displaySlides[currentSlide].imageUrl}')`,
+          backgroundImage: `linear-gradient(135deg, rgba(30,58,138,0.9) 0%, rgba(37,99,235,0.85) 60%), url('${displaySlides[currentSlide].imageUrl}')`,
+          backgroundBlendMode: 'overlay'
         }}
       >
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1 className="hero-title">{slides[currentSlide].title}</h1>
-          <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
+          <h1 className="hero-title">Incident Management System</h1>
+          <p className="hero-subtitle">Modern workflows for IT incidents, tracking and resolution.</p>
           <button
             className="hero-button"
             onClick={() => navigate('/complaint')}

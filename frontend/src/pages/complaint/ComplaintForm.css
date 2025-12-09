@@ -2106,21 +2106,21 @@
 .um-btn-delete:hover { background: #059669; box-shadow: 0 10px 18px rgba(5, 150, 105, 0.38); transform: translateY(-2px); }
 
 /* Move search right above the table */
-.assignments-page .um-toolbar { justify-content: flex-end; margin-top: 0.25rem; margin-bottom: 0.5rem; }
+.assignments-page .um-toolbar { justify-content: flex-end; margin-top: 1.4rem; margin-bottom: 0.4rem; }
 
 /* Reduce table column header height to match user module */
-.assignments-page .um-table thead th { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.assignments-page .um-table thead th { padding-top: 0.45rem; padding-bottom: 0.45rem; vertical-align: middle; }
 
 /* Slightly widen table area */
-.assignments-page .um-table-container { width: 100%; }
+.assignments-page .um-table-container { width: 100%; margin-top: 0.6rem; }
 
 /* Spacing tweaks between title and form, and form to table */
 .assignments-page .page-header { margin-bottom: 1rem; }
-.assignments-page .config-form { margin-top: 1.5rem; margin-bottom: 1rem; border-color: #bfc5cc; }
+.assignments-page .config-form { margin-top: 1.5rem; margin-bottom: 1.4rem; border-color: #bfc5cc; }
 
 /* Pager spacing under table */
 .assignments-page .pager { margin-top: 1.25rem; }
-.assignments-page .pager .pager-btn { padding: 0.6rem 1.4rem; border-radius: 12px; min-width: 160px; height: 42px; }
+.assignments-page .pager .pager-btn { padding: 0.6rem 1.4rem; border-radius: 12px; min-width: 120px; height: 42px; }
 
 /* Ash color for empty selects text only */
 .assignments-page .select-ash.empty { color: #9ca3af; }
@@ -2128,6 +2128,10 @@
 /* Dropdown option colors: placeholder ash, others black */
 .assignments-page select option { color: #0f172a; }
 .assignments-page select option[value=""] { color: #9ca3af; }
+
+.um-btn-progress { background: #6f3d26; color: #ffffff; border: none; box-shadow: 0 6px 14px rgba(111, 61, 38, 0.35); }
+.um-btn-progress:hover { background: #59321f; transform: translateY(-2px); box-shadow: 0 10px 18px rgba(89, 50, 31, 0.38); }
+.um-btn-progress svg { color: #ffffff; }
 
 .um-pagination {
   display: flex;

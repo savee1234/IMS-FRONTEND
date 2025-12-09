@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
-import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
@@ -51,14 +51,14 @@ const MainAssignment = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
-      <Navbar />
+    <div className="complaint-onboard-wrapper users-page assignments-page">
+      <Sidebar />
       <div className="complaint-onboard-background" />
 
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
+      <div className="content-wrapper" style={{ marginLeft: '400px' }}>
+        <div className="complaint-form-container users-wide" style={{ marginTop: '48px', maxWidth: '1720px', width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
           <div className="page-header">
-            <div className="page-header-content">
+            <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
               <h1>Main Assignments</h1>
             </div>
           </div>
@@ -67,7 +67,7 @@ const MainAssignment = () => {
             <div className="form-grid assignments-form-grid">
               <Field label="Employee">
                 <select
-                  className="input"
+                  className={`input select-ash ${filters.employee ? '' : 'empty'}`}
                   value={filters.employee}
                   onChange={(e) => handleChange('employee', e.target.value)}
                 >
@@ -79,7 +79,7 @@ const MainAssignment = () => {
               </Field>
               <Field label="Status">
                 <select
-                  className="input"
+                  className={`input select-ash ${filters.status ? '' : 'empty'}`}
                   value={filters.status}
                   onChange={(e) => handleChange('status', e.target.value)}
                 >
@@ -106,28 +106,31 @@ const MainAssignment = () => {
                 />
               </Field>
             </div>
-            <div className="config-actions">
+            <div className="config-actions" style={{ justifyContent: 'flex-end', paddingRight: '36px' }}>
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div style={{ marginBottom: '0.75rem' }}>
-            <Field label="Search" className="full">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="input"
-              />
-            </Field>
+          <div className="um-toolbar">
+            <div className="um-toolbar-left">
+              <div className="um-search-wrapper">
+                <FaSearch className="um-search-icon" size={16} />
+                <input
+                  className="um-search-input"
+                  placeholder="Search assignments"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="config-card">
-            <table className="config-table">
+          <div className="um-table-container">
+            <table className="um-table">
               <thead>
                 <tr>
                   <th>Request Reference</th>
-                  <th>Entered Date</th>
+                  <th>Entered Date & Time</th>
                   <th>Assigned By</th>
                   <th>Assigned To</th>
                   <th>Remark</th>
@@ -138,19 +141,22 @@ const MainAssignment = () => {
                 {assignments.map((item, index) => (
                   <tr key={index}>
                     <td>{item.requestReference}</td>
-                    <td>{item.enteredDate}</td>
+                    <td>
+                      <div>{item.enteredDate.split(' ')[0]}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredDate.split(' ').slice(1).join(' ')}</div>
+                    </td>
                     <td>{item.assignedBy}</td>
                     <td>{item.assignedTo}</td>
                     <td>{item.remark || 'No remarks'}</td>
                     <td>
-                      <div className="config-table-actions">
-                        <button title="View" type="button" className="config-icon-btn">
+                      <div className="um-actions">
+                        <button title="View" type="button" className="um-btn um-btn-view">
                           <FaEye size={16} />
                         </button>
-                        <button title="Edit" type="button" className="config-icon-btn">
+                        <button title="Edit" type="button" className="um-btn um-btn-update">
                           <FaEdit size={16} />
                         </button>
-                        <button title="Delete" type="button" className="config-icon-btn">
+                        <button title="Delete" type="button" className="um-btn um-btn-delete">
                           <FaTrash size={16} />
                         </button>
                       </div>
@@ -161,11 +167,11 @@ const MainAssignment = () => {
             </table>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="config-btn-secondary">
+          <div className="pager" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: '2rem' }}>
+            <button type="button" className="config-btn-secondary pager-btn">
               <FaChevronLeft /> Previous
             </button>
-            <button type="button" className="config-btn-primary">
+            <button type="button" className="config-btn-primary next-btn pager-btn">
               Next <FaChevronRight />
             </button>
             <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>

@@ -2055,9 +2055,12 @@
 .users-page .um-table thead th:last-child { border-top-right-radius: 0; }
 
 .complaint-onboard-wrapper.users-page {
-  background: #f4f8ff;
+  background: #ffffff;
   padding-top: 8px;
 }
+.users-page .content-wrapper { background: #ffffff; }
+.users-page .complaint-form-container { background: #ffffff; }
+.users-page .complaint-onboard-background { display: none; }
 
 .users-page .complaint-form-container {
   border-radius: 0;
@@ -2078,6 +2081,53 @@
   border: 1px solid #e5e7eb;
   border-radius: var(--radius-md);
 }
+
+/* ============================================
+   Assignments page overrides (user module theme)
+   ============================================ */
+.assignments-page .um-table { border: none; }
+.assignments-page .field-label { color: #1e3a8a; }
+.assignments-page .um-search-input::placeholder,
+.assignments-page .input::placeholder { color: #9ca3af; opacity: 1; }
+.assignments-page .um-toolbar { justify-content: flex-start; padding-left: 0; }
+.assignments-page .input,
+.assignments-page .input-wrapper select { border: none; border-bottom: 2px solid #1e3a8a; border-radius: 0; box-shadow: none; }
+.assignments-page .input:focus,
+.assignments-page .input-wrapper select:focus { box-shadow: none; border-bottom-color: #1e3a8a; transform: none; }
+.assignments-page .config-btn-primary { background: #1e3a8a; border-color: #1e3a8a; color: #ffffff; }
+.assignments-page .config-btn-primary:hover { background: #0f1f4a; border-color: #0f1f4a; }
+.assignments-page .next-btn { background: #1e3a8a; border-color: #1e3a8a; color: #ffffff; }
+.assignments-page .next-btn:hover { background: #0f1f4a; border-color: #0f1f4a; }
+.assignments-page .complaint-onboard-background { display: none; }
+.complaint-onboard-wrapper.assignments-page { background: #ffffff; }
+.assignments-page .content-wrapper { background: #ffffff; }
+.assignments-page .complaint-form-container { background: #ffffff; }
+.um-btn-delete { background: #10b981; color: #ffffff; border: none; box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35); }
+.um-btn-delete:hover { background: #059669; box-shadow: 0 10px 18px rgba(5, 150, 105, 0.38); transform: translateY(-2px); }
+
+/* Move search right above the table */
+.assignments-page .um-toolbar { justify-content: flex-end; margin-top: 0.25rem; margin-bottom: 0.5rem; }
+
+/* Reduce table column header height to match user module */
+.assignments-page .um-table thead th { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+/* Slightly widen table area */
+.assignments-page .um-table-container { width: 100%; }
+
+/* Spacing tweaks between title and form, and form to table */
+.assignments-page .page-header { margin-bottom: 1rem; }
+.assignments-page .config-form { margin-top: 1.5rem; margin-bottom: 1rem; border-color: #bfc5cc; }
+
+/* Pager spacing under table */
+.assignments-page .pager { margin-top: 1.25rem; }
+.assignments-page .pager .pager-btn { padding: 0.6rem 1.4rem; border-radius: 12px; min-width: 160px; height: 42px; }
+
+/* Ash color for empty selects text only */
+.assignments-page .select-ash.empty { color: #9ca3af; }
+.assignments-page .select-ash:not(.empty) { color: #0f172a; }
+/* Dropdown option colors: placeholder ash, others black */
+.assignments-page select option { color: #0f172a; }
+.assignments-page select option[value=""] { color: #9ca3af; }
 
 .um-pagination {
   display: flex;
@@ -2165,3 +2215,4 @@
   filter: blur(4px);
   pointer-events: none;
 }
+.assignments-page .select-ash { background: transparent; box-shadow: none; }

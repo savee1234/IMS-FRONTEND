@@ -4,6 +4,7 @@ const MainAssignmentController = require('../controllers/MainAssignmentControlle
 
 // Routes for main assignments
 router.get('/', MainAssignmentController.getAllMainAssignments);
+router.get('/:id', MainAssignmentController.getMainAssignmentById);
 router.post('/', MainAssignmentController.createMainAssignment);
 router.put('/:id', MainAssignmentController.updateMainAssignment);
 router.delete('/:id', MainAssignmentController.deleteMainAssignment);

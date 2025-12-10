@@ -18,6 +18,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const userManagementRoutes = require('./routes/UserManagementRoute');
 const assignmentRoutes = require('./routes/Assignments');
 const SubAssignmentRoute = require('./routes/SubAssignmentRoute');
+const mainAssignmentRoutes = require('./routes/mainAssignmentRoutes');
 
 const app = express();
 
@@ -72,6 +73,7 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/user-management', userManagementRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/sub-assignments', SubAssignmentRoute);
+app.use('/api/main-assignments', mainAssignmentRoutes);
 
 
 

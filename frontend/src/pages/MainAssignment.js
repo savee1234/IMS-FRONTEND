@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -8,30 +8,31 @@ import './complaint/ComplaintForm.css';
 const MainAssignment = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const assignments = [
-    {
-      requestReference: '25-10-23-0001',
-      enteredDate: '10/23/2025 12:24:44 PM',
-      assignedBy: 'Romaine Murcott',
-      assignedTo: 'Romaine Murcott',
-      remark: '',
-    },
-    {
-      requestReference: '25-10-23-0002',
-      enteredDate: '10/24/2025 09:15:32 AM',
-      assignedBy: 'John Smith',
-      assignedTo: 'Sarah Johnson',
-      remark: 'Urgent follow-up required',
-    },
-    {
-      requestReference: '25-10-23-0003',
-      enteredDate: '10/24/2025 02:45:17 PM',
-      assignedBy: 'Emily Davis',
-      assignedTo: 'Michael Brown',
-      remark: 'Awaiting customer response',
-    },
-  ];
+  useEffect(() => {
+    fetchMainAssignments();
+  }, []);
+
+  const fetchMainAssignments = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:44354/api/main-assignments');
+      if (!response.ok) {
+        throw new Error('Failed to fetch main assignments');
+      }
+      const data = await response.json();
+      setAssignments(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching main assignments:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [filters, setFilters] = useState({
     employee: '',
@@ -136,42 +137,50 @@ const MainAssignment = () => {
           </div>
 
           <div className="config-card">
-            <table className="config-table">
-              <thead>
-                <tr>
-                  <th>Request Reference</th>
-                  <th>Entered Date</th>
-                  <th>Assigned By</th>
-                  <th>Assigned To</th>
-                  <th>Remark</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {assignments.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.requestReference}</td>
-                    <td>{item.enteredDate}</td>
-                    <td>{item.assignedBy}</td>
-                    <td>{item.assignedTo}</td>
-                    <td>{item.remark || 'No remarks'}</td>
-                    <td>
-                      <div className="config-table-actions">
-                        <button title="View" type="button" className="config-icon-btn">
-                          <FaEye size={16} />
-                        </button>
-                        <button title="Edit" type="button" className="config-icon-btn">
-                          <FaEdit size={16} />
-                        </button>
-                        <button title="Delete" type="button" className="config-icon-btn">
-                          <FaTrash size={16} />
-                        </button>
-                      </div>
-                    </td>
+            {loading && <p style={{ textAlign: 'center', padding: '2rem' }}>Loading assignments...</p>}
+            {error && <p style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>Error: {error}</p>}
+            {!loading && !error && (
+              <table className="config-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Assigned By</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {assignments.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.title}</td>
+                      <td>{item.description || 'N/A'}</td>
+                      <td>{item.assignedBy}</td>
+                      <td>{item.assignedTo?.userName || 'Unassigned'}</td>
+                      <td>{item.status}</td>
+                      <td>{item.priority}</td>
+                      <td>{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'}</td>
+                      <td>
+                        <div className="config-table-actions">
+                          <button title="View" type="button" className="config-icon-btn">
+                            <FaEye size={16} />
+                          </button>
+                          <button title="Edit" type="button" className="config-icon-btn">
+                            <FaEdit size={16} />
+                          </button>
+                          <button title="Delete" type="button" className="config-icon-btn">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>

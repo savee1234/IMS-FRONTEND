@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
+import { Eye, Pencil, Trash2, Search } from 'lucide-react';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
@@ -112,7 +112,7 @@ const MainAssignment = () => {
 
         <div className="ma-table-card">
           <div className="ma-search-bar">
-            <FaSearch className="ma-search-icon" />
+            <Search className="ma-search-icon" size={20} />
             <input
               type="text"
               placeholder="Search assignments"
@@ -148,13 +148,13 @@ const MainAssignment = () => {
                     <td>
                       <div className="ma-actions">
                         <button className="ma-btn-action ma-btn-view" title="View">
-                          <FaEye />
+                          <Eye size={18} />
                         </button>
                         <button className="ma-btn-action ma-btn-edit" title="Edit">
-                          <FaEdit />
+                          <Pencil size={18} />
                         </button>
                         <button className="ma-btn-action ma-btn-delete" title="Delete">
-                          <FaTrash />
+                          <Trash2 size={18} />
                         </button>
                       </div>
                     </td>

@@ -9,7 +9,7 @@ import ContactPersonSelect from "../../components/ContactPersonSelect";
 import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import { FaClipboardList, FaUser, FaTasks } from "react-icons/fa";
- 
+
 
 // Add font link for modern fonts
 const addFontLink = () => {
@@ -669,51 +669,51 @@ export default function ComplaintOnboarding() {
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif" }}>
       <Sidebar />
       <div className="complaint-main-content" style={{ 
-        background: 'linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%)',
+        background: '#f3f4f6', // Light gray background matching image
         minHeight: '100vh',
-        transition: 'all 0.3s ease'
+        width: '100%'
       }}>
-        <div className="cf-wrapper">
-          <div className="cf-layout">
-          <aside className="cf-sidebar">
-            <ul className="cf-vertical-steps">
-              {tabs.map((tab, index) => (
-                <li
-                  key={index}
-                  className={`cf-vertical-step ${index < activeTab ? 'completed' : index === activeTab ? 'active' : 'upcoming'}`}
-                >
-                  <button
-                    type="button"
-                    className="cf-vertical-button"
-                    onClick={() => setActiveTab(index)}
-                    aria-current={index === activeTab ? 'step' : undefined}
-                  >
-                    <span className="cf-vertical-icon">{activeTab >= index ? '✓' : index + 1}</span>
-                    <span className="cf-vertical-label">
-                      {index === 0 && <FaClipboardList style={{ marginRight: 6 }} />}
-                      {index === 1 && <FaUser style={{ marginRight: 6 }} />}
-                      {index === 2 && <FaTasks style={{ marginRight: 6 }} />}
-                      {tab.name}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </aside>
+        <div className="cf-wrapper" style={{ maxWidth: '98%', margin: '0 auto', padding: '0.5rem' }}>
+          
+          {/* Horizontal Stepper */}
+          <div className="wizard-stepper" style={{ marginBottom: '1rem' }}>
+            {tabs.map((tab, index) => (
+              <div 
+                key={index} 
+                className={`wizard-step ${index === activeTab ? 'active' : ''}`}
+                style={{ 
+                  flex: 1, 
+                  textAlign: 'center', 
+                  padding: '1rem', 
+                  cursor: 'pointer',
+                  borderBottom: index === activeTab ? '3px solid #2563eb' : '3px solid transparent',
+                  fontWeight: index === activeTab ? '600' : '400',
+                  color: index === activeTab ? '#2563eb' : '#64748b'
+                }}
+                onClick={() => setActiveTab(index)}
+              >
+                {index + 1}. {tab.name}
+              </div>
+            ))}
+          </div>
 
-          <form className="cf-container" onSubmit={onSubmit}>
-          {submitted && generatedRef && (
-            <div className="cf-success">
-              <div className="cf-success-text">Reference: {generatedRef}</div>
+          <form className="cf-container" onSubmit={onSubmit} style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+            {submitted && generatedRef && (
+              <div className="cf-success" style={{ marginBottom: '1rem', padding: '1rem', background: '#ecfdf5', color: '#065f46', borderRadius: '6px' }}>
+                <div className="cf-success-text">Reference: {generatedRef}</div>
+              </div>
+            )}
+
+            <div className="cf-header" style={{ marginBottom: '1rem' }}>
+              <h1 className="cf-title" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b' }}>{tabs[activeTab].name}</h1>
+              <p className="cf-subtitle" style={{ color: '#64748b' }}>Please fill in the details below.</p>
             </div>
-          )}
 
-          {activeTab === 0 && (
-            <div className="cf-grid">
-              <div className="cf-card">
-                <div className="form-grid">
+            {activeTab === 0 && (
+              <div>
+                <div className="redesign-form-grid">
                   <Field label="Request Reference">
-                    <input className="input" value={form.requestRef} readOnly />
+                    <input className="input" value={form.requestRef} readOnly style={{ background: '#f1f5f9' }} />
                   </Field>
                   <Field label="Category Type">
                     <select className="input" value={form.categoryType} onChange={(e) => update('categoryType', e.target.value)}>
@@ -755,41 +755,44 @@ export default function ComplaintOnboarding() {
                       {mediumSources.map(m => (<option key={m} value={m}>{m}</option>))}
                     </select>
                   </Field>
-                  <Field label="Complaint" className="full">
-                    <textarea className="input textarea" rows={3} value={form.complaint} onChange={(e) => update('complaint', e.target.value)} />
-                  </Field>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <Field label="Complaint">
+                      <textarea className="input textarea" rows={4} value={form.complaint} onChange={(e) => update('complaint', e.target.value)} />
+                    </Field>
+                  </div>
                 </div>
-                <div className="cf-actions">
-                  <button type="button" className="cf-btn-primary" onClick={nextTab}>Next Step</button>
+                <div className="cf-actions" style={{ marginTop: '2rem' }}>
+                  <button type="button" className="redesign-btn-next" onClick={nextTab}>Next Step</button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 1 && (
-            <div className="cf-grid">
-              <div className="cf-card">
-                <div className="search-wrapper">
-                  <label className="search-label">Search Contact Person</label>
+            {activeTab === 1 && (
+              <div>
+                <div className="search-wrapper" style={{ marginBottom: '2rem' }}>
+                  <label className="search-label" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Search Contact Person</label>
                   <ContactPersonSelect contacts={organizationContactPersons} onSelect={handleContactSelect} isLoading={loadingContactPersons} selectedPerson={selectedContactPerson} placeholder="Search by name or mobile number" />
                 </div>
-                {notFoundMsg && (<div className="alert-message error">{notFoundMsg}</div>)}
+                
+                {notFoundMsg && (<div className="alert-message error" style={{ padding: '1rem', background: '#fee2e2', color: '#b91c1c', borderRadius: '6px', marginBottom: '1rem' }}>{notFoundMsg}</div>)}
 
                 {searchResult === 'found' && (
-                  <div className="info-card success">
+                  <div className="info-card success" style={{ padding: '1rem', background: '#ecfdf5', color: '#065f46', borderRadius: '6px', marginBottom: '1rem' }}>
                     <div className="info-card-title"><strong>Contact:</strong> {form.contactName} ({form.mobile})</div>
                   </div>
                 )}
+                
                 {searchResult === 'not_found' && (
-                  <div className="info-card warning">
+                  <div className="info-card warning" style={{ padding: '1rem', background: '#fffbeb', color: '#b45309', borderRadius: '6px', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className="info-card-title">Contact not found.</div>
-                    <button type="button" className="cf-btn-primary" onClick={() => { setShowAddDetails(true); setSearchResult(null); }}>Add Details</button>
+                    <button type="button" onClick={() => { setShowAddDetails(true); setSearchResult(null); }} style={{ padding: '0.5rem 1rem', background: '#b45309', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Add Details</button>
                   </div>
                 )}
 
                 {showAddDetails && (
-                  <div className="cf-card">
-                    <div className="form-grid">
+                  <div className="cf-card" style={{ padding: '1.5rem', border: '1px solid #e2e8f0', borderRadius: '8px', marginBottom: '2rem' }}>
+                    <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>New Contact Details</h3>
+                    <div className="redesign-form-grid">
                       <Field label="Contact Name"><input className="input" value={newContactData.name} onChange={(e) => { const v = e.target.value; setNewContactData({ ...newContactData, name: v }); update('contactName', v); }} /></Field>
                       <Field label="Email"><input className="input" value={newContactData.email} type="email" onChange={(e) => { const v = e.target.value; setNewContactData({ ...newContactData, email: v }); update('email', v); }} /></Field>
                       <Field label="Organization"><select className="input" value={newContactData.organization} onChange={(e) => setNewContactData({ ...newContactData, organization: e.target.value })}>{loadingOrganizations ? (<option disabled>Loading organizations...</option>) : organizations.map(org => (<option key={org._id} value={org.organization}>{org.organization}</option>))}</select></Field>
@@ -798,34 +801,43 @@ export default function ComplaintOnboarding() {
                   </div>
                 )}
 
-                <div className="form-grid">
+                <div className="redesign-form-grid">
                   <Field label="Contact Person Name"><input className="input" value={form.contactName} onChange={(e) => update('contactName', e.target.value)} /></Field>
                   <Field label="Email"><input className="input" type="email" value={form.email} onChange={(e) => update('email', e.target.value)} /></Field>
                   <Field label="Mobile No"><input className="input" value={form.mobile} onChange={(e) => update('mobile', e.target.value)} /></Field>
                   <Field label="Office Mobile No"><input className="input" value={form.officeMobile} onChange={(e) => { const v = e.target.value; update('officeMobile', v); if (searchResult === 'not_found') setNewContactData({ ...newContactData, officeMobile: v }); }} /></Field>
                   <Field label="Title"><select className="input" value={form.title} onChange={(e) => update('title', e.target.value)}><option value="Mr.">Mr.</option><option value="Mrs.">Mrs.</option><option value="Ms.">Ms.</option><option value="Dr.">Dr.</option><option value="Prof.">Prof.</option></select></Field>
                 </div>
-                <div className="cf-actions">
-                  <button type="button" className="cf-btn-secondary" onClick={prevTab}>Previous</button>
-                  <button type="button" className="cf-btn-primary" onClick={nextTab}>Next Step</button>
+                
+                <div className="cf-actions" style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+                  <button type="button" onClick={prevTab} style={{ flex: 1, padding: '1rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', color: '#475569' }}>Back</button>
+                  <button type="button" className="redesign-btn-next" onClick={nextTab} style={{ flex: 2 }}>Next Step</button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 2 && (
-            <div className="cf-grid">
-              <div className="cf-card">
-                <div className="table-container">
-                  <table className="modern-table">
-                    <thead><tr><th>Emp No</th><th>Name</th><th>Designation</th><th>Availability</th><th>Assignment</th></tr></thead>
+            {activeTab === 2 && (
+              <div>
+                <div className="table-container" style={{ marginBottom: '2rem', overflowX: 'auto' }}>
+                  <table className="modern-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead>
+                      <tr style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
+                        <th style={{ padding: '1rem', textAlign: 'left' }}>Emp No</th>
+                        <th style={{ padding: '1rem', textAlign: 'left' }}>Name</th>
+                        <th style={{ padding: '1rem', textAlign: 'left' }}>Designation</th>
+                        <th style={{ padding: '1rem', textAlign: 'left' }}>Availability</th>
+                        <th style={{ padding: '1rem', textAlign: 'left' }}>Assignment</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {staff.map(s => (
-                        <tr key={s.empNo}>
-                          <td>{s.empNo}</td><td>{s.name}</td><td>{s.designation}</td>
-                          <td><span className={`availability-badge ${s.availability.toLowerCase()}`}>{s.availability}</span></td>
-                          <td>
-                            <select className="input input-sm" value={staffAssignments[s.empNo] || ''} onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)}>
+                        <tr key={s.empNo} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                          <td style={{ padding: '1rem' }}>{s.empNo}</td>
+                          <td style={{ padding: '1rem' }}>{s.name}</td>
+                          <td style={{ padding: '1rem' }}>{s.designation}</td>
+                          <td style={{ padding: '1rem' }}><span className={`availability-badge ${s.availability.toLowerCase()}`} style={{ padding: '0.25rem 0.5rem', borderRadius: '9999px', background: '#ecfdf5', color: '#059669', fontSize: '0.875rem' }}>{s.availability}</span></td>
+                          <td style={{ padding: '1rem' }}>
+                            <select className="input input-sm" value={staffAssignments[s.empNo] || ''} onChange={(e) => updateStaffAssignment(s.empNo, e.target.value)} style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}>
                               <option value="">Select Assignment</option>
                               <option value="Main Assignment">Main Assignment</option>
                               <option value="Sub Assignment">Sub Assignment</option>
@@ -836,18 +848,18 @@ export default function ComplaintOnboarding() {
                     </tbody>
                   </table>
                 </div>
-                <div className="form-grid">
+                
+                <div className="redesign-form-grid">
                   <Field label="Document Reference">
-                    <div className="input-group">
-                      <div className="input-wrapper">
+                    <div className="input-group" style={{ display: 'flex', gap: '0.5rem' }}>
                         <input
                           className="input"
                           value={form.docRef}
                           onChange={(e) => update('docRef', e.target.value)}
+                          style={{ flex: 1 }}
                         />
-                      </div>
-                      <label className="btn-upload">
-                        <input type="file" onChange={() => {}} />
+                      <label className="btn-upload" style={{ padding: '0.5rem 1rem', background: '#e2e8f0', cursor: 'pointer', borderRadius: '4px', display: 'flex', alignItems: 'center' }}>
+                        <input type="file" onChange={() => {}} style={{ display: 'none' }} />
                         Upload
                       </label>
                     </div>
@@ -859,25 +871,26 @@ export default function ComplaintOnboarding() {
                       onChange={(e) => update('docSubject', e.target.value)}
                     />
                   </Field>
-                  <Field label="Remarks" className="full">
-                    <textarea
-                      className="input textarea"
-                      rows={3}
-                      value={form.remarks}
-                      onChange={(e) => update('remarks', e.target.value)}
-                    />
-                  </Field>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <Field label="Remarks">
+                      <textarea
+                        className="input textarea"
+                        rows={3}
+                        value={form.remarks}
+                        onChange={(e) => update('remarks', e.target.value)}
+                      />
+                    </Field>
+                  </div>
                 </div>
-                <div className="cf-actions">
-                  <button type="button" className="cf-btn-secondary" onClick={prevTab}>Previous</button>
-                  <button type="button" className="cf-btn-secondary" onClick={onReset}>Reset Form</button>
-                  <button type="submit" className="cf-btn-primary">Submit</button>
+                
+                <div className="cf-actions" style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+                  <button type="button" onClick={prevTab} style={{ flex: 1, padding: '1rem', background: '#f1f5f9', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', color: '#475569' }}>Back</button>
+                  <button type="button" onClick={onReset} style={{ flex: 1, padding: '1rem', background: '#fff1f2', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', color: '#e11d48' }}>Reset</button>
+                  <button type="submit" className="redesign-btn-next" style={{ flex: 2 }}>Submit Complaint</button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </form>
-          </div>
         </div>
         <Footer />
       </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
+import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
@@ -148,13 +148,13 @@ const MainAssignment = () => {
                     <td>
                       <div className="ma-actions">
                         <button className="ma-btn-action ma-btn-view" title="View">
-                          <FaEye />
+                          <FaFileAlt color="#ffffff" />
                         </button>
-                        <button className="ma-btn-action ma-btn-edit" title="Edit">
-                          <FaEdit />
+                        <button className="ma-btn-action ma-btn-edit" title="Update">
+                          <FaHistory color="#ffffff" />
                         </button>
                         <button className="ma-btn-action ma-btn-delete" title="Delete">
-                          <FaTrash />
+                          <FaTrash color="#ffffff" />
                         </button>
                       </div>
                     </td>

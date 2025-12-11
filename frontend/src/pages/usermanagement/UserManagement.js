@@ -104,82 +104,81 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper users-page">
+    <div className="ma-wrapper">
       <Sidebar />
-      <div className="complaint-onboard-background" />
-      <div className={`content-wrapper ${isModalOpen || isViewModalOpen ? 'um-content--blurred' : ''}`} style={{ marginLeft: '260px' }}>
-        <div className="complaint-form-container users-wide" style={{ marginTop: '64px', maxWidth: '1350px', width: '97%', marginLeft: 'auto', marginRight: 'auto' }}>
-          <div className="page-header">
-            <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
-              <h1>System Users</h1>
-            </div>
-          </div>
-          <div className="um-body">
-            <div className="um-toolbar">
-              <div className="um-toolbar-left">
-                <div className="um-search-wrapper">
-                  <FaSearch className="um-search-icon" size={16} />
-                  <input
-                    className="um-search-input"
-                    placeholder="Search merchant, Owner, ID etc"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="um-table-container">
-              <table className="um-table">
-                <thead>
-                  <tr>
-                    <th>User ID</th>
-                    <th>Employee Name</th>
-                    <th>Designation</th>
-                    <th>Contact No.</th>
-                    <th>Email Address</th>
-                    <th>Location</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loadingEmployees ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center' }}>Loading employees...</td>
-                    </tr>
-                  ) : employeesError ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
-                    </tr>
-                  ) : employees.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
-                    </tr>
-                  ) : (
-                    filteredEmployees.map((employee, index) => (
-                      <tr key={employee.id || index}>
-                        <td>{employee.id}</td>
-                        <td>{employee.name}</td>
-                        <td>{employee.designation}</td>
-                        <td>{employee.contact}</td>
-                        <td>{employee.email || 'N/A'}</td>
-                        <td>{employee.address || 'N/A'}</td>
-                        <td>
-                          <div className="um-actions">
-                            <button className="um-btn um-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
-                              <FaEye size={22} />
-                            </button>
-                            <button className="um-btn um-btn-update" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
-                              <FaUserCog size={22} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>System Users</h1>
+        </div>
 
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search users"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="ma-search-input"
+            />
+          </div>
+
+          <div className="ma-table-container">
+            <table className="ma-table">
+              <thead>
+                <tr>
+                  <th>USER ID</th>
+                  <th>EMPLOYEE NAME</th>
+                  <th>DESIGNATION</th>
+                  <th>CONTACT NO.</th>
+                  <th>EMAIL ADDRESS</th>
+                  <th>LOCATION</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loadingEmployees ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center' }}>Loading employees...</td>
+                  </tr>
+                ) : employeesError ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
+                  </tr>
+                ) : employees.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
+                  </tr>
+                ) : (
+                  filteredEmployees.map((employee, index) => (
+                    <tr key={employee.id || index}>
+                      <td style={{ color: '#0f172a' }}>{employee.id}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.name}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.designation}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.contact}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.email || 'N/A'}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.address || 'N/A'}</td>
+                      <td>
+                        <div className="ma-actions">
+                          <button className="ma-btn-action ma-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
+                            <FaEye />
+                          </button>
+                          <button className="ma-btn-action ma-btn-edit" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
+                            <FaUserCog />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ma-footer-row">
+            <button className="ma-pagination-btn">&lt; Previous</button>
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page 1 of 1</span>
+            <button className="ma-pagination-btn next">Next &gt;</button>
           </div>
         </div>
       </div>

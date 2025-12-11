@@ -423,6 +423,11 @@ body {
   gap: 0.5rem;
 }
 
+/* Assignment pages: make form field labels match column header/nav blue */
+.assignments-page .field-label {
+  color: #1e3a8a;
+}
+
 .config-icon-btn {
   width: 32px;
   height: 32px;
@@ -764,14 +769,15 @@ body {
 }
 
 .ma-filter-card {
-  background: white;
+  background: #e5e7eb;
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  border: 1px solid #e5e7eb;
 }
 
 .ma-filter-group {
@@ -785,7 +791,7 @@ body {
 .ma-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: #1e3a8a;
 }
 
 .ma-input, .ma-select {
@@ -806,31 +812,34 @@ body {
 }
 
 .ma-btn-submit {
-  background-color: #4f46e5; /* Purple */
+  background-color: #1e3a8a;
   color: white;
-  padding: 0 2.5rem;
+  padding: 0 1.25rem;
   border-radius: 6px;
   font-weight: 600;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
-  height: 42px; /* Match input height */
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
+  margin-left: 1rem;
+  margin-top: 1rem;
 }
-
 .ma-btn-submit:hover {
-  background-color: #4338ca;
+  background-color: #0f1f4a;
 }
 
 .ma-table-card {
-  background: white;
+  background: #e5e7eb;
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  border: 1px solid #e5e7eb;
 }
 
 .ma-search-bar {
@@ -878,9 +887,9 @@ body {
   padding: 1rem 1.5rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #6b7280;
+  color: #1e3a8a;
   text-transform: uppercase;
-  background-color: #f9fafb;
+  background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -914,14 +923,19 @@ body {
   font-size: 0.9rem;
 }
 
-.ma-btn-view { background: #eff6ff; color: #3b82f6; }
-.ma-btn-view:hover { background: #dbeafe; }
+.ma-btn-view { background: #2563eb; color: #ffffff; }
+.ma-btn-view:hover { background: #1d4ed8; }
 
-.ma-btn-edit { background: #f3f4f6; color: #6b7280; }
-.ma-btn-edit:hover { background: #e5e7eb; }
+.ma-btn-edit { background: #4b5563; color: #ffffff; }
+.ma-btn-edit:hover { background: #374151; }
 
-.ma-btn-delete { background: #ecfdf5; color: #10b981; }
-.ma-btn-delete:hover { background: #d1fae5; }
+.ma-btn-delete { background: #10b981; color: #ffffff; }
+.ma-btn-delete:hover { background: #059669; }
+
+.ma-btn-view svg,
+.ma-btn-edit svg,
+.ma-btn-delete svg,
+.ma-actions .ma-btn-action svg { color: #ffffff !important; }
 
 .ma-footer-row {
   margin-top: 1.5rem;
@@ -947,12 +961,12 @@ body {
 }
 
 .ma-pagination-btn.next {
-  background: #a5b4fc; /* Light purple */
+  background: #1e3a8a;
   color: white;
   border: none;
 }
 .ma-pagination-btn.next:hover {
-  background: #818cf8;
+  background: #0f1f4a;
 }
 
 .ma-copyright {

@@ -1650,6 +1650,9 @@
 .um-header {
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .um-title {
@@ -1706,8 +1709,8 @@
 }
 
 .um-btn {
-  width: 56px;
-  height: 36px;
+  width: 64px;
+  height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1724,6 +1727,41 @@
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(6, 182, 212, 0.25);
+}
+
+.um-btn-view {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+}
+
+.um-btn-view:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(29, 78, 216, 0.38);
+}
+
+.um-btn-update {
+  background: #475569;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 14px rgba(71, 85, 105, 0.35);
+}
+
+.um-btn-update:hover {
+  background: #374151;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(55, 65, 81, 0.38);
+}
+
+.um-btn-view svg,
+.um-btn-update svg {
+  color: #ffffff;
+}
+
+.users-page .complaint-form-container {
+  border-radius: 0;
 }
 
 .um-status-badge {
@@ -1996,3 +2034,189 @@
   color: var(--white);
   border-color: var(--primary-blue);
 }
+.users-page .um-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.users-page .um-table thead th {
+  background: #eaebec;
+  color: #1e3a8a;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.users-page .um-table thead th:first-child { border-top-left-radius: 0; }
+.users-page .um-table thead th:last-child { border-top-right-radius: 0; }
+
+.complaint-onboard-wrapper.users-page {
+  background: #ffffff;
+  padding-top: 8px;
+}
+.users-page .content-wrapper { background: #ffffff; }
+.users-page .complaint-form-container { background: #ffffff; }
+.users-page .complaint-onboard-background { display: none; }
+
+.users-page .complaint-form-container {
+  border-radius: 0;
+  box-shadow: 0 14px 32px rgba(2,6,23,0.12), inset 10px 0 12px -8px rgba(2,6,23,0.12), inset -10px 0 12px -8px rgba(2,6,23,0.12);
+}
+
+.users-page .um-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.um-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+   Assignments page overrides (user module theme)
+   ============================================ */
+.assignments-page .um-table { border: none; }
+.assignments-page .field-label { color: #1e3a8a; }
+.assignments-page .um-search-input::placeholder,
+.assignments-page .input::placeholder { color: #9ca3af; opacity: 1; }
+.assignments-page .um-toolbar { justify-content: flex-start; padding-left: 0; }
+.assignments-page .input,
+.assignments-page .input-wrapper select { border: none; border-bottom: 2px solid #1e3a8a; border-radius: 0; box-shadow: none; }
+.assignments-page .input:focus,
+.assignments-page .input-wrapper select:focus { box-shadow: none; border-bottom-color: #1e3a8a; transform: none; }
+.assignments-page .config-btn-primary { background: #1e3a8a; border-color: #1e3a8a; color: #ffffff; }
+.assignments-page .config-btn-primary:hover { background: #0f1f4a; border-color: #0f1f4a; }
+.assignments-page .next-btn { background: #1e3a8a; border-color: #1e3a8a; color: #ffffff; }
+.assignments-page .next-btn:hover { background: #0f1f4a; border-color: #0f1f4a; }
+.assignments-page .complaint-onboard-background { display: none; }
+.complaint-onboard-wrapper.assignments-page { background: #ffffff; }
+.assignments-page .content-wrapper { background: #ffffff; }
+.assignments-page .complaint-form-container { background: #ffffff; }
+.um-btn-delete { background: #10b981; color: #ffffff; border: none; box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35); }
+.um-btn-delete:hover { background: #059669; box-shadow: 0 10px 18px rgba(5, 150, 105, 0.38); transform: translateY(-2px); }
+
+/* Move search right above the table */
+.assignments-page .um-toolbar { justify-content: flex-end; margin-top: 1.4rem; margin-bottom: 0.4rem; }
+
+/* Reduce table column header height to match user module */
+.assignments-page .um-table thead th { padding-top: 0.45rem; padding-bottom: 0.45rem; vertical-align: middle; }
+
+/* Slightly widen table area */
+.assignments-page .um-table-container { width: 100%; margin-top: 0.6rem; }
+
+/* Spacing tweaks between title and form, and form to table */
+.assignments-page .page-header { margin-bottom: 1rem; }
+.assignments-page .config-form { margin-top: 1.5rem; margin-bottom: 1.4rem; border-color: #bfc5cc; }
+
+/* Pager spacing under table */
+.assignments-page .pager { margin-top: 1.25rem; }
+.assignments-page .pager .pager-btn { padding: 0.6rem 1.4rem; border-radius: 12px; min-width: 120px; height: 42px; }
+
+/* Ash color for empty selects text only */
+.assignments-page .select-ash.empty { color: #9ca3af; }
+.assignments-page .select-ash:not(.empty) { color: #0f172a; }
+/* Dropdown option colors: placeholder ash, others black */
+.assignments-page select option { color: #0f172a; }
+.assignments-page select option[value=""] { color: #9ca3af; }
+
+.um-btn-progress { background: #6f3d26; color: #ffffff; border: none; box-shadow: 0 6px 14px rgba(111, 61, 38, 0.35); }
+.um-btn-progress:hover { background: #59321f; transform: translateY(-2px); box-shadow: 0 10px 18px rgba(89, 50, 31, 0.38); }
+.um-btn-progress svg { color: #ffffff; }
+
+.um-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.um-page-btn {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+}
+
+.um-entries-select {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+/* User Management search bar refinements */
+.um-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.um-toolbar-left,
+.um-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.um-search-wrapper {
+  position: relative;
+  min-width: 420px;
+}
+
+.um-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 48%;
+  transform: translateY(-48%);
+  color: #9ca3af;
+}
+
+.um-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 0.9rem 0 2.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  display: block;
+  line-height: 42px;
+}
+
+.users-page .um-toolbar {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 1rem;
+}
+.users-page .page-header {
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.users-page .page-header h1 {
+  font-size: 1.85rem;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #111827;
+  margin-left: 8px;
+}
+.um-content--blurred {
+  filter: blur(4px);
+  pointer-events: none;
+}
+.assignments-page .select-ash { background: transparent; box-shadow: none; }

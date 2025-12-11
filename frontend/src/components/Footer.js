@@ -18,7 +18,7 @@ const Footer = () => {
 
 const styles = {
   footer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#eaebec',
     color: '#374151',
     padding: '12px 0',
     textAlign: 'center',
@@ -28,8 +28,8 @@ const styles = {
     right: 0,
     width: '100%',
     zIndex: 999,
-    boxShadow: '0 -2px 10px rgba(0,0,0,0.06)',
-    borderTop: '1px solid #e5e7eb',
+    boxShadow: '0 -2px 10px rgba(2,6,23,0.08)',
+    borderTop: '1px solid #d1d5db',
     marginTop: 'auto'
   },
   content: {

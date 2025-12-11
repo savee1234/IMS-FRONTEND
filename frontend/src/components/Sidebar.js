@@ -44,7 +44,9 @@ const Sidebar = () => {
               : styles.navLink
           }
         >
-          <span style={styles.navIcon}>🏠</span>
+          <svg style={styles.navIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-10.5z" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          </svg>
           <span>Home</span>
         </Link>
 
@@ -70,7 +72,12 @@ const Sidebar = () => {
             }
           }}
         >
-            <span style={styles.navIcon}>📦</span>
+            <svg style={styles.navIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="#ffffff" strokeWidth="1.8" fill="none"/>
+              <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="#ffffff" strokeWidth="1.8" fill="none"/>
+              <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="#ffffff" strokeWidth="1.8" fill="none"/>
+              <rect x="13" y="13" width="8" height="8" rx="1.5" stroke="#ffffff" strokeWidth="1.8" fill="none"/>
+            </svg>
             <span>Modules</span>
             <span style={styles.chevron}>{isModulesOpen ? '▼' : '▶'}</span>
           </button>
@@ -100,7 +107,11 @@ const Sidebar = () => {
               : styles.navLink
           }
         >
-          <span style={styles.navIcon}>ℹ️</span>
+          <svg style={styles.navIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="#ffffff" strokeWidth="1.8" fill="none"/>
+            <path d="M12 8.5h0" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M11 11.5h2v6h-2z" fill="#ffffff"/>
+          </svg>
           <span>About</span>
         </Link>
       </nav>
@@ -117,17 +128,8 @@ const Sidebar = () => {
         <button 
           onClick={handleLogout} 
           style={styles.logoutBtn}
-          onMouseEnter={(e) => {
-            e.target.style.background = 'rgba(239, 68, 68, 0.3)';
-            e.target.style.transform = 'translateY(-1px)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = 'rgba(239, 68, 68, 0.2)';
-            e.target.style.transform = 'translateY(0)';
-          }}
         >
-          <span style={styles.navIcon}>🚪</span>
-          <span>Logout</span>
+          Logout
         </button>
       </div>
     </aside>
@@ -141,22 +143,22 @@ const styles = {
     top: 0,
     width: '260px',
     height: '100vh',
-    background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)',
+    background: '#1f2a44',
     color: '#ffffff',
     display: 'flex',
     flexDirection: 'column',
-    boxShadow: '4px 0 20px rgba(0, 0, 0, 0.1)',
+    boxShadow: '4px 0 20px rgba(0, 0, 0, 0.12)',
     zIndex: 1000,
     fontFamily: "'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif",
     overflowY: 'auto',
   },
   sidebarHeader: {
-    padding: '1.5rem 1.25rem',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    padding: '1.5rem 1rem',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
     display: 'flex',
     alignItems: 'center',
-    gap: '0.75rem',
-    background: 'rgba(0, 0, 0, 0.1)',
+    gap: '3rem',
+    background: '#1f2a44',
   },
   logo: {
     height: '40px',
@@ -175,8 +177,9 @@ const styles = {
   },
   nav: {
     flex: 1,
-    padding: '1rem 0',
+    padding: '2rem 0 1rem',
     overflowY: 'auto',
+    background: '#1f2a44',
   },
   navLink: {
     display: 'flex',
@@ -192,9 +195,9 @@ const styles = {
     borderRadius: '0 8px 8px 0',
   },
   navLinkActive: {
-    background: 'rgba(255, 255, 255, 0.15)',
+    background: 'rgba(255, 255, 255, 0.08)',
     color: '#ffffff',
-    borderLeftColor: '#60a5fa',
+    borderLeftColor: '#93c5fd',
     fontWeight: 600,
   },
   navIcon: {
@@ -204,6 +207,7 @@ const styles = {
   },
   navSection: {
     marginTop: '0.5rem',
+    background: '#1f2a44',
   },
   navSectionButton: {
     width: '100%',
@@ -233,12 +237,12 @@ const styles = {
   },
   subNav: {
     paddingLeft: '2rem',
-    background: 'rgba(0, 0, 0, 0.1)',
+    background: '#1f2a44',
   },
   subNavLink: {
     display: 'block',
     padding: '0.625rem 1.25rem',
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: 'rgba(255, 255, 255, 0.8)',
     textDecoration: 'none',
     fontSize: '0.875rem',
     transition: 'all 0.2s ease',
@@ -247,22 +251,24 @@ const styles = {
   },
   subNavLinkActive: {
     color: '#ffffff',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderLeftColor: '#60a5fa',
+    background: 'rgba(255, 255, 255, 0.08)',
+    borderLeftColor: '#93c5fd',
     fontWeight: 600,
   },
   sidebarFooter: {
     padding: '1.25rem',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-    background: 'rgba(0, 0, 0, 0.1)',
+    borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+    background: '#1f2a44',
   },
   userInfo: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: '0.75rem',
+    justifyContent: 'center',
+    gap: '0.5rem',
     marginBottom: '1rem',
     paddingBottom: '1rem',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
   },
   userIcon: {
     width: '40px',
@@ -276,6 +282,7 @@ const styles = {
   },
   userDetails: {
     flex: 1,
+    textAlign: 'center',
   },
   userName: {
     fontSize: '0.9rem',
@@ -287,26 +294,22 @@ const styles = {
     color: 'rgba(255, 255, 255, 0.7)',
   },
   logoutBtn: {
-    width: '100%',
+    width: '88%',
     display: 'flex',
     alignItems: 'center',
-    gap: '0.75rem',
-    padding: '0.75rem 1rem',
-    background: 'rgba(239, 68, 68, 0.2)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
+    justifyContent: 'center',
+    padding: '0.5rem 1rem',
+    background: '#f0f5ff',
+    border: '1px solid #d1d5db',
     borderRadius: '8px',
-    color: '#ffffff',
-    fontSize: '0.9rem',
+    color: '#111827',
+    fontSize: '0.95rem',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.2s ease',
     fontFamily: 'inherit',
-  },
-  logoutBtnHover: {
-    background: 'rgba(239, 68, 68, 0.3)',
-    transform: 'translateY(-1px)',
+    margin: '0 auto',
   },
 };
 
 export default Sidebar;
-

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
  
 
@@ -136,28 +136,18 @@ const RosterManagement = () => {
   };
 
   return (
-    <div className="page-container" style={{ position: 'relative', minHeight: '100vh' }}>
-      
+    <div className="complaint-onboard-wrapper users-page assignments-page" style={{ minHeight: '100vh' }}>
+      <Sidebar />
+      <div className="complaint-onboard-background" />
 
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        background: 'linear-gradient(135deg, rgba(0,43,91,0.15) 0%, rgba(59,130,246,0.15) 100%)',
-        zIndex: -1,
-      }}></div>
-      
-      <Navbar />
-      
       <div className="content-wrapper" style={{
         position: 'relative',
         zIndex: 1,
         padding: '1rem',
-        marginTop: '1rem',
-        maxWidth: '1400px',
-        margin: '1rem auto 0 auto'
+        marginTop: '48px',
+        maxWidth: '1720px',
+        marginLeft: '400px',
+        marginRight: 'auto'
       }}>
         <div className="config-content" style={{
           background: 'white',

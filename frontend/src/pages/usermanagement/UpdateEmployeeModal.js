@@ -36,11 +36,11 @@ const UpdateEmployeeModal = ({ isOpen, onClose, employee, onUpdate }) => {
                   <button onClick={onClose} style={{
                     position: 'absolute',
                     right: '16px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e5e7eb',
+                    backgroundColor: '#111827',
+                    border: 'none',
                     fontSize: '20px',
                     cursor: 'pointer',
-                    color: '#111827',
+                    color: '#ffffff',
                     padding: '0',
                     width: '34px',
                     height: '34px',
@@ -148,11 +148,12 @@ const UpdateEmployeeModal = ({ isOpen, onClose, employee, onUpdate }) => {
 const styles = {
   overlay: {
     position: 'fixed',
-    top: '72px',
+    top: 0,
     left: 0,
     right: 0,
-    bottom: '64px',
-    background: 'rgba(2, 132, 199, 0.08)',
+    bottom: 0,
+    background: 'rgba(2, 6, 23, 0.6)',
+    backdropFilter: 'blur(12px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -161,8 +162,8 @@ const styles = {
   },
   modal: {
     backgroundColor: '#ffffff',
-    borderRadius: '20px',
-    boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
+    borderRadius: '0px',
+    boxShadow: '0 24px 48px rgba(2,6,23,0.18)',
     width: '100%',
     maxWidth: '960px',
     display: 'flex',
@@ -175,13 +176,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0fbff',
+    backgroundColor: '#ffffff',
     position: 'relative'
   },
   modalTitle: {
     fontSize: '1.6rem',
     fontWeight: '700',
-    color: '#0ea5e9',
+    color: '#1e3a8a',
     margin: 0
   },
   closeButton: {
@@ -202,7 +203,8 @@ const styles = {
   modalContent: {
     flex: 1,
     overflowY: 'auto',
-    padding: '24px'
+    padding: '24px',
+    backgroundColor: '#eaebec'
   },
   section: {
     marginBottom: '32px'
@@ -306,8 +308,8 @@ const styles = {
   tableHeader: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr 100px',
-    backgroundColor: '#1e40af',
-    color: 'white'
+    backgroundColor: '#eaebec',
+    color: '#1e3a8a'
   },
   tableHeaderCell: {
     padding: '12px 16px',
@@ -373,13 +375,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '12px',
-    backgroundColor: '#f0fbff'
+    backgroundColor: '#eaebec'
   },
   cancelButton: {
     padding: '8px 18px',
-    backgroundColor: 'transparent',
-    color: '#6b7280',
-    border: '1px solid #d1d5db',
+    backgroundColor: '#475569',
+    color: '#ffffff',
+    border: 'none',
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.85rem',
@@ -388,14 +390,14 @@ const styles = {
   },
   submitButton: {
     padding: '10px 22px',
-    backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
-    color: 'white',
+    backgroundColor: '#1e3a8a',
+    color: '#ffffff',
     border: 'none',
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.9rem',
     fontWeight: '600',
-    boxShadow: '0 8px 16px rgba(59, 130, 246, 0.25)'
+    boxShadow: '0 8px 16px rgba(2, 6, 23, 0.18)'
   },
   accordion: {
     display: 'flex',
@@ -407,7 +409,7 @@ const styles = {
     borderRadius: '14px',
     overflow: 'hidden',
     backgroundColor: '#ffffff',
-    boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)'
+    boxShadow: '0 2px 8px rgba(2, 6, 23, 0.06)'
   },
   accordionHeader: {
     width: '100%',

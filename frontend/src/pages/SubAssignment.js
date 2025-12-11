@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const SubAssignment = () => {
@@ -56,144 +56,130 @@ const SubAssignment = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper users-page assignments-page">
-      <Sidebar />
+    <div className="complaint-onboard-wrapper assignments-page">
+      <Navbar />
       <div className="complaint-onboard-background" />
-      <div className="content-wrapper" style={{ marginLeft: '280px' }}>
-        <div className="complaint-form-container users-wide" style={{ marginTop: '48px', maxWidth: '1600px', width: '94%', marginLeft: 'auto', marginRight: 'auto' }}>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
           <div className="page-header">
-            <div className="page-header-content" style={{ justifyContent: 'flex-start' }}>
+            <div className="page-header-content">
               <h1>Sub Assignments</h1>
             </div>
           </div>
 
           <form onSubmit={(e) => e.preventDefault()} className="config-form">
             <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className={`input select-ash ${filters.employee ? '' : 'empty'}`}
-                    value={filters.employee}
-                    onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="romaine.murcott">Romaine Murcott</option>
-                    <option value="john.smith">John Smith</option>
-                    <option value="sarah.johnson">Sarah Johnson</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className={`input select-ash ${filters.status ? '' : 'empty'}`}
-                    value={filters.status}
-                    onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-                    className="input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-                    className="input"
-                  />
-                </div>
-              </div>
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="romaine.murcott">Romaine Murcott</option>
+                  <option value="john.smith">John Smith</option>
+                  <option value="sarah.johnson">Sarah Johnson</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
             </div>
-            <div className="config-actions" style={{ justifyContent: 'flex-end', paddingRight: '36px' }}>
+            <div className="config-actions">
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div className="um-toolbar" style={{ marginTop: '1.4rem', marginBottom: '0.5rem' }}>
-            <div className="um-toolbar-left"></div>
-            <div className="um-toolbar-right">
-              <div className="um-search-wrapper">
-                <FaSearch className="um-search-icon" size={16} />
-                <input
-                  className="um-search-input"
-                  placeholder="Search sub assignments"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
+          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
+            <input
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input"
+            />
+          </Field>
 
-          <div className="um-table-container">
-              <table className="um-table">
-                <thead>
-                  <tr>
-                    <th>Request Reference</th>
-                    <th>Entered Date & Time</th>
-                    <th>Assigned By</th>
-                    <th>Assigned By Designation</th>
-                    <th>Assigned To</th>
-                    <th>Assigned To Designation</th>
-                    <th>Remarks</th>
-                    <th>Actions</th>
+          <div className="config-card">
+            <table className="config-table">
+              <thead>
+                <tr>
+                  <th>Request Reference</th>
+                  <th>Entered Date & Time</th>
+                  <th>Assigned By</th>
+                  <th>Assigned To</th>
+                  <th>Remarks</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.requestReference}</td>
+                    <td>
+                      <div>{item.enteredDate}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
+                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
+                    </td>
+                    <td>
+                      {item.remarks ? item.remarks : (
+                        <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="config-table-actions">
+                        <button className="config-icon-btn" title="View" type="button">
+                          <FaEye size={16} />
+                        </button>
+                        <button className="config-icon-btn" title="Update" type="button">
+                          <FaEdit size={16} />
+                        </button>
+                        <button className="config-icon-btn" title="Delete" type="button">
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {data.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.requestReference}</td>
-                      <td>
-                        <div>{item.enteredDate}</div>
-                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
-                      </td>
-                      <td><div style={{ color: '#0f172a', lineHeight: 1.6, fontWeight: 400 }}>{item.assignedByName}</div></td>
-                      <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByDesignation}</div></td>
-                      <td><div style={{ color: '#0f172a', lineHeight: 1.6, fontWeight: 400 }}>{item.assignedToName}</div></td>
-                      <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedToDesignation}</div></td>
-                      <td>
-                        {item.remarks || ''}
-                      </td>
-                      <td>
-                        <div className="um-actions">
-                          <button className="um-btn um-btn-view" title="View" type="button">
-                            <FaEye size={16} />
-                          </button>
-                          <button className="um-btn um-btn-update" title="Update" type="button">
-                            <FaEdit size={16} />
-                          </button>
-                          <button className="um-btn um-btn-delete" title="Delete" type="button">
-                            <FaTrash size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          <div className="pager" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginTop: '2rem' }}>
-            <button type="button" className="config-btn-secondary pager-btn"><FaChevronLeft /> Previous</button>
-            <button type="button" className="config-btn-primary next-btn pager-btn">Next <FaChevronRight /></button>
-            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>
+          <div style={styles.pagination}>
+            <button type="button" className="config-btn-secondary"><FaChevronLeft /> Previous</button>
+            <button type="button" className="config-btn-primary">Next <FaChevronRight /></button>
+            <span style={styles.pageInfo}>Page {currentPage} of 1</span>
           </div>
         </div>
       </div>
@@ -201,5 +187,14 @@ const SubAssignment = () => {
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
 
 export default SubAssignment;

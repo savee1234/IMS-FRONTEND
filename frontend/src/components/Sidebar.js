@@ -6,7 +6,6 @@ import sltLogo from '../assets/slt-logo.png';
 const Sidebar = () => {
   const location = useLocation();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
-  const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   const modulesPaths = [
     '/complaint',
@@ -89,38 +88,7 @@ const Sidebar = () => {
               <Link to="/roster" style={location.pathname === '/roster' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Roster Management</Link>
               <Link to="/users" style={location.pathname === '/users' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>User Management</Link>
               <Link to="/attendance" style={location.pathname === '/attendance' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Attendance</Link>
-              
-              {/* Configuration Sub-menu */}
-              <div>
-                <div 
-                  onClick={() => setIsConfigOpen(!isConfigOpen)}
-                  style={{
-                    ...styles.subNavLink, 
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    color: location.pathname.includes('/configuration') ? '#ffffff' : 'rgba(255, 255, 255, 0.8)',
-                    background: location.pathname.includes('/configuration') && !isConfigOpen ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                    borderLeft: location.pathname.includes('/configuration') && !isConfigOpen ? '2px solid #93c5fd' : '2px solid transparent',
-                    fontWeight: location.pathname.includes('/configuration') ? 600 : 500
-                  }}
-                >
-                  <span>Configuration</span>
-                  <span style={{ fontSize: '0.7rem' }}>{isConfigOpen ? '▼' : '▶'}</span>
-                </div>
-                
-                {isConfigOpen && (
-                  <div style={{ paddingLeft: '1rem', background: 'rgba(0, 0, 0, 0.1)' }}>
-                    <Link to="/configuration?tab=onboardMedium" style={location.search.includes('onboardMedium') ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Onboard Medium</Link>
-                    <Link to="/configuration?tab=organization" style={location.search.includes('organization') ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Organization</Link>
-                    <Link to="/configuration?tab=organizations" style={location.search.includes('organizations') ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Org. Contact Persons</Link>
-                    <Link to="/configuration?tab=solutionsPerProject" style={location.search.includes('solutionsPerProject') ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Solutions & Projects</Link>
-                    <Link to="/configuration?tab=shifts" style={location.search.includes('shifts') ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Roster Shift Periods</Link>
-                  </div>
-                )}
-              </div>
-
+              <Link to="/configuration" style={location.pathname === '/configuration' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Configuration</Link>
               <Link to="/dashboard" style={location.pathname === '/dashboard' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Dashboard</Link>
               <Link to="/reporting" style={location.pathname === '/reporting' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Reporting</Link>
               <Link to="/my-tasks" style={location.pathname === '/my-tasks' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>View Tasks</Link>

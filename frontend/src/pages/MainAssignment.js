@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
@@ -175,15 +176,8 @@ const MainAssignment = () => {
           </div>
         </div>
 
-        <div className="ma-copyright">
-          <span>&copy; 2025 SLT Incident Management System. All rights reserved.</span>
-          <div className="ma-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
-          </div>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 };

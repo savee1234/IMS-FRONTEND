@@ -186,7 +186,7 @@ const AllAssignments = () => {
                           ]
                         })}
                       >
-                        <FaFileAlt />
+                        <FaFileAlt color="#ffffff" />
                       </button>
                       <button
                         title="Update"
@@ -200,14 +200,14 @@ const AllAssignments = () => {
                           });
                         }}
                       >
-                        <FaHistory />
+                        <FaHistory color="#ffffff" />
                       </button>
                       <button
                         title="Delete"
                         type="button"
                         className="ma-btn-action ma-btn-delete"
                       >
-                        <FaTrash />
+                        <FaTrash color="#ffffff" />
                       </button>
                     </div>
                   </td>

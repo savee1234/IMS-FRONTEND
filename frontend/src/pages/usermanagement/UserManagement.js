@@ -161,10 +161,10 @@ const UserManagement = () => {
                       <td>
                         <div className="ma-actions">
                           <button className="ma-btn-action ma-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
-                            <FaEye />
+                            <FaEye color="#ffffff" />
                           </button>
                           <button className="ma-btn-action ma-btn-edit" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
-                            <FaUserCog />
+                            <FaUserCog color="#ffffff" />
                           </button>
                         </div>
                       </td>

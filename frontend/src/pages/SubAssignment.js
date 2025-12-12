@@ -153,13 +153,13 @@ const SubAssignment = () => {
                     <td>
                       <div className="ma-actions">
                         <button className="ma-btn-action ma-btn-view" title="View">
-                          <FaFileAlt />
+                          <FaFileAlt color="#ffffff" />
                         </button>
                         <button className="ma-btn-action ma-btn-edit" title="Update">
-                          <FaHistory />
+                          <FaHistory color="#ffffff" />
                         </button>
                         <button className="ma-btn-action ma-btn-delete" title="Delete">
-                          <FaTrash />
+                          <FaTrash color="#ffffff" />
                         </button>
                       </div>
                     </td>

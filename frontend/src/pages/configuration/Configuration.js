@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, Bell, Settings } from 'lucide-react';
+import { FaSearch, FaBell, FaCog } from 'react-icons/fa';
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import './ConfigurationModern.css';
@@ -124,7 +124,7 @@ const Configuration = () => {
         {/* Top Header matching Home page */}
         <header style={headerStyle}>
           <div style={searchContainerStyle}>
-            <Search size={20} style={searchIconStyle} />
+            <FaSearch size={20} style={searchIconStyle} />
             <input 
               type="text" 
               placeholder="Search..." 
@@ -134,11 +134,11 @@ const Configuration = () => {
           
           <div style={headerActionsStyle}>
             <button style={iconButtonStyle}>
-              <Bell size={20} />
+              <FaBell size={20} />
               <span style={notificationDotStyle}></span>
             </button>
             <button style={iconButtonStyle}>
-              <Settings size={20} />
+              <FaCog size={20} />
             </button>
           </div>
         </header>

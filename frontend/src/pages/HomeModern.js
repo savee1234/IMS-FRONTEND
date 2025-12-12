@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { Search, Bell, Settings, ArrowRight, Layout, CheckSquare, Calendar, Users, Clock, Settings as ConfigIcon, BarChart, FileText, List, Briefcase, Layers } from 'lucide-react';
+import { FaSearch, FaBell, FaCog, FaArrowRight, FaThLarge, FaCheckSquare, FaCalendarAlt, FaUsers, FaClock, FaChartBar, FaFileAlt } from 'react-icons/fa';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const HomeModern = () => {
     {
       name: 'Complaint Onboard',
       path: '/complaint',
-      icon: <Bell size={24} />,
+      icon: <FaBell size={24} />,
       color: '#3b82f6', // blue
       bgColor: '#eff6ff',
       description: 'Efficiently capture and manage customer complaints'
@@ -19,7 +19,7 @@ const HomeModern = () => {
     {
       name: 'Workflow',
       path: '/workflow',
-      icon: <Layout size={24} />,
+      icon: <FaThLarge size={24} />,
       color: '#8b5cf6', // purple
       bgColor: '#f5f3ff',
       description: 'Automate and optimize your business processes'
@@ -27,7 +27,7 @@ const HomeModern = () => {
     {
       name: 'Roster Management',
       path: '/roster',
-      icon: <Calendar size={24} />,
+      icon: <FaCalendarAlt size={24} />,
       color: '#10b981', // green
       bgColor: '#ecfdf5',
       description: 'Manage employee schedules and assignments'
@@ -35,7 +35,7 @@ const HomeModern = () => {
     {
       name: 'User Management',
       path: '/users',
-      icon: <Users size={24} />,
+      icon: <FaUsers size={24} />,
       color: '#f59e0b', // amber
       bgColor: '#fffbeb',
       description: 'Control access and permissions'
@@ -43,7 +43,7 @@ const HomeModern = () => {
     {
       name: 'Attendance',
       path: '/attendance',
-      icon: <Clock size={24} />,
+      icon: <FaClock size={24} />,
       color: '#ef4444', // red
       bgColor: '#fef2f2',
       description: 'Track employee attendance and overtime'
@@ -51,7 +51,7 @@ const HomeModern = () => {
     {
       name: 'Configuration',
       path: '/configuration',
-      icon: <ConfigIcon size={24} />,
+      icon: <FaCog size={24} />,
       color: '#6366f1', // indigo
       bgColor: '#eef2ff',
       description: 'Customize system settings and parameters'
@@ -59,7 +59,7 @@ const HomeModern = () => {
     {
       name: 'Dashboard',
       path: '/dashboard',
-      icon: <BarChart size={24} />,
+      icon: <FaChartBar size={24} />,
       color: '#ec4899', // pink
       bgColor: '#fdf2f8',
       description: 'Get real-time insights and analytics'
@@ -67,7 +67,7 @@ const HomeModern = () => {
     {
       name: 'Reporting',
       path: '/reporting',
-      icon: <FileText size={24} />,
+      icon: <FaFileAlt size={24} />,
       color: '#06b6d4', // cyan
       bgColor: '#ecfeff',
       description: 'Generate detailed reports and insights'
@@ -75,7 +75,7 @@ const HomeModern = () => {
     {
       name: 'View My Tasks',
       path: '/my-tasks',
-      icon: <CheckSquare size={24} />,
+      icon: <FaCheckSquare size={24} />,
       color: '#8b5cf6', // violet
       bgColor: '#f5f3ff',
       description: 'Monitor and manage your assigned tasks'
@@ -90,7 +90,7 @@ const HomeModern = () => {
         {/* Top Header */}
         <header style={styles.header}>
           <div style={styles.searchContainer}>
-            <Search size={20} style={styles.searchIcon} />
+            <FaSearch size={20} style={styles.searchIcon} />
             <input 
               type="text" 
               placeholder="Search..." 
@@ -100,11 +100,11 @@ const HomeModern = () => {
           
           <div style={styles.headerActions}>
             <button style={styles.iconButton}>
-              <Bell size={20} />
+              <FaBell size={20} />
               <span style={styles.notificationDot}></span>
             </button>
             <button style={styles.iconButton}>
-              <Settings size={20} />
+              <FaCog size={20} />
             </button>
           </div>
         </header>
@@ -124,7 +124,7 @@ const HomeModern = () => {
                   style={styles.primaryButton}
                   onClick={() => navigate('/complaint')}
                 >
-                  Get Started <ArrowRight size={16} style={{ marginLeft: '8px' }} />
+                  Get Started <FaArrowRight size={16} style={{ marginLeft: '8px' }} />
                 </button>
                 <button 
                   style={styles.secondaryButton}
@@ -461,4 +461,4 @@ const styles = {
   },
 };
 
-export default HomeModern;
+export default HomeModern;

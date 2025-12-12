@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';

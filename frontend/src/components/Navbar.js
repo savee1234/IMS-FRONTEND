@@ -7,6 +7,7 @@ import './Navbar.css';
 const Navbar = () => {
   const location = useLocation();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const modulesPaths = [
@@ -183,21 +184,72 @@ const Navbar = () => {
                 >
                   Attendance
                 </Link>
-                  <Link 
-                    to="/configuration" 
-                    onClick={() => setIsModulesOpen(false)} 
-                    style={styles.dropdownItem}
-                    onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.color = '#111827';
-                  }}
-                  onMouseOut={(e) => {
-                      e.target.style.backgroundColor = '';
-                      e.target.style.color = '#111827';
-                  }}
-                >
-                  Configuration
-                </Link>
+                  <div style={styles.dropdownItemContainer}>
+                    <div 
+                      style={{
+                        ...styles.dropdownItem, 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center',
+                        cursor: 'pointer'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsConfigOpen(!isConfigOpen);
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.backgroundColor = '#ffffff';
+                        e.currentTarget.style.color = '#111827';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.backgroundColor = '';
+                        e.currentTarget.style.color = '#111827';
+                      }}
+                    >
+                      <span>Configuration</span>
+                      <span style={{ fontSize: '10px' }}>{isConfigOpen ? '▼' : '▶'}</span>
+                    </div>
+                    
+                    {isConfigOpen && (
+                      <div style={{ paddingLeft: '15px', backgroundColor: '#f9fafb', borderLeft: '2px solid #e5e7eb' }}>
+                        <Link 
+                          to="/configuration?tab=onboardMedium" 
+                          onClick={() => setIsModulesOpen(false)} 
+                          style={styles.dropdownItem}
+                        >
+                          Onboard Medium
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=organization" 
+                          onClick={() => setIsModulesOpen(false)} 
+                          style={styles.dropdownItem}
+                        >
+                          Organization
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=organizations" 
+                          onClick={() => setIsModulesOpen(false)} 
+                          style={styles.dropdownItem}
+                        >
+                          Org. Contact Persons
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=solutionsPerProject" 
+                          onClick={() => setIsModulesOpen(false)} 
+                          style={styles.dropdownItem}
+                        >
+                          Solutions & Projects
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=shifts" 
+                          onClick={() => setIsModulesOpen(false)} 
+                          style={styles.dropdownItem}
+                        >
+                          Roster Shift Periods
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                   <Link 
                     to="/dashboard" 
                     onClick={() => setIsModulesOpen(false)} 

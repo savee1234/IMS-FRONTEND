@@ -24,6 +24,7 @@ const AllAssignments = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [userNames, setUserNames] = useState({});
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -43,7 +44,24 @@ const AllAssignments = () => {
     };
 
     fetchAssignments();
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch('http://localhost:44354/api/user-management');
+      if (!res.ok) throw new Error('Failed to fetch users');
+      const data = await res.json();
+      // Build quick lookup by id
+      const map = {};
+      data.forEach(u => {
+        if (u && u._id) map[u._id] = u.userName || u.name || 'Unknown';
+      });
+      setUserNames(map);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+    }
+  };
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -187,8 +205,8 @@ const AllAssignments = () => {
                       <td>{item.assignedBy}</td>
                       <td>{
                         item.assignedTo && typeof item.assignedTo === 'object'
-                          ? (item.assignedTo.userName || item.assignedTo.name || item.assignedTo._id || 'Unassigned')
-                          : (item.assignedTo ? String(item.assignedTo) : 'Unassigned')
+                          ? (item.assignedTo.userName || item.assignedTo.name || userNames[item.assignedTo._id] || 'Unassigned')
+                          : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned')
                       }</td>
                       <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
                       <td>

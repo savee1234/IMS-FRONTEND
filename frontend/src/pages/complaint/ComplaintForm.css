@@ -826,7 +826,7 @@ body {
   justify-content: center;
   flex: 0 0 auto;
   margin-left: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 .ma-btn-submit:hover {
   background-color: #0f1f4a;

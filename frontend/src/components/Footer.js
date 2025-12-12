@@ -36,7 +36,7 @@ const styles = {
     maxWidth: '1600px',
     margin: '0 auto',
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '1rem',
@@ -47,6 +47,7 @@ const styles = {
     margin: 0,
     fontSize: '14px',
     color: 'rgba(255,255,255,0.85)',
+    marginLeft: '0.75rem',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   links: {

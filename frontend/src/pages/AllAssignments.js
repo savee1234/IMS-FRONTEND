@@ -20,6 +20,30 @@ const AllAssignments = () => {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [statusAssignment, setStatusAssignment] = useState(null);
+  
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch('http://localhost:44354/api/assignments');
+        if (!res.ok) throw new Error('Failed to fetch assignments');
+        const data = await res.json();
+        setAssignments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError(err.message || 'Unexpected error');
+        console.error('Error fetching assignments:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, []);
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));

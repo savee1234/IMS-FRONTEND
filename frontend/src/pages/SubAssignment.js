@@ -50,9 +50,12 @@ const SubAssignment = () => {
   });
   const [search, setSearch] = useState('');
 
-  const styles = {
-    pagination: { display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' },
-    pageInfo: { marginLeft: '0.5rem', color: 'var(--text-primary)' }
+  const handleChange = (field, value) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -143,7 +146,7 @@ const SubAssignment = () => {
                     <td style={{ color: '#0f172a' }}>{item.requestReference}</td>
                     <td>
                       <div>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{item.enteredTime}</div>
                     </td>
                     <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByName}</div></td>
                     <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByDesignation}</div></td>
@@ -176,7 +179,6 @@ const SubAssignment = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

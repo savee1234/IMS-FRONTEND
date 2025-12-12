@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaEye, FaSearch } from 'react-icons/fa';
 
 const OnboardMedium = () => {
   const [onboardMedium, setOnboardMedium] = useState('');
@@ -8,6 +8,7 @@ const OnboardMedium = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch onboard mediums from API
   const fetchOnboardMediums = async () => {
@@ -144,6 +145,12 @@ const OnboardMedium = () => {
     return new Date(dateString).toLocaleString();
   };
 
+  // Filter data based on search term
+  const filteredData = onboardData.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.onboardMediumId && item.onboardMediumId.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <div className="onboard-medium-section">
       
@@ -160,88 +167,113 @@ const OnboardMedium = () => {
         </div>
       )}
       
-      <form onSubmit={handleSubmit} className="config-form">
-        <div className="config-field-row">
-          <label className="config-label">Onboard Medium :</label>
+      {/* Add New Medium Card */}
+      <div className="conf-card">
+        <div className="conf-card-header">
+          <h2 className="conf-card-title">{editMode ? 'Update Medium' : 'Add New Medium'}</h2>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="conf-form-group">
+            <label className="conf-label">Onboard Medium Name</label>
+            <input
+              className="conf-input"
+              type="text"
+              value={onboardMedium}
+              onChange={(e) => setOnboardMedium(e.target.value)}
+              placeholder="Enter onboard medium"
+              required
+            />
+          </div>
+          <div className="conf-actions">
+            <button type="button" onClick={handleReset} className="conf-btn conf-btn-outline">Reset</button>
+            <button type="submit" disabled={loading} className="conf-btn conf-btn-primary">
+              {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Search and Table Card */}
+      <div className="conf-card">
+        <div className="conf-search-container">
+          <FaSearch className="conf-search-icon" />
           <input
-            className="config-input"
             type="text"
-            value={onboardMedium}
-            onChange={(e) => setOnboardMedium(e.target.value)}
-            placeholder="Enter onboard medium"
-            required
+            className="conf-search-input"
+            placeholder="Search medium..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="config-actions">
-          <button type="button" onClick={handleReset} className="config-btn-secondary">Reset</button>
-          <button type="submit" disabled={loading} className="config-btn-primary">{loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}</button>
-        </div>
-      </form>
 
-      <div className="onboard-table config-card">
-        <table className="config-table">
-          <thead>
-            <tr>
-              <th>
-                Medium ID
-              </th>
-              <th>
-                Onboard Medium
-              </th>
-              <th>
-                Created By
-              </th>
-              <th>
-                Created Time
-              </th>
-              <th>
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+        <div className="conf-table-container">
+          <table className="conf-table">
+            <thead>
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
-                  Loading...
-                </td>
+                <th>MEDIUM ID</th>
+                <th>ONBOARD MEDIUM</th>
+                <th>CREATED BY</th>
+                <th>CREATED TIME</th>
+                <th>ACTIONS</th>
               </tr>
-            ) : onboardData.length === 0 ? (
-              <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
-                  No onboard medium records found
-                </td>
-              </tr>
-            ) : (
-              onboardData.map(item => (
-                <tr key={item._id}>
-                  <td>
-                    {item.onboardMediumId}
-                  </td>
-                  <td>
-                    {item.name}
-                  </td>
-                  <td>
-                    {item.createdByName}
-                  </td>
-                  <td>
-                    {formatDate(item.createdDtm)}
-                  </td>
-                  <td>
-                    <div className="config-table-actions">
-                      <button className="config-icon-btn" title="Update" onClick={() => handleEdit(item)} disabled={loading}>
-                        <FaEdit size={18} />
-                      </button>
-                      <button className="config-icon-btn" title="Delete" onClick={() => handleDelete(item._id)} disabled={loading}>
-                        <FaTrash size={18} />
-                      </button>
-                    </div>
+            </thead>
+            <tbody>
+              {loading && onboardData.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
+                    Loading...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : filteredData.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
+                    No onboard medium records found
+                  </td>
+                </tr>
+              ) : (
+                filteredData.map(item => (
+                  <tr key={item._id}>
+                    <td style={{ fontWeight: 500 }}>
+                      {item.onboardMediumId || 'OBM---'}
+                    </td>
+                    <td>
+                      {item.name}
+                    </td>
+                    <td>
+                      {item.createdByName}
+                    </td>
+                    <td>
+                      {formatDate(item.createdDtm)}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex' }}>
+                        <button className="conf-action-btn conf-btn-view" title="View">
+                          <FaEye size={14} />
+                        </button>
+                        <button className="conf-action-btn conf-btn-edit" title="Edit" onClick={() => handleEdit(item)} disabled={loading}>
+                          <FaEdit size={14} />
+                        </button>
+                        <button className="conf-action-btn conf-btn-delete" title="Delete" onClick={() => handleDelete(item._id)} disabled={loading}>
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="conf-pagination">
+          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+            &lt; Previous
+          </button>
+          <span className="conf-page-info">Page 1 of 1</span>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+            Next &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
+import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
@@ -37,8 +36,8 @@ const MainAssignment = () => {
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
-    fromDate: new Date().toISOString().slice(0, 10),
-    toDate: new Date().toISOString().slice(0, 10)
+    fromDate: '2025-11-12', 
+    toDate: '2025-11-12'
   });
 
   const [search, setSearch] = useState('');
@@ -52,105 +51,90 @@ const MainAssignment = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
-      <Navbar />
-      <div className="complaint-onboard-background" />
+    <div className="ma-wrapper">
+      <Sidebar />
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>Main Assignments</h1>
+        </div>
 
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
-          <div className="page-header">
-            <div className="page-header-content">
-              <h1>Main Assignments</h1>
-            </div>
+        <div className="ma-filter-card">
+          <div className="ma-filter-group">
+            <label className="ma-label">Employee</label>
+            <select
+              className="ma-select"
+              value={filters.employee}
+              onChange={(e) => handleChange('employee', e.target.value)}
+            >
+              <option value="">Select Employees</option>
+              <option value="romaine.murcott">Romaine Murcott</option>
+              <option value="john.smith">John Smith</option>
+              <option value="sarah.johnson">Sarah Johnson</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">Status</label>
+            <select
+              className="ma-select"
+              value={filters.status}
+              onChange={(e) => handleChange('status', e.target.value)}
+            >
+              <option value="">Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">From Date</label>
+            <input
+              type="date"
+              value={filters.fromDate}
+              onChange={(e) => handleChange('fromDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">To Date</label>
+            <input
+              type="date"
+              value={filters.toDate}
+              onChange={(e) => handleChange('toDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <button type="button" onClick={handleSubmit} className="ma-btn-submit">
+            Submit
+          </button>
+        </div>
+
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search assignments"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="ma-search-input"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="config-form">
-            <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.employee}
-                    onChange={(e) => handleChange('employee', e.target.value)}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="romaine.murcott">Romaine Murcott</option>
-                    <option value="john.smith">John Smith</option>
-                    <option value="sarah.johnson">Sarah Johnson</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="config-actions">
-              <button type="submit" className="config-btn-primary">Submit</button>
-            </div>
-          </form>
-
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
-              />
-            </div>
-          </div>
-
-          <div className="config-card">
+          <div className="ma-table-container">
             {loading && <p style={{ textAlign: 'center', padding: '2rem' }}>Loading assignments...</p>}
             {error && <p style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>Error: {error}</p>}
             {!loading && !error && (
-              <table className="config-table">
+              <table className="ma-table">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Assigned By</th>
-                    <th>Assigned To</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Due Date</th>
-                    <th>Actions</th>
+                    <th>TITLE</th>
+                    <th>DESCRIPTION</th>
+                    <th>ASSIGNED BY</th>
+                    <th>ASSIGNED TO</th>
+                    <th>STATUS</th>
+                    <th>PRIORITY</th>
+                    <th>DUE DATE</th>
+                    <th>ACTIONS</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -164,15 +148,15 @@ const MainAssignment = () => {
                       <td>{item.priority}</td>
                       <td>{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'}</td>
                       <td>
-                        <div className="config-table-actions">
-                          <button title="View" type="button" className="config-icon-btn">
-                            <FaEye size={16} />
+                        <div className="ma-actions">
+                          <button className="ma-btn-action ma-btn-view" title="View">
+                            <FaEye />
                           </button>
-                          <button title="Edit" type="button" className="config-icon-btn">
-                            <FaEdit size={16} />
+                          <button className="ma-btn-action ma-btn-edit" title="Edit">
+                            <FaEdit />
                           </button>
-                          <button title="Delete" type="button" className="config-icon-btn">
-                            <FaTrash size={16} />
+                          <button className="ma-btn-action ma-btn-delete" title="Delete">
+                            <FaTrash />
                           </button>
                         </div>
                       </td>
@@ -183,19 +167,26 @@ const MainAssignment = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="config-btn-secondary">
-              <FaChevronLeft /> Previous
+          <div className="ma-footer-row">
+            <button className="ma-pagination-btn">
+              &lt; Previous
             </button>
-            <button type="button" className="config-btn-primary">
-              Next <FaChevronRight />
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page {currentPage} of 1</span>
+            <button className="ma-pagination-btn next">
+              Next &gt;
             </button>
-            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page {currentPage} of 1</span>
+          </div>
+        </div>
+
+        <div className="ma-copyright">
+          <span>&copy; 2025 SLT Incident Management System. All rights reserved.</span>
+          <div className="ma-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

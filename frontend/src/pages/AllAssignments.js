@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -20,6 +20,30 @@ const AllAssignments = () => {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [statusAssignment, setStatusAssignment] = useState(null);
+  
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch('http://localhost:44354/api/assignments');
+        if (!res.ok) throw new Error('Failed to fetch assignments');
+        const data = await res.json();
+        setAssignments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError(err.message || 'Unexpected error');
+        console.error('Error fetching assignments:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, []);
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -59,30 +83,6 @@ const AllAssignments = () => {
   const [progressOpen, setProgressOpen] = useState(false);
   const [progressAssignment, setProgressAssignment] = useState(null);
 
-  const [assignments, setAssignments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch('http://localhost:44354/api/assignments');
-        if (!res.ok) throw new Error('Failed to fetch assignments');
-        const data = await res.json();
-        setAssignments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError(err.message || 'Unexpected error');
-        console.error('Error fetching assignments:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAssignments();
-  }, []);
-
   const openProgress = (assignment) => {
     setProgressAssignment(assignment);
     setProgressOpen(true);
@@ -108,74 +108,59 @@ const AllAssignments = () => {
 
           <form onSubmit={handleSubmit} className="config-form">
             <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.employee}
-                    onChange={(e) => handleChange('employee', e.target.value)}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="john.doe">John Doe</option>
-                    <option value="jane.smith">Jane Smith</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => handleChange('employee', e.target.value)}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="john.doe">John Doe</option>
+                  <option value="jane.smith">Jane Smith</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => handleChange('status', e.target.value)}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => handleChange('fromDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => handleChange('toDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
             </div>
             <div className="config-actions">
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
-              />
-            </div>
-          </div>
+          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
+            <input
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input"
+            />
+          </Field>
 
           <div className="config-card">
             {loading && (
@@ -273,6 +258,15 @@ const AllAssignments = () => {
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
 
 export default AllAssignments;
 

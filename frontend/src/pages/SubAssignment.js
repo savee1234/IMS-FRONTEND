@@ -76,75 +76,60 @@ const SubAssignment = () => {
 
           <form onSubmit={(e) => e.preventDefault()} className="config-form">
             <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.employee}
-                    onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="romaine.murcott">Romaine Murcott</option>
-                    <option value="john.smith">John Smith</option>
-                    <option value="sarah.johnson">Sarah Johnson</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.status}
-                    onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-                    className="config-input"
-                  />
-                </div>
-              </div>
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="romaine.murcott">Romaine Murcott</option>
+                  <option value="john.smith">John Smith</option>
+                  <option value="sarah.johnson">Sarah Johnson</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
             </div>
             <div className="config-actions">
               <button type="submit" className="config-btn-primary">Submit</button>
             </div>
           </form>
 
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
-              />
-            </div>
-          </div>
+          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
+            <input
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input"
+            />
+          </Field>
 
           <div className="config-card">
             <table className="config-table">
@@ -229,5 +214,14 @@ const SubAssignment = () => {
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
 
 export default SubAssignment;

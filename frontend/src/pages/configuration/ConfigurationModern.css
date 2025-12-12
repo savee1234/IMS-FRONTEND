@@ -1,0 +1,584 @@
+/* Configuration Modern Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --conf-primary: #4f46e5; /* Indigo/Purple from mockup */
+  --conf-primary-hover: #4338ca;
+  --conf-sidebar-bg: #0f172a; /* Dark blue/slate */
+  --conf-bg: #f3f4f6; /* Light gray background */
+  --conf-card-bg: #ffffff;
+  --conf-text-main: #111827;
+  --conf-text-secondary: #6b7280;
+  --conf-border: #e5e7eb;
+  --conf-success: #10b981;
+  --conf-danger: #ef4444;
+  --conf-info: #3b82f6;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--conf-bg);
+}
+
+.conf-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar Styles (Custom for Configuration Module to match mockup) */
+.conf-sidebar {
+  width: 260px;
+  background-color: var(--conf-sidebar-bg);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.conf-sidebar-header {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.conf-logo {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.conf-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.conf-nav {
+  flex: 1;
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+}
+
+.conf-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #94a3b8;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.conf-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.conf-nav-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.conf-nav-icon {
+  margin-right: 0.75rem;
+  width: 20px;
+  text-align: center;
+}
+
+.conf-submenu {
+  margin-left: 1.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.conf-submenu-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-radius: 0.375rem;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.conf-submenu-item:hover {
+  color: white;
+}
+
+.conf-submenu-item.active {
+  color: #818cf8; /* Light indigo */
+  background-color: rgba(99, 102, 241, 0.1);
+  font-weight: 500;
+}
+
+.conf-submenu-item::before {
+  content: "•";
+  margin-right: 0.5rem;
+  opacity: 0.5;
+}
+
+.conf-user-profile {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.conf-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.conf-user-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.conf-user-info p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.conf-logout-btn {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.conf-logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Main Content Styles */
+.conf-main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 2rem 3rem;
+  background-color: var(--conf-bg);
+  min-height: 100vh;
+}
+
+.conf-header {
+  margin-bottom: 2rem;
+}
+
+.conf-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--conf-text-main);
+  margin: 0;
+}
+
+/* Card Styles */
+.conf-card {
+  background: var(--conf-card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--conf-border);
+}
+
+.conf-card-header {
+  margin-bottom: 1.5rem;
+}
+
+.conf-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--conf-text-main);
+  margin: 0;
+}
+
+/* Form Styles */
+.conf-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.conf-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--conf-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.conf-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--conf-border);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--conf-text-main);
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.conf-input:focus {
+  border-color: var(--conf-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.conf-input::placeholder {
+  color: #9ca3af;
+}
+
+.conf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.conf-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.conf-btn-primary {
+  background-color: var(--conf-primary);
+  color: white;
+}
+
+.conf-btn-primary:hover {
+  background-color: var(--conf-primary-hover);
+}
+
+.conf-btn-outline {
+  background-color: white;
+  border: 1px solid var(--conf-border);
+  color: var(--conf-text-main);
+}
+
+.conf-btn-outline:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Search Bar */
+.conf-search-container {
+  position: relative;
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+}
+
+.conf-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.conf-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--conf-border);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.conf-search-input:focus {
+  border-color: var(--conf-primary);
+}
+
+/* Table Styles */
+.conf-table-container {
+  overflow-x: auto;
+}
+
+.conf-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.conf-table th {
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--conf-border);
+}
+
+.conf-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--conf-border);
+  color: var(--conf-text-main);
+  font-size: 0.9rem;
+}
+
+.conf-table tr:last-child td {
+  border-bottom: none;
+}
+
+.conf-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: all 0.2s;
+}
+
+.conf-btn-view {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.conf-btn-view:hover {
+  background-color: #dbeafe;
+}
+
+.conf-btn-edit {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.conf-btn-edit:hover {
+  background-color: #e5e7eb;
+}
+
+.conf-btn-delete {
+  background-color: #ecfdf5;
+  color: #10b981;
+}
+
+.conf-btn-delete:hover {
+  background-color: #d1fae5;
+}
+
+/* Pagination */
+.conf-pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1.5rem;
+  gap: 1rem;
+}
+
+.conf-page-info {
+  color: var(--conf-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.conf-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.conf-footer-links a {
+  color: #6b7280;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  transition: color 0.2s;
+}
+
+.conf-footer-links a:hover {
+  color: var(--conf-primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.conf-animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Modal Styles */
+.conf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.conf-modal {
+  background-color: var(--conf-card-bg);
+  border-radius: 0.75rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.conf-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--conf-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.conf-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--conf-text-main);
+}
+
+.conf-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--conf-text-secondary);
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.conf-modal-close:hover {
+  color: var(--conf-text-main);
+}
+
+.conf-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.conf-modal-section {
+  margin-bottom: 1.5rem;
+}
+
+.conf-modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.conf-modal-section-title {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  color: var(--conf-text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.conf-modal-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.conf-modal-detail:last-child {
+  margin-bottom: 0;
+}
+
+.conf-modal-detail-icon {
+  margin-right: 0.75rem;
+  width: 16px;
+  text-align: center;
+}
+
+.conf-modal-detail-label {
+  font-weight: 500;
+  margin-right: 0.5rem;
+  color: var(--conf-text-main);
+}
+
+.conf-modal-detail-value {
+  color: var(--conf-text-main);
+}
+
+.conf-modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid var(--conf-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.conf-error-msg {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.conf-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.conf-flex-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.conf-time-select {
+  width: 80px;
+}

@@ -385,7 +385,7 @@ const Shifts = () => {
             &lt; Previous
           </button>
           <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
             Next &gt;
           </button>
         </div>

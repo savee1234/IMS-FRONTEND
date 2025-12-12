@@ -43,7 +43,7 @@ const UserManagement = () => {
           callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
-        setEmployees(mapped.slice(0, 3));
+        setEmployees(mapped);
       } catch (err) {
         console.error('Failed to load user-management:', err);
         setEmployeesError(err.message || String(err));

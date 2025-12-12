@@ -234,7 +234,7 @@ const OnboardMedium = () => {
                 filteredData.map(item => (
                   <tr key={item._id}>
                     <td style={{ fontWeight: 500 }}>
-                      {item.onboardMediumId || 'OBM---'}
+                      {item.onboardMediumId || 'N/A'}
                     </td>
                     <td>
                       {item.name}
@@ -247,7 +247,7 @@ const OnboardMedium = () => {
                     </td>
                     <td>
                       <div style={{ display: 'flex' }}>
-                        <button className="conf-action-btn conf-btn-view" title="View">
+                        <button className="conf-action-btn conf-btn-view" title="View" onClick={() => alert('View functionality not implemented yet')}>
                           <FaEye size={14} />
                         </button>
                         <button className="conf-action-btn conf-btn-edit" title="Edit" onClick={() => handleEdit(item)} disabled={loading}>

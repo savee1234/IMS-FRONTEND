@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
-import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import './complaint/ComplaintForm.css';
+import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
+import './MyTasks.css';
 
 const fetchTasks = async () => {
   try {
@@ -528,32 +528,15 @@ const MyTasks = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page my-tasks-page">
-      <Navbar />
-
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
+    <div className="complaint-onboard-wrapper users-page assignments-page my-tasks-page-wrapper">
+      <Sidebar />
+      <div className="my-tasks-main-content">
+        <div className="page-container">
+        <div className="complaint-form-container users-wide" style={{ marginTop: '60px', maxWidth: '1500px', width: '92%', marginLeft: 'auto', marginRight: 'auto' }}>
           <div className="page-header">
             <div className="page-header-content">
               <h1>My Tasks</h1>
-              <p>View and manage your assigned tasks and complaints</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button
-                onClick={() => window.location.reload()}
-                className="btn btn-primary"
-              >
-                {loading ? 'Loading...' : 'Refresh'}
-              </button>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button className="btn" style={{ backgroundColor: '#2563eb', color: '#fff' }}>CSV</button>
-              <button className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>Excel</button>
-              <button className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>PDF</button>
-              <button className="btn" style={{ backgroundColor: '#6b7280', color: '#fff' }}>Print</button>
+              
             </div>
           </div>
 
@@ -563,8 +546,25 @@ const MyTasks = () => {
             </div>
           )}
 
-          <div style={{ overflowX: 'auto' }}>
-            <table className="modern-table">
+          <div className="um-toolbar" style={{ marginTop: '1.6rem', marginBottom: '0.6rem', paddingLeft: 0 }}>
+            <div className="um-toolbar-left">
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>CSV</button>
+                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>Excel</button>
+                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>PDF</button>
+                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>Print</button>
+              </div>
+            </div>
+            <div className="um-toolbar-right">
+              <div className="um-search-wrapper">
+                <FaSearch className="um-search-icon" size={16} />
+                <input className="um-search-input" placeholder="Search tasks" />
+              </div>
+            </div>
+          </div>
+
+          <div className="um-table-container" style={{ overflowX: 'auto', marginTop: '1.6rem' }}>
+            <table className="um-table">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -632,35 +632,18 @@ const MyTasks = () => {
                         <td>{task.email}</td>
                         <td>{task.created}</td>
                         <td>
-                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
-                            <button
-                              title="View Details"
-                              className="btn"
-                              style={{ backgroundColor: '#2563eb', color: '#fff' }}
-                              onClick={() => handleViewDetails(task)}
-                            >
-                              <FaFileAlt />
+                          <div className="um-actions">
+                            <button title="View Details" className="um-btn um-btn-view" onClick={() => handleViewDetails(task)}>
+                              <FaFileAlt size={16} />
                             </button>
-                            <button
-                              title="History"
-                              className="btn"
-                              style={{ backgroundColor: '#4b5563', color: '#fff' }}
-                            >
-                              <FaHistory />
+                            <button title="History" className="um-btn um-btn-update">
+                              <FaHistory size={16} />
                             </button>
-                            <button
-                              title="Comments"
-                              className="btn"
-                              style={{ backgroundColor: '#7c3aed', color: '#fff' }}
-                            >
-                              <FaComments />
+                            <button title="Comments" className="um-btn">
+                              <FaComments size={16} />
                             </button>
-                            <button
-                              title="Done"
-                              className="btn"
-                              style={{ backgroundColor: '#059669', color: '#fff' }}
-                            >
-                              <FaCheck />
+                            <button title="Done" className="um-btn um-btn-delete">
+                              <FaCheck size={16} />
                             </button>
                           </div>
                         </td>
@@ -1084,9 +1067,9 @@ const MyTasks = () => {
           </div>
         </div>
       )}
-
-      <Footer />
-    </div>
+        </div>
+        <Footer />
+      </div>
   );
 };
 

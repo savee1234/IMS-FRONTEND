@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
+import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
@@ -70,114 +70,100 @@ const AllAssignments = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
-      <Navbar />
-      <div className="complaint-onboard-background" />
+    <div className="ma-wrapper">
+      <Sidebar />
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>All Assignments</h1>
+        </div>
 
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
-          <div className="page-header">
-            <div className="page-header-content">
-              <h1>All Assignments</h1>
-            </div>
+        <div className="ma-filter-card">
+          <div className="ma-filter-group">
+            <label className="ma-label">Employee</label>
+            <select
+              className="ma-select"
+              value={filters.employee}
+              onChange={(e) => handleChange('employee', e.target.value)}
+            >
+              <option value="">Select Employees</option>
+              <option value="john.doe">John Doe</option>
+              <option value="jane.smith">Jane Smith</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">Status</label>
+            <select
+              className="ma-select"
+              value={filters.status}
+              onChange={(e) => handleChange('status', e.target.value)}
+            >
+              <option value="">Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">From Date</label>
+            <input
+              type="date"
+              value={filters.fromDate}
+              onChange={(e) => handleChange('fromDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">To Date</label>
+            <input
+              type="date"
+              value={filters.toDate}
+              onChange={(e) => handleChange('toDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <button type="button" onClick={handleSubmit} className="ma-btn-submit">Submit</button>
+        </div>
+
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search assignments"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="ma-search-input"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="config-form">
-            <div className="form-grid assignments-form-grid">
-              <div className="form-field">
-                <label className="config-label">Employee</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.employee}
-                    onChange={(e) => handleChange('employee', e.target.value)}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="john.doe">John Doe</option>
-                    <option value="jane.smith">Jane Smith</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">Status</label>
-                <div className="field-control input-wrapper">
-                  <select
-                    className="config-input"
-                    value={filters.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">From Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => handleChange('fromDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-              <div className="form-field">
-                <label className="config-label">To Date</label>
-                <div className="field-control input-wrapper">
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => handleChange('toDate', e.target.value)}
-                    className="config-input"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="config-actions">
-              <button type="submit" className="config-btn-primary">Submit</button>
-            </div>
-          </form>
-
-          <div className="form-field full" style={{ marginBottom: '0.75rem' }}>
-            <label className="config-label">Search</label>
-            <div className="field-control input-wrapper">
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="config-input"
-              />
-            </div>
-          </div>
-
-          <div className="config-card">
-            <table className="config-table">
+          <div className="ma-table-container">
+            <table className="ma-table">
               <thead>
                 <tr>
-                  <th>Request Reference</th>
-                  <th>Entered Date</th>
-                  <th>Assigned By</th>
-                  <th>Assigned To</th>
-                  <th>Remark</th>
-                  <th>Actions</th>
+                  <th>REQUEST REFERENCE</th>
+                  <th>ENTERED DATE & TIME</th>
+                  <th>ASSIGNED BY</th>
+                  <th>ASSIGNED TO</th>
+                  <th>REMARK</th>
+                  <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>25-10-23-0001</td>
-                  <td>10/23/2025 12:24:44 PM</td>
-                  <td>Romaine Murcott</td>
-                  <td>Romaine Murcott</td>
-                  <td>No remarks</td>
+                  <td style={{ color: '#0f172a' }}>25-10-23-0001</td>
                   <td>
-                    <div className="config-table-actions">
+                    <div>10/23/2025</div>
+                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>12:24:44 PM</div>
+                  </td>
+                  <td style={{ color: '#0f172a' }}>Romaine Murcott</td>
+                  <td style={{ color: '#0f172a' }}>Romaine Murcott</td>
+                  <td style={{ color: '#0f172a' }}>No remarks</td>
+                  <td>
+                    <div className="ma-actions">
                       <button
                         title="View"
                         type="button"
-                        className="config-icon-btn"
+                        className="ma-btn-action ma-btn-view"
                         onClick={() => openView({
                           requestRef: '25-10-23-0001',
                           categoryType: 'INTERNAL',
@@ -200,12 +186,12 @@ const AllAssignments = () => {
                           ]
                         })}
                       >
-                        <FaEye size={16} />
+                        <FaFileAlt />
                       </button>
                       <button
                         title="Update"
                         type="button"
-                        className="config-icon-btn"
+                        className="ma-btn-action ma-btn-edit"
                         onClick={() => {
                           openStatus({
                             id: '25-10-23-0001',
@@ -214,22 +200,14 @@ const AllAssignments = () => {
                           });
                         }}
                       >
-                        <FaEdit size={16} />
-                      </button>
-                      <button
-                        title="Progress"
-                        type="button"
-                        className="config-icon-btn"
-                        onClick={() => openProgress({ requestRef: '25-10-23-0001' })}
-                      >
-                        <FaTasks size={16} />
+                        <FaHistory />
                       </button>
                       <button
                         title="Delete"
                         type="button"
-                        className="config-icon-btn"
+                        className="ma-btn-action ma-btn-delete"
                       >
-                        <FaTrash size={16} />
+                        <FaTrash />
                       </button>
                     </div>
                   </td>
@@ -237,11 +215,10 @@ const AllAssignments = () => {
               </tbody>
             </table>
           </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="config-btn-secondary">Previous</button>
-            <button type="button" className="config-btn-primary">Next</button>
-            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page 1 of 1</span>
+          <div className="ma-footer-row">
+            <button className="ma-pagination-btn">&lt; Previous</button>
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page 1 of 1</span>
+            <button className="ma-pagination-btn next">Next &gt;</button>
           </div>
         </div>
       </div>
@@ -262,6 +239,15 @@ const AllAssignments = () => {
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
 
 export default AllAssignments;
 

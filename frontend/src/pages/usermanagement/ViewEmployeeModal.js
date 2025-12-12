@@ -72,11 +72,12 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
 const styles = {
   overlay: {
     position: 'fixed',
-    top: '72px',
+    top: 0,
     left: 0,
     right: 0,
-    bottom: '64px',
-    background: 'rgba(2, 132, 199, 0.08)',
+    bottom: 0,
+    background: 'rgba(2, 6, 23, 0.6)',
+    backdropFilter: 'blur(12px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -85,10 +86,11 @@ const styles = {
   },
   modal: {
     backgroundColor: '#ffffff',
-    borderRadius: '20px',
-    boxShadow: '0 20px 40px rgba(6, 182, 212, 0.25)',
+    borderRadius: '0px',
+    boxShadow: '0 24px 48px rgba(2,6,23,0.18)',
     width: '100%',
     maxWidth: '960px',
+    maxHeight: '85vh',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden'
@@ -99,23 +101,23 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0fbff',
+    backgroundColor: '#ffffff',
     position: 'relative'
   },
   modalTitle: {
     fontSize: '1.6rem',
     fontWeight: '700',
-    color: '#0ea5e9',
+    color: '#1e3a8a',
     margin: 0
   },
   closeButton: {
     position: 'absolute',
     right: '16px',
-    backgroundColor: '#ffffff',
-    border: '1px solid #e5e7eb',
+    backgroundColor: '#111827',
+    border: 'none',
     fontSize: '20px',
     cursor: 'pointer',
-    color: '#111827',
+    color: '#ffffff',
     padding: '0',
     width: '34px',
     height: '34px',
@@ -128,7 +130,8 @@ const styles = {
   modalContent: {
     flex: 1,
     overflowY: 'auto',
-    padding: '24px'
+    padding: '16px 24px',
+    backgroundColor: '#eaebec'
   },
   section: {
     marginBottom: '32px'
@@ -146,9 +149,9 @@ const styles = {
     flexDirection: 'column',
     padding: '12px',
     backgroundColor: '#ffffff',
-    borderRadius: '14px',
-    border: '1px solid #dbeafe',
-    boxShadow: '0 2px 8px rgba(59, 130, 246, 0.08)'
+    borderRadius: '8px',
+    border: '1px solid #e5e7eb',
+    boxShadow: '0 2px 8px rgba(2, 6, 23, 0.06)'
   },
   label: {
     fontSize: '0.85rem',
@@ -188,7 +191,7 @@ const styles = {
   privilegeSectionTitle: {
     fontSize: '1rem',
     fontWeight: '600',
-    color: '#1e40af',
+    color: '#1e3a8a',
     marginBottom: '12px',
     margin: 0
   },
@@ -227,18 +230,18 @@ const styles = {
     margin: 0
   },
   modalFooter: {
-    padding: '20px 24px',
+    padding: '12px 24px',
     borderTop: '1px solid #e5e7eb',
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '12px',
-    backgroundColor: '#f0fbff'
+    backgroundColor: '#eaebec'
   },
   closeModalButton: {
     padding: '10px 20px',
-    backgroundColor: '#ffffff',
-    color: '#111827',
-    border: '1px solid #e5e7eb',
+    backgroundColor: '#475569',
+    color: '#ffffff',
+    border: 'none',
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.85rem',
@@ -247,14 +250,14 @@ const styles = {
   },
   updateButton: {
     padding: '10px 20px',
-    backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
-    color: 'white',
+    backgroundColor: '#1e3a8a',
+    color: '#ffffff',
     border: 'none',
     borderRadius: '9999px',
     cursor: 'pointer',
     fontSize: '0.85rem',
     fontWeight: '600',
-    boxShadow: '0 8px 16px rgba(59, 130, 246, 0.25)'
+    boxShadow: '0 8px 16px rgba(2, 6, 23, 0.18)'
   },
   dropdownGroup: {
     display: 'flex',

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import '../complaint/ComplaintForm.css';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
-import { FaEye, FaUserCog } from 'react-icons/fa';
+import { FaEye, FaUserCog, FaSearch } from 'react-icons/fa';
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -18,56 +18,6 @@ const UserManagement = () => {
   
 
   useEffect(() => {
-    const sampleUsers = [
-      {
-        id: 'USR001',
-        name: 'Raveesha Gimhan',
-        designation: 'Software Engineer',
-        contact: '0771234567',
-        status: 'Active',
-        email: 'raveesha@example.com',
-        department: 'Engineering',
-        joiningDate: '2024-02-15',
-        address: 'Colombo',
-        callingName: 'Raveesha'
-      },
-      {
-        id: 'USR002',
-        name: 'Anushka Perera',
-        designation: 'QA Engineer',
-        contact: '0779876543',
-        status: 'Active',
-        email: 'anushka@example.com',
-        department: 'Quality Assurance',
-        joiningDate: '2023-09-02',
-        address: 'Kandy',
-        callingName: 'Anushka'
-      },
-      {
-        id: 'USR003',
-        name: 'Niroshan Fernando',
-        designation: 'Product Manager',
-        contact: '0712223344',
-        status: 'Inactive',
-        email: 'niroshan@example.com',
-        department: 'Product',
-        joiningDate: '2022-06-11',
-        address: 'Galle',
-        callingName: 'Niro'
-      },
-      {
-        id: 'USR004',
-        name: 'Sashini De Silva',
-        designation: 'UI/UX Designer',
-        contact: '0785556677',
-        status: 'Active',
-        email: 'sashini@example.com',
-        department: 'Design',
-        joiningDate: '2024-12-01',
-        address: 'Negombo',
-        callingName: 'Sashi'
-      }
-    ];
     const fetchEmployees = async () => {
       setLoadingEmployees(true);
       setEmployeesError(null);
@@ -93,12 +43,11 @@ const UserManagement = () => {
           callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
-        const withSamples = [...mapped, ...sampleUsers];
-        setEmployees(withSamples);
+        setEmployees(mapped.slice(0, 3));
       } catch (err) {
         console.error('Failed to load user-management:', err);
         setEmployeesError(err.message || String(err));
-        setEmployees(sampleUsers);
+        setEmployees([]);
       } finally {
         setLoadingEmployees(false);
       }
@@ -136,6 +85,18 @@ const UserManagement = () => {
     console.log('Employee updated:', updatedEmployee);
   };
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredEmployees = employees.filter(emp => {
+    const matchesSearch = (
+      emp.id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.designation?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return matchesSearch;
+  });
+
   
 
   const handleClose = () => {
@@ -143,65 +104,81 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="um-wrapper">
-      <Navbar />
-      <div className={`um-content ${isModalOpen || isViewModalOpen ? 'um-content--blurred' : ''}`}>
-        <div className="um-card">
-          <div className="um-header">
-            <h1 className="um-title">System Users</h1>
+    <div className="ma-wrapper">
+      <Sidebar />
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>System Users</h1>
+        </div>
+
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search users"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="ma-search-input"
+            />
           </div>
-          <div className="um-body">
-            <div className="um-table-container">
-              <table className="um-table">
-                <thead>
+
+          <div className="ma-table-container">
+            <table className="ma-table">
+              <thead>
+                <tr>
+                  <th>USER ID</th>
+                  <th>EMPLOYEE NAME</th>
+                  <th>DESIGNATION</th>
+                  <th>CONTACT NO.</th>
+                  <th>EMAIL ADDRESS</th>
+                  <th>LOCATION</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loadingEmployees ? (
                   <tr>
-                    <th>User ID</th>
-                    <th>Employee Name</th>
-                    <th>Designation</th>
-                    <th>Contact No.</th>
-                    <th>Email Address</th>
-                    <th>Location</th>
-                    <th>Actions</th>
+                    <td colSpan={7} style={{ textAlign: 'center' }}>Loading employees...</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {loadingEmployees ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center' }}>Loading employees...</td>
+                ) : employeesError ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
+                  </tr>
+                ) : employees.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
+                  </tr>
+                ) : (
+                  filteredEmployees.map((employee, index) => (
+                    <tr key={employee.id || index}>
+                      <td style={{ color: '#0f172a' }}>{employee.id}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.name}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.designation}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.contact}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.email || 'N/A'}</td>
+                      <td style={{ color: '#0f172a' }}>{employee.address || 'N/A'}</td>
+                      <td>
+                        <div className="ma-actions">
+                          <button className="ma-btn-action ma-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
+                            <FaEye />
+                          </button>
+                          <button className="ma-btn-action ma-btn-edit" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
+                            <FaUserCog />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
-                  ) : employeesError ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
-                    </tr>
-                  ) : employees.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
-                    </tr>
-                  ) : (
-                    employees.map((employee, index) => (
-                      <tr key={employee.id || index}>
-                        <td>{employee.id}</td>
-                        <td>{employee.name}</td>
-                        <td>{employee.designation}</td>
-                        <td>{employee.contact}</td>
-                        <td>{employee.email || 'N/A'}</td>
-                        <td>{employee.address || 'N/A'}</td>
-                        <td>
-                          <div className="um-actions">
-                            <button className="um-btn" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
-                              <FaUserCog size={20} />
-                            </button>
-                            <button className="um-btn" title="View" onClick={() => handleViewEmployee(employee)}>
-                              <FaEye size={20} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="ma-footer-row">
+            <button className="ma-pagination-btn">&lt; Previous</button>
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page 1 of 1</span>
+            <button className="ma-pagination-btn next">Next &gt;</button>
           </div>
         </div>
       </div>

@@ -1,107 +1,35 @@
 // src/pages/Workflow.js
 import React from 'react';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
- 
+import './Workflow.css';
 
 const Workflow = () => {
-  
-  const styles = {
-    page: {
-      position: 'relative',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-    },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(245,245,245,0.3) 100%)',
-      zIndex: -1,
-    },
-  };
-  const containerStyle = {
-    padding: '2rem',
-    marginTop: '4rem',
-    fontFamily: 'Arial, sans-serif',
-    minHeight: '80vh',
-    backgroundColor: '#f4f7fa',
-  };
-
-  const titleStyle = {
-    fontSize: '2rem',
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: '1rem',
-  };
-
-  const cardStyle = {
-    backgroundColor: '#fff',
-    padding: '1.5rem',
-    borderRadius: '10px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    marginBottom: '2rem',
-  };
-
-  const paragraphStyle = {
-    marginBottom: '1rem',
-    lineHeight: '1.7',
-    color: '#34495e',
-  };
-
-  const listStyle = {
-    paddingLeft: '1.5rem',
-  };
-
-  const listItemStyle = {
-    marginBottom: '0.5rem',
-  };
-
   return (
-    <div style={styles.page}>
-      
-              <div style={styles.gradientOverlay}></div>
-      <Navbar />
-      <div style={containerStyle}>
-        <h2 style={titleStyle}>Workflow & Process Module</h2>
+    <div className="workflow-page-wrapper">
+      <Sidebar />
+      <div className="workflow-main-content">
+        <div className="page-container">
+          <div className="page-header">
+            <h1 className="page-title">Workflow & Process Module</h1>
+            <p className="page-subtitle">Manage workflow by tracking and assigning tasks to relevant officers</p>
+          </div>
 
-        <div style={cardStyle}>
-          <p style={paragraphStyle}>
-            Once a complaint is lodged, this module manages the workflow by tracking and assigning tasks to relevant officers.
-          </p>
-          <ul style={listStyle}>
-            <li style={listItemStyle}>
-              ✅ Officers can view capable employees and those in the current roster.
-            </li>
-            <li style={listItemStyle}>
-              ✅ Tasks can be assigned to multiple employees, but only one is the **Accountable Officer**.
-            </li>
-            <li style={listItemStyle}>
-              ✅ Only the Accountable Officer can mark an issue as <strong>Resolved</strong> or <strong>Rejected</strong>.
-            </li>
-            <li style={listItemStyle}>
-              🕑 Assigned employees can update progress/comments, visible on their <strong>Pending Assignments</strong> page.
-            </li>
-            <li style={listItemStyle}>
-              📊 Supervisors can view all assignments and their due-date color-coded statuses in a hierarchy.
-            </li>
-          </ul>
+          <div className="card">
+            <p className="workflow-description">
+              Once a complaint is lodged, this module manages the workflow by tracking and assigning tasks to relevant officers.
+            </p>
+            <ul className="workflow-list">
+              <li>✅ Officers can view capable employees and those in the current roster.</li>
+              <li>✅ Tasks can be assigned to multiple employees, but only one is the <strong>Accountable Officer</strong>.</li>
+              <li>✅ Only the Accountable Officer can mark an issue as <strong>Resolved</strong> or <strong>Rejected</strong>.</li>
+              <li>🕑 Assigned employees can update progress/comments, visible on their <strong>Pending Assignments</strong> page.</li>
+              <li>📊 Supervisors can view all assignments and their due-date color-coded statuses in a hierarchy.</li>
+            </ul>
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

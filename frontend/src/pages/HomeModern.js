@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import img12 from '../assets/12.jpg';
 import img10 from '../assets/10.jpg';
 import imageJpg from '../assets/image.jpg';
+import new111 from '../assets/new111.jpg';
+import new112 from '../assets/new112.jpg';
+import './Home.css';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -21,26 +24,26 @@ const HomeModern = () => {
 
   const slides = [
     {
-      title: 'We Solve Incidents Fast',
-      subtitle: 'Modern UI, analytics, and workflows in one platform.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: img12,
       fallbackUrl: img12
     },
     {
-      title: 'Blue & Bold Experience',
-      subtitle: 'A colorful, engaging hero that matches your brand.',
-      imageUrl: `${process.env.PUBLIC_URL}/new111.jpg`,
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
+      imageUrl: new111,
       fallbackUrl: img12
     },
     {
-      title: 'Technology That Empowers',
-      subtitle: 'Coordinate teams, track tasks, and report with ease.',
-      imageUrl: `${process.env.PUBLIC_URL}/new112.jpg`,
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
+      imageUrl: new112,
       fallbackUrl: img12
     },
     {
-      title: 'Act Fast, Resolve Faster',
-      subtitle: 'Real-time insights to reduce response times.',
+      title: 'Incident Management System',
+      subtitle: 'Modern workflows for IT incidents, tracking and resolution.',
       imageUrl: img10,
       fallbackUrl: img10
     }
@@ -254,26 +257,25 @@ const HomeModern = () => {
   };
 
   return (
-    <div style={styles.pageContainer}>
-      <Navbar />
+    <div className="home-page-wrapper">
+      <Sidebar />
+      <div className="home-main-content">
       
 
       {/* Hero Section */}
-      <section style={{
-        ...styles.heroSection,
-        backgroundImage: `url('${displaySlides[currentSlide].imageUrl}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}>
-        <div style={styles.heroOverlay}></div>
-        <div style={styles.heroContent}>
-          <h1 style={styles.heroTitle}>{slides[currentSlide].title}</h1>
-          <p style={styles.heroSubtitle}>{slides[currentSlide].subtitle}</p>
+      <section 
+        className="hero-section"
+        style={{
+          backgroundImage: `linear-gradient(135deg, rgba(30,58,138,0.9) 0%, rgba(37,99,235,0.85) 60%), url('${displaySlides[currentSlide].imageUrl}')`,
+          backgroundBlendMode: 'overlay'
+        }}
+      >
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1 className="hero-title">Incident Management System</h1>
+          <p className="hero-subtitle">Modern workflows for IT incidents, tracking and resolution.</p>
           <button
-            style={{
-              ...styles.heroButton,
-              ...(heroButtonHover ? styles.heroButtonHover : {})
-            }}
+            className="hero-button"
             onClick={() => navigate('/complaint')}
             onMouseEnter={() => setHeroButtonHover(true)}
             onMouseLeave={() => setHeroButtonHover(false)}
@@ -281,28 +283,33 @@ const HomeModern = () => {
             Get Started
           </button>
           <button
-            style={styles.heroButtonSecondary}
+            className="hero-button-secondary"
             onClick={() => navigate('/dashboard')}
           >
             View Dashboard
           </button>
-          <div style={styles.sliderControls}>
-            <button aria-label="Previous" style={styles.sliderNavButton} onClick={() => setCurrentSlide((currentSlide - 1 + slides.length) % slides.length)}>
+          <div className="slider-controls">
+            <button 
+              aria-label="Previous" 
+              className="slider-nav-button" 
+              onClick={() => setCurrentSlide((currentSlide - 1 + slides.length) % slides.length)}
+            >
               ‹
             </button>
-            <div style={styles.sliderDots}>
+            <div className="slider-dots">
               {slides.map((_, i) => (
                 <span
                   key={i}
                   onClick={() => setCurrentSlide(i)}
-                  style={{
-                    ...styles.sliderDot,
-                    ...(currentSlide === i ? styles.sliderDotActive : {})
-                  }}
+                  className={`slider-dot ${currentSlide === i ? 'slider-dot-active' : ''}`}
                 />
               ))}
             </div>
-            <button aria-label="Next" style={styles.sliderNavButton} onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)}>
+            <button 
+              aria-label="Next" 
+              className="slider-nav-button" 
+              onClick={() => setCurrentSlide((currentSlide + 1) % slides.length)}
+            >
               ›
             </button>
           </div>
@@ -350,22 +357,22 @@ const HomeModern = () => {
       </section>
 
       {/* About Section */}
-      <section style={styles.aboutSection}>
-        <div style={styles.aboutContent}>
-          <div style={styles.aboutImage}>
-            <img src={imageJpg} alt="Team Collaboration" style={{ width: '100%', height: '400px', objectFit: 'cover' }} />
+      <section className="about-section">
+        <div className="about-content">
+          <div className="about-image">
+            <img src={imageJpg} alt="Team Collaboration" />
           </div>
-          <div style={styles.aboutText}>
-            <h2 style={styles.sectionTitle}>About Our System</h2>
-            <p style={styles.aboutDescription}>
+          <div className="about-text">
+            <h2 className="section-title">About Our System</h2>
+            <p className="about-description">
               The SLT Incident Management System is a comprehensive platform designed to streamline 
               incident reporting and resolution processes. With over 10 years of continuous improvement, 
               we've helped organizations reduce incident response time by 65% and improve customer 
               satisfaction scores significantly.
             </p>
-            <div style={styles.statsContainer}>
-              <div style={styles.statItem}>
-                <div style={styles.statIcon}>
+            <div className="stats-container">
+              <div className="stat-item">
+                <div className="stat-icon">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -374,20 +381,20 @@ const HomeModern = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 style={styles.statNumber}>500+</h3>
-                  <p style={styles.statLabel}>Organizations Trust Us</p>
+                  <h3 className="stat-number">500+</h3>
+                  <p className="stat-label">Organizations Trust Us</p>
                 </div>
               </div>
-              <div style={styles.statItem}>
-                <div style={styles.statIcon}>
+              <div className="stat-item">
+                <div className="stat-icon">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
                 <div>
-                  <h3 style={styles.statNumber}>10 Years</h3>
-                  <p style={styles.statLabel}>Of Excellence</p>
+                  <h3 className="stat-number">10 Years</h3>
+                  <p className="stat-label">Of Excellence</p>
                 </div>
               </div>
             </div>
@@ -448,16 +455,13 @@ const HomeModern = () => {
       
 
       {/* Call to Action Section */}
-      <section style={styles.ctaSection}>
-        <div style={styles.ctaOverlay}></div>
-        <div style={styles.ctaContent}>
-          <h2 style={styles.ctaTitle}>Need Assistance with Incident Management?</h2>
-          <p style={styles.ctaSubtitle}>Contact Our Support Team for a System Demo</p>
+      <section className="cta-section">
+        <div className="cta-overlay"></div>
+        <div className="cta-content">
+          <h2 className="cta-title">Need Assistance with Incident Management?</h2>
+          <p className="cta-subtitle">Contact Our Support Team for a System Demo</p>
           <button 
-            style={{
-              ...styles.ctaButton,
-              ...(ctaButtonHover ? styles.ctaButtonHover : {})
-            }}
+            className="cta-button"
             onClick={() => navigate('/contact')}
             onMouseEnter={() => setCtaButtonHover(true)}
             onMouseLeave={() => setCtaButtonHover(false)}
@@ -469,6 +473,7 @@ const HomeModern = () => {
 
       {/* Footer */}
       <Footer />
+      </div>
     </div>
   );
 };

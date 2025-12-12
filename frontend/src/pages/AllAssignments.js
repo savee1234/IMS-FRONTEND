@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -58,6 +58,30 @@ const AllAssignments = () => {
 
   const [progressOpen, setProgressOpen] = useState(false);
   const [progressAssignment, setProgressAssignment] = useState(null);
+
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch('http://localhost:44354/api/assignments');
+        if (!res.ok) throw new Error('Failed to fetch assignments');
+        const data = await res.json();
+        setAssignments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError(err.message || 'Unexpected error');
+        console.error('Error fetching assignments:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssignments();
+  }, []);
 
   const openProgress = (assignment) => {
     setProgressAssignment(assignment);
@@ -154,88 +178,75 @@ const AllAssignments = () => {
           </div>
 
           <div className="config-card">
-            <table className="config-table">
-              <thead>
-                <tr>
-                  <th>Request Reference</th>
-                  <th>Entered Date</th>
-                  <th>Assigned By</th>
-                  <th>Assigned To</th>
-                  <th>Remark</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>25-10-23-0001</td>
-                  <td>10/23/2025 12:24:44 PM</td>
-                  <td>Romaine Murcott</td>
-                  <td>Romaine Murcott</td>
-                  <td>No remarks</td>
-                  <td>
-                    <div className="config-table-actions">
-                      <button
-                        title="View"
-                        type="button"
-                        className="config-icon-btn"
-                        onClick={() => openView({
-                          requestRef: '25-10-23-0001',
-                          categoryType: 'INTERNAL',
-                          documentSubject: 'gdfgd gdfgf g',
-                          mediumSource: '657645374',
-                          projectType: 'Type 1',
-                          contactPerson: 'Chandima Dunuwila',
-                          criticality: 'MEDIUM',
-                          documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
-                          medium: 'Call Centre (Test)',
-                          organization: 'DEF',
-                          projectName: 'NCPA',
-                          remarks: 'd fd gdfg fd',
-                          mainAssignment: [
-                            { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
-                          ],
-                          subAssignments: [
-                            { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
-                            { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
-                          ]
-                        })}
-                      >
-                        <FaEye size={16} />
-                      </button>
-                      <button
-                        title="Update"
-                        type="button"
-                        className="config-icon-btn"
-                        onClick={() => {
-                          openStatus({
-                            id: '25-10-23-0001',
-                            requestRef: '25-10-23-0001',
-                            contactPerson: 'Chandima Dunuwila'
-                          });
-                        }}
-                      >
-                        <FaEdit size={16} />
-                      </button>
-                      <button
-                        title="Progress"
-                        type="button"
-                        className="config-icon-btn"
-                        onClick={() => openProgress({ requestRef: '25-10-23-0001' })}
-                      >
-                        <FaTasks size={16} />
-                      </button>
-                      <button
-                        title="Delete"
-                        type="button"
-                        className="config-icon-btn"
-                      >
-                        <FaTrash size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            {loading && (
+              <p style={{ textAlign: 'center', padding: '1rem' }}>Loading assignments...</p>
+            )}
+            {error && (
+              <p style={{ textAlign: 'center', padding: '1rem', color: 'red' }}>Error: {error}</p>
+            )}
+            {!loading && !error && (
+              <table className="config-table">
+                <thead>
+                  <tr>
+                    <th>Assignment Type</th>
+                    <th>Assigned By</th>
+                    <th>Assigned To</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assignments.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.Assignment}</td>
+                      <td>{item.assignedBy}</td>
+                      <td>{
+                        item.assignedTo && typeof item.assignedTo === 'object'
+                          ? (item.assignedTo.userName || item.assignedTo.name || item.assignedTo._id || 'Unassigned')
+                          : (item.assignedTo ? String(item.assignedTo) : 'Unassigned')
+                      }</td>
+                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
+                      <td>
+                        <div className="config-table-actions">
+                          <button
+                            title="View"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openView(item)}
+                          >
+                            <FaEye size={16} />
+                          </button>
+                          <button
+                            title="Update"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openStatus(item)}
+                          >
+                            <FaEdit size={16} />
+                          </button>
+                          <button
+                            title="Progress"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openProgress(item)}
+                          >
+                            <FaTasks size={16} />
+                          </button>
+                          <button title="Delete" type="button" className="config-icon-btn">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {assignments.length === 0 && (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>

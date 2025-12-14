@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { logout } from '../utils/auth';
 import sltLogo from '../assets/slt-logo.png';
 import './Navbar.css';
+import { FaChevronRight } from 'react-icons/fa';
 
 const Navbar = () => {
   const location = useLocation();
@@ -166,7 +167,13 @@ const Navbar = () => {
                     >
                       Configuration
                     </Link>
-                    <span style={styles.submenuArrow}>▸</span>
+                    <span style={{ 
+                      ...styles.submenuArrow, 
+                      transform: `translateY(-50%) rotate(${isConfigSubOpen ? 90 : 0}deg)`,
+                      transition: 'transform 0.2s ease'
+                    }}>
+                      <FaChevronRight size={12} />
+                    </span>
                     {isConfigSubOpen && (
                       <div style={styles.submenu}>
                         <Link 
@@ -486,7 +493,6 @@ const styles = {
     position: 'absolute',
     right: '10px',
     top: '50%',
-    transform: 'translateY(-50%)',
     color: '#64748b',
     fontSize: '12px'
   },

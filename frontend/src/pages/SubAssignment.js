@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -7,40 +7,46 @@ import './complaint/ComplaintForm.css';
 const SubAssignment = () => {
   
 
-  const data = [
-    {
-      requestReference: '25-11-10-0002',
-      enteredDate: '11/10/2025',
-      enteredTime: '10:16:01 AM',
-      assignedByName: 'Romaine Murcott',
-      assignedByDesignation: 'TTO',
-      assignedToName: 'Piumi Kaushalya',
-      assignedToDesignation: 'TTO',
-      remarks: '',
-    },
-    {
-      requestReference: '25-11-10-0003',
-      enteredDate: '11/10/2025',
-      enteredTime: '11:30:45 AM',
-      assignedByName: 'John Smith',
-      assignedByDesignation: 'Manager',
-      assignedToName: 'Sarah Johnson',
-      assignedToDesignation: 'Engineer',
-      remarks: 'Urgent follow-up required',
-    },
-    {
-      requestReference: '25-11-10-0004',
-      enteredDate: '11/10/2025',
-      enteredTime: '02:15:33 PM',
-      assignedByName: 'Emily Davis',
-      assignedByDesignation: 'Supervisor',
-      assignedToName: 'Michael Brown',
-      assignedToDesignation: 'Technician',
-      remarks: 'Awaiting customer response',
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [currentPage] = useState(1);
+  useEffect(() => {
+    const fetchSubAssignments = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('http://localhost:44354/api/sub-assignments');
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const result = await response.json();
+        
+        // Map API response to table structure
+        const mapped = result.map(item => ({
+          requestReference: item._id || 'N/A',
+          enteredDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A',
+          enteredTime: item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'N/A',
+          assignedByName: item.assignedBy || 'N/A',
+          assignedByDesignation: '',
+          assignedToName: item.assignedTo?.userName || 'N/A',
+          assignedToDesignation: '',
+          assignedToContact: item.assignedTo?.contactNumber || '',
+          assignedToStatus: item.assignedTo?.activeStatus ? 'Active' : 'Inactive',
+          remarks: '',
+          rawData: item
+        }));
+        
+        setData(mapped);
+      } catch (err) {
+        console.error('Failed to fetch sub-assignments:', err);
+        setError(err.message || 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubAssignments();
+  }, []);
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
@@ -136,41 +142,61 @@ const SubAssignment = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.requestReference}</td>
-                    <td>
-                      <div>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
-                    </td>
-                    <td>
-                      {item.remarks ? item.remarks : (
-                        <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="config-table-actions">
-                        <button className="config-icon-btn" title="View" type="button">
-                          <FaEye size={16} />
-                        </button>
-                        <button className="config-icon-btn" title="Update" type="button">
-                          <FaEdit size={16} />
-                        </button>
-                        <button className="config-icon-btn" title="Delete" type="button">
-                          <FaTrash size={16} />
-                        </button>
-                      </div>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>
+                      Loading sub-assignments...
                     </td>
                   </tr>
-                ))}
+                ) : error ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#dc2626' }}>
+                      Error: {error}
+                    </td>
+                  </tr>
+                ) : data.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+                      No sub-assignments found
+                    </td>
+                  </tr>
+                ) : (
+                  data.map((item, index) => (
+                    <tr key={item.rawData?._id || index}>
+                      <td>{item.requestReference}</td>
+                      <td>
+                        <div>{item.enteredDate}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
+                      </td>
+                      <td>
+                        {item.remarks ? item.remarks : (
+                          <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="config-table-actions">
+                          <button className="config-icon-btn" title="View" type="button">
+                            <FaEye size={16} />
+                          </button>
+                          <button className="config-icon-btn" title="Update" type="button">
+                            <FaEdit size={16} />
+                          </button>
+                          <button className="config-icon-btn" title="Delete" type="button">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

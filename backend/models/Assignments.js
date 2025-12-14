@@ -15,7 +15,6 @@ const assignmentSchema = new mongoose.Schema({
     enum:['Main Assignment','Sub Assignment'],
     required:true
   }
-
 });
 
 module.exports = mongoose.model("Assignments", assignmentSchema);  

@@ -1,37 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
   const [currentPage] = useState(1);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const assignments = [
-    {
-      requestReference: '25-10-23-0001',
-      enteredDate: '10/23/2025',
-      enteredTime: '12:24:44 PM',
-      assignedBy: 'Romaine Murcott',
-      assignedTo: 'Romaine Murcott',
-      remark: 'No remarks',
-    },
-    {
-      requestReference: '25-10-23-0002',
-      enteredDate: '10/24/2025',
-      enteredTime: '09:15:32 AM',
-      assignedBy: 'John Smith',
-      assignedTo: 'Sarah Johnson',
-      remark: 'Urgent follow-up required',
-    },
-    {
-      requestReference: '25-10-23-0003',
-      enteredDate: '10/24/2025',
-      enteredTime: '02:45:17 PM',
-      assignedBy: 'Emily Davis',
-      assignedTo: 'Michael Brown',
-      remark: 'Awaiting customer response',
-    },
-  ];
+  useEffect(() => {
+    fetchMainAssignments();
+  }, []);
+
+  const fetchMainAssignments = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:44354/api/main-assignments');
+      if (!response.ok) {
+        throw new Error('Failed to fetch main assignments');
+      }
+      const data = await response.json();
+      setAssignments(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching main assignments:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [filters, setFilters] = useState({
     employee: '',
@@ -121,45 +119,50 @@ const MainAssignment = () => {
           </div>
 
           <div className="ma-table-container">
-            <table className="ma-table">
-              <thead>
-                <tr>
-                  <th>REQUEST REFERENCE</th>
-                  <th>ENTERED DATE & TIME</th>
-                  <th>ASSIGNED BY</th>
-                  <th>ASSIGNED TO</th>
-                  <th>REMARK</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {assignments.map((item, index) => (
-                  <tr key={index}>
-                    <td style={{ fontWeight: 600 }}>{item.requestReference}</td>
-                    <td>
-                      <div>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{item.enteredTime}</div>
-                    </td>
-                    <td>{item.assignedBy}</td>
-                    <td>{item.assignedTo}</td>
-                    <td>{item.remark}</td>
-                    <td>
-                      <div className="ma-actions">
-                        <button className="ma-btn-action ma-btn-view" title="View">
-                          <FaEye />
-                        </button>
-                        <button className="ma-btn-action ma-btn-edit" title="Edit">
-                          <FaEdit />
-                        </button>
-                        <button className="ma-btn-action ma-btn-delete" title="Delete">
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
+            {loading && <p style={{ textAlign: 'center', padding: '2rem' }}>Loading assignments...</p>}
+            {error && <p style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>Error: {error}</p>}
+            {!loading && !error && (
+              <table className="ma-table">
+                <thead>
+                  <tr>
+                    <th>TITLE</th>
+                    <th>DESCRIPTION</th>
+                    <th>ASSIGNED BY</th>
+                    <th>ASSIGNED TO</th>
+                    <th>STATUS</th>
+                    <th>PRIORITY</th>
+                    <th>DUE DATE</th>
+                    <th>ACTIONS</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {assignments.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.title}</td>
+                      <td>{item.description || 'N/A'}</td>
+                      <td>{item.assignedBy}</td>
+                      <td>{item.assignedTo?.userName || 'Unassigned'}</td>
+                      <td>{item.status}</td>
+                      <td>{item.priority}</td>
+                      <td>{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'}</td>
+                      <td>
+                        <div className="ma-actions">
+                          <button className="ma-btn-action ma-btn-view" title="View">
+                            <FaEye />
+                          </button>
+                          <button className="ma-btn-action ma-btn-edit" title="Edit">
+                            <FaEdit />
+                          </button>
+                          <button className="ma-btn-action ma-btn-delete" title="Delete">
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
           <div className="ma-footer-row">

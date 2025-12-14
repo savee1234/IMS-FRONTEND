@@ -9,6 +9,7 @@ const OnboardMedium = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ createdBy: '', fromDate: '', toDate: '' });
 
   // Fetch onboard mediums from API
   const fetchOnboardMediums = async () => {
@@ -145,11 +146,16 @@ const OnboardMedium = () => {
     return new Date(dateString).toLocaleString();
   };
 
-  // Filter data based on search term
-  const filteredData = onboardData.filter(item => 
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.onboardMediumId && item.onboardMediumId.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredData = onboardData.filter(item => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.onboardMediumId && item.onboardMediumId.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCreatedBy = !filters.createdBy || item.createdByName === filters.createdBy;
+    const createdDate = item.createdDtm ? new Date(item.createdDtm) : null;
+    const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+    const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+    return matchesSearch && matchesCreatedBy && fromOk && toOk;
+  });
 
   return (
     <div className="onboard-medium-section">
@@ -191,6 +197,43 @@ const OnboardMedium = () => {
             </button>
           </div>
         </form>
+      </div>
+
+      <div className="conf-card">
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Created By</label>
+            <select
+              className="conf-input"
+              value={filters.createdBy}
+              onChange={(e) => setFilters(prev => ({ ...prev, createdBy: e.target.value }))}
+            >
+              <option value="">All</option>
+              {Array.from(new Set(onboardData.map(i => i.createdByName).filter(Boolean))).map(name => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">From Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.fromDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+            />
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">To Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.toDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+            />
+          </div>
+          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
+        </div>
       </div>
 
       {/* Search and Table Card */}

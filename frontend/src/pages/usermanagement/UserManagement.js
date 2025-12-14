@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+ 
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import '../complaint/ComplaintForm.css';
@@ -8,7 +8,7 @@ import ViewEmployeeModal from './ViewEmployeeModal';
 import { FaEye, FaUserCog, FaSearch } from 'react-icons/fa';
 
 const UserManagement = () => {
-  const navigate = useNavigate();
+ 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -99,9 +99,6 @@ const UserManagement = () => {
 
   
 
-  const handleClose = () => {
-    navigate('/');
-  };
 
   return (
     <div className="complaint-onboard-wrapper users-page">
@@ -200,25 +197,6 @@ const UserManagement = () => {
     </div>
   );
 };
-
-// Table Styles
-const tableHeaderStyle = {
-  padding: '0.85rem',
-  border: '1px solid #d1d5db',
-  textAlign: 'center',
-  fontWeight: '600',
-  color: 'white',
-  fontSize: '0.95rem'
-};
-
-const tableCellStyle = {
-  padding: '0.85rem',
-  border: '1px solid #d1d5db',
-  textAlign: 'center',
-  fontSize: '0.95rem',
-  color: '#374151'
-};
-
 
 export default UserManagement;
 

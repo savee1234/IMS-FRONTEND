@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -36,7 +36,7 @@ const RosterView = () => {
   const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
   // Fetch rosters from backend
-  const fetchRosters = async () => {
+  const fetchRosters = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -58,12 +58,12 @@ const RosterView = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL, month]);
 
   // Load rosters on component mount and when month changes
   useEffect(() => {
     fetchRosters();
-  }, [month]);
+  }, [fetchRosters]);
 
   const filteredRosters = rosters; // Backend filtering is now handled by the API
 
@@ -268,6 +268,7 @@ const RosterView = () => {
                     color: '#0f172a',
                     backgroundColor: '#f8fafc'
                   }}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -390,6 +391,7 @@ const RosterView = () => {
                                 fontSize: '0.9rem',
                                 boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
                               }}
+                              disabled={loading}
                             >
                               View
                             </button>
@@ -405,6 +407,7 @@ const RosterView = () => {
                                 fontSize: '0.9rem',
                                 boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
                               }}
+                              disabled={loading}
                             >
                               Update
                             </button>

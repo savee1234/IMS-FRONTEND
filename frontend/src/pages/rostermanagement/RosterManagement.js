@@ -136,9 +136,18 @@ const RosterManagement = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper users-page assignments-page" style={{ minHeight: '100vh' }}>
+    <div className="complaint-onboard-wrapper users-page assignments-page" style={{ minHeight: '100vh', position: 'relative' }}>
       <Sidebar />
       <div className="complaint-onboard-background" />
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'linear-gradient(135deg, rgba(0,43,91,0.15) 0%, rgba(59,130,246,0.15) 100%)',
+        zIndex: -1
+      }}></div>
 
       <div className="content-wrapper" style={{
         position: 'relative',

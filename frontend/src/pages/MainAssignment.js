@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
-  const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage] = useState(1);
 
   const assignments = [
     {
@@ -175,12 +173,12 @@ const MainAssignment = () => {
           </div>
         </div>
 
-        <div className="ma-copyright">
+          <div className="ma-copyright">
           <span>&copy; 2025 SLT Incident Management System. All rights reserved.</span>
           <div className="ma-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/contact">Contact Us</a>
           </div>
         </div>
       </div>

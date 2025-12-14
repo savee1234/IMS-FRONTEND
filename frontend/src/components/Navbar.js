@@ -7,17 +7,16 @@ import './Navbar.css';
 const Navbar = () => {
   const location = useLocation();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
+  const [isConfigSubOpen, setIsConfigSubOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const configItemRef = useRef(null);
 
   const modulesPaths = [
     '/complaint',
-    '/workflow',
     '/roster',
     '/users',
-    '/attendance',
     '/configuration',
     '/dashboard',
-    '/reporting',
     '/my-tasks',
     '/main-assignment',
     '/sub-assignment',
@@ -32,6 +31,7 @@ const Navbar = () => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsModulesOpen(false);
+        setIsConfigSubOpen(false);
       }
     }
     
@@ -124,21 +124,6 @@ const Navbar = () => {
                   Complaint Onboard
                 </Link>
                   <Link 
-                    to="/workflow" 
-                    onClick={() => setIsModulesOpen(false)} 
-                    style={styles.dropdownItem}
-                    onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.color = '#111827';
-                  }}
-                  onMouseOut={(e) => {
-                      e.target.style.backgroundColor = '';
-                      e.target.style.color = '#111827';
-                  }}
-                >
-                  Workflow
-                </Link>
-                  <Link 
                     to="/roster" 
                     onClick={() => setIsModulesOpen(false)} 
                     style={styles.dropdownItem}
@@ -168,36 +153,60 @@ const Navbar = () => {
                 >
                   User Management
                 </Link>
-                  <Link 
-                    to="/attendance" 
-                    onClick={() => setIsModulesOpen(false)} 
-                    style={styles.dropdownItem}
-                    onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.color = '#111827';
-                  }}
-                  onMouseOut={(e) => {
-                      e.target.style.backgroundColor = '';
-                      e.target.style.color = '#111827';
-                  }}
-                >
-                  Attendance
-                </Link>
-                  <Link 
-                    to="/configuration" 
-                    onClick={() => setIsModulesOpen(false)} 
-                    style={styles.dropdownItem}
-                    onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.color = '#111827';
-                  }}
-                  onMouseOut={(e) => {
-                      e.target.style.backgroundColor = '';
-                      e.target.style.color = '#111827';
-                  }}
-                >
-                  Configuration
-                </Link>
+                  <div 
+                    style={styles.dropdownItemWithArrow}
+                    ref={configItemRef}
+                    onMouseEnter={() => setIsConfigSubOpen(true)}
+                    onMouseLeave={() => setIsConfigSubOpen(false)}
+                  >
+                    <Link 
+                      to="/configuration" 
+                      onClick={() => setIsModulesOpen(false)} 
+                      style={{ ...styles.dropdownItem, paddingRight: '28px' }}
+                    >
+                      Configuration
+                    </Link>
+                    <span style={styles.submenuArrow}>▸</span>
+                    {isConfigSubOpen && (
+                      <div style={styles.submenu}>
+                        <Link 
+                          to="/configuration?tab=onboardMedium"
+                          onClick={() => { setIsModulesOpen(false); setIsConfigSubOpen(false); }}
+                          style={styles.submenuItem}
+                        >
+                          Onboard Medium
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=organization"
+                          onClick={() => { setIsModulesOpen(false); setIsConfigSubOpen(false); }}
+                          style={styles.submenuItem}
+                        >
+                          Organizations
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=organizations"
+                          onClick={() => { setIsModulesOpen(false); setIsConfigSubOpen(false); }}
+                          style={styles.submenuItem}
+                        >
+                          Org. Contact Persons
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=solutionsPerProject"
+                          onClick={() => { setIsModulesOpen(false); setIsConfigSubOpen(false); }}
+                          style={styles.submenuItem}
+                        >
+                          Solutions & Projects
+                        </Link>
+                        <Link 
+                          to="/configuration?tab=shifts"
+                          onClick={() => { setIsModulesOpen(false); setIsConfigSubOpen(false); }}
+                          style={styles.submenuItem}
+                        >
+                          Roster Shift Periods
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                   <Link 
                     to="/dashboard" 
                     onClick={() => setIsModulesOpen(false)} 
@@ -212,21 +221,6 @@ const Navbar = () => {
                   }}
                 >
                   Dashboard
-                </Link>
-                  <Link 
-                    to="/reporting" 
-                    onClick={() => setIsModulesOpen(false)} 
-                    style={styles.dropdownItem}
-                    onMouseOver={(e) => {
-                  e.target.style.backgroundColor = '#ffffff';
-                  e.target.style.color = '#111827';
-                  }}
-                  onMouseOut={(e) => {
-                      e.target.style.backgroundColor = '';
-                      e.target.style.color = '#111827';
-                  }}
-                >
-                  Reporting
                 </Link>
                   <Link 
                     to="/my-tasks" 
@@ -468,6 +462,11 @@ const styles = {
     zIndex: 1001,
     border: '1px solid #e5e7eb'
   },
+  dropdownItemWithArrow: {
+    position: 'relative',
+    display: 'block',
+    padding: 0,
+  },
   dropdownItem: {
     display: 'block',
     padding: '12px 16px',
@@ -482,6 +481,37 @@ const styles = {
   dropdownItemHover: {
     backgroundColor: 'rgba(59, 130, 246, 0.15)',
     color: '#000000'
+  },
+  submenuArrow: {
+    position: 'absolute',
+    right: '10px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    color: '#64748b',
+    fontSize: '12px'
+  },
+  submenu: {
+    position: 'absolute',
+    top: 0,
+    left: '100%',
+    backgroundColor: '#ffffff',
+    minWidth: '220px',
+    boxShadow: '0 12px 24px rgba(0,0,0,0.08)',
+    borderRadius: '8px',
+    padding: '8px 0',
+    zIndex: 1002,
+    border: '1px solid #e5e7eb'
+  },
+  submenuItem: {
+    display: 'block',
+    padding: '10px 14px',
+    color: '#111827',
+    textDecoration: 'none',
+    fontSize: '14px',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    transition: 'all 0.2s',
+    fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   userIconContainer: {
     display: 'flex',

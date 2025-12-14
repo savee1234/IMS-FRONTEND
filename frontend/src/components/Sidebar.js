@@ -7,20 +7,7 @@ const Sidebar = () => {
   const location = useLocation();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
 
-  const modulesPaths = [
-    '/complaint',
-    '/workflow',
-    '/roster',
-    '/users',
-    '/attendance',
-    '/configuration',
-    '/dashboard',
-    '/reporting',
-    '/my-tasks',
-    '/main-assignment',
-    '/sub-assignment',
-    '/all-assignments',
-  ];
+  
 
   const handleLogout = () => {
     logout();
@@ -84,13 +71,15 @@ const Sidebar = () => {
           {isModulesOpen && (
             <div style={styles.subNav}>
               <Link to="/complaint" style={location.pathname === '/complaint' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Complaint Onboard</Link>
-              <Link to="/workflow" style={location.pathname === '/workflow' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Workflow</Link>
               <Link to="/roster" style={location.pathname === '/roster' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Roster Management</Link>
               <Link to="/users" style={location.pathname === '/users' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>User Management</Link>
-              <Link to="/attendance" style={location.pathname === '/attendance' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Attendance</Link>
               <Link to="/configuration" style={location.pathname === '/configuration' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Configuration</Link>
+              <Link to="/configuration?tab=onboardMedium" style={location.search.includes('onboardMedium') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Onboard Medium</Link>
+              <Link to="/configuration?tab=organization" style={location.search.includes('organization') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Organizations</Link>
+              <Link to="/configuration?tab=organizations" style={location.search.includes('organizations') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Org. Contact Persons</Link>
+              <Link to="/configuration?tab=solutionsPerProject" style={location.search.includes('solutionsPerProject') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Solutions & Projects</Link>
+              <Link to="/configuration?tab=shifts" style={location.search.includes('shifts') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Roster Shift Periods</Link>
               <Link to="/dashboard" style={location.pathname === '/dashboard' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Dashboard</Link>
-              <Link to="/reporting" style={location.pathname === '/reporting' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Reporting</Link>
               <Link to="/my-tasks" style={location.pathname === '/my-tasks' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>View Tasks</Link>
               <Link to="/main-assignment" style={location.pathname === '/main-assignment' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Main Assignment</Link>
               <Link to="/sub-assignment" style={location.pathname === '/sub-assignment' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Sub Assignment</Link>
@@ -245,6 +234,16 @@ const styles = {
     color: 'rgba(255, 255, 255, 0.8)',
     textDecoration: 'none',
     fontSize: '0.875rem',
+    transition: 'all 0.2s ease',
+    borderLeft: '2px solid transparent',
+    borderRadius: '0 6px 6px 0',
+  },
+  subNavLinkIndented: {
+    display: 'block',
+    padding: '0.5rem 2.5rem',
+    color: 'rgba(255, 255, 255, 0.75)',
+    textDecoration: 'none',
+    fontSize: '0.82rem',
     transition: 'all 0.2s ease',
     borderLeft: '2px solid transparent',
     borderRadius: '0 6px 6px 0',

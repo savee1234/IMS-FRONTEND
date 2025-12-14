@@ -6,15 +6,10 @@ import Footer from '../components/Footer';
 import complaintImg from '../assets/complaint.jpg';
 import rosterImg from '../assets/RosterManagement.jpg';
 import configImg from '../assets/Configuration.jpg';
-import reportsImg from '../assets/Reports.jpg';
 import tasksImg from '../assets/MyTasks.jpg';
 import notificationImg from '../assets/Notification.jpg';
 import userManagementImg from '../assets/UserManagement.jpg';
-import attendanceImg from '../assets/AttendanceOT.jpg';
-import workflowImg from '../assets/Workflow.jpg';
-import loginImg from '../assets/Login.jpg';
-import contactImg from '../assets/contact.jpg';
-import pendingImg from '../assets/PendingAssignments.jpg';
+import pendingAssignmentsImg from '../assets/PendingAssignments.jpg';
 
 // Add imports for the new images
 import newBgImg from '../assets/newbg.jpg';
@@ -54,13 +49,6 @@ const modules = [
     description: 'Efficiently capture and manage customer complaints with our streamlined workflow system.'
   },
   { 
-    name: 'Workflow', 
-    img: workflowImg, 
-    path: '/workflow', 
-    color: '#8B5CF6',
-    description: 'Automate and optimize your business processes with customizable workflow solutions.'
-  },
-  { 
     name: 'Roster Management', 
     img: rosterImg, 
     path: '/roster', 
@@ -75,13 +63,6 @@ const modules = [
     description: 'Control access and permissions with our comprehensive user management system.'
   },
   { 
-    name: 'Attendance', 
-    img: attendanceImg, 
-    path: '/attendance', 
-    color: '#EF4444',
-    description: 'Track employee attendance and overtime with our advanced monitoring system.'
-  },
-  { 
     name: 'Configuration', 
     img: configImg, 
     path: '/configuration', 
@@ -94,13 +75,6 @@ const modules = [
     path: '/dashboard', 
     color: '#EC4899',
     description: 'Get real-time insights and analytics through our comprehensive dashboard.'
-  },
-  { 
-    name: 'Reporting', 
-    img: reportsImg, 
-    path: '/reporting', 
-    color: '#06B6D4',
-    description: 'Generate detailed reports and gain valuable insights from your data.'
   },
   { 
     name: 'View My Tasks', 
@@ -125,7 +99,7 @@ const modules = [
   },
   { 
     name: 'All Assignments', 
-    img: reportsImg, 
+    img: pendingAssignmentsImg, 
     path: '/all-assignments', 
     color: '#F43F5E',
     description: 'Overview all assignments and track progress across your organization.'
@@ -406,69 +380,63 @@ const styles = {
 
 // Function to get modern SVG icons for each module
 const getModuleIcon = (moduleName, color) => {
-  const iconStyle = {
-    width: '30px',
-    height: '30px',
-    color: color,
-  };
-
   switch (moduleName) {
     case 'Complaint Onboard':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
     case 'Workflow':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M4 6H20M4 12H20M4 18H11\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
     case 'Roster Management':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
     case 'User Management':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z\" stroke=\"currentColor\" stroke-width=\"2\"/>
-          <path d=\"M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z\" stroke=\"currentColor\" stroke-width=\"2\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2"/>
         </svg>`;
     case 'Attendance':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <circle cx=\"12\" cy=\"12\" r=\"9\" stroke=\"currentColor\" stroke-width=\"2\"/>
-          <path d=\"M12 6V12L16 14\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
     case 'Configuration':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M10.3246 4.31731C10.751 2.5609 13.249 2.5609 13.6754 4.31731C13.9508 5.45193 15.2142 5.99038 16.224 5.38285C17.7405 4.46744 19.5329 6.25977 18.6175 7.77634C18.0099 8.78612 18.5484 10.0495 19.683 10.3249C21.4394 10.7513 21.4394 13.2493 19.683 13.6756C18.5484 13.951 18.01 15.2144 18.6175 16.2242C19.5329 17.7407 17.7405 19.5331 16.224 18.6177C15.2142 18.0101 13.9508 18.5486 13.6754 19.6832C13.249 21.4396 10.751 21.4396 10.3246 19.6832C10.0492 18.5486 8.7858 18.0101 7.77602 18.6177C6.25945 19.5331 4.46708 17.7407 5.38251 16.2242C5.99004 15.2144 5.45159 13.951 4.31697 13.6756C2.56056 13.2492 2.56056 10.7512 4.31697 10.3249C5.45159 10.0495 5.98999 8.78612 5.38251 7.77634C4.46708 6.25977 6.25945 4.46744 7.77602 5.38285C8.7858 5.99038 10.0492 5.45193 10.3246 4.31731Z\" stroke=\"currentColor\" stroke-width=\"2\"/>
-          <circle cx=\"12\" cy=\"12\" r=\"3\" stroke=\"currentColor\" stroke-width=\"2\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10.3246 4.31731C10.751 2.5609 13.249 2.5609 13.6754 4.31731C13.9508 5.45193 15.2142 5.99038 16.224 5.38285C17.7405 4.46744 19.5329 6.25977 18.6175 7.77634C18.0099 8.78612 18.5484 10.0495 19.683 10.3249C21.4394 10.7513 21.4394 13.2493 19.683 13.6756C18.5484 13.951 18.01 15.2144 18.6175 16.2242C19.5329 17.7407 17.7405 19.5331 16.224 18.6177C15.2142 18.0101 13.9508 18.5486 13.6754 19.6832C13.249 21.4396 10.751 21.4396 10.3246 19.6832C10.0492 18.5486 8.7858 18.0101 7.77602 18.6177C6.25945 19.5331 4.46708 17.7407 5.38251 16.2242C5.99004 15.2144 5.45159 13.951 4.31697 13.6756C2.56056 13.2492 2.56056 10.7512 4.31697 10.3249C5.45159 10.0495 5.98999 8.78612 5.38251 7.77634C4.46708 6.25977 6.25945 4.46744 7.77602 5.38285C8.7858 5.99038 10.0492 5.45193 10.3246 4.31731Z" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
         </svg>`;
     case 'Dashboard':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-          <path d=\"M4 6H10V18H4V6ZM14 6H20V12H14V6ZM14 16H20V18H14V16Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6H10V18H4V6ZM14 6H20V12H14V6ZM14 16H20V18H14V16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>`;
     case 'Reporting':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M9 17V11M15 17V7M3 21H21M3 3H21V21H3V3Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 17V11M15 17V7M3 21H21M3 3H21V21H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>`;
     case 'View My Tasks':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>`;
     case 'Main Assignment':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M12 6V12L16 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 6V12L16 14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>`;
     case 'Sub Assignment':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M4 21V15M4 9V3M20 21V15M20 9V3M4 15H12M4 9H12M12 15V9M20 15H12M20 9H12\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 21V15M4 9V3M20 21V15M20 9V3M4 15H12M4 9H12M12 15V9M20 15H12M20 9H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>`;
     case 'All Assignments':
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
-            <path d=\"M9 12H15M9 16H13\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5V3C9 1.89543 9.89543 1 11 1H13C14.1046 1 15 1.89543 15 3V5M9 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 12H15M9 16H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>`;
     default:
-      return `<svg style=\"width:30px;height:30px;color:${color};\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-            <path d=\"M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>
-          </svg>`;
+      return `<svg style="width:30px;height:30px;color:${color};" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12H15M12 9V15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
   }
 };
 
@@ -486,7 +454,7 @@ const HomeWithSlider = () => {
     }, 5000);
     
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);

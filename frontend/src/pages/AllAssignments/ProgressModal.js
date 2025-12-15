@@ -1,6 +1,5 @@
 import React from 'react';
 import './ProgressModal.css';
-import { FaChevronDown } from 'react-icons/fa';
 
 export default function ProgressModal({ assignment, onClose }) {
   if (!assignment) return null;

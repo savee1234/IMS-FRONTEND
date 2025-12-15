@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
-import Sidebar from '../components/Sidebar';
+import React, { useState, useEffect } from 'react';
+import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
@@ -24,6 +24,7 @@ const AllAssignments = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [userNames, setUserNames] = useState({});
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -43,7 +44,24 @@ const AllAssignments = () => {
     };
 
     fetchAssignments();
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch('http://localhost:44354/api/user-management');
+      if (!res.ok) throw new Error('Failed to fetch users');
+      const data = await res.json();
+      // Build quick lookup by id
+      const map = {};
+      data.forEach(u => {
+        if (u && u._id) map[u._id] = u.userName || u.name || 'Unknown';
+      });
+      setUserNames(map);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+    }
+  };
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -94,155 +112,150 @@ const AllAssignments = () => {
   };
 
   return (
-    <div className="ma-wrapper">
-      <Sidebar />
-      <div className="ma-content">
-        <div className="ma-header">
-          <h1>All Assignments</h1>
-        </div>
+    <div className="complaint-onboard-wrapper assignments-page">
+      <Navbar />
+      <div className="complaint-onboard-background" />
 
-        <div className="ma-filter-card">
-          <div className="ma-filter-group">
-            <label className="ma-label">Employee</label>
-            <select
-              className="ma-select"
-              value={filters.employee}
-              onChange={(e) => handleChange('employee', e.target.value)}
-            >
-              <option value="">Select Employees</option>
-              <option value="john.doe">John Doe</option>
-              <option value="jane.smith">Jane Smith</option>
-            </select>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>All Assignments</h1>
+            </div>
           </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">Status</label>
-            <select
-              className="ma-select"
-              value={filters.status}
-              onChange={(e) => handleChange('status', e.target.value)}
-            >
-              <option value="">Select Status</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-          </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">From Date</label>
-            <input
-              type="date"
-              value={filters.fromDate}
-              onChange={(e) => handleChange('fromDate', e.target.value)}
-              className="ma-input"
-            />
-          </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">To Date</label>
-            <input
-              type="date"
-              value={filters.toDate}
-              onChange={(e) => handleChange('toDate', e.target.value)}
-              className="ma-input"
-            />
-          </div>
-          <button type="button" onClick={handleSubmit} className="ma-btn-submit">Submit</button>
-        </div>
 
-        <div className="ma-table-card">
-          <div className="ma-search-bar">
-            <FaSearch className="ma-search-icon" />
+          <form onSubmit={handleSubmit} className="config-form">
+            <div className="form-grid assignments-form-grid">
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => handleChange('employee', e.target.value)}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="john.doe">John Doe</option>
+                  <option value="jane.smith">Jane Smith</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => handleChange('status', e.target.value)}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => handleChange('fromDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => handleChange('toDate', e.target.value)}
+                  className="input"
+                />
+              </Field>
+            </div>
+            <div className="config-actions">
+              <button type="submit" className="config-btn-primary">Submit</button>
+            </div>
+          </form>
+
+          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
             <input
-              type="text"
-              placeholder="Search assignments"
+              placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="ma-search-input"
+              className="input"
             />
+          </Field>
+
+          <div className="config-card">
+            {loading && (
+              <p style={{ textAlign: 'center', padding: '1rem' }}>Loading assignments...</p>
+            )}
+            {error && (
+              <p style={{ textAlign: 'center', padding: '1rem', color: 'red' }}>Error: {error}</p>
+            )}
+            {!loading && !error && (
+              <table className="config-table">
+                <thead>
+                  <tr>
+                    <th>Assignment Type</th>
+                    <th>Assigned By</th>
+                    <th>Assigned To</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assignments.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.Assignment}</td>
+                      <td>{item.assignedBy}</td>
+                      <td>{
+                        item.assignedTo && typeof item.assignedTo === 'object'
+                          ? (item.assignedTo.userName || item.assignedTo.name || userNames[item.assignedTo._id] || 'Unassigned')
+                          : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned')
+                      }</td>
+                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
+                      <td>
+                        <div className="config-table-actions">
+                          <button
+                            title="View"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openView(item)}
+                          >
+                            <FaEye size={16} />
+                          </button>
+                          <button
+                            title="Update"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openStatus(item)}
+                          >
+                            <FaEdit size={16} />
+                          </button>
+                          <button
+                            title="Progress"
+                            type="button"
+                            className="config-icon-btn"
+                            onClick={() => openProgress(item)}
+                          >
+                            <FaTasks size={16} />
+                          </button>
+                          <button title="Delete" type="button" className="config-icon-btn">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {assignments.length === 0 && (
+                    <tr>
+                      <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
 
-          <div className="ma-table-container">
-            <table className="ma-table">
-              <thead>
-                <tr>
-                  <th>REQUEST REFERENCE</th>
-                  <th>ENTERED DATE & TIME</th>
-                  <th>ASSIGNED BY</th>
-                  <th>ASSIGNED TO</th>
-                  <th>REMARK</th>
-                  <th>ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ color: '#0f172a' }}>25-10-23-0001</td>
-                  <td>
-                    <div>10/23/2025</div>
-                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>12:24:44 PM</div>
-                  </td>
-                  <td style={{ color: '#0f172a' }}>Romaine Murcott</td>
-                  <td style={{ color: '#0f172a' }}>Romaine Murcott</td>
-                  <td style={{ color: '#0f172a' }}>No remarks</td>
-                  <td>
-                    <div className="ma-actions">
-                      <button
-                        title="View"
-                        type="button"
-                        className="ma-btn-action ma-btn-view"
-                        onClick={() => openView({
-                          requestRef: '25-10-23-0001',
-                          categoryType: 'INTERNAL',
-                          documentSubject: 'gdfgd gdfgf g',
-                          mediumSource: '657645374',
-                          projectType: 'Type 1',
-                          contactPerson: 'Chandima Dunuwila',
-                          criticality: 'MEDIUM',
-                          documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
-                          medium: 'Call Centre (Test)',
-                          organization: 'DEF',
-                          projectName: 'NCPA',
-                          remarks: 'd fd gdfg fd',
-                          mainAssignment: [
-                            { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
-                          ],
-                          subAssignments: [
-                            { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
-                            { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
-                          ]
-                        })}
-                      >
-                        <FaFileAlt color="#ffffff" />
-                      </button>
-                      <button
-                        title="Update"
-                        type="button"
-                        className="ma-btn-action ma-btn-edit"
-                        onClick={() => {
-                          openStatus({
-                            id: '25-10-23-0001',
-                            requestRef: '25-10-23-0001',
-                            contactPerson: 'Chandima Dunuwila'
-                          });
-                        }}
-                      >
-                        <FaHistory color="#ffffff" />
-                      </button>
-                      <button
-                        title="Delete"
-                        type="button"
-                        className="ma-btn-action ma-btn-delete"
-                      >
-                        <FaTrash color="#ffffff" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="ma-footer-row">
-            <button className="ma-pagination-btn">&lt; Previous</button>
-            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page 1 of 1</span>
-            <button className="ma-pagination-btn next">Next &gt;</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
+            <button type="button" className="config-btn-secondary">Previous</button>
+            <button type="button" className="config-btn-primary">Next</button>
+            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page 1 of 1</span>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTimes, FaBuilding, FaIdCard, FaTag, FaUser, FaCalendarAlt } from 'react-icons/fa';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FaEye, FaEdit, FaTrash, FaTimes, FaBuilding, FaIdCard, FaTag, FaUser, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 
 const Organization = () => {
   const [orgFormData, setOrgFormData] = useState({
@@ -15,6 +15,8 @@ const Organization = () => {
   const [editingId, setEditingId] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ organizationType: '', fromDate: '', toDate: '' });
   
   // API Base URL
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
@@ -29,7 +31,7 @@ const Organization = () => {
     }));
   };
 
-  const fetchOrganizations = async () => {
+  const fetchOrganizations = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -51,11 +53,11 @@ const Organization = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL]);
 
   useEffect(() => {
     fetchOrganizations();
-  }, []);
+  }, [fetchOrganizations]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -557,7 +559,54 @@ const Organization = () => {
         </form>
       </div>
 
+      <div className="conf-card" style={{ marginTop: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Organization Type</label>
+            <select
+              className="conf-input"
+              value={filters.organizationType}
+              onChange={(e) => setFilters(prev => ({ ...prev, organizationType: e.target.value }))}
+            >
+              <option value="">All</option>
+              <option value="Type 1">Type 1</option>
+              <option value="Type 2">Type 2</option>
+              <option value="Type 3">Type 3</option>
+            </select>
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">From Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.fromDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+            />
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">To Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.toDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+            />
+          </div>
+          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
+        </div>
+      </div>
+
       <div className="config-card" style={{ marginTop: '1rem' }}>
+        <div className="conf-search-container">
+          <FaSearch className="conf-search-icon" />
+          <input
+            type="text"
+            className="conf-search-input"
+            placeholder="Search organizations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <table className="config-table">
           <thead>
             <tr>
@@ -582,7 +631,20 @@ const Organization = () => {
                 </td>
               </tr>
             ) : (
-              organizations.map(org => (
+              organizations
+                .filter(org => {
+                  const matchesType = !filters.organizationType || org.organizationType === filters.organizationType;
+                  const createdDate = org.createdDtm ? new Date(org.createdDtm) : null;
+                  const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+                  const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+                  const q = searchTerm.toLowerCase();
+                  const matchesSearch =
+                    (org.organization || '').toLowerCase().includes(q) ||
+                    (org.organizationType || '').toLowerCase().includes(q) ||
+                    (org.createdByName || '').toLowerCase().includes(q);
+                  return matchesType && fromOk && toOk && matchesSearch;
+                })
+                .map(org => (
                 <tr key={org._id}>
                   <td>{org.organizationId || ''}</td>
                   <td>{org.organization || ''}</td>
@@ -608,6 +670,15 @@ const Organization = () => {
             )}
           </tbody>
         </table>
+        <div className="conf-pagination">
+          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+            &lt; Previous
+          </button>
+          <span className="conf-page-info">Page 1 of 1</span>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+            Next &gt;
+          </button>
+        </div>
       </div>
 
       <OrganizationDetailsModal />

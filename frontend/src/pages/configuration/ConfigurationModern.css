@@ -393,12 +393,12 @@ body {
 }
 
 .conf-btn-delete {
-  background-color: #ecfdf5;
-  color: #10b981;
+  background-color: #fef2f2; /* light red, matches Tailwind red-50 */
+  color: var(--conf-danger);
 }
 
 .conf-btn-delete:hover {
-  background-color: #d1fae5;
+  background-color: #fee2e2; /* slightly darker red, matches Tailwind red-100 */
 }
 
 /* Pagination */

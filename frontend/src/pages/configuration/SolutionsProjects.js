@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 
 const SolutionsProjects = () => {
   const [solutionFormData, setSolutionFormData] = useState({
@@ -15,11 +15,8 @@ const SolutionsProjects = () => {
   const [error, setError] = useState('');
 
   // New state for solution management
-  const [showSolutionForm, setShowSolutionForm] = useState(false);
   const [newSolution, setNewSolution] = useState('');
   const [newSolutionType, setNewSolutionType] = useState('');
-  const [availableSolutions, setAvailableSolutions] = useState([]);
-  const [availableSolutionTypes, setAvailableSolutionTypes] = useState([]);
 
   const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
@@ -44,13 +41,12 @@ const SolutionsProjects = () => {
 
   useEffect(() => {
     fetchSolutions();
-  }, []);
+  }, [fetchSolutions]);
 
   const employees = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
   
   // Initialize with default values and allow dynamic updates
   const [solutionTypes, setSolutionTypes] = useState(['Web Development', 'Mobile App', 'Database', 'API Integration']);
-  const [solutions, setSolutions] = useState(['Customer Portal', 'Inventory System', 'Payment Gateway', 'Analytics Dashboard']);
 
   // Define solution type to solutions mapping
   const [solutionTypeToSolutionsMap, setSolutionTypeToSolutionsMap] = useState({
@@ -177,6 +173,8 @@ const SolutionsProjects = () => {
   // New functions for solution management
   const [newlyAddedSolutionType, setNewlyAddedSolutionType] = useState('');
   const [newlyAddedSolution, setNewlyAddedSolution] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ employee: '', solutionType: '', fromDate: '', toDate: '' });
 
   const handleAddSolutionType = () => {
     if (!newSolutionType.trim()) {
@@ -227,15 +225,8 @@ const SolutionsProjects = () => {
       return;
     }
     
-    // Add solution to the solutions state (global list)
     const newSol = newSolution.trim();
-    setSolutions(prev => {
-      if (!prev.includes(newSol)) {
-        return [...prev, newSol];
-      }
-      return prev;
-    });
-    
+ 
     // Add the new solution to the selected solution type
     const updatedMap = {
       ...solutionTypeToSolutionsMap,
@@ -252,20 +243,7 @@ const SolutionsProjects = () => {
     alert(`Solution "${newSol}" has been added to solution type "${newSolutionType}"!`);
   };
 
-  const handleDeleteSolution = (solutionToDelete) => {
-    if (window.confirm(`Are you sure you want to delete "${solutionToDelete}"?`)) {
-      setSolutions(prev => prev.filter(sol => sol !== solutionToDelete));
-      
-      // Remove solution from mapping
-      const updatedMap = {...solutionTypeToSolutionsMap};
-      Object.keys(updatedMap).forEach(type => {
-        updatedMap[type] = updatedMap[type].filter(sol => sol !== solutionToDelete);
-      });
-      setSolutionTypeToSolutionsMap(updatedMap);
-      
-      alert('Solution deleted successfully!');
-    }
-  };
+ 
 
   const handleDeleteSolutionType = (typeToDelete) => {
     if (window.confirm(`Are you sure you want to delete "${typeToDelete}"?`)) {
@@ -285,13 +263,7 @@ const SolutionsProjects = () => {
     setNewSolutionType('');
   };
 
-  const handleResetSolutionType = () => {
-    setNewSolutionType('');
-  };
-
-  const handleResetSolution = () => {
-    setNewSolution('');
-  };
+ 
 
   // Get solutions based on selected solution type
   const getSolutionsForType = (solutionType) => {
@@ -307,6 +279,52 @@ const SolutionsProjects = () => {
       {error && (
         <div className="alert-message error">{error}</div>
       )}
+
+      <div className="conf-card">
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Employee</label>
+            <select
+              className="conf-input"
+              value={filters.employee}
+              onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
+            >
+              <option value="">All</option>
+              {employees.map(emp => <option key={emp} value={emp}>{emp}</option>)}
+            </select>
+          </div>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Solution Type</label>
+            <select
+              className="conf-input"
+              value={filters.solutionType}
+              onChange={(e) => setFilters(prev => ({ ...prev, solutionType: e.target.value }))}
+            >
+              <option value="">All</option>
+              {solutionTypes.map(type => <option key={type} value={type}>{type}</option>)}
+            </select>
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">From Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.fromDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+            />
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">To Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.toDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+            />
+          </div>
+          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
+        </div>
+      </div>
 
       <form onSubmit={handleSolutionSubmit} className="config-form">
         <div className="form-grid">
@@ -794,6 +812,16 @@ const SolutionsProjects = () => {
       </div>
 
       <div className="config-card" style={{ marginTop: '1rem' }}>
+        <div className="conf-search-container">
+          <FaSearch className="conf-search-icon" />
+          <input
+            type="text"
+            className="conf-search-input"
+            placeholder="Search solutions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <table className="config-table">
           <thead>
             <tr>
@@ -813,7 +841,22 @@ const SolutionsProjects = () => {
                 </td>
               </tr>
             ) : (
-              solutionResponsibleData.map(item => (
+              solutionResponsibleData
+                .filter(item => {
+                  const matchesEmp = !filters.employee || item.employee === filters.employee;
+                  const matchesType = !filters.solutionType || item.solutionType === filters.solutionType;
+                  const createdDate = item.createdDtm ? new Date(item.createdDtm) : null;
+                  const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+                  const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+                  const q = searchTerm.toLowerCase();
+                  const matchesSearch =
+                    (item.employee || '').toLowerCase().includes(q) ||
+                    (item.solutionType || '').toLowerCase().includes(q) ||
+                    (item.solution || '').toLowerCase().includes(q) ||
+                    (item.createdByName || '').toLowerCase().includes(q);
+                  return matchesEmp && matchesType && fromOk && toOk && matchesSearch;
+                })
+                .map(item => (
                 <tr key={item._id}>
                   <td>
                     {item.employee}
@@ -851,6 +894,15 @@ const SolutionsProjects = () => {
             )}
           </tbody>
         </table>
+        <div className="conf-pagination">
+          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+            &lt; Previous
+          </button>
+          <span className="conf-page-info">Page 1 of 1</span>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+            Next &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

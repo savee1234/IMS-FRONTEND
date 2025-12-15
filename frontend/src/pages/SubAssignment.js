@@ -1,47 +1,52 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const SubAssignment = () => {
-  const navigate = useNavigate();
+  
 
-  const data = [
-    {
-      requestReference: '25-11-10-0002',
-      enteredDate: '11/10/2025',
-      enteredTime: '10:16:01 AM',
-      assignedByName: 'Romaine Murcott',
-      assignedByDesignation: 'TTO',
-      assignedToName: 'Piumi Kaushalya',
-      assignedToDesignation: 'TTO',
-      remarks: '',
-    },
-    {
-      requestReference: '25-11-10-0003',
-      enteredDate: '11/10/2025',
-      enteredTime: '11:30:45 AM',
-      assignedByName: 'John Smith',
-      assignedByDesignation: 'Manager',
-      assignedToName: 'Sarah Johnson',
-      assignedToDesignation: 'Engineer',
-      remarks: 'Urgent follow-up required',
-    },
-    {
-      requestReference: '25-11-10-0004',
-      enteredDate: '11/10/2025',
-      enteredTime: '02:15:33 PM',
-      assignedByName: 'Emily Davis',
-      assignedByDesignation: 'Supervisor',
-      assignedToName: 'Michael Brown',
-      assignedToDesignation: 'Technician',
-      remarks: 'Awaiting customer response',
-    },
-  ];
-
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchSubAssignments = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('http://localhost:44354/api/sub-assignments');
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const result = await response.json();
+        
+        // Map API response to table structure
+        const mapped = result.map(item => ({
+          requestReference: item._id || 'N/A',
+          enteredDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A',
+          enteredTime: item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'N/A',
+          assignedByName: item.assignedBy || 'N/A',
+          assignedByDesignation: '',
+          assignedToName: item.assignedTo?.userName || 'N/A',
+          assignedToDesignation: '',
+          assignedToContact: item.assignedTo?.contactNumber || '',
+          assignedToStatus: item.assignedTo?.activeStatus ? 'Active' : 'Inactive',
+          remarks: '',
+          rawData: item
+        }));
+        
+        setData(mapped);
+      } catch (err) {
+        console.error('Failed to fetch sub-assignments:', err);
+        setError(err.message || 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubAssignments();
+  }, []);
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
@@ -50,136 +55,171 @@ const SubAssignment = () => {
   });
   const [search, setSearch] = useState('');
 
-  const handleChange = (field, value) => {
-    setFilters(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const styles = {
+    pagination: { display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' },
+    pageInfo: { marginLeft: '0.5rem', color: 'var(--text-primary)' }
   };
 
   return (
-    <div className="ma-wrapper">
-      <Sidebar />
-      <div className="ma-content">
-        <div className="ma-header">
-          <h1>Sub Assignments</h1>
-        </div>
+    <div className="complaint-onboard-wrapper assignments-page">
+      <Navbar />
+      <div className="complaint-onboard-background" />
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>Sub Assignments</h1>
+            </div>
+          </div>
 
-        <div className="ma-filter-card">
-          <div className="ma-filter-group">
-            <label className="ma-label">Employee</label>
-            <select
-              className="ma-select"
-              value={filters.employee}
-              onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
-            >
-              <option value="">Select Employees</option>
-              <option value="romaine.murcott">Romaine Murcott</option>
-              <option value="john.smith">John Smith</option>
-              <option value="sarah.johnson">Sarah Johnson</option>
-            </select>
-          </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">Status</label>
-            <select
-              className="ma-select"
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-            >
-              <option value="">Select Status</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-          </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">From Date</label>
-            <input
-              type="date"
-              value={filters.fromDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-              className="ma-input"
-            />
-          </div>
-          <div className="ma-filter-group">
-            <label className="ma-label">To Date</label>
-            <input
-              type="date"
-              value={filters.toDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-              className="ma-input"
-            />
-          </div>
-          <button type="button" className="ma-btn-submit">Submit</button>
-        </div>
+          <form onSubmit={(e) => e.preventDefault()} className="config-form">
+            <div className="form-grid assignments-form-grid">
+              <Field label="Employee">
+                <select
+                  className="input"
+                  value={filters.employee}
+                  onChange={(e) => setFilters(prev => ({ ...prev, employee: e.target.value }))}
+                >
+                  <option value="">Select Employees</option>
+                  <option value="romaine.murcott">Romaine Murcott</option>
+                  <option value="john.smith">John Smith</option>
+                  <option value="sarah.johnson">Sarah Johnson</option>
+                </select>
+              </Field>
+              <Field label="Status">
+                <select
+                  className="input"
+                  value={filters.status}
+                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                >
+                  <option value="">Select Status</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </Field>
+              <Field label="From Date">
+                <input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+              <Field label="To Date">
+                <input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+                  className="input"
+                />
+              </Field>
+            </div>
+            <div className="config-actions">
+              <button type="submit" className="config-btn-primary">Submit</button>
+            </div>
+          </form>
 
-        <div className="ma-table-card">
-          <div className="ma-search-bar">
-            <FaSearch className="ma-search-icon" />
+          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
             <input
-              type="text"
-              placeholder="Search assignments"
+              placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="ma-search-input"
+              className="input"
             />
-          </div>
+          </Field>
 
-          <div className="ma-table-container">
-            <table className="ma-table">
+          <div className="config-card">
+            <table className="config-table">
               <thead>
                 <tr>
-                  <th>REQUEST REFERENCE</th>
-                  <th>ENTERED DATE & TIME</th>
-                  <th>ASSIGNED BY</th>
-                  <th>ASSIGNED BY DESIGNATION</th>
-                  <th>ASSIGNED TO</th>
-                  <th>ASSIGNED TO DESIGNATION</th>
-                  <th>REMARK</th>
-                  <th>ACTIONS</th>
+                  <th>Request Reference</th>
+                  <th>Entered Date & Time</th>
+                  <th>Assigned By</th>
+                  <th>Assigned To</th>
+                  <th>Remarks</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td style={{ color: '#0f172a' }}>{item.requestReference}</td>
-                    <td>
-                      <div>{item.enteredDate}</div>
-                      <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{item.enteredTime}</div>
-                    </td>
-                    <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByName}</div></td>
-                    <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedByDesignation}</div></td>
-                    <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedToName}</div></td>
-                    <td><div style={{ color: '#0f172a', fontWeight: 400 }}>{item.assignedToDesignation}</div></td>
-                    <td style={{ color: '#0f172a' }}>{item.remarks || <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>}</td>
-                    <td>
-                      <div className="ma-actions">
-                        <button className="ma-btn-action ma-btn-view" title="View">
-                          <FaFileAlt color="#ffffff" />
-                        </button>
-                        <button className="ma-btn-action ma-btn-edit" title="Update">
-                          <FaHistory color="#ffffff" />
-                        </button>
-                        <button className="ma-btn-action ma-btn-delete" title="Delete">
-                          <FaTrash color="#ffffff" />
-                        </button>
-                      </div>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>
+                      Loading sub-assignments...
                     </td>
                   </tr>
-                ))}
+                ) : error ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#dc2626' }}>
+                      Error: {error}
+                    </td>
+                  </tr>
+                ) : data.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+                      No sub-assignments found
+                    </td>
+                  </tr>
+                ) : (
+                  data.map((item, index) => (
+                    <tr key={item.rawData?._id || index}>
+                      <td>{item.requestReference}</td>
+                      <td>
+                        <div>{item.enteredDate}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.enteredTime}</div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedByName}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedByDesignation}</div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.6 }}>{item.assignedToName}</div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 400 }}>{item.assignedToDesignation}</div>
+                      </td>
+                      <td>
+                        {item.remarks ? item.remarks : (
+                          <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>No remarks</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="config-table-actions">
+                          <button className="config-icon-btn" title="View" type="button">
+                            <FaEye size={16} />
+                          </button>
+                          <button className="config-icon-btn" title="Update" type="button">
+                            <FaEdit size={16} />
+                          </button>
+                          <button className="config-icon-btn" title="Delete" type="button">
+                            <FaTrash size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
 
-          <div className="ma-footer-row">
-            <button className="ma-pagination-btn">&lt; Previous</button>
-            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page {currentPage} of 1</span>
-            <button className="ma-pagination-btn next">Next &gt;</button>
+          <div style={styles.pagination}>
+            <button type="button" className="config-btn-secondary"><FaChevronLeft /> Previous</button>
+            <button type="button" className="config-btn-primary">Next <FaChevronRight /></button>
+            <span style={styles.pageInfo}>Page {currentPage} of 1</span>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
+
+function Field({ label, children, className = "", style }) {
+  return (
+    <div className={`form-field ${className}`} style={style}>
+      <label className="field-label">{label}</label>
+      <div className="field-control">{children}</div>
+    </div>
+  );
+}
+
 export default SubAssignment;

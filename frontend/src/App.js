@@ -5,20 +5,15 @@ import { isAuthenticated } from './utils/auth';
 
 
 import Login from './pages/Login';
-import Home from './pages/Home';
 import HomeModern from './pages/HomeModern';
-import Complaint from './pages/Complaint';
 import { ComplaintForm } from './pages/complaint/index.js';
 import RosterManagement from './pages/rostermanagement/RosterManagement';
 import RosterView from './pages/rostermanagement/RosterView';
 import UserManagement from './pages/usermanagement/UserManagement';   // Main UserManagement page
 
 import Configuration from './pages/configuration/Configuration';
-import Reports from './pages/Reports';
-import Attendance from './pages/AttendanceOT';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';
-import Workflow from './pages/Workflow';
 
 import SelectAssigner from './pages/SelectAssigner';
 import MyTasks from './pages/MyTasks';
@@ -49,11 +44,8 @@ function App() {
         <Route path="/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
         {/* Removed legacy user module front collapses and related pages */}
 
-        <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
         <Route path="/configuration" element={<PrivateRoute><Configuration /></PrivateRoute>} />
-        <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="/workflow" element={<PrivateRoute><Workflow /></PrivateRoute>} />
         <Route path="/select-assigner" element={<PrivateRoute><SelectAssigner /></PrivateRoute>} />
         <Route path="/my-tasks" element={<PrivateRoute><MyTasks /></PrivateRoute>} />
         <Route path="/main-assignment" element={<PrivateRoute><MainAssignment /></PrivateRoute>} />

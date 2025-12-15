@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { FaSearch, FaBell, FaCog, FaArrowRight, FaThLarge, FaCheckSquare, FaCalendarAlt, FaUsers, FaClock, FaChartBar, FaFileAlt } from 'react-icons/fa';
+import { Search, Bell, Settings, ArrowRight, CheckSquare, Calendar, Users, Settings as ConfigIcon, BarChart, ClipboardList, ClipboardCheck, List } from 'lucide-react';
 
 const HomeModern = () => {
   const navigate = useNavigate();
@@ -15,14 +15,6 @@ const HomeModern = () => {
       color: '#3b82f6', // blue
       bgColor: '#eff6ff',
       description: 'Efficiently capture and manage customer complaints'
-    },
-    {
-      name: 'Workflow',
-      path: '/workflow',
-      icon: <FaThLarge size={24} />,
-      color: '#8b5cf6', // purple
-      bgColor: '#f5f3ff',
-      description: 'Automate and optimize your business processes'
     },
     {
       name: 'Roster Management',
@@ -41,14 +33,6 @@ const HomeModern = () => {
       description: 'Control access and permissions'
     },
     {
-      name: 'Attendance',
-      path: '/attendance',
-      icon: <FaClock size={24} />,
-      color: '#ef4444', // red
-      bgColor: '#fef2f2',
-      description: 'Track employee attendance and overtime'
-    },
-    {
       name: 'Configuration',
       path: '/configuration',
       icon: <FaCog size={24} />,
@@ -65,20 +49,36 @@ const HomeModern = () => {
       description: 'Get real-time insights and analytics'
     },
     {
-      name: 'Reporting',
-      path: '/reporting',
-      icon: <FaFileAlt size={24} />,
-      color: '#06b6d4', // cyan
-      bgColor: '#ecfeff',
-      description: 'Generate detailed reports and insights'
-    },
-    {
       name: 'View My Tasks',
       path: '/my-tasks',
       icon: <FaCheckSquare size={24} />,
       color: '#8b5cf6', // violet
       bgColor: '#f5f3ff',
       description: 'Monitor and manage your assigned tasks'
+    },
+    {
+      name: 'Main Assignment',
+      path: '/main-assignment',
+      icon: <ClipboardCheck size={24} />,
+      color: '#f97316', // orange
+      bgColor: '#fff7ed',
+      description: 'Handle primary assignments and responsibilities'
+    },
+    {
+      name: 'Sub Assignment',
+      path: '/sub-assignment',
+      icon: <List size={24} />,
+      color: '#14b8a6', // teal
+      bgColor: '#f0fdfa',
+      description: 'Manage sub-tasks and delegated responsibilities'
+    },
+    {
+      name: 'All Assignments',
+      path: '/all-assignments',
+      icon: <ClipboardList size={24} />,
+      color: '#f43f5e', // rose
+      bgColor: '#fff1f2',
+      description: 'Overview all assignments and track progress'
     }
   ];
 
@@ -188,7 +188,7 @@ const styles = {
   pageContainer: {
     display: 'flex',
     minHeight: '100vh',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#eff6ff',
     fontFamily: "'Inter', 'Poppins', sans-serif",
   },
   mainContent: {

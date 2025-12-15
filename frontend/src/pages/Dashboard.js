@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import './Dashboard.css';
@@ -9,11 +9,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
-  useEffect(() => {
-    fetchComplaints();
-  }, []);
-
-  const fetchComplaints = async () => {
+  const fetchComplaints = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/complaints`);
@@ -26,7 +22,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL]);
+
+  useEffect(() => {
+    fetchComplaints();
+  }, [fetchComplaints]);
 
   // Filter complaints by selected month
   const getFilteredComplaints = () => {

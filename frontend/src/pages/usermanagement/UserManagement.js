@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+ 
 import Sidebar from '../../components/Sidebar';
 import Footer from '../../components/Footer';
 import '../complaint/ComplaintForm.css';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
-import { FaEye, FaUserCog, FaSearch } from 'react-icons/fa';
+import { FaEye, FaEdit, FaSearch } from 'react-icons/fa';
 
 const UserManagement = () => {
-  const navigate = useNavigate();
+ 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -43,7 +43,7 @@ const UserManagement = () => {
           callingName: u.callingName || u.CallingName || u.calling_name || ''
         }));
 
-        setEmployees(mapped.slice(0, 3));
+        setEmployees(mapped);
       } catch (err) {
         console.error('Failed to load user-management:', err);
         setEmployeesError(err.message || String(err));
@@ -97,18 +97,15 @@ const UserManagement = () => {
     return matchesSearch;
   });
 
-  
+  const [currentPage] = useState(1);
 
-  const handleClose = () => {
-    navigate('/');
-  };
 
   return (
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
         <div className="ma-header">
-          <h1>System Users</h1>
+          <h1>Users</h1>
         </div>
 
         <div className="ma-table-card">
@@ -127,44 +124,44 @@ const UserManagement = () => {
             <table className="ma-table">
               <thead>
                 <tr>
-                  <th>USER ID</th>
-                  <th>EMPLOYEE NAME</th>
-                  <th>DESIGNATION</th>
-                  <th>CONTACT NO.</th>
-                  <th>EMAIL ADDRESS</th>
-                  <th>LOCATION</th>
-                  <th>ACTIONS</th>
+                  <th>User ID</th>
+                  <th>Employee Name</th>
+                  <th>Designation</th>
+                  <th>Contact No.</th>
+                  <th>Email Address</th>
+                  <th>Location</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loadingEmployees ? (
                   <tr>
-                    <td colSpan={7} style={{ textAlign: 'center' }}>Loading employees...</td>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>Loading employees...</td>
                   </tr>
                 ) : employeesError ? (
                   <tr>
-                    <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c' }}>Error loading employees: {employeesError}</td>
+                    <td colSpan={7} style={{ textAlign: 'center', color: '#b91c1c', padding: '2rem' }}>Error loading employees: {employeesError}</td>
                   </tr>
                 ) : employees.length === 0 ? (
                   <tr>
-                    <td colSpan={7} style={{ textAlign: 'center' }}>No employees found.</td>
+                    <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>No employees found.</td>
                   </tr>
                 ) : (
                   filteredEmployees.map((employee, index) => (
                     <tr key={employee.id || index}>
-                      <td style={{ color: '#0f172a' }}>{employee.id}</td>
-                      <td style={{ color: '#0f172a' }}>{employee.name}</td>
-                      <td style={{ color: '#0f172a' }}>{employee.designation}</td>
-                      <td style={{ color: '#0f172a' }}>{employee.contact}</td>
-                      <td style={{ color: '#0f172a' }}>{employee.email || 'N/A'}</td>
-                      <td style={{ color: '#0f172a' }}>{employee.address || 'N/A'}</td>
+                      <td>{employee.id}</td>
+                      <td>{employee.name}</td>
+                      <td>{employee.designation}</td>
+                      <td>{employee.contact}</td>
+                      <td>{employee.email || 'N/A'}</td>
+                      <td>{employee.address || 'N/A'}</td>
                       <td>
                         <div className="ma-actions">
                           <button className="ma-btn-action ma-btn-view" title="View" onClick={() => handleViewEmployee(employee)}>
-                            <FaEye color="#ffffff" />
+                            <FaEye />
                           </button>
                           <button className="ma-btn-action ma-btn-edit" title="Update Privileges" onClick={() => handleUpdateEmployee(employee)}>
-                            <FaUserCog color="#ffffff" />
+                            <FaEdit />
                           </button>
                         </div>
                       </td>
@@ -176,9 +173,13 @@ const UserManagement = () => {
           </div>
 
           <div className="ma-footer-row">
-            <button className="ma-pagination-btn">&lt; Previous</button>
-            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page 1 of 1</span>
-            <button className="ma-pagination-btn next">Next &gt;</button>
+            <button className="ma-pagination-btn">
+              &lt; Previous
+            </button>
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page {currentPage} of 1</span>
+            <button className="ma-pagination-btn next">
+              Next &gt;
+            </button>
           </div>
         </div>
       </div>
@@ -199,25 +200,6 @@ const UserManagement = () => {
     </div>
   );
 };
-
-// Table Styles
-const tableHeaderStyle = {
-  padding: '0.85rem',
-  border: '1px solid #d1d5db',
-  textAlign: 'center',
-  fontWeight: '600',
-  color: 'white',
-  fontSize: '0.95rem'
-};
-
-const tableCellStyle = {
-  padding: '0.85rem',
-  border: '1px solid #d1d5db',
-  textAlign: 'center',
-  fontSize: '0.95rem',
-  color: '#374151'
-};
-
 
 export default UserManagement;
 

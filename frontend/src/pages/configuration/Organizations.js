@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTimes, FaUser, FaBuilding, FaEnvelope, FaMobile, FaPhone, FaIdCard, FaCalendarAlt } from 'react-icons/fa';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FaEye, FaEdit, FaTrash, FaUser, FaBuilding, FaEnvelope, FaMobile, FaPhone, FaIdCard, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 
 const Organizations = () => {
   const [orgFormData, setOrgFormData] = useState({
@@ -21,6 +21,8 @@ const Organizations = () => {
   const [editingId, setEditingId] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ organizationId: '', title: '', fromDate: '', toDate: '' });
 
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
 
@@ -53,7 +55,7 @@ const Organizations = () => {
   };
 
   // Fetch organizations for dropdown
-  const fetchOrganizations = async () => {
+  const fetchOrganizations = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/organizations`);
       const data = await response.json();
@@ -64,10 +66,10 @@ const Organizations = () => {
       console.error('Error fetching organizations:', error);
       setError('Failed to load organizations');
     }
-  };
+  }, [API_BASE_URL]);
 
   // Fetch organization contact persons
-  const fetchOrgContacts = async () => {
+  const fetchOrgContacts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/organization-contact-persons`);
@@ -83,13 +85,13 @@ const Organizations = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL]);
 
   // Load data on component mount
   useEffect(() => {
     fetchOrganizations();
     fetchOrgContacts();
-  }, []);
+  }, [fetchOrganizations, fetchOrgContacts]);
 
   const handleOrgInputChange = (e) => {
     const { name, value } = e.target;
@@ -595,6 +597,54 @@ const Organizations = () => {
         <div className="alert-message error">{error}</div>
       )}
 
+      <div className="conf-card" style={{ marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Organization</label>
+            <select
+              className="conf-input"
+              value={filters.organizationId}
+              onChange={(e) => setFilters(prev => ({ ...prev, organizationId: e.target.value }))}
+            >
+              <option value="">All</option>
+              {organizations.map(org => (
+                <option key={org._id} value={org._id}>{getOrganizationName(org)}</option>
+              ))}
+            </select>
+          </div>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Title</label>
+            <select
+              className="conf-input"
+              value={filters.title}
+              onChange={(e) => setFilters(prev => ({ ...prev, title: e.target.value }))}
+            >
+              <option value="">All</option>
+              {titles.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">From Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.fromDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+            />
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">To Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.toDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+            />
+          </div>
+          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
+        </div>
+      </div>
+
       <form onSubmit={handleOrgSubmit} className="config-form">
         <div className="form-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -714,6 +764,16 @@ const Organizations = () => {
       </form>
 
       <div className="config-card" style={{ marginTop: '1rem' }}>
+        <div className="conf-search-container">
+          <FaSearch className="conf-search-icon" />
+          <input
+            type="text"
+            className="conf-search-input"
+            placeholder="Search contacts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <table className="config-table">
           <thead>
             <tr>
@@ -754,7 +814,22 @@ const Organizations = () => {
                 </td>
               </tr>
             ) : (
-              orgContacts.map(contact => (
+              orgContacts
+                .filter(contact => {
+                  const orgId = contact.organizationId?._id || contact.organizationId;
+                  const matchesOrg = !filters.organizationId || orgId === filters.organizationId;
+                  const matchesTitle = !filters.title || contact.title === filters.title;
+                  const createdDate = contact.createdDtm ? new Date(contact.createdDtm) : null;
+                  const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+                  const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+                  const q = searchTerm.toLowerCase();
+                  const matchesSearch =
+                    getOrganizationName(contact).toLowerCase().includes(q) ||
+                    (contact.name || '').toLowerCase().includes(q) ||
+                    (contact.email || '').toLowerCase().includes(q);
+                  return matchesOrg && matchesTitle && fromOk && toOk && matchesSearch;
+                })
+                .map(contact => (
                 <tr key={contact._id}>
                   <td>
                     {getOrganizationName(contact)}
@@ -792,6 +867,15 @@ const Organizations = () => {
             )}
           </tbody>
         </table>
+        <div className="conf-pagination">
+          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+            &lt; Previous
+          </button>
+          <span className="conf-page-info">Page 1 of 1</span>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+            Next &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

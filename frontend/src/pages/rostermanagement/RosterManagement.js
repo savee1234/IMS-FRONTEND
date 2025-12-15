@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
+import "../complaint/ComplaintForm.css";
+import { FaEye } from "react-icons/fa";
  
 
 const employees = [
@@ -136,97 +138,22 @@ const RosterManagement = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper users-page assignments-page" style={{ minHeight: '100vh' }}>
+    <div className="ma-wrapper">
       <Sidebar />
-      <div className="complaint-onboard-background" />
-
-      <div className="content-wrapper" style={{
-        position: 'relative',
-        zIndex: 1,
-        padding: '1rem',
-        marginTop: '48px',
-        maxWidth: '1720px',
-        marginLeft: '400px',
-        marginRight: 'auto'
-      }}>
-        <div className="config-content" style={{
-          background: 'white',
-          borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-          border: '1px solid #e5e7eb',
-          overflow: 'hidden'
-        }}>
-          <div className="roster-management-section" style={{ padding: '2rem' }}>
-        {/* Header */}
-        <div style={{ 
-          fontSize: '1.8rem', 
-          fontWeight: 'bold', 
-          color: '#0f172a',
-          marginBottom: '2rem',
-          textAlign: 'left',
-          borderBottom: '2px solid #3b82f6',
-          paddingBottom: '0.5rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <h2 style={{ margin: 0 }}>Create Roster</h2>
-          <button
-            onClick={() => navigate("/roster-view")}
-            style={{
-              padding: '0.75rem 2rem',
-              backgroundImage: 'linear-gradient(90deg, #06b6d4, #3b82f6)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '999px',
-              fontSize: '0.95rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              boxShadow: '0 10px 24px rgba(59, 130, 246, 0.25)'
-            }}
-          >
-            View Rosters
-          </button>
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>Roster Management</h1>
         </div>
 
-        {/* Error Display */}
         {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            border: '1px solid #fecaca',
-            color: '#dc2626',
-            padding: '1rem',
-            borderRadius: '4px',
-            marginBottom: '1rem'
-          }}>
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '1rem', borderRadius: '6px' }}>
             {error}
           </div>
         )}
 
-        {/* Form Section */}
-        <form style={{
-          background: 'white',
-          padding: '2rem',
-          borderRadius: '12px',
-          border: '1px solid #e5e7eb',
-          marginBottom: '2rem',
-          boxShadow: '0 10px 24px rgba(2, 6, 23, 0.08)'
-        }}>
-          {/* Month Picker */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            marginBottom: '1.5rem',
-            gap: '1rem'
-          }}>
-            <label style={{
-              fontWeight: '600',
-              color: '#374151',
-              fontSize: '1rem',
-              minWidth: '120px'
-            }}>
-              Select Month :
-            </label>
+        <div className="ma-filter-card" style={{ alignItems: 'center' }}>
+          <div className="ma-filter-group" style={{ maxWidth: '340px' }}>
+            <label className="ma-label">Month</label>
             <input
               type="month"
               value={month}
@@ -234,72 +161,26 @@ const RosterManagement = () => {
                 setMonth(e.target.value);
                 generateMonthData(e.target.value);
               }}
-              style={{
-                padding: '0.75rem',
-                border: '1px solid #cbd5e1',
-                borderRadius: '10px',
-                fontSize: '0.95rem',
-                width: '300px',
-                outline: 'none',
-                color: '#0f172a',
-                backgroundColor: '#f8fafc'
-              }}
+              className="ma-input"
             />
           </div>
-        </form>
+          <button type="button" className="ma-btn-submit" onClick={() => navigate('/roster-view')}>
+            <FaEye style={{ marginRight: '8px' }} />
+            View Rosters
+          </button>
+        </div>
 
-          {/* Roster Table */}
-          {roster.length > 0 && (
-            <div style={{
-              background: 'white',
-              borderRadius: '12px',
-              padding: '1.5rem',
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 10px 24px rgba(2, 6, 23, 0.08)',
-              marginBottom: '2rem'
-            }}>
-              <table style={{ 
-                width: '100%', 
-                borderCollapse: 'collapse',
-                border: '1px solid #e5e7eb'
-              }}>
+        {roster.length > 0 && (
+          <div className="ma-table-card">
+            <div className="ma-table-container">
+              <table className="ma-table">
                 <thead>
                   <tr>
-                    <th style={{
-                      padding: '1rem', 
-                      textAlign: 'left',
-                      border: '1px solid #e5e7eb',
-                      fontWeight: '600',
-                      backgroundColor: '#1e3a8a',
-                      color: '#ffffff'
-                    }}>Date</th>
-                    <th style={{
-                      padding: '1rem', 
-                      textAlign: 'left',
-                      border: '1px solid #e5e7eb',
-                      fontWeight: '600',
-                      backgroundColor: '#1e3a8a',
-                      color: '#ffffff'
-                    }}>Day</th>
-                    <th style={{
-                      padding: '1rem', 
-                      textAlign: 'left',
-                      border: '1px solid #e5e7eb',
-                      fontWeight: '600',
-                      backgroundColor: '#1e3a8a',
-                      color: '#ffffff'
-                    }}>Shift</th>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Shift</th>
                     {["E1", "E2", "E3", "E4", "E5"].map((col) => (
-                      <th key={col} style={{
-                        padding: '1rem', 
-                        textAlign: 'center',
-                        border: '1px solid #e5e7eb',
-                        fontWeight: '600',
-                        backgroundColor: '#1e3a8a',
-                        color: '#ffffff'
-                      }}>
-                        {col}
-                      </th>
+                      <th key={col}>{col}</th>
                     ))}
                   </tr>
                 </thead>
@@ -310,34 +191,15 @@ const RosterManagement = () => {
                         <tr key={`${day.date}-${shift.shift}`}>
                           {shiftIndex === 0 && (
                             <>
-                              <td rowSpan={2} style={{
-                                padding: '1rem',
-                                border: '1px solid #e5e7eb',
-                                color: '#374151'
-                              }}>
-                                {new Date(day.date).toLocaleDateString("en-GB")}
-                              </td>
-                              <td rowSpan={2} style={{
-                                padding: '1rem',
-                                border: '1px solid #e5e7eb',
-                                color: '#374151'
-                              }}>
-                                {day.dayName}
-                              </td>
+                              <td rowSpan={2}>{new Date(day.date).toLocaleDateString("en-GB")}</td>
+                              <td rowSpan={2}>{day.dayName}</td>
                             </>
                           )}
-                          <td style={{
-                            padding: '1rem',
-                            border: '1px solid #e5e7eb',
-                            color: '#374151'
-                          }}>{shift.shift}</td>
+                          <td>{shift.shift}</td>
                           {shift.employees.map((emp, empIndex) => (
-                            <td key={empIndex} style={{
-                              padding: '1rem',
-                              border: '1px solid #e5e7eb',
-                              textAlign: 'center'
-                            }}>
+                            <td key={empIndex}>
                               <select
+                                className="ma-select"
                                 value={emp}
                                 onChange={(e) =>
                                   handleEmployeeSelect(
@@ -347,16 +209,6 @@ const RosterManagement = () => {
                                     e.target.value
                                   )
                                 }
-                                style={{
-                                  width: '100%',
-                                  padding: '0.5rem',
-                                  border: '1px solid #cbd5e1',
-                                  borderRadius: '10px',
-                                  fontSize: '0.95rem',
-                                  backgroundColor: '#ffffff',
-                                  outline: 'none',
-                                  cursor: 'pointer'
-                                }}
                               >
                                 <option value="">Select</option>
                                 {employees.map((employee, i) => (
@@ -373,45 +225,18 @@ const RosterManagement = () => {
                   ))}
                 </tbody>
               </table>
-
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'flex-end',
-                gap: '1rem',
-                marginTop: '1.5rem'
-              }}>
-                <button type="button" onClick={resetRoster} style={{
-                  padding: '0.75rem 2rem',
-                  backgroundColor: '#475569',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '999px',
-                  fontSize: '0.95rem',
-                  fontWeight: '700',
-                  cursor: 'pointer'
-                }}>
-                  Reset
-                </button>
-                
-                <button onClick={submitRoster} disabled={loading} style={{
-                  padding: '0.75rem 2rem',
-                  backgroundImage: loading ? 'none' : 'linear-gradient(90deg, #06b6d4, #3b82f6)',
-                  backgroundColor: loading ? '#9ca3af' : undefined,
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '999px',
-                  fontSize: '0.95rem',
-                  fontWeight: '700',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  boxShadow: loading ? 'none' : '0 10px 24px rgba(59, 130, 246, 0.25)'
-                }}>
-                  {loading ? 'Saving...' : 'Submit'}
-                </button>
-              </div>
             </div>
-          )}
+
+            <div className="ma-footer-row">
+              <button type="button" className="ma-pagination-btn" onClick={resetRoster}>
+                Reset
+              </button>
+              <button className="ma-pagination-btn next" onClick={submitRoster} disabled={loading}>
+                {loading ? 'Saving…' : 'Submit'}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <Footer />
     </div>

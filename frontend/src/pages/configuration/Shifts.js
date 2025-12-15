@@ -17,6 +17,7 @@ const Shifts = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ createdBy: '', fromDate: '', toDate: '' });
   
   const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
@@ -41,7 +42,7 @@ const Shifts = () => {
 
   useEffect(() => {
     fetchShifts();
-  }, []);
+  }, [fetchShifts]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,13 +152,55 @@ const Shifts = () => {
   };
 
   // Filter data based on search term
-  const filteredShifts = shifts.filter(item => 
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.createdByName && item.createdByName.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const filteredShifts = shifts.filter(item => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.createdByName && item.createdByName.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCreatedBy = !filters.createdBy || item.createdByName === filters.createdBy;
+    const createdDate = item.createdDtm ? new Date(item.createdDtm) : null;
+    const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+    const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+    return matchesSearch && matchesCreatedBy && fromOk && toOk;
+  });
 
   return (
     <div className="shifts-section">
+      <div className="conf-card">
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div className="conf-form-group" style={{ minWidth: '220px' }}>
+            <label className="conf-label">Created By</label>
+            <select
+              className="conf-input"
+              value={filters.createdBy}
+              onChange={(e) => setFilters(prev => ({ ...prev, createdBy: e.target.value }))}
+            >
+              <option value="">All</option>
+              {Array.from(new Set(shifts.map(i => i.createdByName).filter(Boolean))).map(name => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">From Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.fromDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+            />
+          </div>
+          <div className="conf-form-group">
+            <label className="conf-label">To Date</label>
+            <input
+              type="date"
+              className="conf-input"
+              value={filters.toDate}
+              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+            />
+          </div>
+          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
+        </div>
+      </div>
       {/* View Modal */}
       {viewModalOpen && selectedShift && (
         <div className="conf-modal-overlay">
@@ -385,7 +428,7 @@ const Shifts = () => {
             &lt; Previous
           </button>
           <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
             Next &gt;
           </button>
         </div>

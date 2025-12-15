@@ -931,6 +931,8 @@ body {
 
 .ma-btn-delete { background: #10b981; color: #ffffff; }
 .ma-btn-delete:hover { background: #059669; }
+.ma-btn-progress { background: #4c1d95; color: #ffffff; }
+.ma-btn-progress:hover { background: #3b0d82; }
 
 .ma-btn-view svg,
 .ma-btn-edit svg,
@@ -991,3 +993,5 @@ body {
 .ma-links a:hover {
   color: #4b5563;
 }
+.main-assignment-page .ma-table th { padding: 0.75rem 1.25rem; }
+.main-assignment-page .ma-table td { padding: 1rem 1.25rem; }

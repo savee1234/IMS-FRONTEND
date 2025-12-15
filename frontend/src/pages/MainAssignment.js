@@ -49,7 +49,7 @@ const MainAssignment = () => {
   };
 
   return (
-    <div className="ma-wrapper">
+    <div className="ma-wrapper main-assignment-page">
       <Sidebar />
       <div className="ma-content">
         <div className="ma-header">

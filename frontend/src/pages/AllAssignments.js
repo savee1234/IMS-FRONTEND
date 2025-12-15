@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { FaEye, FaEdit, FaTrash, FaTasks, FaSearch } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
 import ProgressModal from './AllAssignments/ProgressModal';
@@ -112,75 +111,73 @@ const AllAssignments = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper assignments-page">
-      <Navbar />
-      <div className="complaint-onboard-background" />
+    <div className="ma-wrapper">
+      <Sidebar />
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>All Assignments</h1>
+        </div>
 
-      <div className="content-wrapper">
-        <div className="complaint-form-container assignments-wide">
-          <div className="page-header">
-            <div className="page-header-content">
-              <h1>All Assignments</h1>
-            </div>
+        <div className="ma-filter-card">
+          <div className="ma-filter-group">
+            <label className="ma-label">Employee</label>
+            <select
+              className="ma-select"
+              value={filters.employee}
+              onChange={(e) => handleChange('employee', e.target.value)}
+            >
+              <option value="">Select Employees</option>
+              <option value="john.doe">John Doe</option>
+              <option value="jane.smith">Jane Smith</option>
+            </select>
           </div>
-
-          <form onSubmit={handleSubmit} className="config-form">
-            <div className="form-grid assignments-form-grid">
-              <Field label="Employee">
-                <select
-                  className="input"
-                  value={filters.employee}
-                  onChange={(e) => handleChange('employee', e.target.value)}
-                >
-                  <option value="">Select Employees</option>
-                  <option value="john.doe">John Doe</option>
-                  <option value="jane.smith">Jane Smith</option>
-                </select>
-              </Field>
-              <Field label="Status">
-                <select
-                  className="input"
-                  value={filters.status}
-                  onChange={(e) => handleChange('status', e.target.value)}
-                >
-                  <option value="">Select Status</option>
-                  <option value="Pending">Pending</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Resolved">Resolved</option>
-                </select>
-              </Field>
-              <Field label="From Date">
-                <input
-                  type="date"
-                  value={filters.fromDate}
-                  onChange={(e) => handleChange('fromDate', e.target.value)}
-                  className="input"
-                />
-              </Field>
-              <Field label="To Date">
-                <input
-                  type="date"
-                  value={filters.toDate}
-                  onChange={(e) => handleChange('toDate', e.target.value)}
-                  className="input"
-                />
-              </Field>
-            </div>
-            <div className="config-actions">
-              <button type="submit" className="config-btn-primary">Submit</button>
-            </div>
-          </form>
-
-          <Field label="Search" className="full" style={{ marginBottom: '0.75rem' }}>
+          <div className="ma-filter-group">
+            <label className="ma-label">Status</label>
+            <select
+              className="ma-select"
+              value={filters.status}
+              onChange={(e) => handleChange('status', e.target.value)}
+            >
+              <option value="">Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">From Date</label>
             <input
-              placeholder="Search"
+              type="date"
+              value={filters.fromDate}
+              onChange={(e) => handleChange('fromDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">To Date</label>
+            <input
+              type="date"
+              value={filters.toDate}
+              onChange={(e) => handleChange('toDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <button type="submit" className="ma-btn-submit" onClick={handleSubmit}>Submit</button>
+        </div>
+
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search assignments"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input"
+              className="ma-search-input"
             />
-          </Field>
+          </div>
 
-          <div className="config-card">
+          <div className="ma-table-container">
             {loading && (
               <p style={{ textAlign: 'center', padding: '1rem' }}>Loading assignments...</p>
             )}
@@ -188,7 +185,7 @@ const AllAssignments = () => {
               <p style={{ textAlign: 'center', padding: '1rem', color: 'red' }}>Error: {error}</p>
             )}
             {!loading && !error && (
-              <table className="config-table">
+              <table className="ma-table">
                 <thead>
                   <tr>
                     <th>Assignment Type</th>
@@ -210,33 +207,33 @@ const AllAssignments = () => {
                       }</td>
                       <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
                       <td>
-                        <div className="config-table-actions">
+                        <div className="ma-actions">
                           <button
                             title="View"
                             type="button"
-                            className="config-icon-btn"
+                            className="ma-btn-action ma-btn-view"
                             onClick={() => openView(item)}
                           >
-                            <FaEye size={16} />
+                            <FaEye />
                           </button>
                           <button
                             title="Update"
                             type="button"
-                            className="config-icon-btn"
+                            className="ma-btn-action ma-btn-edit"
                             onClick={() => openStatus(item)}
                           >
-                            <FaEdit size={16} />
+                            <FaEdit />
                           </button>
                           <button
                             title="Progress"
                             type="button"
-                            className="config-icon-btn"
-                            onClick={() => openProgress(item)}
+                            className="ma-btn-action ma-btn-progress"
+                            onClick={() => openProgress(assignment)}
                           >
-                            <FaTasks size={16} />
+                            <FaTasks />
                           </button>
-                          <button title="Delete" type="button" className="config-icon-btn">
-                            <FaTrash size={16} />
+                          <button title="Delete" type="button" className="ma-btn-action ma-btn-delete">
+                            <FaTrash />
                           </button>
                         </div>
                       </td>
@@ -252,10 +249,10 @@ const AllAssignments = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '1rem' }}>
-            <button type="button" className="config-btn-secondary">Previous</button>
-            <button type="button" className="config-btn-primary">Next</button>
-            <span style={{ marginLeft: '0.5rem', color: 'var(--text-primary)' }}>Page 1 of 1</span>
+          <div className="ma-footer-row">
+            <button type="button" className="ma-pagination-btn">&lt; Previous</button>
+            <span style={{ marginLeft: '0.5rem', color: '#6b7280' }}>Page 1 of 1</span>
+            <button type="button" className="ma-pagination-btn next">Next &gt;</button>
           </div>
         </div>
       </div>
@@ -272,19 +269,9 @@ const AllAssignments = () => {
         <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
       )}
 
-      <Footer />
     </div>
   );
 };
-
-function Field({ label, children, className = "", style }) {
-  return (
-    <div className={`form-field ${className}`} style={style}>
-      <label className="field-label">{label}</label>
-      <div className="field-control">{children}</div>
-    </div>
-  );
-}
 
 export default AllAssignments;
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import './Dashboard.css';
+import HeaderBar from '../components/HeaderBar';
 
 const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().substring(0, 7));
@@ -97,6 +98,7 @@ const Dashboard = () => {
     <div className="dashboard-wrapper">
       <Sidebar />
       <div className="dashboard-main-content">
+        <HeaderBar />
         <div className="dashboard-container">
           <div className="dashboard-header">
             <h1 className="dashboard-title">Dashboard</h1>

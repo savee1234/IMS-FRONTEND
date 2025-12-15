@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 import { Search, Bell, Settings, ArrowRight, CheckSquare, Calendar, Users, Settings as ConfigIcon, BarChart, ClipboardList, ClipboardCheck, List } from 'lucide-react';
 
 const HomeModern = () => {
@@ -180,6 +181,7 @@ const HomeModern = () => {
           </section>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

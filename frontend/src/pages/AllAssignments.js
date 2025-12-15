@@ -5,6 +5,8 @@ import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
 import ProgressModal from './AllAssignments/ProgressModal';
 import './complaint/ComplaintForm.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const AllAssignments = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,6 +118,7 @@ const AllAssignments = () => {
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>All Assignments</h1>
         </div>
@@ -292,6 +295,7 @@ const AllAssignments = () => {
         <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
       )}
 
+      <Footer />
     </div>
   );
 };

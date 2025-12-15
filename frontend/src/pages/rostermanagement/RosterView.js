@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import "../complaint/ComplaintForm.css";
 import { FaEye, FaEdit } from "react-icons/fa";
+import HeaderBar from "../../components/HeaderBar";
  
 
 const employees = [
@@ -156,6 +157,7 @@ const RosterView = () => {
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h1>Rosters</h1>
           <button type="button" className="ma-btn-submit" onClick={() => navigate('/roster')}>

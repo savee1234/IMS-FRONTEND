@@ -11,7 +11,7 @@ const HomeModern = () => {
     {
       name: 'Complaint Onboard',
       path: '/complaint',
-      icon: <FaBell size={24} />,
+      icon: <Bell size={24} />,
       color: '#3b82f6', // blue
       bgColor: '#eff6ff',
       description: 'Efficiently capture and manage customer complaints'
@@ -19,7 +19,7 @@ const HomeModern = () => {
     {
       name: 'Roster Management',
       path: '/roster',
-      icon: <FaCalendarAlt size={24} />,
+      icon: <Calendar size={24} />,
       color: '#10b981', // green
       bgColor: '#ecfdf5',
       description: 'Manage employee schedules and assignments'
@@ -27,7 +27,7 @@ const HomeModern = () => {
     {
       name: 'User Management',
       path: '/users',
-      icon: <FaUsers size={24} />,
+      icon: <Users size={24} />,
       color: '#f59e0b', // amber
       bgColor: '#fffbeb',
       description: 'Control access and permissions'
@@ -35,7 +35,7 @@ const HomeModern = () => {
     {
       name: 'Configuration',
       path: '/configuration',
-      icon: <FaCog size={24} />,
+      icon: <ConfigIcon size={24} />,
       color: '#6366f1', // indigo
       bgColor: '#eef2ff',
       description: 'Customize system settings and parameters'
@@ -43,7 +43,7 @@ const HomeModern = () => {
     {
       name: 'Dashboard',
       path: '/dashboard',
-      icon: <FaChartBar size={24} />,
+      icon: <BarChart size={24} />,
       color: '#ec4899', // pink
       bgColor: '#fdf2f8',
       description: 'Get real-time insights and analytics'
@@ -51,7 +51,7 @@ const HomeModern = () => {
     {
       name: 'View My Tasks',
       path: '/my-tasks',
-      icon: <FaCheckSquare size={24} />,
+      icon: <CheckSquare size={24} />,
       color: '#8b5cf6', // violet
       bgColor: '#f5f3ff',
       description: 'Monitor and manage your assigned tasks'
@@ -90,7 +90,7 @@ const HomeModern = () => {
         {/* Top Header */}
         <header style={styles.header}>
           <div style={styles.searchContainer}>
-            <FaSearch size={20} style={styles.searchIcon} />
+            <Search size={20} style={styles.searchIcon} />
             <input 
               type="text" 
               placeholder="Search..." 
@@ -100,11 +100,11 @@ const HomeModern = () => {
           
           <div style={styles.headerActions}>
             <button style={styles.iconButton}>
-              <FaBell size={20} />
+              <Bell size={20} />
               <span style={styles.notificationDot}></span>
             </button>
             <button style={styles.iconButton}>
-              <FaCog size={20} />
+              <Settings size={20} />
             </button>
           </div>
         </header>
@@ -124,7 +124,7 @@ const HomeModern = () => {
                   style={styles.primaryButton}
                   onClick={() => navigate('/complaint')}
                 >
-                  Get Started <FaArrowRight size={16} style={{ marginLeft: '8px' }} />
+                  Get Started <ArrowRight size={16} style={{ marginLeft: '8px' }} />
                 </button>
                 <button 
                   style={styles.secondaryButton}
@@ -461,4 +461,4 @@ const styles = {
   },
 };
 
-export default HomeModern;
+export default HomeModern;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
-import { FaFileAlt, FaHistory, FaTrash, FaSearch } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
 
 const MainAssignment = () => {
@@ -186,7 +185,6 @@ const MainAssignment = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

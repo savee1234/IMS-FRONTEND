@@ -7,6 +7,8 @@ import ProgressModal from './AllAssignments/ProgressModal';
 import './complaint/ComplaintForm.css';
 
 const AllAssignments = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
@@ -196,7 +198,11 @@ const AllAssignments = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {assignments.map((item) => (
+                  {(() => {
+                    const indexOfLast = currentPage * itemsPerPage;
+                    const indexOfFirst = indexOfLast - itemsPerPage;
+                    const visibleAssignments = assignments.slice(indexOfFirst, indexOfLast);
+                    return visibleAssignments.map((item) => (
                     <tr key={item._id}>
                       <td>{item.Assignment}</td>
                       <td>{item.assignedBy}</td>
@@ -228,7 +234,7 @@ const AllAssignments = () => {
                             title="Progress"
                             type="button"
                             className="ma-btn-action ma-btn-progress"
-                            onClick={() => openProgress(assignment)}
+                            onClick={() => openProgress(item)}
                           >
                             <FaTasks />
                           </button>
@@ -238,7 +244,8 @@ const AllAssignments = () => {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                    ));
+                  })()}
                   {assignments.length === 0 && (
                     <tr>
                       <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
@@ -250,9 +257,25 @@ const AllAssignments = () => {
           </div>
 
           <div className="ma-footer-row">
-            <button type="button" className="ma-pagination-btn">&lt; Previous</button>
-            <span style={{ marginLeft: '0.5rem', color: '#6b7280' }}>Page 1 of 1</span>
-            <button type="button" className="ma-pagination-btn next">Next &gt;</button>
+            <button
+              type="button"
+              className="ma-pagination-btn"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              &lt; Previous
+            </button>
+            <span style={{ marginLeft: '0.5rem', color: '#6b7280' }}>
+              Page {currentPage} of {Math.max(1, Math.ceil(assignments.length / itemsPerPage))}
+            </span>
+            <button
+              type="button"
+              className="ma-pagination-btn next"
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(assignments.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(assignments.length / itemsPerPage)}
+            >
+              Next &gt;
+            </button>
           </div>
         </div>
       </div>

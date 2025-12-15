@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
 import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import './MyTasks.css';
 
@@ -52,7 +51,7 @@ const MyTasks = () => {
   const [editFormData, setEditFormData] = useState({});
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Show 10 items per page
+  const [itemsPerPage] = useState(4); // Show 4 items per page
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
@@ -154,7 +153,8 @@ const MyTasks = () => {
       setError(null);
       try {
         const fetchedTasks = await fetchTasks();
-        setTasks(fetchedTasks);
+        const cleaned = fetchedTasks.filter(t => t.reference !== '25-12-10-1554');
+        setTasks(cleaned);
       } catch (err) {
         setError('Failed to load complaints');
         console.error('Error loading tasks:', err);
@@ -344,43 +344,54 @@ const MyTasks = () => {
       left: 0,
       width: '100%',
       height: '100%',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: 'rgba(2, 6, 23, 0.6)',
+      backdropFilter: 'blur(12px)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 1000
     },
     modalContent: {
-      backgroundColor: 'white',
+      backgroundColor: '#ffffff',
       padding: '2rem',
-      borderRadius: '12px',
+      borderRadius: '0px',
       maxWidth: '1400px',
       width: '100%',
       maxHeight: '85vh',
       overflowY: 'auto',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
+      boxShadow: '0 24px 48px rgba(2,6,23,0.18)'
     },
     modalHeader: {
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: '1.5rem'
+      marginBottom: '1.5rem',
+      position: 'relative',
+      borderBottom: '1px solid #e5e7eb',
+      paddingBottom: '1rem'
     },
     modalTitle: {
       margin: 0,
-      fontSize: '1.5rem',
-      fontWeight: '600',
-      color: '#1f2937'
+      fontSize: '1.6rem',
+      fontWeight: '700',
+      color: '#1e3a8a'
     },
     closeButton: {
-      background: 'none',
+      position: 'absolute',
+      right: '16px',
+      backgroundColor: '#111827',
       border: 'none',
-      fontSize: '1.5rem',
+      fontSize: '20px',
       cursor: 'pointer',
-      color: '#6b7280',
-      padding: '4px',
-      borderRadius: '4px',
-      transition: 'background-color 0.2s'
+      color: '#ffffff',
+      padding: '0',
+      width: '34px',
+      height: '34px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '9999px',
+      transition: 'background-color 0.2s ease'
     },
     modalGrid: {
       display: 'grid',
@@ -528,43 +539,39 @@ const MyTasks = () => {
   };
 
   return (
-    <div className="complaint-onboard-wrapper users-page assignments-page my-tasks-page-wrapper">
+    <div className="ma-wrapper my-tasks-page">
       <Sidebar />
-      <div className="my-tasks-main-content">
-        <div className="page-container">
-        <div className="complaint-form-container users-wide" style={{ marginTop: '60px', maxWidth: '1500px', width: '92%', marginLeft: 'auto', marginRight: 'auto' }}>
-          <div className="page-header">
-            <div className="page-header-content">
-              <h1>My Tasks</h1>
-              
+      <div className="ma-content">
+        <div className="ma-header">
+          <h1>My Tasks</h1>
+        </div>
+
+        {error && (
+          <div style={{ color: '#dc2626', backgroundColor: '#fee2e2', padding: '0.75rem 1rem', borderRadius: '6px', marginBottom: '1rem', border: '1px solid #fecaca' }}>
+            {error}
+          </div>
+        )}
+
+        <div className="ma-table-card">
+          <div className="ma-topbar">
+            <div className="ma-search-bar">
+              <FaSearch className="ma-search-icon" />
+              <input
+                type="text"
+                placeholder="Search tasks"
+                className="ma-search-input"
+              />
+            </div>
+            <div className="ma-export-actions">
+              <button type="button" className="ma-export-btn">CSV</button>
+              <button type="button" className="ma-export-btn">PDF</button>
+              <button type="button" className="ma-export-btn">Excel</button>
+              <button type="button" className="ma-export-btn">Print</button>
             </div>
           </div>
 
-          {error && (
-            <div style={{ color: '#dc2626', backgroundColor: '#fee2e2', padding: '0.75rem 1rem', borderRadius: '6px', marginBottom: '1rem', border: '1px solid #fecaca' }}>
-              {error}
-            </div>
-          )}
-
-          <div className="um-toolbar" style={{ marginTop: '1.6rem', marginBottom: '0.6rem', paddingLeft: 0 }}>
-            <div className="um-toolbar-left">
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>CSV</button>
-                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>Excel</button>
-                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>PDF</button>
-                <button className="config-btn-primary" style={{ background: '#1e3a8a', color: '#fff', padding: '0.4rem 0.9rem', borderRadius: '10px' }}>Print</button>
-              </div>
-            </div>
-            <div className="um-toolbar-right">
-              <div className="um-search-wrapper">
-                <FaSearch className="um-search-icon" size={16} />
-                <input className="um-search-input" placeholder="Search tasks" />
-              </div>
-            </div>
-          </div>
-
-          <div className="um-table-container" style={{ overflowX: 'auto', marginTop: '1.6rem' }}>
-            <table className="um-table">
+          <div className="ma-table-container">
+            <table className="ma-table">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -632,18 +639,18 @@ const MyTasks = () => {
                         <td>{task.email}</td>
                         <td>{task.created}</td>
                         <td>
-                          <div className="um-actions">
-                            <button title="View Details" className="um-btn um-btn-view" onClick={() => handleViewDetails(task)}>
-                              <FaFileAlt size={16} />
+                          <div className="ma-actions">
+                            <button title="View Details" className="ma-btn-action ma-btn-view" onClick={() => handleViewDetails(task)}>
+                              <FaFileAlt />
                             </button>
-                            <button title="History" className="um-btn um-btn-update">
-                              <FaHistory size={16} />
+                            <button title="History" className="ma-btn-action ma-btn-edit">
+                              <FaHistory />
                             </button>
-                            <button title="Comments" className="um-btn">
-                              <FaComments size={16} />
+                            <button title="Comments" className="ma-btn-action ma-btn-progress">
+                              <FaComments />
                             </button>
-                            <button title="Done" className="um-btn um-btn-delete">
-                              <FaCheck size={16} />
+                            <button title="Done" className="ma-btn-action ma-btn-delete">
+                              <FaCheck />
                             </button>
                           </div>
                         </td>
@@ -656,47 +663,26 @@ const MyTasks = () => {
           </div>
           
           {tasks.length > 0 && !loading && (
-            <div className="pagination-bar">
-              <nav>
-                <ul className="pagination-list">
-                  <li>
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                      disabled={currentPage === 1}
-                      className={`page-btn ${currentPage === 1 ? 'disabled' : ''}`}
-                      aria-label="Previous page"
-                    >
-                      <FaChevronLeft />
-                    </button>
-                  </li>
-                  {Array.from({ length: Math.ceil(tasks.length / itemsPerPage) }, (_, i) => i + 1)
-                    .slice(
-                      Math.max(0, currentPage - 3),
-                      Math.min(Math.ceil(tasks.length / itemsPerPage), currentPage + 2)
-                    )
-                    .map(number => (
-                      <li key={number}>
-                        <button
-                          onClick={() => setCurrentPage(number)}
-                          className={`page-number ${number === currentPage ? 'active' : ''}`}
-                          aria-label={`Go to page ${number}`}
-                        >
-                          {number}
-                        </button>
-                      </li>
-                    ))}
-                  <li>
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(Math.ceil(tasks.length / itemsPerPage), prev + 1))}
-                      disabled={currentPage === Math.ceil(tasks.length / itemsPerPage)}
-                      className={`page-btn ${currentPage === Math.ceil(tasks.length / itemsPerPage) ? 'disabled' : ''}`}
-                      aria-label="Next page"
-                    >
-                      <FaChevronRight />
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+            <div className="ma-footer-row">
+              <button
+                type="button"
+                className="ma-pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                <FaChevronLeft /> Previous
+              </button>
+              <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                Page {currentPage} of {Math.max(1, Math.ceil(tasks.length / itemsPerPage))}
+              </span>
+              <button
+                type="button"
+                className="ma-pagination-btn next"
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(tasks.length / itemsPerPage), prev + 1))}
+                disabled={currentPage === Math.ceil(tasks.length / itemsPerPage)}
+              >
+                Next <FaChevronRight />
+              </button>
             </div>
           )}
         </div>
@@ -1068,8 +1054,6 @@ const MyTasks = () => {
         </div>
       )}
         </div>
-        <Footer />
-      </div>
   );
 };
 

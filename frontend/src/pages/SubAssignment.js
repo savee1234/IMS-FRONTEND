@@ -10,6 +10,7 @@ const SubAssignment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
 
   useEffect(() => {
     const fetchSubAssignments = async () => {
@@ -60,7 +61,7 @@ const SubAssignment = () => {
   };
 
   return (
-    <div className="ma-wrapper">
+    <div className="ma-wrapper sub-assignment-page">
       <Sidebar />
       <div className="ma-content">
         <div className="ma-header">
@@ -161,7 +162,11 @@ const SubAssignment = () => {
                     </td>
                   </tr>
                 ) : (
-                  data.map((item, index) => (
+                  (() => {
+                    const indexOfLast = currentPage * itemsPerPage;
+                    const indexOfFirst = indexOfLast - itemsPerPage;
+                    const currentRows = data.slice(indexOfFirst, indexOfLast);
+                    return currentRows.map((item, index) => (
                     <tr key={item.rawData?._id || index}>
                       <td>{item.requestReference}</td>
                       <td>
@@ -199,16 +204,33 @@ const SubAssignment = () => {
                         </div>
                       </td>
                     </tr>
-                  ))
+                    ));
+                  })()
                 )}
               </tbody>
             </table>
           </div>
 
           <div className="ma-footer-row">
-            <button type="button" className="ma-pagination-btn"><FaChevronLeft /> Previous</button>
-            <span style={styles.pageInfo}>Page {currentPage} of 1</span>
-            <button type="button" className="ma-pagination-btn next">Next <FaChevronRight /></button>
+            <button
+              type="button"
+              className="ma-pagination-btn"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              <FaChevronLeft /> Previous
+            </button>
+            <span style={styles.pageInfo}>
+              Page {currentPage} of {Math.max(1, Math.ceil(data.length / itemsPerPage))}
+            </span>
+            <button
+              type="button"
+              className="ma-pagination-btn next"
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(data.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+            >
+              Next <FaChevronRight />
+            </button>
           </div>
         </div>
       </div>

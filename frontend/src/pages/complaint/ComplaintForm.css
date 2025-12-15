@@ -938,6 +938,10 @@ body {
 .ma-btn-edit svg,
 .ma-btn-delete svg,
 .ma-actions .ma-btn-action svg { color: #ffffff !important; }
+.ma-topbar { display:flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.ma-export-actions { display:flex; gap: 0.5rem; }
+.ma-export-btn { background: #1e3a8a; color: #ffffff; border: none; border-radius: 6px; padding: 0.4rem 0.9rem; cursor: pointer; transition: background-color 0.2s; }
+.ma-export-btn:hover { background: #0f1f4a; }
 
 .ma-footer-row {
   margin-top: 1.5rem;
@@ -995,3 +999,5 @@ body {
 }
 .main-assignment-page .ma-table th { padding: 0.75rem 1.25rem; }
 .main-assignment-page .ma-table td { padding: 1rem 1.25rem; }
+.sub-assignment-page .ma-table th { padding: 0.85rem 1.25rem; }
+.sub-assignment-page .ma-table td { padding: 1.1rem 1.25rem; }

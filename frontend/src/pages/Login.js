@@ -5,6 +5,7 @@ import axios from 'axios';
 import { isAuthenticated } from '../utils/auth';
  
 import logo from '../assets/slt-logo.png';
+import Footer from '../components/Footer';
 
 const Login = () => {
   const [serviceNumber, setServiceNumber] = useState('');
@@ -209,6 +210,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };

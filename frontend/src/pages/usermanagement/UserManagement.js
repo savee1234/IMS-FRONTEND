@@ -6,6 +6,7 @@ import '../complaint/ComplaintForm.css';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
 import { FaEye, FaEdit, FaSearch } from 'react-icons/fa';
+import HeaderBar from '../../components/HeaderBar';
 
 const UserManagement = () => {
  
@@ -105,6 +106,7 @@ const UserManagement = () => {
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Users</h1>
         </div>

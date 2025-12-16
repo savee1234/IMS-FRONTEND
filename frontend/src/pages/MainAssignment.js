@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const MainAssignment = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +55,7 @@ const MainAssignment = () => {
     <div className="ma-wrapper main-assignment-page">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Main Assignments</h1>
         </div>
@@ -138,7 +141,6 @@ const MainAssignment = () => {
                 </thead>
                 <tbody>
                   {(() => {
-                    const totalPages = Math.max(1, Math.ceil(assignments.length / itemsPerPage));
                     const indexOfLast = currentPage * itemsPerPage;
                     const indexOfFirst = indexOfLast - itemsPerPage;
                     const visible = assignments.slice(indexOfFirst, indexOfLast);
@@ -193,15 +195,8 @@ const MainAssignment = () => {
           </div>
         </div>
 
-          <div className="ma-copyright">
-          <span>&copy; 2025 SLT Incident Management System. All rights reserved.</span>
-          <div className="ma-links">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
-            <a href="/contact">Contact Us</a>
-          </div>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 };

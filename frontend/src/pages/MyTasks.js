@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import './MyTasks.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const fetchTasks = async () => {
   try {
@@ -542,6 +544,7 @@ const MyTasks = () => {
     <div className="ma-wrapper my-tasks-page">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>My Tasks</h1>
         </div>
@@ -1053,6 +1056,7 @@ const MyTasks = () => {
           </div>
         </div>
       )}
+      <Footer />
         </div>
   );
 };

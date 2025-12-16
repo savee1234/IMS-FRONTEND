@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaEye, FaEdit, FaTrash, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const SubAssignment = () => {
   
@@ -64,6 +66,7 @@ const SubAssignment = () => {
     <div className="ma-wrapper sub-assignment-page">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Sub Assignments</h1>
         </div>
@@ -234,6 +237,7 @@ const SubAssignment = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

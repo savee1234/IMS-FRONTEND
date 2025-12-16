@@ -17,14 +17,12 @@ const complaintRoutes = require('./routes/complaints');
 const contactRoutes = require('./routes/contactRoutes');
 const userManagementRoutes = require('./routes/UserManagementRoute');
 const assignmentRoutes = require('./routes/Assignments');
-const SubAssignmentRoute = require('./routes/SubAssignmentRoute');
 const mainAssignmentRoutes = require('./routes/mainAssignmentRoutes');
+const onboardMediumRoutes = require('./routes/onboardMedium');
 
 const app = express();
 
 const PORT = process.env.PORT || 44354;
-const onboardMediumRoutes = require('./routes/onboardMedium');
-const { getSubAssignment } = require('./controllers/SubAssignmentController');
 
 // Security middleware
 app.use(helmet());
@@ -72,10 +70,8 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/user-management', userManagementRoutes);
 app.use('/api/assignments', assignmentRoutes);
-app.use('/api/sub-assignments', SubAssignmentRoute);
 app.use('/api/main-assignments', mainAssignmentRoutes);
-
-
+app.use('/api/onboard-mediums', onboardMediumRoutes);
 
 // Serve React frontend static files
 if (process.env.NODE_ENV === 'production') {

@@ -17,6 +17,8 @@ const Organization = () => {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ organizationType: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   
   // API Base URL
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
@@ -510,110 +512,87 @@ const Organization = () => {
     );
   };
 
-  return (
-    <div>
-      <div className="config-card">
-        <h3>{editMode ? 'Edit Organization' : 'Add New System Organization'}</h3>
-        {error && (
-          <div className="alert-message error">{error}</div>
-        )}
-        <form onSubmit={handleSubmit} className="config-form">
-          <div className="form-grid">
-            <div className="form-field">
-              <label className="config-label">Organization *</label>
-              <div className="field-control input-wrapper">
-                <input
-                  type="text"
-                  name="organization"
-                  value={orgFormData.organization}
-                  onChange={handleInputChange}
-                  className="config-input"
-                  required
-                />
-              </div>
-            </div>
-            <div className="form-field">
-              <label className="config-label">Organization Type *</label>
-              <div className="field-control input-wrapper">
-                <select
-                  name="organizationType"
-                  value={orgFormData.organizationType}
-                  onChange={handleInputChange}
-                  className="config-input"
-                  required
-                >
-                  <option value="">Select type</option>
-                  <option value="Type 1">Type 1</option>
-                  <option value="Type 2">Type 2</option>
-                  <option value="Type 3">Type 3</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="config-actions">
-            <button type="button" onClick={handleReset} className="config-btn-secondary">Reset</button>
-            <button type="submit" disabled={submitting} className="config-btn-primary">
-              {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
-            </button>
-          </div>
-        </form>
-      </div>
+  const filteredOrganizations = organizations.filter(org => {
+    const q = searchTerm.toLowerCase();
+    return (
+      (org.organization || '').toLowerCase().includes(q) ||
+      (org.organizationType || '').toLowerCase().includes(q) ||
+      (org.createdByName || '').toLowerCase().includes(q)
+    );
+  });
+  const pageCount = Math.max(1, Math.ceil(filteredOrganizations.length / itemsPerPage));
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentRows = filteredOrganizations.slice(indexOfFirst, indexOfLast);
 
-      <div className="conf-card" style={{ marginTop: '1rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <div className="conf-form-group" style={{ minWidth: '220px' }}>
-            <label className="conf-label">Organization Type</label>
+  return (
+    <div className="onboard-medium-section">
+      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+        {error && (
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
+        >
+          <div className="ma-filter-group" style={{ flex: '1 1 280px' }}>
+            <label className="ma-label">{editMode ? 'Edit Organization' : 'Add New System Organization'}</label>
+            <input
+              type="text"
+              name="organization"
+              value={orgFormData.organization}
+              onChange={handleInputChange}
+              className="ma-input"
+              placeholder="Enter organization"
+              required
+            />
+          </div>
+          <div className="ma-filter-group" style={{ flex: '1 1 220px' }}>
+            <label className="ma-label">Organization Type *</label>
             <select
-              className="conf-input"
-              value={filters.organizationType}
-              onChange={(e) => setFilters(prev => ({ ...prev, organizationType: e.target.value }))}
+              name="organizationType"
+              value={orgFormData.organizationType}
+              onChange={handleInputChange}
+              className="ma-select"
+              required
             >
-              <option value="">All</option>
+              <option value="">Select type</option>
               <option value="Type 1">Type 1</option>
               <option value="Type 2">Type 2</option>
               <option value="Type 3">Type 3</option>
             </select>
           </div>
-          <div className="conf-form-group">
-            <label className="conf-label">From Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.fromDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-            />
+          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button type="submit" disabled={submitting} className="ma-btn-submit" style={{ marginLeft: 0, marginTop: 0 }}>
+              {submitting ? 'Saving...' : (editMode ? 'Update' : 'Submit')}
+            </button>
           </div>
-          <div className="conf-form-group">
-            <label className="conf-label">To Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.toDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-            />
-          </div>
-          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
-        </div>
+        </form>
       </div>
 
-      <div className="config-card" style={{ marginTop: '1rem' }}>
-        <div className="conf-search-container">
-          <FaSearch className="conf-search-icon" />
+      {/* Middle filter section removed */}
+
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
           <input
             type="text"
-            className="conf-search-input"
-            placeholder="Search organizations..."
+            className="ma-search-input"
+            placeholder="Search organizations"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
           />
         </div>
-        <table className="config-table">
+        <div className="ma-table-container">
+        <table className="ma-table">
           <thead>
             <tr>
               <th>Organization ID</th>
               <th>Organization</th>
               <th>Organization Type</th>
-              <th>Created By</th>
               <th>Created By Name</th>
               <th>Created Date</th>
               <th>Actions</th>
@@ -622,46 +601,32 @@ const Organization = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>Loading...</td>
+                <td colSpan="6" style={{ padding: '1rem', textAlign: 'center' }}>Loading...</td>
               </tr>
-            ) : organizations.length === 0 ? (
+            ) : filteredOrganizations.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  No organizations found. Add your first organization above.
+                <td colSpan="6" style={{ padding: '1rem', textAlign: 'center' }}>
+                  No organization records found
                 </td>
               </tr>
             ) : (
-              organizations
-                .filter(org => {
-                  const matchesType = !filters.organizationType || org.organizationType === filters.organizationType;
-                  const createdDate = org.createdDtm ? new Date(org.createdDtm) : null;
-                  const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
-                  const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
-                  const q = searchTerm.toLowerCase();
-                  const matchesSearch =
-                    (org.organization || '').toLowerCase().includes(q) ||
-                    (org.organizationType || '').toLowerCase().includes(q) ||
-                    (org.createdByName || '').toLowerCase().includes(q);
-                  return matchesType && fromOk && toOk && matchesSearch;
-                })
-                .map(org => (
+              currentRows.map(org => (
                 <tr key={org._id}>
                   <td>{org.organizationId || ''}</td>
                   <td>{org.organization || ''}</td>
                   <td>{org.organizationType || ''}</td>
-                  <td>{org.createdBy || ''}</td>
                   <td>{org.createdByName || ''}</td>
                   <td>{org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}</td>
                   <td>
-                    <div className="config-table-actions">
-                      <button title="View" type="button" className="config-icon-btn" onClick={() => handleView(org)}>
-                        <FaEye size={16} />
+                    <div className="ma-actions">
+                      <button title="View" type="button" className="ma-btn-action ma-btn-view" onClick={() => handleView(org)}>
+                        <FaEye />
                       </button>
-                      <button title="Edit" type="button" className="config-icon-btn" onClick={() => handleEdit(org)}>
-                        <FaEdit size={16} />
+                      <button title="Edit" type="button" className="ma-btn-action ma-btn-edit" onClick={() => handleEdit(org)}>
+                        <FaEdit />
                       </button>
-                      <button title="Delete" type="button" className="config-icon-btn" onClick={() => handleDeleteOrganization(org._id)}>
-                        <FaTrash size={16} />
+                      <button title="Delete" type="button" className="ma-btn-action ma-btn-delete" onClick={() => handleDeleteOrganization(org._id)}>
+                        <FaTrash />
                       </button>
                     </div>
                   </td>
@@ -670,12 +635,25 @@ const Organization = () => {
             )}
           </tbody>
         </table>
-        <div className="conf-pagination">
-          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+        </div>
+        <div className="ma-footer-row">
+          <button
+            type="button"
+            className="ma-pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
             &lt; Previous
           </button>
-          <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            type="button"
+            className="ma-pagination-btn next"
+            onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+            disabled={currentPage === pageCount}
+          >
             Next &gt;
           </button>
         </div>

@@ -23,6 +23,8 @@ const Organizations = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ organizationId: '', title: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
 
   const titles = ['Manager', 'Director', 'Coordinator', 'Supervisor', 'Executive'];
 
@@ -597,184 +599,123 @@ const Organizations = () => {
         <div className="alert-message error">{error}</div>
       )}
 
-      <div className="conf-card" style={{ marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <div className="conf-form-group" style={{ minWidth: '220px' }}>
-            <label className="conf-label">Organization</label>
+      {/* Upper filter section removed */}
+
+      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+        {error && (
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleOrgSubmit} style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
+            <label className="ma-label">Organization *</label>
             <select
-              className="conf-input"
-              value={filters.organizationId}
-              onChange={(e) => setFilters(prev => ({ ...prev, organizationId: e.target.value }))}
+              name="organizationId"
+              value={orgFormData.organizationId}
+              onChange={handleOrgInputChange}
+              className="ma-select"
+              required
             >
-              <option value="">All</option>
+              <option value="">Select Organization</option>
               {organizations.map(org => (
                 <option key={org._id} value={org._id}>{getOrganizationName(org)}</option>
               ))}
             </select>
           </div>
-          <div className="conf-form-group" style={{ minWidth: '220px' }}>
-            <label className="conf-label">Title</label>
+          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+            <label className="ma-label">Title</label>
             <select
-              className="conf-input"
-              value={filters.title}
-              onChange={(e) => setFilters(prev => ({ ...prev, title: e.target.value }))}
+              name="title"
+              value={orgFormData.title}
+              onChange={handleOrgInputChange}
+              className="ma-select"
             >
-              <option value="">All</option>
-              {titles.map(t => <option key={t} value={t}>{t}</option>)}
+              <option value="">Select Title</option>
+              {titles.map(title => (
+                <option key={title} value={title}>{title}</option>
+              ))}
             </select>
           </div>
-          <div className="conf-form-group">
-            <label className="conf-label">From Date</label>
+          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+            <label className="ma-label">Mobile No</label>
             <input
-              type="date"
-              className="conf-input"
-              value={filters.fromDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
+              className="ma-input"
+              type="tel"
+              name="mobileNo"
+              value={orgFormData.mobileNo}
+              onChange={handleOrgInputChange}
+              placeholder="Enter mobile number"
             />
           </div>
-          <div className="conf-form-group">
-            <label className="conf-label">To Date</label>
+          <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
+            <label className="ma-label">Contact Person Name *</label>
             <input
-              type="date"
-              className="conf-input"
-              value={filters.toDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
+              className="ma-input"
+              type="text"
+              name="contactPersonName"
+              value={orgFormData.contactPersonName}
+              onChange={handleOrgInputChange}
+              placeholder="Enter contact name"
+              required
             />
           </div>
-          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
-        </div>
+          <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
+            <label className="ma-label">Email *</label>
+            <input
+              className="ma-input"
+              type="email"
+              name="email"
+              value={orgFormData.email}
+              onChange={handleOrgInputChange}
+              placeholder="Enter email address"
+              required
+            />
+          </div>
+          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+            <label className="ma-label">Office No</label>
+            <input
+              className="ma-input"
+              type="text"
+              name="officeNo"
+              value={orgFormData.officeNo}
+              onChange={handleOrgInputChange}
+              placeholder="Enter office number"
+            />
+          </div>
+          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+            <label className="ma-label">Calling Name</label>
+            <input
+              className="ma-input"
+              type="text"
+              name="callingName"
+              value={orgFormData.callingName}
+              onChange={handleOrgInputChange}
+              placeholder="Enter calling name"
+            />
+          </div>
+          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button type="submit" disabled={loading} className="ma-btn-submit" style={{ marginLeft: 0, marginTop: 0 }}>
+              {loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}
+            </button>
+          </div>
+        </form>
       </div>
 
-      <form onSubmit={handleOrgSubmit} className="config-form">
-        <div className="form-grid">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div className="form-field">
-              <label className="field-label">Organization</label>
-              <div className="field-control input-wrapper">
-              <select
-                name="organizationId"
-                value={orgFormData.organizationId}
-                onChange={handleOrgInputChange}
-                required
-              >
-                <option value="">Select Organization</option>
-                {organizations.map(org => (
-                  <option key={org._id} value={org._id}>{getOrganizationName(org)}</option>
-                ))}   
-              </select>
-              </div>
-            </div>
-            
-            <div className="form-field">
-              <label className="field-label">Title</label>
-              <div className="field-control input-wrapper">
-              <select
-                name="title"
-                value={orgFormData.title}
-                onChange={handleOrgInputChange}
-              >
-                <option value="">Select Title</option>
-                {titles.map(title => (
-                  <option key={title} value={title}>{title}</option>
-                ))}
-              </select>
-              </div>
-            </div>
-            
-            <div className="form-field">
-              <label className="field-label">Mobile No</label>
-              <div className="field-control input-wrapper">
-              <input
-                className="input"
-                type="tel"
-                name="mobileNo"
-                value={orgFormData.mobileNo}
-                onChange={handleOrgInputChange}
-                placeholder="Enter mobile number"
-              />
-              </div>
-            </div>
-          </div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div className="form-field">
-              <label className="field-label">Contact Person Name</label>
-              <div className="field-control input-wrapper">
-              <input
-                className="input"
-                type="text"
-                name="contactPersonName"
-                value={orgFormData.contactPersonName}
-                onChange={handleOrgInputChange}
-                placeholder="Enter contact name"
-                required
-              />
-              </div>
-            </div>
-            
-            <div className="form-field">
-              <label className="field-label">Email</label>
-              <div className="field-control input-wrapper">
-              <input
-                className="input"
-                type="email"
-                name="email"
-                value={orgFormData.email}
-                onChange={handleOrgInputChange}
-                placeholder="Enter email address"
-                required
-              />
-              </div>
-            </div>
-            
-            <div className="form-field">
-              <label className="field-label">Office No</label>
-              <div className="field-control input-wrapper">
-              <input
-                className="input"
-                type="text"
-                name="officeNo"
-                value={orgFormData.officeNo}
-                onChange={handleOrgInputChange}
-                placeholder="Enter office number"
-              />
-              </div>
-            </div>
-            
-            <div className="form-field">
-              <label className="field-label">Calling Name</label>
-              <div className="field-control input-wrapper">
-              <input
-                className="input"
-                type="text"
-                name="callingName"
-                value={orgFormData.callingName}
-                onChange={handleOrgInputChange}
-                placeholder="Enter calling name"
-              />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="config-actions">
-          <button type="button" onClick={handleReset} className="config-btn-secondary">Reset</button>
-          <button type="submit" disabled={loading} className="config-btn-primary">{loading ? 'Saving...' : (editMode ? 'Update' : 'Submit')}</button>
-        </div>
-      </form>
-
-      <div className="config-card" style={{ marginTop: '1rem' }}>
-        <div className="conf-search-container">
-          <FaSearch className="conf-search-icon" />
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
           <input
             type="text"
-            className="conf-search-input"
-            placeholder="Search contacts..."
+            className="ma-search-input"
+            placeholder="Search contacts"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
           />
         </div>
-        <table className="config-table">
+        <div className="ma-table-container">
+        <table className="ma-table">
           <thead>
             <tr>
               <th>
@@ -803,33 +744,28 @@ const Organizations = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>
-                  Loading...
-                </td>
+                <td colSpan="7" style={{ padding: '1rem', textAlign: 'center' }}>Loading...</td>
               </tr>
             ) : orgContacts.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ padding: '2rem', textAlign: 'center', color: '#6b7280' }}>
-                  No organization contacts found
-                </td>
+                <td colSpan="7" style={{ padding: '1rem', textAlign: 'center' }}>No organization contacts found</td>
               </tr>
             ) : (
-              orgContacts
-                .filter(contact => {
-                  const orgId = contact.organizationId?._id || contact.organizationId;
-                  const matchesOrg = !filters.organizationId || orgId === filters.organizationId;
-                  const matchesTitle = !filters.title || contact.title === filters.title;
-                  const createdDate = contact.createdDtm ? new Date(contact.createdDtm) : null;
-                  const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
-                  const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
-                  const q = searchTerm.toLowerCase();
-                  const matchesSearch =
+              (() => {
+                const q = searchTerm.toLowerCase();
+                const filtered = orgContacts.filter(contact => {
+                  return (
                     getOrganizationName(contact).toLowerCase().includes(q) ||
                     (contact.name || '').toLowerCase().includes(q) ||
-                    (contact.email || '').toLowerCase().includes(q);
-                  return matchesOrg && matchesTitle && fromOk && toOk && matchesSearch;
-                })
-                .map(contact => (
+                    (contact.email || '').toLowerCase().includes(q) ||
+                    (contact.mobileNumber || '').toLowerCase().includes(q)
+                  );
+                });
+                const pageCount = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+                const indexOfLast = currentPage * itemsPerPage;
+                const indexOfFirst = indexOfLast - itemsPerPage;
+                const currentRows = filtered.slice(indexOfFirst, indexOfLast);
+                return currentRows.map(contact => (
                 <tr key={contact._id}>
                   <td>
                     {getOrganizationName(contact)}
@@ -850,32 +786,60 @@ const Organizations = () => {
                     {new Date(contact.createdDtm).toLocaleString()}
                   </td>
                   <td>
-                    <div className="config-table-actions">
-                      <button title="View" type="button" className="config-icon-btn" onClick={() => handleView(contact)}>
-                        <FaEye size={16} />
+                    <div className="ma-actions">
+                      <button title="View" type="button" className="ma-btn-action ma-btn-view" onClick={() => handleView(contact)}>
+                        <FaEye />
                       </button>
-                      <button title="Update" type="button" className="config-icon-btn" onClick={() => handleEdit(contact)}>
-                        <FaEdit size={16} />
+                      <button title="Update" type="button" className="ma-btn-action ma-btn-edit" onClick={() => handleEdit(contact)}>
+                        <FaEdit />
                       </button>
-                      <button title="Delete" type="button" className="config-icon-btn" onClick={() => handleDeleteContact(contact._id)} disabled={loading}>
-                        <FaTrash size={16} />
+                      <button title="Delete" type="button" className="ma-btn-action ma-btn-delete" onClick={() => handleDeleteContact(contact._id)} disabled={loading}>
+                        <FaTrash />
                       </button>
                     </div>
                   </td>
                 </tr>
-              ))
+                ));
+              })()
             )}
           </tbody>
         </table>
-        <div className="conf-pagination">
-          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
-            &lt; Previous
-          </button>
-          <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
-            Next &gt;
-          </button>
         </div>
+        {(() => {
+          const q = searchTerm.toLowerCase();
+          const filtered = orgContacts.filter(contact => {
+            return (
+              getOrganizationName(contact).toLowerCase().includes(q) ||
+              (contact.name || '').toLowerCase().includes(q) ||
+              (contact.email || '').toLowerCase().includes(q) ||
+              (contact.mobileNumber || '').toLowerCase().includes(q)
+            );
+          });
+          const pageCount = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+          return (
+            <div className="ma-footer-row">
+              <button
+                type="button"
+                className="ma-pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                &lt; Previous
+              </button>
+              <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                Page {currentPage} of {pageCount}
+              </span>
+              <button
+                type="button"
+                className="ma-pagination-btn next"
+                onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+                disabled={currentPage === pageCount}
+              >
+                Next &gt;
+              </button>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

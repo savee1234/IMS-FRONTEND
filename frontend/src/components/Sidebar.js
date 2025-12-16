@@ -6,6 +6,7 @@ import sltLogo from '../assets/slt-logo.png';
 const Sidebar = () => {
   const location = useLocation();
   const [isModulesOpen, setIsModulesOpen] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   
 
@@ -73,12 +74,26 @@ const Sidebar = () => {
               <Link to="/complaint" style={location.pathname === '/complaint' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Complaint Onboard</Link>
               <Link to="/roster" style={location.pathname === '/roster' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Roster Management</Link>
               <Link to="/users" style={location.pathname === '/users' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>User Management</Link>
-              <Link to="/configuration" style={location.pathname === '/configuration' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Configuration</Link>
-              <Link to="/configuration?tab=onboardMedium" style={location.search.includes('onboardMedium') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Onboard Medium</Link>
-              <Link to="/configuration?tab=organization" style={location.search.includes('organization') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Organizations</Link>
-              <Link to="/configuration?tab=organizations" style={location.search.includes('organizations') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Org. Contact Persons</Link>
-              <Link to="/configuration?tab=solutionsPerProject" style={location.search.includes('solutionsPerProject') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Solutions & Projects</Link>
-              <Link to="/configuration?tab=shifts" style={location.search.includes('shifts') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>— Roster Shift Periods</Link>
+              <button
+                type="button"
+                onClick={() => setIsConfigOpen(!isConfigOpen)}
+                style={{ 
+                  ...styles.subNavButton, 
+                  ...(location.pathname === '/configuration' ? styles.subNavLinkActive : {}) 
+                }}
+              >
+                <span>Configuration</span>
+                <span style={styles.chevron}>{isConfigOpen ? '▼' : '▶'}</span>
+              </button>
+              {isConfigOpen && (
+                <div style={styles.subNavIndentedGroup}>
+                  <Link to="/configuration?tab=onboardMedium" style={location.search.includes('onboardMedium') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>Onboard Medium</Link>
+                  <Link to="/configuration?tab=organization" style={location.search.includes('organization') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>Organizations</Link>
+                  <Link to="/configuration?tab=organizations" style={location.search.includes('organizations') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>Org. Contact Persons</Link>
+                  <Link to="/configuration?tab=solutionsPerProject" style={location.search.includes('solutionsPerProject') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>Solutions & Projects</Link>
+                  <Link to="/configuration?tab=shifts" style={location.search.includes('shifts') ? { ...styles.subNavLinkIndented, ...styles.subNavLinkActive } : styles.subNavLinkIndented}>Roster Shift Periods</Link>
+                </div>
+              )}
               <Link to="/dashboard" style={location.pathname === '/dashboard' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Dashboard</Link>
               <Link to="/my-tasks" style={location.pathname === '/my-tasks' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>View Tasks</Link>
               <Link to="/main-assignment" style={location.pathname === '/main-assignment' ? { ...styles.subNavLink, ...styles.subNavLinkActive } : styles.subNavLink}>Main Assignment</Link>
@@ -253,6 +268,49 @@ const styles = {
     background: 'rgba(255, 255, 255, 0.08)',
     borderLeftColor: '#93c5fd',
     fontWeight: 600,
+  },
+  subNavButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0.625rem 1.25rem',
+    color: 'rgba(255, 255, 255, 0.8)',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    transition: 'all 0.2s ease',
+    borderLeft: '2px solid transparent',
+    borderRadius: '0 6px 6px 0',
+    width: '100%',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    textAlign: 'left',
+  },
+  subNavRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    paddingRight: '1rem',
+  },
+  subNavLinkFlex: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  subNavToggle: {
+    background: 'transparent',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.8)',
+    cursor: 'pointer',
+    fontSize: '0.75rem',
+    padding: '0.25rem 0.5rem',
+  },
+  subNavToggleActive: {
+    color: '#ffffff',
+  },
+  subNavIndentedGroup: {
+    paddingLeft: '0.5rem',
   },
   sidebarFooter: {
     padding: '1.25rem',

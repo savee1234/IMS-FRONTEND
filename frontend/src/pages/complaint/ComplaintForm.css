@@ -843,6 +843,12 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+/* Increase spacing between ash sections in configuration pages */
+.ma-filter-card,
+.ma-table-card {
+  margin-bottom: 2rem;
+}
+
 .ma-search-bar {
   margin-bottom: 1.5rem;
   position: relative;

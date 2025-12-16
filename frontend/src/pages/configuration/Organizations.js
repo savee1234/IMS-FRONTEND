@@ -601,7 +601,7 @@ const Organizations = () => {
 
       {/* Upper filter section removed */}
 
-      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+      <div className="ma-filter-card" style={{ marginBottom: '2rem' }}>
         {error && (
           <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' }}>
             {error}
@@ -623,7 +623,7 @@ const Organizations = () => {
               ))}
             </select>
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Title</label>
             <select
               name="title"
@@ -637,7 +637,7 @@ const Organizations = () => {
               ))}
             </select>
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Mobile No</label>
             <input
               className="ma-input"
@@ -648,7 +648,7 @@ const Organizations = () => {
               placeholder="Enter mobile number"
             />
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Contact Person Name *</label>
             <input
               className="ma-input"
@@ -660,7 +660,7 @@ const Organizations = () => {
               required
             />
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Email *</label>
             <input
               className="ma-input"
@@ -672,7 +672,7 @@ const Organizations = () => {
               required
             />
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Office No</label>
             <input
               className="ma-input"
@@ -683,7 +683,7 @@ const Organizations = () => {
               placeholder="Enter office number"
             />
           </div>
-          <div className="ma-filter-group" style={{ flex: '1 1 200px' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
             <label className="ma-label">Calling Name</label>
             <input
               className="ma-input"

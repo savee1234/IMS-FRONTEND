@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
+import HeaderBar from "../../components/HeaderBar";
 import Footer from "../../components/Footer";
 import "../complaint/ComplaintForm.css";
 import { FaEye } from "react-icons/fa";
@@ -141,6 +142,7 @@ const RosterManagement = () => {
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Roster Management</h1>
         </div>

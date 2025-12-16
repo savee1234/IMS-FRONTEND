@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaEye, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import './complaint/ComplaintForm.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const MainAssignment = () => {
-  const [currentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [itemsPerPage] = useState(4);
 
   useEffect(() => {
     fetchMainAssignments();
@@ -49,9 +52,10 @@ const MainAssignment = () => {
   };
 
   return (
-    <div className="ma-wrapper">
+    <div className="ma-wrapper main-assignment-page">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Main Assignments</h1>
         </div>
@@ -136,12 +140,16 @@ const MainAssignment = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {assignments.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item.title}</td>
-                      <td>{item.description || 'N/A'}</td>
-                      <td>{item.assignedBy}</td>
-                      <td>{item.assignedTo?.userName || 'Unassigned'}</td>
+                  {(() => {
+                    const indexOfLast = currentPage * itemsPerPage;
+                    const indexOfFirst = indexOfLast - itemsPerPage;
+                    const visible = assignments.slice(indexOfFirst, indexOfLast);
+                    return visible.map((item) => (
+                      <tr key={item._id}>
+                        <td>{item.title}</td>
+                        <td>{item.description || 'N/A'}</td>
+                        <td>{item.assignedBy}</td>
+                        <td>{item.assignedTo?.userName || 'Unassigned'}</td>
                       <td>{item.status}</td>
                       <td>{item.priority}</td>
                       <td>{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'}</td>
@@ -159,32 +167,36 @@ const MainAssignment = () => {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                    ));
+                  })()}
                 </tbody>
               </table>
             )}
           </div>
 
           <div className="ma-footer-row">
-            <button className="ma-pagination-btn">
+            <button
+              className="ma-pagination-btn"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
               &lt; Previous
             </button>
-            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page {currentPage} of 1</span>
-            <button className="ma-pagination-btn next">
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+              Page {currentPage} of {Math.max(1, Math.ceil(assignments.length / itemsPerPage))}
+            </span>
+            <button
+              className="ma-pagination-btn next"
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(assignments.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(assignments.length / itemsPerPage)}
+            >
               Next &gt;
             </button>
           </div>
         </div>
 
-          <div className="ma-copyright">
-          <span>&copy; 2025 SLT Incident Management System. All rights reserved.</span>
-          <div className="ma-links">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
-            <a href="/contact">Contact Us</a>
-          </div>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 };

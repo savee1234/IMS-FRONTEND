@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import './ConfigurationModern.css';
 import '../complaint/ComplaintForm.css'; // Import legacy styles for other components
 import Sidebar from '../../components/Sidebar';
+import HeaderBar from '../../components/HeaderBar';
+import Footer from '../../components/Footer';
 
 // Import sub-components
 import OnboardMedium from './OnboardMedium';
@@ -58,21 +60,15 @@ const Configuration = () => {
     <div className="conf-wrapper">
       <Sidebar />
       <main className="conf-main">
+        <HeaderBar />
         <div className="conf-header">
           <h1 className="conf-title">{getPageTitle()}</h1>
         </div>
         <div className="conf-animate-fade-in">
           {renderActiveComponent()}
         </div>
-        <footer className="conf-footer">
-          <div>© 2025 SLT Incident Management System. All rights reserved.</div>
-          <div className="conf-footer-links">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
-            <a href="/contact">Contact Us</a>
-          </div>
-        </footer>
       </main>
+      <Footer />
     </div>
   );
 };

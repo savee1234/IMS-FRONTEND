@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
  
+import Footer from '../components/Footer';
 
 const employees = [
   { empNo: 'E001', name: 'Alice Johnson', designation: 'Technician', status: 'Available', solutions: ['Reset Password', 'Check Connectivity', 'Assign Engineer'] },
@@ -193,6 +194,7 @@ const SelectAssigner = () => {
         </div>
       </div>
       </div>
+      <Footer />
     </div>
   );
 };

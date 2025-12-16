@@ -6,6 +6,7 @@ import '../complaint/ComplaintForm.css';
 import UpdateEmployeeModal from './UpdateEmployeeModal';
 import ViewEmployeeModal from './ViewEmployeeModal';
 import { FaEye, FaEdit, FaSearch } from 'react-icons/fa';
+import HeaderBar from '../../components/HeaderBar';
 
 const UserManagement = () => {
  
@@ -97,13 +98,15 @@ const UserManagement = () => {
     return matchesSearch;
   });
 
-  const [currentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
 
 
   return (
     <div className="ma-wrapper">
       <Sidebar />
       <div className="ma-content">
+        <HeaderBar />
         <div className="ma-header">
           <h1>Users</h1>
         </div>
@@ -147,7 +150,11 @@ const UserManagement = () => {
                     <td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>No employees found.</td>
                   </tr>
                 ) : (
-                  filteredEmployees.map((employee, index) => (
+                  (() => {
+                    const indexOfLast = currentPage * itemsPerPage;
+                    const indexOfFirst = indexOfLast - itemsPerPage;
+                    const visibleEmployees = filteredEmployees.slice(indexOfFirst, indexOfLast);
+                    return visibleEmployees.map((employee, index) => (
                     <tr key={employee.id || index}>
                       <td>{employee.id}</td>
                       <td>{employee.name}</td>
@@ -166,18 +173,29 @@ const UserManagement = () => {
                         </div>
                       </td>
                     </tr>
-                  ))
+                    ));
+                  })()
                 )}
               </tbody>
             </table>
           </div>
 
           <div className="ma-footer-row">
-            <button className="ma-pagination-btn">
+            <button
+              className="ma-pagination-btn"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
               &lt; Previous
             </button>
-            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Page {currentPage} of 1</span>
-            <button className="ma-pagination-btn next">
+            <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+              Page {currentPage} of {Math.max(1, Math.ceil(filteredEmployees.length / itemsPerPage))}
+            </span>
+            <button
+              className="ma-pagination-btn next"
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredEmployees.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(filteredEmployees.length / itemsPerPage)}
+            >
               Next &gt;
             </button>
           </div>

@@ -4,14 +4,19 @@ const Usermanagement = require("../models/Usermanagement");
 // Create a new assignment
 exports.createAssignment = async (req, res) => {
   try {
-    const { assignedTo, assignedBy, Assignment: assignmentType } = req.body;
+    const { assignedTo, assignedBy, title, description, status, priority } = req.body;
+    
     const newAssignment = new AssignmentModel({
-      assignedTo: Array.isArray(assignedTo) ? assignedTo : [assignedTo],
-      assignedBy,
-      Assignment: assignmentType
+      assignedTo: Array.isArray(assignedTo) ? assignedTo : [],
+      assignedBy: assignedBy || 'System',
+      title: title || 'New Assignment',
+      description: description || '',
+      status: status || 'Pending',
+      priority: priority || 'Medium'
     });
+    
     await newAssignment.save();
-    await newAssignment.populate('assignedTo', 'userName name email');
+    await newAssignment.populate('assignedTo.user', 'userName userId Designation ContactNumber');
     res.status(201).json(newAssignment);
   } catch (error) {
     const err = { message: error.message };
@@ -19,11 +24,14 @@ exports.createAssignment = async (req, res) => {
     res.status(500).json({ message: "Error creating assignment", error: err });
   }
 };
+
 // Get assignments by user ID
 exports.getAssignmentsByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const assignments = await AssignmentModel.find({ assignedTo: { $in: [userId] } }).populate('assignedTo', 'userName name email');
+    const assignments = await AssignmentModel.find({ 
+      'assignedTo.user': userId 
+    }).populate('assignedTo.user', 'userName userId Designation ContactNumber');
     res.status(200).json(assignments);
   } catch (error) {
     const err = { message: error.message };
@@ -35,7 +43,7 @@ exports.getAssignmentsByUserId = async (req, res) => {
 // Get all assignments
 exports.getAllAssignments = async (req, res) => {
   try {
-    const assignments = await AssignmentModel.find().populate('assignedTo', 'userName name email');
+    const assignments = await AssignmentModel.find().populate('assignedTo.user', 'userName userId Designation ContactNumber');
     res.status(200).json(assignments);
   } catch (error) {
     const err = { message: error.message };
@@ -59,27 +67,41 @@ exports.seedAllUserAssignments = async (req, res) => {
     // Get the first user as the default assignedBy
     const defaultAssigner = users[0].userName || users[0].name || 'System';
 
-    // Create assignments for each user
-    const assignmentsToCreate = [];
+    // Create ONE assignment with all users (both Main and Sub)
+    const mainAssignments = users.map(user => ({
+      user: user._id,
+      assignmentType: 'Main Assignment'
+    }));
 
-    users.forEach(user => {
-      assignmentsToCreate.push({
-        assignedTo: [user._id],
-        assignedBy: defaultAssigner,
-        Assignment: 'Main Assignment'
-      });
+    const subAssignments = users.map(user => ({
+      user: user._id,
+      assignmentType: 'Sub Assignment'
+    }));
 
-      assignmentsToCreate.push({
-        assignedTo: [user._id],
+    // Create two assignments: one with all main, one with all sub
+    const assignmentsToCreate = [
+      {
+        assignedTo: mainAssignments,
         assignedBy: defaultAssigner,
-        Assignment: 'Sub Assignment'
-      });
-    });
+        title: 'Seeded Main Assignments',
+        description: 'All users as main assignments',
+        status: 'Pending',
+        priority: 'Medium'
+      },
+      {
+        assignedTo: subAssignments,
+        assignedBy: defaultAssigner,
+        title: 'Seeded Sub Assignments',
+        description: 'All users as sub assignments',
+        status: 'Pending',
+        priority: 'Medium'
+      }
+    ];
 
     const createdAssignments = await AssignmentModel.insertMany(assignmentsToCreate);
 
     res.status(201).json({
-      message: `Successfully created ${createdAssignments.length} assignments`,
+      message: `Successfully created ${createdAssignments.length} assignment documents`,
       totalMainAssignments: users.length,
       totalSubAssignments: users.length,
       totalUsers: users.length

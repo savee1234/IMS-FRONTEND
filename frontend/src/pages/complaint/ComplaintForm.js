@@ -431,22 +431,31 @@ export default function ComplaintOnboarding() {
         }
       }
 
-      // Step 1: Create assignments for all selected staff members
+      // Step 1: Create ONE assignment with all selected staff members
       const assignmentIds = [];
       const selectedStaff = Object.keys(staffAssignments).filter(empNo => staffAssignments[empNo]);
 
       if (selectedStaff.length > 0) {
-        const staffData = staff.find(s => s.empNo === selectedStaff[0]);
-        const defaultAssigner = staffData?.name || 'System';
-
-        for (const empNo of selectedStaff) {
+        // Build assignedTo array with user and assignmentType
+        const assignedToArray = selectedStaff.map(empNo => {
           const staffMember = staff.find(s => s.empNo === empNo);
-          if (!staffMember) continue;
+          return {
+            user: staffMember._id, // MongoDB ObjectId
+            assignmentType: staffAssignments[empNo] // 'Main Assignment' or 'Sub Assignment'
+          };
+        }).filter(item => item.user); // Filter out any null/undefined users
+
+        if (assignedToArray.length > 0) {
+          const staffData = staff.find(s => s.empNo === selectedStaff[0]);
+          const defaultAssigner = staffData?.name || 'System';
 
           const assignmentPayload = {
-            assignedTo: [staffMember._id], // Use MongoDB _id from staff object
-            assignedBy: defaultAssigner,
-            Assignment: staffAssignments[empNo]
+            assignedTo: assignedToArray,
+            title: `Complaint Assignment - ${form.requestRef || 'New'}`,
+            description: form.complaint ? form.complaint.substring(0, 200) : 'No description',
+            status: 'Pending',
+            priority: 'Medium',
+            assignedBy: defaultAssigner
           };
 
           try {
@@ -460,19 +469,19 @@ export default function ComplaintOnboarding() {
               const assignmentData = await assignmentResponse.json();
               if (assignmentData._id) {
                 assignmentIds.push(assignmentData._id);
-                console.log(`✅ Created assignment for ${staffMember.name}: ${assignmentData._id}`);
+                console.log(`✅ Created assignment with ${assignedToArray.length} users: ${assignmentData._id}`);
               }
             } else {
               const errorData = await assignmentResponse.json().catch(() => ({}));
-              console.warn(`Failed to create assignment for ${staffMember.name}:`, assignmentResponse.status, errorData);
+              console.warn('Failed to create assignment:', assignmentResponse.status, errorData);
             }
           } catch (error) {
-            console.warn(`Error creating assignment for ${staffMember.name}:`, error);
+            console.warn('Error creating assignment:', error);
           }
         }
       }
 
-      console.log(`Created ${assignmentIds.length} assignments:`, assignmentIds);
+      console.log(`Created ${assignmentIds.length} assignment(s) with total ${selectedStaff.length} users`);
 
       // Step 2: Submit complaint with assignment references
       const submissionData = { ...form };

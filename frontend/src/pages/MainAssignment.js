@@ -149,7 +149,11 @@ const MainAssignment = () => {
                         <td>{item.title}</td>
                         <td>{item.description || 'N/A'}</td>
                         <td>{item.assignedBy}</td>
-                        <td>{item.assignedTo?.userName || 'Unassigned'}</td>
+                        <td>{
+                          item.assignedTo && Array.isArray(item.assignedTo)
+                            ? item.assignedTo.map(user => user.userName || user.name || 'Unknown').join(', ')
+                            : (item.assignedTo?.userName || 'Unassigned')
+                        }</td>
                       <td>{item.status}</td>
                       <td>{item.priority}</td>
                       <td>{item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'N/A'}</td>

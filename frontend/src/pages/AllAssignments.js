@@ -210,9 +210,13 @@ const AllAssignments = () => {
                       <td>{item.Assignment}</td>
                       <td>{item.assignedBy}</td>
                       <td>{
-                        item.assignedTo && typeof item.assignedTo === 'object'
-                          ? (item.assignedTo.userName || item.assignedTo.name || userNames[item.assignedTo._id] || 'Unassigned')
-                          : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned')
+                        item.assignedTo && Array.isArray(item.assignedTo)
+                          ? item.assignedTo.map(user => 
+                              user.userName || user.name || userNames[user._id] || user._id
+                            ).join(', ')
+                          : (item.assignedTo && typeof item.assignedTo === 'object'
+                              ? (item.assignedTo.userName || item.assignedTo.name || item.assignedTo._id || 'Unassigned')
+                              : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned'))
                       }</td>
                       <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
                       <td>

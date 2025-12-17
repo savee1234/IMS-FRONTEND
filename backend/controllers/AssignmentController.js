@@ -6,11 +6,12 @@ exports.createAssignment = async (req, res) => {
   try {
     const { assignedTo, assignedBy, Assignment: assignmentType } = req.body;
     const newAssignment = new AssignmentModel({
-      assignedTo,
+      assignedTo: Array.isArray(assignedTo) ? assignedTo : [assignedTo],
       assignedBy,
       Assignment: assignmentType
     });
     await newAssignment.save();
+    await newAssignment.populate('assignedTo', 'userName name email');
     res.status(201).json(newAssignment);
   } catch (error) {
     const err = { message: error.message };
@@ -22,7 +23,7 @@ exports.createAssignment = async (req, res) => {
 exports.getAssignmentsByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const assignments = await AssignmentModel.find({ assignedTo: userId }).populate('assignedTo', 'userName name email');
+    const assignments = await AssignmentModel.find({ assignedTo: { $in: [userId] } }).populate('assignedTo', 'userName name email');
     res.status(200).json(assignments);
   } catch (error) {
     const err = { message: error.message };
@@ -63,13 +64,13 @@ exports.seedAllUserAssignments = async (req, res) => {
 
     users.forEach(user => {
       assignmentsToCreate.push({
-        assignedTo: user._id,
+        assignedTo: [user._id],
         assignedBy: defaultAssigner,
         Assignment: 'Main Assignment'
       });
 
       assignmentsToCreate.push({
-        assignedTo: user._id,
+        assignedTo: [user._id],
         assignedBy: defaultAssigner,
         Assignment: 'Sub Assignment'
       });

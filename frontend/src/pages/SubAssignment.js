@@ -24,19 +24,25 @@ const SubAssignment = () => {
         const result = await response.json();
         
         // Map API response to table structure
-        const mapped = result.map(item => ({
-          requestReference: item._id || 'N/A',
-          enteredDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A',
-          enteredTime: item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'N/A',
-          assignedByName: item.assignedBy || 'N/A',
-          assignedByDesignation: '',
-          assignedToName: item.assignedTo?.userName || 'N/A',
-          assignedToDesignation: '',
-          assignedToContact: item.assignedTo?.contactNumber || '',
-          assignedToStatus: item.assignedTo?.activeStatus ? 'Active' : 'Inactive',
-          remarks: '',
-          rawData: item
-        }));
+        const mapped = result.map(item => {
+          const assignedToNames = item.assignedTo && Array.isArray(item.assignedTo)
+            ? item.assignedTo.map(user => user.userName || user.name || 'Unknown').join(', ')
+            : (item.assignedTo?.userName || 'N/A');
+          
+          return {
+            requestReference: item._id || 'N/A',
+            enteredDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A',
+            enteredTime: item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'N/A',
+            assignedByName: item.assignedBy || 'N/A',
+            assignedByDesignation: '',
+            assignedToName: assignedToNames,
+            assignedToDesignation: '',
+            assignedToContact: item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo[0]?.contactNumber ? item.assignedTo[0].contactNumber : '',
+            assignedToStatus: item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo[0]?.activeStatus ? 'Active' : 'Inactive',
+            remarks: '',
+            rawData: item
+          };
+        });
         
         setData(mapped);
       } catch (err) {

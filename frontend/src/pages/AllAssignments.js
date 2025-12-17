@@ -37,6 +37,7 @@ const AllAssignments = () => {
         const res = await fetch('http://localhost:44354/api/assignments');
         if (!res.ok) throw new Error('Failed to fetch assignments');
         const data = await res.json();
+        console.log('Fetched assignments:', data);
         setAssignments(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message || 'Unexpected error');
@@ -146,7 +147,8 @@ const AllAssignments = () => {
               <option value="">Select Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
             </select>
           </div>
           <div className="ma-filter-group">
@@ -193,9 +195,12 @@ const AllAssignments = () => {
               <table className="ma-table">
                 <thead>
                   <tr>
-                    <th>Assignment Type</th>
-                    <th>Assigned By</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Priority</th>
                     <th>Assigned To</th>
+                    <th>Assigned By</th>
                     <th>Created At</th>
                     <th>Actions</th>
                   </tr>
@@ -205,21 +210,42 @@ const AllAssignments = () => {
                     const indexOfLast = currentPage * itemsPerPage;
                     const indexOfFirst = indexOfLast - itemsPerPage;
                     const visibleAssignments = assignments.slice(indexOfFirst, indexOfLast);
-                    return visibleAssignments.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item.Assignment}</td>
-                      <td>{item.assignedBy}</td>
-                      <td>{
-                        item.assignedTo && Array.isArray(item.assignedTo)
-                          ? item.assignedTo.map(user => 
-                              user.userName || user.name || userNames[user._id] || user._id
-                            ).join(', ')
-                          : (item.assignedTo && typeof item.assignedTo === 'object'
-                              ? (item.assignedTo.userName || item.assignedTo.name || item.assignedTo._id || 'Unassigned')
-                              : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned'))
-                      }</td>
-                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
-                      <td>
+                    return visibleAssignments.map((item) => {
+                      // Extract assigned users
+                      const assignedUsers = item.assignedTo && Array.isArray(item.assignedTo) 
+                        ? item.assignedTo.map(assignee => {
+                            const userName = assignee.user?.userName || 'Unknown';
+                            const assignType = assignee.assignmentType === 'Main Assignment' ? '(Main)' : '(Sub)';
+                            return `${userName} ${assignType}`;
+                          }).join(', ')
+                        : 'Unassigned';
+
+                      return (
+                        <tr key={item._id}>
+                          <td><strong>{item.title || 'N/A'}</strong></td>
+                          <td>
+                            <div style={{ maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {item.description || 'No description'}
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`ma-status-badge ma-status-${(item.status || '').toLowerCase().replace(' ', '-')}`}>
+                              {item.status || 'Pending'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`ma-priority-badge ma-priority-${(item.priority || '').toLowerCase()}`}>
+                              {item.priority || 'Medium'}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {assignedUsers}
+                            </div>
+                          </td>
+                          <td>{item.assignedBy || 'N/A'}</td>
+                          <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB') : 'N/A'}</td>
+                          <td>
                         <div className="ma-actions">
                           <button
                             title="View"
@@ -251,11 +277,12 @@ const AllAssignments = () => {
                         </div>
                       </td>
                     </tr>
-                    ));
+                      );
+                    });
                   })()}
                   {assignments.length === 0 && (
                     <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
+                      <td colSpan="8" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
                     </tr>
                   )}
                 </tbody>

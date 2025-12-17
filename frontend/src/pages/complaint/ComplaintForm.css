@@ -1002,3 +1002,66 @@ body {
 .main-assignment-page .ma-table td { padding: 1rem 1.25rem; }
 .sub-assignment-page .ma-table th { padding: 0.85rem 1.25rem; }
 .sub-assignment-page .ma-table td { padding: 1.1rem 1.25rem; }
+
+/* Status Badge Styles */
+.ma-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ma-status-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.ma-status-in-progress {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.ma-status-completed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.ma-status-on-hold {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* Priority Badge Styles */
+.ma-priority-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ma-priority-low {
+  background-color: #e0f2fe;
+  color: #075985;
+}
+
+.ma-priority-medium {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.ma-priority-high {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
+
+.ma-priority-critical {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+

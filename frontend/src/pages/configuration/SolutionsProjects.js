@@ -302,6 +302,124 @@ const SolutionsProjects = () => {
 
       
 
+      
+
+      {/* Solution Management (Type + Solution + By Type) */}
+      <div className="ma-filter-card">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+          <div>
+            <h5 className="ma-label" style={{ margin: 0, marginBottom: '0.5rem' }}>Add Solution Type</h5>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={newSolutionType}
+                onChange={(e) => setNewSolutionType(e.target.value)}
+                placeholder="Enter solution type"
+                className="ma-input"
+              />
+              <button
+                onClick={handleAddSolutionType}
+                className="ma-btn-submit"
+                style={{ marginTop: 0 }}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div style={{ height: '1px', backgroundColor: '#e5e7eb' }} />
+
+          <div>
+            <h5 className="ma-label" style={{ margin: 0, marginBottom: '0.75rem' }}>Add Solution Name</h5>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto auto', gap: '0.5rem', width: '100%' }}>
+              <div className="ma-filter-group">
+                <label className="ma-label">Solution Type <span style={{ color: '#dc2626' }}>*</span></label>
+                <select
+                  value={newSolutionType}
+                  onChange={(e) => setNewSolutionType(e.target.value)}
+                  className="ma-select"
+                  style={{ color: newSolutionType ? '#111827' : '#9ca3af' }}
+                >
+                  <option value="">Select a type</option>
+                  {solutionTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="ma-filter-group">
+                <label className="ma-label">Solution Name <span style={{ color: '#dc2626' }}>*</span></label>
+                <input
+                  type="text"
+                  value={newSolution}
+                  onChange={(e) => setNewSolution(e.target.value)}
+                  placeholder="Enter solution name"
+                  className="ma-input"
+                />
+              </div>
+              <div className="ma-actions" style={{ alignItems: 'flex-end' }}>
+                <button
+                  onClick={handleResetSolutionManagement}
+                  className="ma-pagination-btn"
+                  style={{ marginTop: 0, height: '42px', padding: '0 1.25rem', borderRadius: '6px' }}
+                >
+                  Reset
+                </button>
+              </div>
+              <div className="ma-actions" style={{ alignItems: 'flex-end' }}>
+                <button
+                  onClick={handleAddSolution}
+                  className="ma-btn-submit"
+                  style={{ marginTop: 0, backgroundColor: '#1e3a8a', cursor: (!newSolutionType || !newSolution.trim()) ? 'not-allowed' : 'pointer' }}
+                  disabled={!newSolutionType || !newSolution.trim()}
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ height: '1px', backgroundColor: '#e5e7eb' }} />
+
+          <div>
+            <label className="ma-label">Solutions by Type:</label>
+            <div style={{ maxHeight: '220px', overflowY: 'auto', padding: '0.6rem', borderRadius: '8px', border: '1px dashed #93c5fd', backgroundColor: '#ffffff' }}>
+              {solutionTypes.length === 0 ? (
+                <div style={{ color: '#6b7280', fontStyle: 'italic', padding: '0.4rem' }}>
+                  No solution types available. Add a solution type first.
+                </div>
+              ) : (
+                solutionTypes.map((type, typeIndex) => {
+                  const solutionsForType = solutionTypeToSolutionsMap[type] || [];
+                  return (
+                    <div key={typeIndex} style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', alignItems: 'center', gap: '0.3rem', padding: '0.4rem', borderRadius: '8px', border: '1px solid #bfdbfe', backgroundColor: '#f8fafc', marginBottom: '0.6rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', padding: '0.2rem 0.3rem', borderRadius: '6px', fontSize: '0.9rem', color: '#1f2937' }}>
+                        <span style={{ fontWeight: 'normal' }}>{type}</span>
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                        {solutionsForType.length === 0 ? (
+                          <span style={{ color: '#9ca3af', fontSize: '0.8rem', fontStyle: 'italic' }}>
+                            No solutions added yet
+                          </span>
+                        ) : (
+                          solutionsForType.map((solution, solIndex) => (
+                            <span
+                              key={solIndex}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.25rem 0.6rem', backgroundColor: '#dbeafe', borderRadius: '15px', fontSize: '0.8rem', border: '1px solid #93c5fd', color: '#111827' }}
+                            >
+                              <span>{solution}</span>
+                            </span>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
         <form onSubmit={handleSolutionSubmit} style={{ width: '100%' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', width: '100%' }}>
@@ -397,172 +515,6 @@ const SolutionsProjects = () => {
             </button>
           </div>
         </form>
-      </div>
-
-      <div className="ma-filter-card">
-
-        
-        <div>
-          {/* Combined Solution Type and Solution Management */}
-          <div className="ma-filter-card">
-
-            
-            {/* Two-column layout for adding types and solutions */}
-            <div className="form-grid">
-              {/* Add Solution Type Column */}
-              <div>
-                <h5>Solution Types</h5>
-                
-                <div>
-                  <div>
-                    <label className="ma-label">Type Name</label>
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <input
-                        type="text"
-                        value={newSolutionType}
-                        onChange={(e) => setNewSolutionType(e.target.value)}
-                        placeholder="Enter solution type"
-                        className="ma-input"
-                      />
-                      <button
-                        onClick={handleAddSolutionType}
-                        className="ma-btn-submit"
-                        style={{ marginTop: 0 }}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="ma-label">Current Types ({solutionTypes.length}):</label>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                    {solutionTypes.length === 0 ? (
-                      <li>No types added</li>
-                    ) : (
-                      solutionTypes.map((type, index) => (
-                        <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0' }}>
-                          <span>{type}</span>
-                          <button onClick={() => handleDeleteSolutionType(type)} className="ma-btn-action ma-btn-delete" title="Delete">×</button>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </div>
-              </div>
-              
-              {/* Add Solution Column */}
-              <div style={{
-                background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
-                padding: '1rem',
-                borderRadius: '10px',
-                border: '1px solid #bfdbfe'
-              }}>
-                <h5 style={{
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: '#1e40af',
-                  margin: '0 0 0.8rem 0'
-                }}>
-                  Solutions
-                </h5>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column',
-                  gap: '0.8rem',
-                  marginBottom: '0.8rem'
-                }}>
-                  <div>
-                    <label className="ma-label">
-                      Solution Type <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <select
-                      value={newSolutionType}
-                      onChange={(e) => setNewSolutionType(e.target.value)}
-                      className="ma-select"
-                    >
-                      <option value="">Select a type</option>
-                      {solutionTypes.map((type, index) => (
-                        <option key={index} value={type}>{type}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="ma-label">
-                      Solution Name <span style={{ color: '#dc2626' }}>*</span>
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <input
-                        type="text"
-                        value={newSolution}
-                        onChange={(e) => setNewSolution(e.target.value)}
-                        placeholder="Enter solution name"
-                        className="ma-input"
-                        style={{ flex: 1 }}
-                      />
-                      <button
-                        onClick={handleAddSolution}
-                        className="ma-btn-submit"
-                        style={{ marginTop: 0 }}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Reset Button */}
-                <div className="ma-actions" style={{ justifyContent: 'flex-end' }}>
-                  <button onClick={handleResetSolutionManagement} className="ma-pagination-btn">Reset All</button>
-                </div>
-              </div>
-            </div>
-            
-            <div className="ma-table-card" style={{ marginTop: '1rem' }}>
-              <label className="ma-label">Solutions by Type:</label>
-              <div style={{ maxHeight: '150px', overflowY: 'auto', padding: '0.6rem', borderRadius: '8px', border: '1px dashed #93c5fd' }}>
-                {solutionTypes.length === 0 ? (
-                  <div style={{ color: '#6b7280', fontStyle: 'italic', padding: '0.4rem' }}>
-                    No solution types available. Add a solution type first.
-                  </div>
-                ) : (
-                  solutionTypes.map((type, typeIndex) => {
-                    const solutionsForType = solutionTypeToSolutionsMap[type] || [];
-                    return (
-                      <div key={typeIndex} style={{ marginBottom: '0.6rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #bfdbfe', marginBottom: '0.2rem' }}>
-                          <span style={{ fontWeight: '600' }}>{type}</span>
-                          <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '10px', padding: '0.1rem 0.4rem', fontSize: '0.7rem' }}>
-                            {solutionsForType.length} solutions
-                          </span>
-                        </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.2rem', paddingLeft: '0.8rem' }}>
-                          {solutionsForType.length === 0 ? (
-                            <span style={{ color: '#9ca3af', fontSize: '0.75rem', fontStyle: 'italic' }}>
-                              No solutions added yet
-                            </span>
-                          ) : (
-                            solutionsForType.map((solution, solIndex) => (
-                              <span
-                                key={solIndex}
-                                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem', padding: '0.2rem 0.4rem', backgroundColor: '#dbeafe', borderRadius: '15px', fontSize: '0.7rem', border: '1px solid #93c5fd' }}
-                              >
-                                <span>{solution}</span>
-                              </span>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="ma-table-card">

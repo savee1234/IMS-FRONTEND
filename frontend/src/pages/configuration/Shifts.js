@@ -314,7 +314,7 @@ const Shifts = () => {
               </select>
             </div>
           </div>
-          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+          <div className="ma-actions" style={{ justifyContent: 'flex-end', width: '100%' }}>
             <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
             <button type="submit" disabled={loading} className="ma-btn-submit" style={{ marginLeft: 0, marginTop: 0 }}>
               {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}

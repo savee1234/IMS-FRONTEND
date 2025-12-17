@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './UpdateStatusModal.css';
 
 export default function UpdateStatusModal({ assignment, onClose, onSubmit }) {
@@ -6,6 +6,10 @@ export default function UpdateStatusModal({ assignment, onClose, onSubmit }) {
   const [remark, setRemark] = useState('');
   const [documentTitle, setDocumentTitle] = useState('');
   const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    setStatus(assignment?.status || '');
+  }, [assignment]);
 
   const resetForm = () => {
     setStatus('');
@@ -17,7 +21,7 @@ export default function UpdateStatusModal({ assignment, onClose, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
-      assignmentId: assignment?.id || assignment?.requestRef || null,
+      assignmentId: assignment?._id || assignment?.id || assignment?.requestRef || null,
       status,
       remark,
       documentTitle,
@@ -41,8 +45,8 @@ export default function UpdateStatusModal({ assignment, onClose, onSubmit }) {
               <option value="">Select Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
             </select>
           </div>
 

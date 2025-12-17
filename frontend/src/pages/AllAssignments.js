@@ -9,6 +9,7 @@ import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
 
 const AllAssignments = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:44354/api';
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [filters, setFilters] = useState({
@@ -29,30 +30,31 @@ const AllAssignments = () => {
   const [error, setError] = useState(null);
   const [userNames, setUserNames] = useState({});
 
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch('http://localhost:44354/api/assignments');
-        if (!res.ok) throw new Error('Failed to fetch assignments');
-        const data = await res.json();
-        setAssignments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError(err.message || 'Unexpected error');
-        console.error('Error fetching assignments:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchAssignments = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_BASE}/assignments`);
+      if (!res.ok) throw new Error('Failed to fetch assignments');
+      const data = await res.json();
+      setAssignments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error fetching assignments:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchAssignments();
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('http://localhost:44354/api/user-management');
+      const res = await fetch(`${API_BASE}/user-management`);
       if (!res.ok) throw new Error('Failed to fetch users');
       const data = await res.json();
       // Build quick lookup by id
@@ -95,10 +97,32 @@ const AllAssignments = () => {
     setStatusAssignment(null);
   };
 
-  const handleStatusSubmit = (payload) => {
-    console.log('Status update payload:', payload);
-    // TODO: call API to submit status update
-    closeStatus();
+  const handleStatusSubmit = async (payload) => {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!payload.assignmentId) throw new Error('Missing assignment id');
+
+      const res = await fetch(`${API_BASE}/assignments/${payload.assignmentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: payload.status })
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to update assignment');
+      }
+
+      const updated = await res.json();
+      setAssignments(prev => prev.map(a => (a._id === updated._id ? updated : a)));
+      closeStatus();
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error updating assignment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [progressOpen, setProgressOpen] = useState(false);
@@ -112,6 +136,29 @@ const AllAssignments = () => {
   const closeProgress = () => {
     setProgressOpen(false);
     setProgressAssignment(null);
+  };
+
+  const handleDelete = async (assignmentId) => {
+    const confirmDelete = window.confirm('Delete this assignment?');
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(`${API_BASE}/assignments/${assignmentId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to delete assignment');
+      }
+
+      setAssignments(prev => prev.filter(a => a._id !== assignmentId));
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error deleting assignment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -146,7 +193,8 @@ const AllAssignments = () => {
               <option value="">Select Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
             </select>
           </div>
           <div className="ma-filter-group">
@@ -193,9 +241,12 @@ const AllAssignments = () => {
               <table className="ma-table">
                 <thead>
                   <tr>
-                    <th>Assignment Type</th>
-                    <th>Assigned By</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Priority</th>
                     <th>Assigned To</th>
+                    <th>Assigned By</th>
                     <th>Created At</th>
                     <th>Actions</th>
                   </tr>
@@ -205,17 +256,42 @@ const AllAssignments = () => {
                     const indexOfLast = currentPage * itemsPerPage;
                     const indexOfFirst = indexOfLast - itemsPerPage;
                     const visibleAssignments = assignments.slice(indexOfFirst, indexOfLast);
-                    return visibleAssignments.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item.Assignment}</td>
-                      <td>{item.assignedBy}</td>
-                      <td>{
-                        item.assignedTo && typeof item.assignedTo === 'object'
-                          ? (item.assignedTo.userName || item.assignedTo.name || userNames[item.assignedTo._id] || 'Unassigned')
-                          : (item.assignedTo ? (userNames[item.assignedTo] || String(item.assignedTo)) : 'Unassigned')
-                      }</td>
-                      <td>{item.createdAt ? new Date(item.createdAt).toLocaleString() : 'N/A'}</td>
-                      <td>
+                    return visibleAssignments.map((item) => {
+                      // Extract assigned users
+                      const assignedUsers = item.assignedTo && Array.isArray(item.assignedTo) 
+                        ? item.assignedTo.map(assignee => {
+                            const userName = assignee.user?.userName || 'Unknown';
+                            const assignType = assignee.assignmentType === 'Main Assignment' ? '(Main)' : '(Sub)';
+                            return `${userName} ${assignType}`;
+                          }).join(', ')
+                        : 'Unassigned';
+
+                      return (
+                        <tr key={item._id}>
+                          <td><strong>{item.title || 'N/A'}</strong></td>
+                          <td>
+                            <div style={{ maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {item.description || 'No description'}
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`ma-status-badge ma-status-${(item.status || '').toLowerCase().replace(' ', '-')}`}>
+                              {item.status || 'Pending'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`ma-priority-badge ma-priority-${(item.priority || '').toLowerCase()}`}>
+                              {item.priority || 'Medium'}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {assignedUsers}
+                            </div>
+                          </td>
+                          <td>{item.assignedBy || 'N/A'}</td>
+                          <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB') : 'N/A'}</td>
+                          <td>
                         <div className="ma-actions">
                           <button
                             title="View"
@@ -241,17 +317,23 @@ const AllAssignments = () => {
                           >
                             <FaTasks />
                           </button>
-                          <button title="Delete" type="button" className="ma-btn-action ma-btn-delete">
+                          <button
+                            title="Delete"
+                            type="button"
+                            className="ma-btn-action ma-btn-delete"
+                            onClick={() => handleDelete(item._id)}
+                          >
                             <FaTrash />
                           </button>
                         </div>
                       </td>
                     </tr>
-                    ));
+                      );
+                    });
                   })()}
                   {assignments.length === 0 && (
                     <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
+                      <td colSpan="8" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
                     </tr>
                   )}
                 </tbody>

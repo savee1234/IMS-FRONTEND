@@ -44,7 +44,12 @@ const complaintSchema = new mongoose.Schema(
       default: null
     },
 
-    // assignment
+    // assignments linked to this complaint (references to Assignments documents)
+    assignments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Assignments'
+    }],
+    // optional legacy single assignment field (kept for backward compatibility)
     assignment: String,
     docRef: String,
     docSubject: String,

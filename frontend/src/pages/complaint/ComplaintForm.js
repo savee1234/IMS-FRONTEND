@@ -49,9 +49,10 @@ export default function ComplaintOnboarding() {
         // API might return { success: true, data: [...] } or an array directly
         const raw = Array.isArray(data) ? data : (data.data || []);
 
-        // Map API users to staff shape. Availability should be empty as requested.
+        // Map API users to staff shape with MongoDB _id for assignments
         const mapped = raw.map(u => ({
-          empNo: u.userId,
+          _id: u._id, // MongoDB ObjectId for assignment reference
+          empNo: u.userId, // String userId for display
           name: u.userName,
           designation: u.Designation,
           availability: 'office'
@@ -90,6 +91,7 @@ export default function ComplaintOnboarding() {
 
     // assignment
     assignment: "",
+    assignments: [],
     docRef: "",
     docSubject: "",
     remarks: ""
@@ -431,9 +433,61 @@ export default function ComplaintOnboarding() {
         }
       }
 
-      // Submit complaint - prepare clean submission data
+      // Step 1: Create ONE assignment with all selected staff members
+      const assignmentIds = [];
+      const selectedStaff = Object.keys(staffAssignments).filter(empNo => staffAssignments[empNo]);
+
+      if (selectedStaff.length > 0) {
+        // Build assignedTo array with user and assignmentType
+        const assignedToArray = selectedStaff.map(empNo => {
+          const staffMember = staff.find(s => s.empNo === empNo);
+          return {
+            user: staffMember._id, // MongoDB ObjectId
+            assignmentType: staffAssignments[empNo] // 'Main Assignment' or 'Sub Assignment'
+          };
+        }).filter(item => item.user); // Filter out any null/undefined users
+
+        if (assignedToArray.length > 0) {
+          const staffData = staff.find(s => s.empNo === selectedStaff[0]);
+          const defaultAssigner = staffData?.name || 'System';
+
+          const assignmentPayload = {
+            assignedTo: assignedToArray,
+            title: `Complaint Assignment - ${form.requestRef || 'New'}`,
+            description: form.complaint ? form.complaint.substring(0, 200) : 'No description',
+            status: 'Pending',
+            priority: 'Medium',
+            assignedBy: defaultAssigner
+          };
+
+          try {
+            const assignmentResponse = await fetch('http://localhost:44354/api/assignments', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(assignmentPayload),
+            });
+
+            if (assignmentResponse.ok) {
+              const assignmentData = await assignmentResponse.json();
+              if (assignmentData._id) {
+                assignmentIds.push(assignmentData._id);
+                console.log(`✅ Created assignment with ${assignedToArray.length} users: ${assignmentData._id}`);
+              }
+            } else {
+              const errorData = await assignmentResponse.json().catch(() => ({}));
+              console.warn('Failed to create assignment:', assignmentResponse.status, errorData);
+            }
+          } catch (error) {
+            console.warn('Error creating assignment:', error);
+          }
+        }
+      }
+
+      console.log(`Created ${assignmentIds.length} assignment(s) with total ${selectedStaff.length} users`);
+
+      // Step 2: Submit complaint with assignment references
       const submissionData = { ...form };
-      console.log('Submitting complaint data:', JSON.stringify(submissionData, null, 2));
+      submissionData.assignments = assignmentIds;
 
       // Remove empty fields that might cause issues
       Object.keys(submissionData).forEach(key => {
@@ -447,16 +501,16 @@ export default function ComplaintOnboarding() {
         delete submissionData.solutionName;
       }
 
-      console.log('Cleaned submission data:', JSON.stringify(submissionData, null, 2));
+      // Ensure assignments is always an array
+      if (!submissionData.assignments || !Array.isArray(submissionData.assignments)) {
+        submissionData.assignments = [];
+      }
 
       const response = await fetch("http://localhost:44354/api/complaints", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submissionData),
       });
-
-      console.log('Response status:', response.status);
-      console.log('Response ok?', response.ok);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -465,13 +519,12 @@ export default function ComplaintOnboarding() {
       }
 
       const savedComplaint = await response.json();
-      console.log('Saved complaint response:', savedComplaint);
       
       setSubmitted(true);
       // Use the reference number from the backend response, or fall back to the generated one
       const finalRef = savedComplaint.data.requestRef || form.requestRef;
       setGeneratedRef(finalRef);
-      alert(`✅ Complaint submitted successfully! Reference: ${finalRef}`);
+      alert(`✅ Complaint submitted successfully! Reference: ${finalRef}\n${assignmentIds.length} assignment(s) linked.`);
 
     } catch (error) {
       console.error('Submission error:', error);

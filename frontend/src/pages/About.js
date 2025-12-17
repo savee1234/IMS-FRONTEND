@@ -1,6 +1,8 @@
 import React from 'react';
 import HeaderBar from '../components/HeaderBar';
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
+import '../components/PageWrapper.css';
  
 
 const About = () => {
@@ -107,50 +109,50 @@ const About = () => {
   };
 
   return (
-    <div style={styles.page}>
-      
-      <div style={styles.gradientOverlay}></div>
-      <HeaderBar />
-      <div style={styles.container}>
-        <div style={styles.containerBefore}></div>
-        <h1 style={styles.header}>About Our Incident Management System</h1>
-
-        <div style={styles.imageContainer}>
-          {/* Replace with your actual image */}
-          <img 
-            src="https://via.placeholder.com/800x400?text=IMS+Dashboard" 
-            alt="IMS System Overview" 
-            style={styles.systemImage}
-          />
+    <div className="page-wrapper">
+      <Sidebar />
+      <div className="page-main-content">
+        <HeaderBar />
+        <div className="page-container">
+          <div className="page-header">
+            <h1 className="page-title">About</h1>
+            <p className="page-subtitle">Incident Management System overview and benefits</p>
+          </div>
+          <div style={styles.container}>
+            <div style={styles.containerBefore}></div>
+            <div style={styles.imageContainer}>
+              <img 
+                src="https://via.placeholder.com/800x400?text=IMS+Dashboard" 
+                alt="IMS System Overview" 
+                style={styles.systemImage}
+              />
+            </div>
+            <p style={styles.paragraph}>
+              The <strong>Incident Management System (IMS)</strong> is SLT Digital Platforms Division's centralized platform for efficient incident tracking and resolution, replacing manual processes with automated workflows.
+            </p>
+            <div style={styles.highlight}>
+              <h2 style={styles.subHeader}>Key Benefits</h2>
+              <ul style={styles.featureList}>
+                <li style={styles.listItem}><strong>Faster Response:</strong> Reduces incident resolution time</li>
+                <li style={styles.listItem}><strong>24/7 Availability:</strong> Ensures continuous service monitoring</li>
+                <li style={styles.listItem}><strong>Transparent Tracking:</strong> Real-time status updates</li>
+                <li style={styles.listItem}><strong>Automated Workflows:</strong> Smart routing to appropriate teams</li>
+              </ul>
+            </div>
+            <h2 style={styles.subHeader}>For All Users</h2>
+            <ul style={styles.featureList}>
+              <li style={styles.listItem}>Customers report issues easily</li>
+              <li style={styles.listItem}>Agents log and track incidents</li>
+              <li style={styles.listItem}>Technicians resolve with clear priorities</li>
+              <li style={styles.listItem}>Managers monitor performance metrics</li>
+            </ul>
+            <p style={styles.tagline}>
+              Supporting SLT in delivering exceptional digital experiences through smarter incident management.
+            </p>
+          </div>
         </div>
-
-        <p style={styles.paragraph}>
-          The <strong>Incident Management System (IMS)</strong> is SLT Digital Platforms Division's centralized platform for efficient incident tracking and resolution, replacing manual processes with automated workflows.
-        </p>
-
-        <div style={styles.highlight}>
-          <h2 style={styles.subHeader}>Key Benefits</h2>
-          <ul style={styles.featureList}>
-            <li style={styles.listItem}><strong>Faster Response:</strong> Reduces incident resolution time</li>
-            <li style={styles.listItem}><strong>24/7 Availability:</strong> Ensures continuous service monitoring</li>
-            <li style={styles.listItem}><strong>Transparent Tracking:</strong> Real-time status updates</li>
-            <li style={styles.listItem}><strong>Automated Workflows:</strong> Smart routing to appropriate teams</li>
-          </ul>
-        </div>
-
-        <h2 style={styles.subHeader}>For All Users</h2>
-        <ul style={styles.featureList}>
-          <li style={styles.listItem}>Customers report issues easily</li>
-          <li style={styles.listItem}>Agents log and track incidents</li>
-          <li style={styles.listItem}>Technicians resolve with clear priorities</li>
-          <li style={styles.listItem}>Managers monitor performance metrics</li>
-        </ul>
-
-        <p style={styles.tagline}>
-          Supporting SLT in delivering exceptional digital experiences through smarter incident management.
-        </p>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

@@ -812,6 +812,20 @@ body {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
 
+/* Select placeholder ash color and dropdown options black */
+.ma-select {
+  color: #1f2937;
+}
+.ma-select:required:invalid {
+  color: #9ca3af;
+}
+.ma-select option {
+  color: #111827;
+}
+.ma-select option[value=""] {
+  color: #9ca3af;
+}
+
 .ma-btn-submit {
   background-color: #1e3a8a;
   color: white;
@@ -846,7 +860,7 @@ body {
 /* Increase spacing between ash sections in configuration pages */
 .ma-filter-card,
 .ma-table-card {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .ma-search-bar {

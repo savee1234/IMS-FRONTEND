@@ -40,14 +40,14 @@ const styles = {
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '1rem',
-    padding: '0 2rem',
+    padding: '0 30px',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   text: {
     margin: 0,
+    marginLeft: '16rem',
     fontSize: '14px',
     color: 'rgba(255,255,255,0.85)',
-    marginLeft: '0.75rem',
     fontFamily: "'Inter', 'Poppins', 'Montserrat', 'Segoe UI', 'Roboto', sans-serif"
   },
   links: {

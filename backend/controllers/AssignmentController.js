@@ -52,6 +52,74 @@ exports.getAllAssignments = async (req, res) => {
   }
 };
 
+// Get assignment by ID
+exports.getAssignmentById = async (req, res) => {
+  try {
+    const { assignmentId } = req.params;
+    const assignment = await AssignmentModel.findById(assignmentId).populate('assignedTo.user', 'userName userId Designation ContactNumber');
+
+    if (!assignment) {
+      return res.status(404).json({ message: 'Assignment not found' });
+    }
+
+    res.status(200).json(assignment);
+  } catch (error) {
+    const err = { message: error.message };
+    if (process.env.NODE_ENV !== 'production') err.stack = error.stack;
+    res.status(500).json({ message: "Error fetching assignment", error: err });
+  }
+};
+
+// Update an assignment
+exports.updateAssignment = async (req, res) => {
+  try {
+    const { assignmentId } = req.params;
+    const { assignedTo, assignedBy, title, description, status, priority } = req.body;
+
+    const updates = {};
+    if (assignedTo !== undefined) updates.assignedTo = Array.isArray(assignedTo) ? assignedTo : [];
+    if (assignedBy !== undefined) updates.assignedBy = assignedBy;
+    if (title !== undefined) updates.title = title;
+    if (description !== undefined) updates.description = description;
+    if (status !== undefined) updates.status = status;
+    if (priority !== undefined) updates.priority = priority;
+
+    const updatedAssignment = await AssignmentModel.findByIdAndUpdate(
+      assignmentId,
+      updates,
+      { new: true, runValidators: true }
+    ).populate('assignedTo.user', 'userName userId Designation ContactNumber');
+
+    if (!updatedAssignment) {
+      return res.status(404).json({ message: 'Assignment not found' });
+    }
+
+    res.status(200).json(updatedAssignment);
+  } catch (error) {
+    const err = { message: error.message };
+    if (process.env.NODE_ENV !== 'production') err.stack = error.stack;
+    res.status(500).json({ message: "Error updating assignment", error: err });
+  }
+};
+
+// Delete an assignment
+exports.deleteAssignment = async (req, res) => {
+  try {
+    const { assignmentId } = req.params;
+    const deletedAssignment = await AssignmentModel.findByIdAndDelete(assignmentId);
+
+    if (!deletedAssignment) {
+      return res.status(404).json({ message: 'Assignment not found' });
+    }
+
+    res.status(200).json({ message: 'Assignment deleted successfully', assignmentId });
+  } catch (error) {
+    const err = { message: error.message };
+    if (process.env.NODE_ENV !== 'production') err.stack = error.stack;
+    res.status(500).json({ message: "Error deleting assignment", error: err });
+  }
+};
+
 // Seed assignments for all users
 exports.seedAllUserAssignments = async (req, res) => {
   try {

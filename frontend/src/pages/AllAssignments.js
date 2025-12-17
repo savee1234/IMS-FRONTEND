@@ -9,6 +9,7 @@ import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
 
 const AllAssignments = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:44354/api';
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
   const [filters, setFilters] = useState({
@@ -29,31 +30,31 @@ const AllAssignments = () => {
   const [error, setError] = useState(null);
   const [userNames, setUserNames] = useState({});
 
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch('http://localhost:44354/api/assignments');
-        if (!res.ok) throw new Error('Failed to fetch assignments');
-        const data = await res.json();
-        console.log('Fetched assignments:', data);
-        setAssignments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError(err.message || 'Unexpected error');
-        console.error('Error fetching assignments:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchAssignments = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_BASE}/assignments`);
+      if (!res.ok) throw new Error('Failed to fetch assignments');
+      const data = await res.json();
+      setAssignments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error fetching assignments:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchAssignments();
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('http://localhost:44354/api/user-management');
+      const res = await fetch(`${API_BASE}/user-management`);
       if (!res.ok) throw new Error('Failed to fetch users');
       const data = await res.json();
       // Build quick lookup by id
@@ -96,10 +97,32 @@ const AllAssignments = () => {
     setStatusAssignment(null);
   };
 
-  const handleStatusSubmit = (payload) => {
-    console.log('Status update payload:', payload);
-    // TODO: call API to submit status update
-    closeStatus();
+  const handleStatusSubmit = async (payload) => {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!payload.assignmentId) throw new Error('Missing assignment id');
+
+      const res = await fetch(`${API_BASE}/assignments/${payload.assignmentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: payload.status })
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to update assignment');
+      }
+
+      const updated = await res.json();
+      setAssignments(prev => prev.map(a => (a._id === updated._id ? updated : a)));
+      closeStatus();
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error updating assignment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [progressOpen, setProgressOpen] = useState(false);
@@ -113,6 +136,29 @@ const AllAssignments = () => {
   const closeProgress = () => {
     setProgressOpen(false);
     setProgressAssignment(null);
+  };
+
+  const handleDelete = async (assignmentId) => {
+    const confirmDelete = window.confirm('Delete this assignment?');
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(`${API_BASE}/assignments/${assignmentId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to delete assignment');
+      }
+
+      setAssignments(prev => prev.filter(a => a._id !== assignmentId));
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error deleting assignment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -271,7 +317,12 @@ const AllAssignments = () => {
                           >
                             <FaTasks />
                           </button>
-                          <button title="Delete" type="button" className="ma-btn-action ma-btn-delete">
+                          <button
+                            title="Delete"
+                            type="button"
+                            className="ma-btn-action ma-btn-delete"
+                            onClick={() => handleDelete(item._id)}
+                          >
                             <FaTrash />
                           </button>
                         </div>

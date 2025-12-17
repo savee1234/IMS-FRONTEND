@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
 
 import complaintImg from '../assets/complaint.jpg';
@@ -470,7 +470,7 @@ const HomeWithSlider = () => {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
+      <HeaderBar />
       
       {/* Hero Section with Slider */}
       <section style={styles.heroContainer}>

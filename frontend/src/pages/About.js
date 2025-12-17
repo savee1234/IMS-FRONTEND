@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
+import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
  
 
@@ -110,7 +110,7 @@ const About = () => {
     <div style={styles.page}>
       
       <div style={styles.gradientOverlay}></div>
-      <Navbar />
+      <HeaderBar />
       <div style={styles.container}>
         <div style={styles.containerBefore}></div>
         <h1 style={styles.header}>About Our Incident Management System</h1>

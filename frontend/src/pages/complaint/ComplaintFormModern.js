@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import HeaderBar from "../../components/HeaderBar";
 import Footer from "../../components/Footer";
 import "./ComplaintForm.css";
 
@@ -621,7 +621,7 @@ export default function ComplaintFormModern() {
 
   return (
     <div style={styles.pageContainer}>
-      <Navbar />
+      <HeaderBar />
       
       {/* Form Section - Without Hero */}
       <section style={styles.formSection}>

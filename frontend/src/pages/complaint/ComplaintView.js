@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
  
 import "./ComplaintForm.css";
-import Navbar from '../../components/Navbar';
+import HeaderBar from '../../components/HeaderBar';
 import Footer from '../../components/Footer';
 
 const ComplaintView = () => {
@@ -124,7 +124,7 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
-        <Navbar />
+        <HeaderBar />
 
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
           <p>Loading complaint details...</p>
@@ -165,7 +165,7 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
-        <Navbar />
+        <HeaderBar />
 
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
           <p>Error: {error}</p>
@@ -206,7 +206,7 @@ const ComplaintView = () => {
           zIndex: -1,
         }}></div>
         
-        <Navbar />
+        <HeaderBar />
 
         <div className="content-wrapper" style={{ padding: "2rem", textAlign: "center" }}>
           <p>No complaint found.</p>
@@ -246,7 +246,7 @@ const ComplaintView = () => {
         zIndex: -1,
       }}></div>
       
-      <Navbar />
+      <HeaderBar />
 
       <div className="content-wrapper">
         {/* Modern Header */}

@@ -1,6 +1,6 @@
 import React from 'react';
 import ComplaintForm from './complaint/ComplaintForm';
-import Navbar from '../components/Navbar';
+import HeaderBar from '../components/HeaderBar';
 import Footer from '../components/Footer';
  
 
@@ -18,7 +18,7 @@ const Complaint = () => (
       zIndex: -1,
     }}></div>
     
-    <Navbar />
+    <HeaderBar />
     
     <ComplaintForm />
     

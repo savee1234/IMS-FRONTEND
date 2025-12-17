@@ -229,7 +229,7 @@ const RosterManagement = () => {
               </table>
             </div>
 
-            <div className="ma-footer-row">
+            <div className="ma-footer-row" style={{ justifyContent: 'flex-end' }}>
               <button type="button" className="ma-pagination-btn" onClick={resetRoster}>
                 Reset
               </button>

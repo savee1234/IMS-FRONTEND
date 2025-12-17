@@ -180,7 +180,7 @@ const OnboardMedium = () => {
         </div>
       )}
       
-      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
         <form
           onSubmit={handleSubmit}
           style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}

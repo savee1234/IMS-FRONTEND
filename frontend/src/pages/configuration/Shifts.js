@@ -239,7 +239,7 @@ const Shifts = () => {
       )}
 
       {/* Add/Edit Shift Card - Themed */}
-      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
         <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
           <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
             <label className="ma-label">{editMode ? 'Update Shift Period' : 'Add New Shift Period'}</label>

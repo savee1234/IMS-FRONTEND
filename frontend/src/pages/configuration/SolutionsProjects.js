@@ -302,176 +302,101 @@ const SolutionsProjects = () => {
 
       
 
-      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
-        <form onSubmit={handleSolutionSubmit} style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
-        <div className="form-grid">
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: '0.35rem'
-          }}>
-            <label className="ma-label">
-              Employee <span style={{ color: '#dc2626' }}>*</span>
-            </label>
-            <select
-              name="employee"
-              value={solutionFormData.employee}
-              onChange={handleSolutionInputChange}
-              required
-              className="ma-select"
-            >
-              <option value="">Select Employee</option>
-              {employees.map(emp => (
-                <option key={emp} value={emp}>{emp}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column',
-            gap: '0.35rem'
-          }}>
-            <label className="ma-label">
-              Solution Type <span style={{ color: '#dc2626' }}>*</span>
-            </label>
-            <select
-              name="solutionType"
-              value={solutionFormData.solutionType}
-              onChange={handleSolutionInputChange}
-              required
-              style={{
-                padding: '0.65rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '0.9rem',
-                background: 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.65rem center/14px 14px',
-                outline: 'none',
-                cursor: 'pointer',
-                color: '#1f2937',
-                WebkitAppearance: 'none',
-                MozAppearance: 'none',
-                appearance: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
-            >
-              <option value="">Select Solution Type</option>
-              {solutionTypes.map((type, index) => (
-                <option 
-                  key={index} 
-                  value={type}
-                  style={{
-                    backgroundColor: newlyAddedSolutionType === type ? '#dbeafe' : 'transparent',
-                    fontWeight: newlyAddedSolutionType === type ? 'bold' : 'normal'
-                  }}
-                >
-                  {type}
-                  {newlyAddedSolutionType === type && ' (Newly Added)'}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column',
-          gap: '0.35rem',
-          marginBottom: '1.25rem'
-        }}>
-          <label className="ma-label">
-            Solution <span style={{ color: '#dc2626' }}>*</span>
-          </label>
-          <select
-            name="solution"
-            value={solutionFormData.solution}
-            onChange={handleSolutionInputChange}
-            required
-            disabled={!solutionFormData.solutionType}
-            style={{
-              padding: '0.65rem',
-              border: '1px solid #d1d5db',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              background: solutionFormData.solutionType 
-                ? 'white url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e") no-repeat right 0.65rem center/14px 14px'
-                : 'white',
-              outline: 'none',
-              cursor: solutionFormData.solutionType ? 'pointer' : 'not-allowed',
-              color: '#1f2937',
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-              transition: 'border-color 0.2s',
-              opacity: solutionFormData.solutionType ? 1 : 0.6
-            }}
-            onFocus={(e) => solutionFormData.solutionType && (e.target.style.borderColor = '#3b82f6')}
-            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
-          >
-            <option value="">Select Solution</option>
-            {solutionFormData.solutionType && getSolutionsForType(solutionFormData.solutionType).map((sol, index) => (
-              <option 
-                key={index} 
-                value={sol}
-                style={{
-                  backgroundColor: newlyAddedSolution === sol ? '#dbeafe' : 'transparent',
-                  fontWeight: newlyAddedSolution === sol ? 'bold' : 'normal'
-                }}
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
+        <form onSubmit={handleSolutionSubmit} style={{ width: '100%' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', width: '100%' }}>
+            <div className="ma-filter-group">
+              <label className="ma-label">
+                Employee <span style={{ color: '#dc2626' }}>*</span>
+              </label>
+              <select
+                name="employee"
+                value={solutionFormData.employee}
+                onChange={handleSolutionInputChange}
+                required
+                className="ma-select"
               >
-                {sol}
-                {newlyAddedSolution === sol && ' (Newly Added)'}
-              </option>
-            ))}
-          </select>
-        </div>
-        
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'flex-end',
-          gap: '0.65rem'
-        }}>
-          <button 
-            type="button" 
-            onClick={handleSolutionReset}
-            style={{
-              padding: '0.6rem 1.25rem',
-              backgroundColor: '#6b7280',
-              color: 'white',
-              border: '1px solid #6b7280',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#4b5563'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#6b7280'}
-          >
-            Reset
-          </button>
-          <button 
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: '0.6rem 1.25rem',
-              backgroundColor: loading ? '#9ca3af' : '#3b82f6',
-              color: 'white',
-              border: loading ? '1px solid #9ca3af' : '1px solid #2563eb',
-              borderRadius: '8px',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#2563eb')}
-            onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#3b82f6')}
-          >
-            {loading ? 'Saving...' : (solEditMode ? 'Update' : 'Submit')}
-          </button>
-        </div>
-      </form>
+                <option value="">Select Employee</option>
+                {employees.map(emp => (
+                  <option key={emp} value={emp}>{emp}</option>
+                ))}
+              </select>
+            </div>
+            <div className="ma-filter-group">
+              <label className="ma-label">
+                Solution Type <span style={{ color: '#dc2626' }}>*</span>
+              </label>
+              <select
+                name="solutionType"
+                value={solutionFormData.solutionType}
+                onChange={handleSolutionInputChange}
+                required
+                className="ma-select"
+              >
+                <option value="">Select Solution Type</option>
+                {solutionTypes.map((type, index) => (
+                  <option 
+                    key={index} 
+                    value={type}
+                    style={{
+                      backgroundColor: newlyAddedSolutionType === type ? '#dbeafe' : 'transparent',
+                      fontWeight: newlyAddedSolutionType === type ? 'bold' : 'normal'
+                    }}
+                  >
+                    {type}
+                    {newlyAddedSolutionType === type && ' (Newly Added)'}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="ma-filter-group">
+              <label className="ma-label">
+                Solution <span style={{ color: '#dc2626' }}>*</span>
+              </label>
+              <select
+                name="solution"
+                value={solutionFormData.solution}
+                onChange={handleSolutionInputChange}
+                required
+                disabled={!solutionFormData.solutionType}
+                className="ma-select"
+                style={{ cursor: solutionFormData.solutionType ? 'pointer' : 'not-allowed', opacity: solutionFormData.solutionType ? 1 : 0.6 }}
+              >
+                <option value="">Select Solution</option>
+                {solutionFormData.solutionType && getSolutionsForType(solutionFormData.solutionType).map((sol, index) => (
+                  <option 
+                    key={index} 
+                    value={sol}
+                    style={{
+                      backgroundColor: newlyAddedSolution === sol ? '#dbeafe' : 'transparent',
+                      fontWeight: newlyAddedSolution === sol ? 'bold' : 'normal'
+                    }}
+                  >
+                    {sol}
+                    {newlyAddedSolution === sol && ' (Newly Added)'}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="ma-actions" style={{ justifyContent: 'flex-end', width: '100%', marginTop: '1rem' }}>
+            <button 
+              type="button" 
+              onClick={handleSolutionReset}
+              className="ma-pagination-btn"
+            >
+              Reset
+            </button>
+            <button 
+              type="submit"
+              disabled={loading}
+              className="ma-btn-submit"
+              style={{ marginTop: 0, opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            >
+              {loading ? 'Saving...' : (solEditMode ? 'Update' : 'Submit')}
+            </button>
+          </div>
+        </form>
       </div>
 
       <div className="ma-filter-card">
@@ -502,6 +427,7 @@ const SolutionsProjects = () => {
                       <button
                         onClick={handleAddSolutionType}
                         className="ma-btn-submit"
+                        style={{ marginTop: 0 }}
                       >
                         Add
                       </button>
@@ -580,6 +506,7 @@ const SolutionsProjects = () => {
                       <button
                         onClick={handleAddSolution}
                         className="ma-btn-submit"
+                        style={{ marginTop: 0 }}
                       >
                         Add
                       </button>

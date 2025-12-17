@@ -527,7 +527,7 @@ const Organization = () => {
 
   return (
     <div className="onboard-medium-section">
-      <div className="ma-filter-card" style={{ marginBottom: '1.25rem' }}>
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
         {error && (
           <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' }}>
             {error}

@@ -8,11 +8,15 @@ import Footer from '../components/Footer';
 const SubAssignment = () => {
   
 
+  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:44354/api';
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(4);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchSubAssignments = async () => {
@@ -65,6 +69,75 @@ const SubAssignment = () => {
 
     fetchSubAssignments();
   }, []);
+
+  const openView = (item) => {
+    setSelectedItem(item);
+    setViewModalOpen(true);
+  };
+
+  const closeView = () => {
+    setViewModalOpen(false);
+    setSelectedItem(null);
+  };
+
+  const openEdit = (item) => {
+    setSelectedItem(item);
+    setEditModalOpen(true);
+  };
+
+  const closeEdit = () => {
+    setEditModalOpen(false);
+    setSelectedItem(null);
+  };
+
+  const handleDelete = async (assignmentId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this sub-assignment?');
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_BASE}/sub-assignments/${assignmentId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete sub-assignment');
+      
+      // Refresh data after deletion
+      const response = await fetch(`${API_BASE}/sub-assignments`);
+      const result = await response.json();
+      const mapped = result.map(item => {
+        const assignedToNames = item.assignedTo && Array.isArray(item.assignedTo)
+          ? item.assignedTo.map(assignee => {
+              const userName = assignee.user?.userName || assignee.user?.name || 'Unknown';
+              const assignType = assignee.assignmentType === 'Sub Assignment' ? '(Sub)' : '(Main)';
+              return `${userName} ${assignType}`;
+            }).join(', ')
+          : 'N/A';
+
+        const firstUser = item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo.length > 0
+          ? item.assignedTo[0].user
+          : null;
+        
+        return {
+          requestReference: item._id || 'N/A',
+          enteredDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A',
+          enteredTime: item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : 'N/A',
+          assignedByName: item.assignedBy || 'N/A',
+          assignedByDesignation: '',
+          assignedToName: assignedToNames,
+          assignedToDesignation: firstUser?.Designation || '—',
+          assignedToContact: firstUser?.ContactNumber || '',
+          assignedToStatus: firstUser?.ActiveStatus ? 'Active' : 'Inactive',
+          remarks: item.description || '',
+          rawData: item
+        };
+      });
+      setData(mapped);
+    } catch (err) {
+      setError(err.message || 'Failed to delete sub-assignment');
+      console.error('Delete error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
@@ -211,13 +284,28 @@ const SubAssignment = () => {
                       </td>
                       <td>
                         <div className="ma-actions">
-                          <button className="ma-btn-action ma-btn-view" title="View" type="button">
+                          <button 
+                            className="ma-btn-action ma-btn-view" 
+                            title="View" 
+                            type="button"
+                            onClick={() => openView(item)}
+                          >
                             <FaEye />
                           </button>
-                          <button className="ma-btn-action ma-btn-edit" title="Update" type="button">
+                          <button 
+                            className="ma-btn-action ma-btn-edit" 
+                            title="Update" 
+                            type="button"
+                            onClick={() => openEdit(item)}
+                          >
                             <FaEdit />
                           </button>
-                          <button className="ma-btn-action ma-btn-delete" title="Delete" type="button">
+                          <button 
+                            className="ma-btn-action ma-btn-delete" 
+                            title="Delete" 
+                            type="button"
+                            onClick={() => handleDelete(item.rawData._id)}
+                          >
                             <FaTrash />
                           </button>
                         </div>
@@ -254,6 +342,150 @@ const SubAssignment = () => {
         </div>
       </div>
       <Footer />
+
+      {/* View Modal */}
+      {viewModalOpen && selectedItem && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            padding: '2rem',
+            borderRadius: '8px',
+            maxWidth: '600px',
+            width: '90%',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            <h2>Sub-Assignment Details</h2>
+            <p><strong>Request Reference:</strong> {selectedItem.requestReference}</p>
+            <p><strong>Title:</strong> {selectedItem.rawData?.title || 'N/A'}</p>
+            <p><strong>Description:</strong> {selectedItem.remarks || 'N/A'}</p>
+            <p><strong>Status:</strong> {selectedItem.rawData?.status || 'Pending'}</p>
+            <p><strong>Priority:</strong> {selectedItem.rawData?.priority || 'Medium'}</p>
+            <p><strong>Assigned To:</strong> {selectedItem.assignedToName}</p>
+            <p><strong>Assigned By:</strong> {selectedItem.assignedByName}</p>
+            <p><strong>Date:</strong> {selectedItem.enteredDate} {selectedItem.enteredTime}</p>
+            <button 
+              onClick={closeView}
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 1rem',
+                backgroundColor: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {editModalOpen && selectedItem && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            padding: '2rem',
+            borderRadius: '8px',
+            maxWidth: '600px',
+            width: '90%',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+          }}>
+            <h2>Edit Sub-Assignment</h2>
+            <p style={{ color: '#666', fontSize: '0.9rem' }}>Edit sub-assignment details</p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>
+                Status
+              </label>
+              <select 
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc'
+                }}
+                defaultValue={selectedItem.rawData?.status}
+              >
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="On Hold">On Hold</option>
+              </select>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>
+                Priority
+              </label>
+              <select 
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc'
+                }}
+                defaultValue={selectedItem.rawData?.priority}
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem' }}>
+              <button 
+                onClick={closeEdit}
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: '#6b7280',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Close
+              </button>
+              <button 
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: '#10b981',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  flex: 1
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

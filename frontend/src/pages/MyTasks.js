@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
 import './MyTasks.css';
@@ -344,33 +344,34 @@ const MyTasks = () => {
       position: 'fixed',
       top: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
-      backgroundColor: 'rgba(2, 6, 23, 0.6)',
-      backdropFilter: 'blur(12px)',
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(2, 6, 23, 0.3)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 1000
+      zIndex: 1000,
+      padding: '24px'
     },
     modalContent: {
       backgroundColor: '#ffffff',
-      padding: '2rem',
       borderRadius: '0px',
-      maxWidth: '1400px',
+      boxShadow: '0 24px 48px rgba(2,6,23,0.18)',
       width: '100%',
+      maxWidth: '960px',
       maxHeight: '85vh',
-      overflowY: 'auto',
-      boxShadow: '0 24px 48px rgba(2,6,23,0.18)'
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
     },
     modalHeader: {
+      padding: '20px 24px',
+      borderBottom: '1px solid #e5e7eb',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: '1.5rem',
-      position: 'relative',
-      borderBottom: '1px solid #e5e7eb',
-      paddingBottom: '1rem'
+      backgroundColor: '#ffffff',
+      position: 'relative'
     },
     modalTitle: {
       margin: 0,
@@ -397,22 +398,37 @@ const MyTasks = () => {
     },
     modalGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: '1rem',
-      marginBottom: '1.5rem'
+      gridTemplateColumns: '1fr 1fr',
+      gap: '16px',
+      padding: '16px 24px',
+      backgroundColor: '#eaebec',
+      flex: 1,
+      overflowY: 'auto'
     },
     modalField: {
-      marginBottom: '0.5rem'
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '12px',
+      backgroundColor: '#ffffff',
+      borderRadius: '8px',
+      border: '1px solid #e5e7eb',
+      boxShadow: '0 2px 8px rgba(2, 6, 23, 0.06)'
     },
     modalLabel: {
-      fontWeight: '600',
-      color: '#374151',
-      fontSize: '0.875rem'
+      fontSize: '0.85rem',
+      fontWeight: '500',
+      color: '#6b7280',
+      marginBottom: '6px',
+      lineHeight: 1.2
     },
     modalValue: {
-      margin: '4px 0 0 0',
-      color: '#6b7280',
-      fontSize: '0.875rem'
+      fontSize: '0.95rem',
+      fontWeight: '500',
+      color: '#374151',
+      backgroundColor: '#f8fafc',
+      border: '1px solid #e5e7eb',
+      borderRadius: '10px',
+      padding: '10px 12px'
     },
     modalDescription: {
       marginBottom: '1.5rem'

@@ -19,9 +19,12 @@ const mongoose = require('mongoose');
     ActiveStatus:{
         type: Boolean,
         default: true
-    }
-
+    },
+    Email:{
+        type: String,
+        required: true,
+        unique: true  
     }, 
-    { timestamps: true });
+  }, { timestamps: true });
 
 module.exports = mongoose.model('Usermanagement', userManangementSchema);

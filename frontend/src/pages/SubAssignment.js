@@ -25,9 +25,19 @@ const SubAssignment = () => {
         
         // Map API response to table structure
         const mapped = result.map(item => {
+          // Extract assigned user names from populated assignedTo array
           const assignedToNames = item.assignedTo && Array.isArray(item.assignedTo)
-            ? item.assignedTo.map(user => user.userName || user.name || 'Unknown').join(', ')
-            : (item.assignedTo?.userName || 'N/A');
+            ? item.assignedTo.map(assignee => {
+                const userName = assignee.user?.userName || assignee.user?.name || 'Unknown';
+                const assignType = assignee.assignmentType === 'Sub Assignment' ? '(Sub)' : '(Main)';
+                return `${userName} ${assignType}`;
+              }).join(', ')
+            : 'N/A';
+
+          // Get first assigned user's details for designation and contact
+          const firstUser = item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo.length > 0
+            ? item.assignedTo[0].user
+            : null;
           
           return {
             requestReference: item._id || 'N/A',
@@ -36,10 +46,10 @@ const SubAssignment = () => {
             assignedByName: item.assignedBy || 'N/A',
             assignedByDesignation: '',
             assignedToName: assignedToNames,
-            assignedToDesignation: '',
-            assignedToContact: item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo[0]?.contactNumber ? item.assignedTo[0].contactNumber : '',
-            assignedToStatus: item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo[0]?.activeStatus ? 'Active' : 'Inactive',
-            remarks: '',
+            assignedToDesignation: firstUser?.Designation || '—',
+            assignedToContact: firstUser?.ContactNumber || '',
+            assignedToStatus: firstUser?.ActiveStatus ? 'Active' : 'Inactive',
+            remarks: item.description || '',
             rawData: item
           };
         });

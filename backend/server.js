@@ -18,6 +18,7 @@ const contactRoutes = require('./routes/contactRoutes');
 const userManagementRoutes = require('./routes/UserManagementRoute');
 const assignmentRoutes = require('./routes/Assignments');
 const mainAssignmentRoutes = require('./routes/mainAssignmentRoutes');
+const subAssignmentRoutes = require('./routes/SubAssignmentRoute');
 const onboardMediumRoutes = require('./routes/onboardMedium');
 
 const app = express();
@@ -71,6 +72,7 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/user-management', userManagementRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/main-assignments', mainAssignmentRoutes);
+app.use('/api/sub-assignments', subAssignmentRoutes);
 app.use('/api/onboard-mediums', onboardMediumRoutes);
 
 // Serve React frontend static files

@@ -37,6 +37,10 @@ const AllAssignments = () => {
       const res = await fetch(`${API_BASE}/assignments`);
       if (!res.ok) throw new Error('Failed to fetch assignments');
       const data = await res.json();
+      console.log('Fetched assignments:', data);
+      if (data.length > 0) {
+        console.log('First assignment assignedTo:', data[0].assignedTo);
+      }
       setAssignments(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message || 'Unexpected error');
@@ -258,9 +262,24 @@ const AllAssignments = () => {
                     const visibleAssignments = assignments.slice(indexOfFirst, indexOfLast);
                     return visibleAssignments.map((item) => {
                       // Extract assigned users
-                      const assignedUsers = item.assignedTo && Array.isArray(item.assignedTo) 
+                      const assignedUsers = Array.isArray(item.assignedTo) && item.assignedTo.length > 0
                         ? item.assignedTo.map(assignee => {
-                            const userName = assignee.user?.userName || 'Unknown';
+                            // Handle both populated and unpopulated user references
+                            let userName = 'Unknown User';
+                            
+                            if (assignee.user) {
+                              if (typeof assignee.user === 'object' && assignee.user.userName) {
+                                // User is populated
+                                userName = assignee.user.userName;
+                              } else if (typeof assignee.user === 'string') {
+                                // User is just an ID reference
+                                userName = userNames[assignee.user] || assignee.user;
+                              } else if (assignee.user._id) {
+                                // User object without userName but with _id
+                                userName = userNames[assignee.user._id] || 'Unknown User';
+                              }
+                            }
+                            
                             const assignType = assignee.assignmentType === 'Main Assignment' ? '(Main)' : '(Sub)';
                             return `${userName} ${assignType}`;
                           }).join(', ')

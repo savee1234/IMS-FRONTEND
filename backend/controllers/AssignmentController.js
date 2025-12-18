@@ -43,7 +43,11 @@ exports.getAssignmentsByUserId = async (req, res) => {
 // Get all assignments
 exports.getAllAssignments = async (req, res) => {
   try {
-    const assignments = await AssignmentModel.find().populate('assignedTo.user', 'userName userId Designation ContactNumber');
+    const assignments = await AssignmentModel.find().populate('assignedTo.user', 'userName userId Designation ContactNumber ActiveStatus');
+    console.log('Fetched assignments count:', assignments.length);
+    if (assignments.length > 0) {
+      console.log('First assignment:', JSON.stringify(assignments[0], null, 2));
+    }
     res.status(200).json(assignments);
   } catch (error) {
     const err = { message: error.message };

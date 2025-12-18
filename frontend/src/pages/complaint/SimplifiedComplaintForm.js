@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SimplifiedComplaintForm.css";
 import ContactPersonSelect from "../../components/ContactPersonSelect";
-import Navbar from '../../components/Navbar';
+import HeaderBar from '../../components/HeaderBar';
 import Footer from '../../components/Footer';
 
 // Add font link for modern fonts
@@ -599,7 +599,7 @@ export default function SimplifiedComplaintForm() {
 
   return (
     <div className="simplified-complaint-form">
-      <Navbar />
+      <HeaderBar />
       
       {/* Modern Header */}
       <div className="form-header">

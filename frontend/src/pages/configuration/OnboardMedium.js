@@ -10,6 +10,8 @@ const OnboardMedium = () => {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ createdBy: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
 
   // Fetch onboard mediums from API
   const fetchOnboardMediums = async () => {
@@ -157,6 +159,11 @@ const OnboardMedium = () => {
     return matchesSearch && matchesCreatedBy && fromOk && toOk;
   });
 
+  const pageCount = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentRows = filteredData.slice(indexOfFirst, indexOfLast);
+
   return (
     <div className="onboard-medium-section">
       
@@ -173,16 +180,15 @@ const OnboardMedium = () => {
         </div>
       )}
       
-      {/* Add New Medium Card */}
-      <div className="conf-card">
-        <div className="conf-card-header">
-          <h2 className="conf-card-title">{editMode ? 'Update Medium' : 'Add New Medium'}</h2>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="conf-form-group">
-            <label className="conf-label">Onboard Medium Name</label>
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
+        >
+          <div className="ma-filter-group" style={{ flex: '1 1 300px' }}>
+            <label className="ma-label">{editMode ? 'Update Medium' : 'Add New Medium'}</label>
             <input
-              className="conf-input"
+              className="ma-input"
               type="text"
               value={onboardMedium}
               onChange={(e) => setOnboardMedium(e.target.value)}
@@ -190,67 +196,35 @@ const OnboardMedium = () => {
               required
             />
           </div>
-          <div className="conf-actions">
-            <button type="button" onClick={handleReset} className="conf-btn conf-btn-outline">Reset</button>
-            <button type="submit" disabled={loading} className="conf-btn conf-btn-primary">
+          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="ma-btn-submit"
+              style={{ marginLeft: 0, marginTop: 0 }}
+            >
               {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
             </button>
           </div>
         </form>
       </div>
 
-      <div className="conf-card">
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <div className="conf-form-group" style={{ minWidth: '220px' }}>
-            <label className="conf-label">Created By</label>
-            <select
-              className="conf-input"
-              value={filters.createdBy}
-              onChange={(e) => setFilters(prev => ({ ...prev, createdBy: e.target.value }))}
-            >
-              <option value="">All</option>
-              {Array.from(new Set(onboardData.map(i => i.createdByName).filter(Boolean))).map(name => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="conf-form-group">
-            <label className="conf-label">From Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.fromDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-            />
-          </div>
-          <div className="conf-form-group">
-            <label className="conf-label">To Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.toDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-            />
-          </div>
-          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
-        </div>
-      </div>
-
-      {/* Search and Table Card */}
-      <div className="conf-card">
-        <div className="conf-search-container">
-          <FaSearch className="conf-search-icon" />
+      {/* Search and Table Card - Main Assignment Theme */}
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
           <input
             type="text"
-            className="conf-search-input"
-            placeholder="Search medium..."
+            className="ma-search-input"
+            placeholder="Search onboard mediums"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="conf-table-container">
-          <table className="conf-table">
+        <div className="ma-table-container">
+          <table className="ma-table">
             <thead>
               <tr>
                 <th>MEDIUM ID</th>
@@ -274,7 +248,7 @@ const OnboardMedium = () => {
                   </td>
                 </tr>
               ) : (
-                filteredData.map(item => (
+                currentRows.map(item => (
                   <tr key={item._id}>
                     <td style={{ fontWeight: 500 }}>
                       {item.onboardMediumId || 'N/A'}
@@ -289,15 +263,15 @@ const OnboardMedium = () => {
                       {formatDate(item.createdDtm)}
                     </td>
                     <td>
-                      <div style={{ display: 'flex' }}>
-                        <button className="conf-action-btn conf-btn-view" title="View" onClick={() => alert('View functionality not implemented yet')}>
-                          <FaEye size={14} />
+                      <div className="ma-actions">
+                        <button className="ma-btn-action ma-btn-view" title="View" type="button" onClick={() => alert('View functionality not implemented yet')}>
+                          <FaEye />
                         </button>
-                        <button className="conf-action-btn conf-btn-edit" title="Edit" onClick={() => handleEdit(item)} disabled={loading}>
-                          <FaEdit size={14} />
+                        <button className="ma-btn-action ma-btn-edit" title="Edit" type="button" onClick={() => handleEdit(item)} disabled={loading}>
+                          <FaEdit />
                         </button>
-                        <button className="conf-action-btn conf-btn-delete" title="Delete" onClick={() => handleDelete(item._id)} disabled={loading}>
-                          <FaTrash size={14} />
+                        <button className="ma-btn-action ma-btn-delete" title="Delete" type="button" onClick={() => handleDelete(item._id)} disabled={loading}>
+                          <FaTrash />
                         </button>
                       </div>
                     </td>
@@ -308,12 +282,24 @@ const OnboardMedium = () => {
           </table>
         </div>
 
-        <div className="conf-pagination">
-          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+        <div className="ma-footer-row">
+          <button
+            type="button"
+            className="ma-pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
             &lt; Previous
           </button>
-          <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            type="button"
+            className="ma-pagination-btn next"
+            onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+            disabled={currentPage === pageCount}
+          >
             Next &gt;
           </button>
         </div>

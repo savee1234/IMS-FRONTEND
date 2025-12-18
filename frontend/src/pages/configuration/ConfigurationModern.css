@@ -329,6 +329,53 @@ body {
 }
 
 /* Table Styles */
+.conf-tabs {
+  margin: 0 0 0 24px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.conf-tab {
+  padding: 10px 14px;
+  border-radius: 14px 14px 0 0;
+  border: 1px solid var(--conf-border);
+  border-bottom: 1px solid var(--conf-border);
+  background-color: #cbd5e1;
+  color: #1f2937;
+  font-weight: 500; /* Not bold */
+  letter-spacing: 0.02em; /* Match header letter spacing */
+  font-size: 0.85rem; /* Match header font size feel */
+  font-family: 'Poppins', 'Inter', sans-serif; /* Match table header font */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 -1px 6px rgba(0,0,0,0.06);
+}
+.conf-tab:hover {
+  background-color: #9ca3af;
+  color: #0f172a;
+}
+.conf-tab.active {
+  background-color: #ffffff;
+  color: #1e293b;
+  border-bottom: none;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+  font-weight: 500; /* Not bold for active as well */
+}
+.conf-content-card {
+  margin: -1px 24px 24px 24px; /* attach to active tab by overlapping 1px */
+  background: #ffffff;
+  border: 1px solid var(--conf-border);
+  border-top: none;
+  border-radius: 0 12px 12px 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.conf-header-left {
+  padding-left: 24px;
+  padding-right: 24px;
+  margin: 8px 0 12px 0;
+}
 .conf-table-container {
   overflow-x: auto;
 }

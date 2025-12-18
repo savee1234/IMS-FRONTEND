@@ -6,7 +6,7 @@ const HeaderBar = ({ placeholder = 'Search...' }) => {
 
   const styles = {
     header: {
-      height: '80px',
+      height: '60px',
       padding: '0 40px',
       display: 'flex',
       alignItems: 'center',

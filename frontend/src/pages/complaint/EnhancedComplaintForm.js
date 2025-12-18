@@ -10,7 +10,7 @@ import {
   Business as BusinessIcon, Category as CategoryIcon, 
   Description as DescriptionIcon, CheckCircle as CheckCircleIcon
 } from '@material-ui/icons';
-import Navbar from '../../components/Navbar';
+import HeaderBar from '../../components/HeaderBar';
 import Footer from '../../components/Footer';
 
 // Custom styles
@@ -359,7 +359,7 @@ const EnhancedComplaintForm = () => {
   if (activeStep === steps.length) {
     return (
       <div className={classes.root}>
-        <Navbar />
+        <HeaderBar />
         <Container maxWidth="md" style={{ 
           padding: '4rem 0', 
           minHeight: '80vh', 
@@ -397,7 +397,7 @@ const EnhancedComplaintForm = () => {
   // Main form render
   return (
     <div className={classes.root}>
-      <Navbar />
+      <HeaderBar />
       <Container maxWidth="lg" className={classes.container}>
         <div className={classes.header}>
           <Typography variant="h3" className={classes.title}>

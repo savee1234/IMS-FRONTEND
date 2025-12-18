@@ -18,6 +18,8 @@ const Shifts = () => {
   const [selectedShift, setSelectedShift] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ createdBy: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   
   const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:44354';
 
@@ -163,44 +165,14 @@ const Shifts = () => {
     return matchesSearch && matchesCreatedBy && fromOk && toOk;
   });
 
+  const pageCount = Math.max(1, Math.ceil(filteredShifts.length / itemsPerPage));
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentRows = filteredShifts.slice(indexOfFirst, indexOfLast);
+
   return (
     <div className="shifts-section">
-      <div className="conf-card">
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-          <div className="conf-form-group" style={{ minWidth: '220px' }}>
-            <label className="conf-label">Created By</label>
-            <select
-              className="conf-input"
-              value={filters.createdBy}
-              onChange={(e) => setFilters(prev => ({ ...prev, createdBy: e.target.value }))}
-            >
-              <option value="">All</option>
-              {Array.from(new Set(shifts.map(i => i.createdByName).filter(Boolean))).map(name => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="conf-form-group">
-            <label className="conf-label">From Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.fromDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, fromDate: e.target.value }))}
-            />
-          </div>
-          <div className="conf-form-group">
-            <label className="conf-label">To Date</label>
-            <input
-              type="date"
-              className="conf-input"
-              value={filters.toDate}
-              onChange={(e) => setFilters(prev => ({ ...prev, toDate: e.target.value }))}
-            />
-          </div>
-          <button type="button" className="conf-btn conf-btn-primary">Submit</button>
-        </div>
-      </div>
+      {/* Upper filter section removed */}
       {/* View Modal */}
       {viewModalOpen && selectedShift && (
         <div className="conf-modal-overlay">
@@ -266,114 +238,106 @@ const Shifts = () => {
         </div>
       )}
 
-      {/* Add/Edit Shift Card */}
-      <div className="conf-card">
-        <div className="conf-card-header">
-          <h2 className="conf-card-title">{editMode ? 'Update Shift Period' : 'Add New Shift Period'}</h2>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="conf-form-group">
-            <label className="conf-label">Shift Name</label>
+      {/* Add/Edit Shift Card - Themed */}
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
+        <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
+          <div className="ma-filter-group" style={{ flex: '1 1 240px' }}>
+            <label className="ma-label">{editMode ? 'Update Shift Period' : 'Add New Shift Period'}</label>
             <input
               type="text"
               value={shiftName}
               onChange={(e) => setShiftName(e.target.value)}
-              className="conf-input"
+              className="ma-input"
               placeholder="Enter shift name"
               required
             />
           </div>
-
-          <div className="conf-grid-2">
-            <div className="conf-form-group">
-              <label className="conf-label">From Time</label>
-              <div className="conf-flex-row">
-                <select 
-                  value={fromHours} 
-                  onChange={(e) => setFromHours(e.target.value)}
-                  className="conf-input"
-                >
-                  {Array.from({length: 12}, (_, i) => (i + 1).toString().padStart(2, '0')).map(hour => (
-                    <option key={`from-${hour}`} value={hour}>{hour}</option>
-                  ))}
-                </select>
-                <select 
-                  value={fromMinutes} 
-                  onChange={(e) => setFromMinutes(e.target.value)}
-                  className="conf-input"
-                >
-                  {['00', '15', '30', '45'].map(minute => (
-                    <option key={`from-min-${minute}`} value={minute}>{minute}</option>
-                  ))}
-                </select>
-                <select 
-                  value={fromAmPm} 
-                  onChange={(e) => setFromAmPm(e.target.value)}
-                  className="conf-input conf-time-select"
-                >
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="conf-form-group">
-              <label className="conf-label">To Time</label>
-              <div className="conf-flex-row">
-                <select 
-                  value={toHours} 
-                  onChange={(e) => setToHours(e.target.value)}
-                  className="conf-input"
-                >
-                  {Array.from({length: 12}, (_, i) => (i + 1).toString().padStart(2, '0')).map(hour => (
-                    <option key={`to-${hour}`} value={hour}>{hour}</option>
-                  ))}
-                </select>
-                <select 
-                  value={toMinutes} 
-                  onChange={(e) => setToMinutes(e.target.value)}
-                  className="conf-input"
-                >
-                  {['00', '15', '30', '45'].map(minute => (
-                    <option key={`to-min-${minute}`} value={minute}>{minute}</option>
-                  ))}
-                </select>
-                <select 
-                  value={toAmPm} 
-                  onChange={(e) => setToAmPm(e.target.value)}
-                  className="conf-input conf-time-select"
-                >
-                  <option value="AM">AM</option>
-                  <option value="PM">PM</option>
-                </select>
-              </div>
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
+            <label className="ma-label">From Time</label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <select 
+                value={fromHours} 
+                onChange={(e) => setFromHours(e.target.value)}
+                className="ma-select"
+              >
+                {Array.from({length: 12}, (_, i) => (i + 1).toString().padStart(2, '0')).map(hour => (
+                  <option key={`from-${hour}`} value={hour}>{hour}</option>
+                ))}
+              </select>
+              <select 
+                value={fromMinutes} 
+                onChange={(e) => setFromMinutes(e.target.value)}
+                className="ma-select"
+              >
+                {['00', '15', '30', '45'].map(minute => (
+                  <option key={`from-min-${minute}`} value={minute}>{minute}</option>
+                ))}
+              </select>
+              <select 
+                value={fromAmPm} 
+                onChange={(e) => setFromAmPm(e.target.value)}
+                className="ma-select"
+              >
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
             </div>
           </div>
-
-          <div className="conf-actions">
-            <button type="button" onClick={handleReset} className="conf-btn conf-btn-outline">Reset</button>
-            <button type="submit" disabled={loading} className="conf-btn conf-btn-primary">
+          <div className="ma-filter-group" style={{ flex: '1 1 260px' }}>
+            <label className="ma-label">To Time</label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <select 
+                value={toHours} 
+                onChange={(e) => setToHours(e.target.value)}
+                className="ma-select"
+              >
+                {Array.from({length: 12}, (_, i) => (i + 1).toString().padStart(2, '0')).map(hour => (
+                  <option key={`to-${hour}`} value={hour}>{hour}</option>
+                ))}
+              </select>
+              <select 
+                value={toMinutes} 
+                onChange={(e) => setToMinutes(e.target.value)}
+                className="ma-select"
+              >
+                {['00', '15', '30', '45'].map(minute => (
+                  <option key={`to-min-${minute}`} value={minute}>{minute}</option>
+                ))}
+              </select>
+              <select 
+                value={toAmPm} 
+                onChange={(e) => setToAmPm(e.target.value)}
+                className="ma-select"
+              >
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
+          </div>
+          <div className="ma-actions" style={{ justifyContent: 'flex-end', width: '100%' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button type="submit" disabled={loading} className="ma-btn-submit" style={{ marginLeft: 0, marginTop: 0 }}>
               {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
             </button>
           </div>
         </form>
       </div>
 
-      {/* List Card */}
-      <div className="conf-card">
-        <div className="conf-search-container">
-          <FaSearch className="conf-search-icon" />
+      {/* List Card - Themed */}
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
           <input
             type="text"
-            className="conf-search-input"
-            placeholder="Search shifts..."
+            className="ma-search-input"
+            placeholder="Search shifts"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
           />
         </div>
 
-        <div className="conf-table-container">
-          <table className="conf-table">
+        <div className="ma-table-container">
+          <table className="ma-table">
             <thead>
               <tr>
                 <th>SHIFT NAME</th>
@@ -394,7 +358,7 @@ const Shifts = () => {
                   <td colSpan="6" style={{ textAlign: 'center', padding: '1rem' }}>No shifts found</td>
                 </tr>
               ) : (
-                filteredShifts.map((shift) => (
+                currentRows.map((shift) => (
                   <tr key={shift._id}>
                     <td style={{ fontWeight: 500 }}>{shift.name}</td>
                     <td>{shift.fromTime}</td>
@@ -404,15 +368,15 @@ const Shifts = () => {
                       {shift.createdDtm ? new Date(shift.createdDtm).toLocaleDateString() : '-'}
                     </td>
                     <td>
-                      <div style={{ display: 'flex' }}>
-                        <button className="conf-action-btn conf-btn-view" title="View" onClick={() => handleView(shift)}>
-                          <FaEye size={14} />
+                      <div className="ma-actions">
+                        <button className="ma-btn-action ma-btn-view" title="View" onClick={() => handleView(shift)}>
+                          <FaEye />
                         </button>
-                        <button className="conf-action-btn conf-btn-edit" title="Edit" onClick={() => handleEdit(shift)}>
-                          <FaEdit size={14} />
+                        <button className="ma-btn-action ma-btn-edit" title="Edit" onClick={() => handleEdit(shift)}>
+                          <FaEdit />
                         </button>
-                        <button className="conf-action-btn conf-btn-delete" title="Delete" onClick={() => handleDelete(shift._id)}>
-                          <FaTrash size={14} />
+                        <button className="ma-btn-action ma-btn-delete" title="Delete" onClick={() => handleDelete(shift._id)}>
+                          <FaTrash />
                         </button>
                       </div>
                     </td>
@@ -422,13 +386,24 @@ const Shifts = () => {
             </tbody>
           </table>
         </div>
-
-        <div className="conf-pagination">
-          <button className="conf-btn conf-btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+        <div className="ma-footer-row">
+          <button
+            type="button"
+            className="ma-pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
             &lt; Previous
           </button>
-          <span className="conf-page-info">Page 1 of 1</span>
-          <button className="conf-btn conf-btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} disabled>
+          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            type="button"
+            className="ma-pagination-btn next"
+            onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+            disabled={currentPage === pageCount}
+          >
             Next &gt;
           </button>
         </div>

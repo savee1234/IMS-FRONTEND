@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.d8fba526.css",
-    "main.js": "/static/js/main.bd34d406.js",
+    "main.css": "/static/css/main.7a99d405.css",
+    "main.js": "/static/js/main.ac1f0137.js",
     "static/js/453.239560d4.chunk.js": "/static/js/453.239560d4.chunk.js",
     "static/media/slt-logo.png": "/static/media/slt-logo.260c9ac5dcf18e17b25e.png",
     "index.html": "/index.html",
-    "main.d8fba526.css.map": "/static/css/main.d8fba526.css.map",
-    "main.bd34d406.js.map": "/static/js/main.bd34d406.js.map",
+    "main.7a99d405.css.map": "/static/css/main.7a99d405.css.map",
+    "main.ac1f0137.js.map": "/static/js/main.ac1f0137.js.map",
     "453.239560d4.chunk.js.map": "/static/js/453.239560d4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d8fba526.css",
-    "static/js/main.bd34d406.js"
+    "static/css/main.7a99d405.css",
+    "static/js/main.ac1f0137.js"
   ]
 }

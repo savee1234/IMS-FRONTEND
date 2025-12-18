@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './ConfigurationModern.css';
 import '../complaint/ComplaintForm.css'; // Import legacy styles for other components
 import Sidebar from '../../components/Sidebar';
@@ -17,7 +17,16 @@ import Shifts from './Shifts';
 
 const Configuration = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('onboardMedium');
+
+  const tabs = [
+    { key: 'onboardMedium', label: 'Onboard Medium' },
+    { key: 'organization', label: 'Organizations' },
+    { key: 'organizations', label: 'Org. Contact Persons' },
+    { key: 'solutionsPerProject', label: 'Solutions & Projects' },
+    { key: 'shifts', label: 'Roster Shift Periods' }
+  ];
 
   const renderActiveComponent = () => {
     switch (activeCategory) {
@@ -61,10 +70,22 @@ const Configuration = () => {
       <Sidebar />
       <main className="conf-main">
         <HeaderBar />
-        <div className="conf-header">
-          <h1 className="conf-title">{getPageTitle()}</h1>
+        <div className="conf-header-left">
+          <h1 className="conf-title">Configuration</h1>
         </div>
-        <div className="conf-animate-fade-in">
+        <div className="conf-tabs">
+          {tabs.map(tab => (
+            <button
+              key={tab.key}
+              type="button"
+              className={`conf-tab ${activeCategory === tab.key ? 'active' : ''}`}
+              onClick={() => { setActiveCategory(tab.key); navigate(`/configuration?tab=${tab.key}`); }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <div className="conf-content-card conf-animate-fade-in">
           {renderActiveComponent()}
         </div>
       </main>

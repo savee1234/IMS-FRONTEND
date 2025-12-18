@@ -1,9 +1,9 @@
- import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import { FaFileAlt, FaHistory, FaComments, FaCheck, FaChevronLeft, FaChevronRight, FaSearch } from 'react-icons/fa';
-import './MyTasks.css';
-import HeaderBar from '../components/HeaderBar';
+import React, { useEffect, useState } from 'react';
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import backgroundVideo from '../assets/Background.mp4';
+import { FaFileAlt, FaHistory, FaComments, FaCheck } from 'react-icons/fa';
+import './complaint/ComplaintForm.css';
 
 const fetchTasks = async () => {
   try {
@@ -51,9 +51,6 @@ const MyTasks = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState({});
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(4); // Show 4 items per page
 
   const handleViewDetails = (complaint) => {
     setSelectedComplaint(complaint);
@@ -155,8 +152,7 @@ const MyTasks = () => {
       setError(null);
       try {
         const fetchedTasks = await fetchTasks();
-        const cleaned = fetchedTasks.filter(t => t.reference !== '25-12-10-1554');
-        setTasks(cleaned);
+        setTasks(fetchedTasks);
       } catch (err) {
         setError('Failed to load complaints');
         console.error('Error loading tasks:', err);
@@ -200,7 +196,7 @@ const MyTasks = () => {
       zIndex: 1,
       padding: '1rem',
       marginTop: '1rem',
-      maxWidth: '1600px',
+      maxWidth: '1400px',
       margin: '1rem auto 0 auto'
     },
     pageHeader: {
@@ -344,91 +340,64 @@ const MyTasks = () => {
       position: 'fixed',
       top: 0,
       left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(2, 6, 23, 0.3)',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 1000,
-      padding: '24px'
+      zIndex: 1000
     },
     modalContent: {
-      backgroundColor: '#ffffff',
-      borderRadius: '0px',
-      boxShadow: '0 24px 48px rgba(2,6,23,0.18)',
+      backgroundColor: 'white',
+      padding: '15rem',
+      borderRadius: '12px',
+      maxWidth: '1100px',
       width: '100%',
-      maxWidth: '960px',
-      maxHeight: '85vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden'
+      maxHeight: '80vh',
+      overflowY: 'auto',
+      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
     },
     modalHeader: {
-      padding: '20px 24px',
-      borderBottom: '1px solid #e5e7eb',
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: '#ffffff',
-      position: 'relative'
+      marginBottom: '1.5rem'
     },
     modalTitle: {
       margin: 0,
-      fontSize: '1.6rem',
-      fontWeight: '700',
-      color: '#1e3a8a'
+      fontSize: '1.5rem',
+      fontWeight: '600',
+      color: '#1f2937'
     },
     closeButton: {
-      position: 'absolute',
-      right: '16px',
-      backgroundColor: '#111827',
+      background: 'none',
       border: 'none',
-      fontSize: '20px',
+      fontSize: '1.5rem',
       cursor: 'pointer',
-      color: '#ffffff',
-      padding: '0',
-      width: '34px',
-      height: '34px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: '9999px',
-      transition: 'background-color 0.2s ease'
+      color: '#6b7280',
+      padding: '4px',
+      borderRadius: '4px',
+      transition: 'background-color 0.2s'
     },
     modalGrid: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '16px',
-      padding: '16px 24px',
-      backgroundColor: '#eaebec',
-      flex: 1,
-      overflowY: 'auto'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '1rem',
+      marginBottom: '1.5rem'
     },
     modalField: {
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '12px',
-      backgroundColor: '#ffffff',
-      borderRadius: '8px',
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 2px 8px rgba(2, 6, 23, 0.06)'
+      marginBottom: '0.5rem'
     },
     modalLabel: {
-      fontSize: '0.85rem',
-      fontWeight: '500',
-      color: '#6b7280',
-      marginBottom: '6px',
-      lineHeight: 1.2
+      fontWeight: '600',
+      color: '#374151',
+      fontSize: '0.875rem'
     },
     modalValue: {
-      fontSize: '0.95rem',
-      fontWeight: '500',
-      color: '#374151',
-      backgroundColor: '#f8fafc',
-      border: '1px solid #e5e7eb',
-      borderRadius: '10px',
-      padding: '10px 12px'
+      margin: '4px 0 0 0',
+      color: '#6b7280',
+      fontSize: '0.875rem'
     },
     modalDescription: {
       marginBottom: '1.5rem'
@@ -557,40 +526,43 @@ const MyTasks = () => {
   };
 
   return (
-    <div className="ma-wrapper my-tasks-page">
-      <Sidebar />
-      <div className="ma-content">
-        <HeaderBar />
-        <div className="ma-header">
-          <h1>My Tasks</h1>
-        </div>
+    <div className="complaint-onboard-wrapper assignments-page my-tasks-page">
+      <Navbar />
 
-        {error && (
-          <div style={{ color: '#dc2626', backgroundColor: '#fee2e2', padding: '0.75rem 1rem', borderRadius: '6px', marginBottom: '1rem', border: '1px solid #fecaca' }}>
-            {error}
-          </div>
-        )}
-
-        <div className="ma-table-card">
-          <div className="ma-topbar">
-            <div className="ma-search-bar">
-              <FaSearch className="ma-search-icon" />
-              <input
-                type="text"
-                placeholder="Search tasks"
-                className="ma-search-input"
-              />
-            </div>
-            <div className="ma-export-actions">
-              <button type="button" className="ma-export-btn">CSV</button>
-              <button type="button" className="ma-export-btn">PDF</button>
-              <button type="button" className="ma-export-btn">Excel</button>
-              <button type="button" className="ma-export-btn">Print</button>
+      <div className="content-wrapper">
+        <div className="complaint-form-container assignments-wide">
+          <div className="page-header">
+            <div className="page-header-content">
+              <h1>My Tasks</h1>
+              <p>View and manage your assigned tasks and complaints</p>
             </div>
           </div>
 
-          <div className="ma-table-container">
-            <table className="ma-table">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => window.location.reload()}
+                className="btn btn-primary"
+              >
+                {loading ? 'Loading...' : 'Refresh'}
+              </button>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="btn" style={{ backgroundColor: '#2563eb', color: '#fff' }}>CSV</button>
+              <button className="btn" style={{ backgroundColor: '#4CAF50', color: '#fff' }}>Excel</button>
+              <button className="btn" style={{ backgroundColor: '#FFB300', color: '#fff' }}>PDF</button>
+              <button className="btn" style={{ backgroundColor: '#6b7280', color: '#fff' }}>Print</button>
+            </div>
+          </div>
+
+          {error && (
+            <div style={{ color: '#dc2626', backgroundColor: '#fee2e2', padding: '0.75rem 1rem', borderRadius: '6px', marginBottom: '1rem', border: '1px solid #fecaca' }}>
+              {error}
+            </div>
+          )}
+
+          <div style={{ overflowX: 'auto' }}>
+            <table className="modern-table">
               <thead>
                 <tr>
                   <th>Reference</th>
@@ -618,92 +590,78 @@ const MyTasks = () => {
                     </td>
                   </tr>
                 ) : (
-                  // Pagination logic
-                  (() => {
-                    const indexOfLastItem = currentPage * itemsPerPage;
-                    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-                    const currentTasks = tasks.slice(indexOfFirstItem, indexOfLastItem);
-                    
-                    return currentTasks.map((task) => (
-                      <tr key={task.id}>
-                        <td>{task.reference}</td>
-                        <td>{task.requester}</td>
-                        <td>{task.priority}</td>
-                        <td>
-                          <span
-                            style={{
-                              padding: '0.25rem 0.75rem',
-                              borderRadius: '9999px',
-                              fontSize: '0.75rem',
-                              fontWeight: 600,
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.05em',
-                              backgroundColor: task.status === 'Open'
-                                ? '#fee2e2'
-                                : task.status === 'Ongoing'
-                                ? '#fef3c7'
-                                : '#d1fae5',
-                              color: task.status === 'Open'
-                                ? '#dc2626'
-                                : task.status === 'Ongoing'
-                                ? '#92400e'
-                                : '#065f46'
-                            }}
+                  tasks.map((task) => (
+                    <tr key={task.id}>
+                      <td>{task.reference}</td>
+                      <td>{task.requester}</td>
+                      <td>{task.priority}</td>
+                      <td>
+                        <span
+                          style={{
+                            padding: '0.25rem 0.75rem',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            backgroundColor: task.status === 'Open'
+                              ? '#fee2e2'
+                              : task.status === 'Ongoing'
+                              ? '#fef3c7'
+                              : '#d1fae5',
+                            color: task.status === 'Open'
+                              ? '#dc2626'
+                              : task.status === 'Ongoing'
+                              ? '#92400e'
+                              : '#065f46'
+                          }}
+                        >
+                          {task.status}
+                        </span>
+                      </td>
+                      <td>{task.issue}</td>
+                      <td>{task.phone}</td>
+                      <td>{task.email}</td>
+                      <td>{task.created}</td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-start' }}>
+                          <button
+                            title="View Details"
+                            className="btn"
+                            style={{ backgroundColor: '#2563eb', color: '#fff' }}
+                            onClick={() => handleViewDetails(task)}
                           >
-                            {task.status}
-                          </span>
-                        </td>
-                        <td>{task.issue}</td>
-                        <td>{task.phone}</td>
-                        <td>{task.email}</td>
-                        <td>{task.created}</td>
-                        <td>
-                          <div className="ma-actions">
-                            <button title="View Details" className="ma-btn-action ma-btn-view" onClick={() => handleViewDetails(task)}>
-                              <FaFileAlt />
-                            </button>
-                            <button title="History" className="ma-btn-action ma-btn-edit">
-                              <FaHistory />
-                            </button>
-                            <button title="Comments" className="ma-btn-action ma-btn-progress">
-                              <FaComments />
-                            </button>
-                            <button title="Done" className="ma-btn-action ma-btn-delete">
-                              <FaCheck />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ));
-                  })()
+                            <FaFileAlt />
+                          </button>
+                          <button
+                            title="History"
+                            className="btn"
+                            style={{ backgroundColor: '#4b5563', color: '#fff' }}
+                          >
+                            <FaHistory />
+                          </button>
+                          <button
+                            title="Comments"
+                            className="btn"
+                            style={{ backgroundColor: '#7c3aed', color: '#fff' }}
+                          >
+                            <FaComments />
+                          </button>
+                          <button
+                            title="Done"
+                            className="btn"
+                            style={{ backgroundColor: '#059669', color: '#fff' }}
+                          >
+                            <FaCheck />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
           </div>
-          
-          {tasks.length > 0 && !loading && (
-            <div className="ma-footer-row">
-              <button
-                type="button"
-                className="ma-pagination-btn"
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-              >
-                <FaChevronLeft /> Previous
-              </button>
-              <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
-                Page {currentPage} of {Math.max(1, Math.ceil(tasks.length / itemsPerPage))}
-              </span>
-              <button
-                type="button"
-                className="ma-pagination-btn next"
-                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(tasks.length / itemsPerPage), prev + 1))}
-                disabled={currentPage === Math.ceil(tasks.length / itemsPerPage)}
-              >
-                Next <FaChevronRight />
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -1072,8 +1030,9 @@ const MyTasks = () => {
           </div>
         </div>
       )}
+
       <Footer />
-        </div>
+    </div>
   );
 };
 

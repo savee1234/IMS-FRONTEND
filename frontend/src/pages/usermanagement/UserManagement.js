@@ -37,7 +37,7 @@ const UserManagement = () => {
           designation: u.Designation,
           contact: u.ContactNumber,
           status: u.ActiveStatus ? 'Active' : 'Inactive',
-          email: u.email || u.userEmail || '',
+          email: u.Email || u.email || u.userEmail || '',
           department: u.department || u.unit || '',
           joiningDate: u.joiningDate || u.createdAt || '',
           address: u.address || '',

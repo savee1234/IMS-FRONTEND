@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTasks, FaSearch } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaTasks, FaSearch, FaChevronDown } from 'react-icons/fa';
 import Sidebar from '../components/Sidebar';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
@@ -161,6 +161,118 @@ const AllAssignments = () => {
     }
   };
 
+  const AssigneesDropdown = ({ assignedTo }) => {
+    const [open, setOpen] = useState(false);
+    const list = Array.isArray(assignedTo) ? assignedTo : [];
+    const main = list.filter(a => (a.assignmentType || '').toLowerCase().includes('main'));
+    const sub = list.filter(a => (a.assignmentType || '').toLowerCase().includes('sub'));
+    const total = list.length;
+    const label = total > 0 ? `${total} assignee${total > 1 ? 's' : ''}` : 'Unassigned';
+    const toggle = () => setOpen(v => !v);
+    return (
+      <div style={{ position: 'relative', display: 'inline-block', maxWidth: '300px' }}>
+        <button
+          type="button"
+          onClick={toggle}
+          style={{
+            padding: '6px 10px',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb',
+            background: '#ffffff',
+            color: '#111827',
+            fontSize: '0.9rem',
+            cursor: total > 0 ? 'pointer' : 'default',
+            minWidth: '160px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '8px'
+          }}
+          disabled={total === 0}
+        >
+          <span style={{ flex: '1 1 auto' }}>{label}</span>
+          <FaChevronDown
+            style={{
+              flex: '0 0 auto',
+              transition: 'transform 0.2s ease',
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+              color: total === 0 ? '#9ca3af' : '#6b7280'
+            }}
+            size={14}
+          />
+        </button>
+        {open && total > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '110%',
+              left: 0,
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '10px',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
+              width: '320px',
+              zIndex: 20,
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ padding: '10px 12px', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', fontWeight: 600, color: '#374151' }}>
+              Main Assigners
+            </div>
+            <div style={{ maxHeight: '180px', overflowY: 'auto' }}>
+              {main.length === 0 && (
+                <div style={{ padding: '10px 12px', color: '#6b7280' }}>None</div>
+              )}
+              {main.map((a, i) => {
+                const name = a.user?.userName || a.user?.name || 'Unknown';
+                return (
+                  <div key={`m-${i}`} style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ display: 'inline-block', fontSize: '0.8rem', background: '#eef2ff', color: '#4f46e5', padding: '2px 8px', borderRadius: '12px' }}>Main</span>
+                    <span style={{ color: '#111827' }}>{name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: '10px 12px', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', fontWeight: 600, color: '#374151' }}>
+              Sub Assigners
+            </div>
+            <div style={{ maxHeight: '180px', overflowY: 'auto' }}>
+              {sub.length === 0 && (
+                <div style={{ padding: '10px 12px', color: '#6b7280' }}>None</div>
+              )}
+              {sub.map((a, i) => {
+                const name = a.user?.userName || a.user?.name || 'Unknown';
+                return (
+                  <div key={`s-${i}`} style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ display: 'inline-block', fontSize: '0.8rem', background: '#ecfeff', color: '#0ea5e9', padding: '2px 8px', borderRadius: '12px' }}>Sub</span>
+                    <span style={{ color: '#111827' }}>{name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: '8px 12px', textAlign: 'right', background: '#f9fafb' }}>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                style={{
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #e5e7eb',
+                  background: '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="ma-wrapper">
       <Sidebar />
@@ -285,9 +397,7 @@ const AllAssignments = () => {
                             </span>
                           </td>
                           <td>
-                            <div style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              {assignedUsers}
-                            </div>
+                            <AssigneesDropdown assignedTo={item.assignedTo} />
                           </td>
                           <td>{item.assignedBy || 'N/A'}</td>
                           <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB') : 'N/A'}</td>

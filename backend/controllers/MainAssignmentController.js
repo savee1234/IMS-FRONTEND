@@ -1,30 +1,20 @@
-const MainAssignment = require('../models/MainAssignment');
+const AssignmentModel = require('../models/Assignments');
+const Usermanagement = require('../models/Usermanagement');
 
-// Get all main assignments
+/**
+ * Get all main assignments (assignments with Main Assignment type)
+ */
 exports.getAllMainAssignments = async (req, res) => {
     try {
-        const assignments = await MainAssignment.find().populate('assignedTo', 'userName ContactNumber ActiveStatus');
+        // Find assignments and populate user details for each assignee
+        const assignments = await AssignmentModel.find().populate('assignedTo.user', 'userName userId Designation ContactNumber ActiveStatus');
         
-        // Normalize populated user fields for consistent API shape
-        const normalized = assignments.map(ma => ({
-            _id: ma._id,
-            title: ma.title,
-            description: ma.description,
-            status: ma.status,
-            priority: ma.priority,
-            dueDate: ma.dueDate,
-            assignedTo: ma.assignedTo ? {
-                id: ma.assignedTo._id,
-                userName: ma.assignedTo.userName,
-                contactNumber: ma.assignedTo.ContactNumber,
-                activeStatus: ma.assignedTo.ActiveStatus
-            } : null,
-            assignedBy: ma.assignedBy,
-            createdAt: ma.createdAt,
-            updatedAt: ma.updatedAt
-        }));
-        
-        res.status(200).json(normalized);
+        // Filter to only include assignments that have at least one Main Assignment type
+        const mainAssignments = assignments.filter(a => 
+            a.assignedTo && a.assignedTo.some(assignee => assignee.assignmentType === 'Main Assignment')
+        );
+
+        res.status(200).json(mainAssignments);
     } catch (error) {
         const err = { message: error.message };
         if (process.env.NODE_ENV !== 'production') err.stack = error.stack;
@@ -32,13 +22,24 @@ exports.getAllMainAssignments = async (req, res) => {
     }
 };
 
-// Get a single main assignment by ID
+/**
+ * Get a single main assignment by ID (must have Main Assignment type)
+ */
 exports.getMainAssignmentById = async (req, res) => {
     try {
-        const assignment = await MainAssignment.findById(req.params.id).populate('assignedTo', 'userName ContactNumber ActiveStatus');
+        const { assignmentId } = req.params;
+        const assignment = await AssignmentModel.findById(assignmentId).populate('assignedTo.user', 'userName userId Designation ContactNumber ActiveStatus');
+        
         if (!assignment) {
             return res.status(404).json({ message: 'Main assignment not found' });
         }
+
+        // Verify it has at least one Main Assignment type
+        const hasMainAssignment = assignment.assignedTo && assignment.assignedTo.some(assignee => assignee.assignmentType === 'Main Assignment');
+        if (!hasMainAssignment) {
+            return res.status(404).json({ message: 'Main assignment not found' });
+        }
+
         res.status(200).json(assignment);
     } catch (error) {
         const err = { message: error.message };
@@ -47,19 +48,45 @@ exports.getMainAssignmentById = async (req, res) => {
     }
 };
 
-// Create a new main assignment
+/**
+ * Create a new main assignment with users assigned as Main Assignment type
+ */
 exports.createMainAssignment = async (req, res) => {
     try {
-        // Validate required fields
-        if (!req.body.title || !req.body.assignedTo || !req.body.assignedBy) {
-            return res.status(400).json({ message: 'Missing required fields: title, assignedTo, assignedBy' });
+        const { assignedTo, assignedBy, title, description, status, priority } = req.body;
+
+        if (!assignedTo || !Array.isArray(assignedTo) || assignedTo.length === 0) {
+            return res.status(400).json({ message: 'assignedTo must be a non-empty array of user IDs' });
         }
-        
-        const mainAssignment = new MainAssignment(req.body);
-        const savedAssignment = await mainAssignment.save();
-        const populated = await savedAssignment.populate('assignedTo', 'userName ContactNumber ActiveStatus');
-        
-        res.status(201).json(populated);
+        if (!assignedBy || !title) {
+            return res.status(400).json({ message: 'Missing required fields: assignedBy, title' });
+        }
+
+        // Verify users exist
+        const userIds = assignedTo;
+        const users = await Usermanagement.find({ _id: { $in: userIds } });
+        if (users.length !== userIds.length) {
+            return res.status(400).json({ message: 'One or more users do not exist' });
+        }
+
+        // Create assignment with all assignees as Main Assignment type
+        const mainAssignmentData = {
+            assignedTo: userIds.map(userId => ({
+                user: userId,
+                assignmentType: 'Main Assignment'
+            })),
+            assignedBy: assignedBy || 'System',
+            title: title,
+            description: description || '',
+            status: status || 'Pending',
+            priority: priority || 'Medium'
+        };
+
+        const newAssignment = new AssignmentModel(mainAssignmentData);
+        await newAssignment.save();
+        await newAssignment.populate('assignedTo.user', 'userName userId Designation ContactNumber ActiveStatus');
+
+        res.status(201).json(newAssignment);
     } catch (error) {
         const err = { message: error.message };
         if (process.env.NODE_ENV !== 'production') err.stack = error.stack;
@@ -67,19 +94,51 @@ exports.createMainAssignment = async (req, res) => {
     }
 };
 
-// Update a main assignment
+/**
+ * Update a main assignment
+ */
 exports.updateMainAssignment = async (req, res) => {
     try {
-        const updatedAssignment = await MainAssignment.findByIdAndUpdate(
-            req.params.id,
-            { ...req.body, updatedAt: new Date() },
-            { new: true }
-        ).populate('assignedTo', 'userName ContactNumber ActiveStatus');
-        
+        const { assignmentId } = req.params;
+        const { assignedTo, assignedBy, title, description, status, priority } = req.body;
+
+        const updates = {};
+        if (assignedTo !== undefined) {
+            if (!Array.isArray(assignedTo) || assignedTo.length === 0) {
+                return res.status(400).json({ message: 'assignedTo must be a non-empty array' });
+            }
+            // Verify users exist
+            const users = await Usermanagement.find({ _id: { $in: assignedTo } });
+            if (users.length !== assignedTo.length) {
+                return res.status(400).json({ message: 'One or more users do not exist' });
+            }
+            updates.assignedTo = assignedTo.map(userId => ({
+                user: userId,
+                assignmentType: 'Main Assignment'
+            }));
+        }
+        if (assignedBy !== undefined) updates.assignedBy = assignedBy;
+        if (title !== undefined) updates.title = title;
+        if (description !== undefined) updates.description = description;
+        if (status !== undefined) updates.status = status;
+        if (priority !== undefined) updates.priority = priority;
+
+        const updatedAssignment = await AssignmentModel.findByIdAndUpdate(
+            assignmentId,
+            updates,
+            { new: true, runValidators: true }
+        ).populate('assignedTo.user', 'userName userId Designation ContactNumber ActiveStatus');
+
         if (!updatedAssignment) {
             return res.status(404).json({ message: 'Main assignment not found' });
         }
-        
+
+        // Verify it has Main Assignment type
+        const hasMainAssignment = updatedAssignment.assignedTo && updatedAssignment.assignedTo.some(assignee => assignee.assignmentType === 'Main Assignment');
+        if (!hasMainAssignment) {
+            return res.status(404).json({ message: 'Main assignment not found' });
+        }
+
         res.status(200).json(updatedAssignment);
     } catch (error) {
         const err = { message: error.message };
@@ -88,14 +147,19 @@ exports.updateMainAssignment = async (req, res) => {
     }
 };
 
-// Delete a main assignment
+/**
+ * Delete a main assignment
+ */
 exports.deleteMainAssignment = async (req, res) => {
     try {
-        const deletedAssignment = await MainAssignment.findByIdAndDelete(req.params.id);
+        const { assignmentId } = req.params;
+        const deletedAssignment = await AssignmentModel.findByIdAndDelete(assignmentId);
+
         if (!deletedAssignment) {
             return res.status(404).json({ message: 'Main assignment not found' });
         }
-        res.status(200).json({ message: 'Main assignment deleted successfully' });
+
+        res.status(200).json({ message: 'Main assignment deleted successfully', assignmentId });
     } catch (error) {
         const err = { message: error.message };
         if (process.env.NODE_ENV !== 'production') err.stack = error.stack;

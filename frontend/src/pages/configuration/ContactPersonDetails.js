@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaEye, FaEdit, FaTrash, FaTimes, FaUser, FaBuilding, FaEnvelope, FaMobile, FaPhone, FaIdCard, FaCalendarAlt, FaSearch, FaFilter } from 'react-icons/fa';
 
 const ContactPersonDetails = () => {
@@ -20,7 +20,7 @@ const ContactPersonDetails = () => {
     : 'http://localhost:44354';
 
   // Fetch organizations for filter dropdown
-  const fetchOrganizations = async () => {
+  const fetchOrganizations = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/organizations`);
       const data = await response.json();
@@ -30,10 +30,10 @@ const ContactPersonDetails = () => {
     } catch (error) {
       console.error('Error fetching organizations:', error);
     }
-  };
+  }, [API_BASE_URL]);
 
   // Fetch contact persons
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     setLoading(true);
     try {
       let url = `${API_BASE_URL}/api/organization-contact-persons?`;
@@ -65,13 +65,13 @@ const ContactPersonDetails = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL, showAll, currentPage, itemsPerPage, selectedOrganization, searchTerm]);
 
   // Load data on component mount and when filters change
    useEffect(() => {
      fetchOrganizations();
      fetchContacts();
-   }, [currentPage, selectedOrganization, searchTerm, showAll]);
+   }, [fetchOrganizations, fetchContacts]);
 
    // Auto-refresh every 30 seconds to show newly created contacts
    useEffect(() => {
@@ -82,7 +82,7 @@ const ContactPersonDetails = () => {
      }, 30000); // Refresh every 30 seconds
 
      return () => clearInterval(interval);
-   }, [loading, viewModalOpen]);
+   }, [loading, viewModalOpen, fetchContacts]);
 
    // Listen for new contact creation events
    useEffect(() => {
@@ -96,7 +96,7 @@ const ContactPersonDetails = () => {
      return () => {
        window.removeEventListener('contactCreated', handleNewContactCreated);
      };
-   }, []);
+  }, [fetchContacts]);
 
   const handleView = (contact) => {
     setSelectedContact(contact);
@@ -702,9 +702,9 @@ const ContactPersonDetails = () => {
               <th style={{
                 padding: '1rem',
                 textAlign: 'left',
-                border: '1px solid #d1d5db',
+                border: '1px solid #1e3a8a',
                 fontWeight: '600',
-                backgroundColor: '#1a237e',
+                backgroundColor: '#1e3a8a',
                 color: '#ffffff',
                 whiteSpace: 'nowrap'
               }}>
@@ -713,9 +713,9 @@ const ContactPersonDetails = () => {
               <th style={{
                 padding: '1rem',
                 textAlign: 'center',
-                border: '1px solid #d1d5db',
+                border: '1px solid #1e3a8a',
                 fontWeight: '600',
-                backgroundColor: '#1a237e',
+                backgroundColor: '#1e3a8a',
                 color: '#ffffff',
                 whiteSpace: 'nowrap'
               }}>

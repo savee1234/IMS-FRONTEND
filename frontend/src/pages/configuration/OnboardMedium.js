@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaEye, FaSearch } from 'react-icons/fa';
 
 const OnboardMedium = () => {
   const [onboardMedium, setOnboardMedium] = useState('');
@@ -8,6 +8,10 @@ const OnboardMedium = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ createdBy: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
 
   // Fetch onboard mediums from API
   const fetchOnboardMediums = async () => {
@@ -144,19 +148,24 @@ const OnboardMedium = () => {
     return new Date(dateString).toLocaleString();
   };
 
+  const filteredData = onboardData.filter(item => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.onboardMediumId && item.onboardMediumId.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCreatedBy = !filters.createdBy || item.createdByName === filters.createdBy;
+    const createdDate = item.createdDtm ? new Date(item.createdDtm) : null;
+    const fromOk = !filters.fromDate || (createdDate && createdDate >= new Date(filters.fromDate));
+    const toOk = !filters.toDate || (createdDate && createdDate <= new Date(filters.toDate));
+    return matchesSearch && matchesCreatedBy && fromOk && toOk;
+  });
+
+  const pageCount = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentRows = filteredData.slice(indexOfFirst, indexOfLast);
+
   return (
-    <div className="onboard-medium-section" style={{ padding: '2rem' }}>
-      <h2 style={{ 
-        fontSize: '1.8rem', 
-        fontWeight: 'bold', 
-        color: '#1f2937',
-        marginBottom: '2rem',
-        textAlign: 'left',
-        borderBottom: '2px solid #3b82f6',
-        paddingBottom: '0.5rem'
-      }}>
-        Onboard Medium
-      </h2>
+    <div className="onboard-medium-section">
       
       {error && (
         <div style={{
@@ -171,247 +180,129 @@ const OnboardMedium = () => {
         </div>
       )}
       
-      <form onSubmit={handleSubmit} style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        padding: '2rem',
-        borderRadius: '8px',
-        border: '1px solid #d1d5db',
-        marginBottom: '2rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          marginBottom: '1.5rem',
-          gap: '1rem'
-        }}>
-          <label style={{
-            fontWeight: '600',
-            color: '#374151',
-            fontSize: '1rem',
-            minWidth: '180px'
-          }}>
-            Onboard Medium :
-          </label>
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
+        >
+          <div className="ma-filter-group" style={{ flex: '1 1 300px' }}>
+            <label className="ma-label">{editMode ? 'Update Medium' : 'Add New Medium'}</label>
+            <input
+              className="ma-input"
+              type="text"
+              value={onboardMedium}
+              onChange={(e) => setOnboardMedium(e.target.value)}
+              placeholder="Enter onboard medium"
+              required
+            />
+          </div>
+          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="ma-btn-submit"
+              style={{ marginLeft: 0, marginTop: 0 }}
+            >
+              {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Search and Table Card - Main Assignment Theme */}
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
           <input
             type="text"
-            value={onboardMedium}
-            onChange={(e) => setOnboardMedium(e.target.value)}
-            placeholder="Enter onboard medium"
-            required
-            style={{
-              padding: '0.75rem',
-              border: '1px solid #d1d5db',
-              borderRadius: '4px',
-              fontSize: '0.9rem',
-              width: '300px',
-              outline: 'none',
-              color: '#374151'
-            }}
+            className="ma-search-input"
+            placeholder="Search onboard mediums"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'flex-end',
-          gap: '1rem'
-        }}>
-          <button type="button" onClick={handleReset} style={{
-            padding: '0.75rem 2rem',
-            backgroundColor: '#6b7280',
-            color: 'white',
-            border: '1px solid #6b7280',
-            borderRadius: '4px',
-            fontSize: '0.9rem',
-            fontWeight: '600',
-            cursor: 'pointer'
-          }}>
-            Reset
-          </button>
-          
-          <button type="submit" disabled={loading} style={{
-            padding: '0.75rem 2rem',
-            backgroundColor: loading ? '#9ca3af' : '#3b82f6',
-            color: 'white',
-            border: `1px solid ${loading ? '#9ca3af' : '#3b82f6'}`,
-            borderRadius: '4px',
-            fontSize: '0.9rem',
-            fontWeight: '600',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}>
-            {loading ? 'Processing...' : (editMode ? 'Update' : 'Submit')}
-          </button>
-        </div>
-      </form>
 
-      <div className="onboard-table" style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        border: '1px solid #d1d5db',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-      }}>
-        <table style={{ 
-          width: '100%', 
-          borderCollapse: 'collapse',
-          border: '1px solid #d1d5db'
-        }}>
-          <thead>
-            <tr>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Medium ID
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Onboard Medium
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Created By
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'left',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Created Time
-              </th>
-              <th style={{ 
-                padding: '1rem', 
-                textAlign: 'center',
-                border: '1px solid #d1d5db',
-                fontWeight: '600',
-                backgroundColor: '#1a237e',
-                color: '#ffffff'
-              }}>
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+        <div className="ma-table-container">
+          <table className="ma-table">
+            <thead>
               <tr>
-                <td colSpan="5" style={{ 
-                  padding: '2rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
-                  Loading...
-                </td>
+                <th>MEDIUM ID</th>
+                <th>ONBOARD MEDIUM</th>
+                <th>CREATED BY</th>
+                <th>CREATED TIME</th>
+                <th>ACTIONS</th>
               </tr>
-            ) : onboardData.length === 0 ? (
-              <tr>
-                <td colSpan="5" style={{ 
-                  padding: '2rem', 
-                  textAlign: 'center',
-                  color: '#6b7280',
-                  border: '1px solid #d1d5db'
-                }}>
-                  No onboard medium records found
-                </td>
-              </tr>
-            ) : (
-              onboardData.map(item => (
-                <tr key={item._id}>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
-                    {item.onboardMediumId}
-                  </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
-                    {item.name}
-                  </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
-                    {item.createdByName}
-                  </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    color: '#374151'
-                  }}>
-                    {formatDate(item.createdDtm)}
-                  </td>
-                  <td style={{ 
-                    padding: '1rem',
-                    border: '1px solid #d1d5db',
-                    textAlign: 'center'
-                  }}>
-                    <button
-                      onClick={() => handleEdit(item)}
-                      disabled={loading}
-                      style={{
-                        backgroundColor: loading ? '#9ca3af' : '#FFB300',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px',
-                        marginRight: '6px'
-                      }}
-                      title="Update"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item._id)}
-                      disabled={loading}
-                      style={{
-                        backgroundColor: loading ? '#9ca3af' : '#F44336',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px'
-                      }}
-                      title="Delete"
-                    >
-                      <FaTrash />
-                    </button>
+            </thead>
+            <tbody>
+              {loading && onboardData.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
+                    Loading...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : filteredData.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
+                    No onboard medium records found
+                  </td>
+                </tr>
+              ) : (
+                currentRows.map(item => (
+                  <tr key={item._id}>
+                    <td style={{ fontWeight: 500 }}>
+                      {item.onboardMediumId || 'N/A'}
+                    </td>
+                    <td>
+                      {item.name}
+                    </td>
+                    <td>
+                      {item.createdByName}
+                    </td>
+                    <td>
+                      {formatDate(item.createdDtm)}
+                    </td>
+                    <td>
+                      <div className="ma-actions">
+                        <button className="ma-btn-action ma-btn-view" title="View" type="button" onClick={() => alert('View functionality not implemented yet')}>
+                          <FaEye />
+                        </button>
+                        <button className="ma-btn-action ma-btn-edit" title="Edit" type="button" onClick={() => handleEdit(item)} disabled={loading}>
+                          <FaEdit />
+                        </button>
+                        <button className="ma-btn-action ma-btn-delete" title="Delete" type="button" onClick={() => handleDelete(item._id)} disabled={loading}>
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="ma-footer-row">
+          <button
+            type="button"
+            className="ma-pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
+            &lt; Previous
+          </button>
+          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            type="button"
+            className="ma-pagination-btn next"
+            onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+            disabled={currentPage === pageCount}
+          >
+            Next &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

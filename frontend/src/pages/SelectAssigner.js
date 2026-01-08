@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import backgroundVideo from '../assets/Background.mp4';
+ 
+import Footer from '../components/Footer';
 
 const employees = [
   { empNo: 'E001', name: 'Alice Johnson', designation: 'Technician', status: 'Available', solutions: ['Reset Password', 'Check Connectivity', 'Assign Engineer'] },
@@ -42,24 +43,7 @@ const SelectAssigner = () => {
       position: 'relative',
       minHeight: '100vh'
     }}>
-      {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: -2
-        }}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      
       
       {/* Overlay */}
       <div style={{
@@ -106,16 +90,16 @@ const SelectAssigner = () => {
             marginBottom: '20px'
           }}>
             <thead style={{
-              backgroundColor: '#f8f9fa',
-              borderBottom: '1px solid #dee2e6'
+              backgroundColor: '#1e3a8a',
+              borderBottom: '1px solid #1e3a8a'
             }}>
               <tr>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Emp No</th>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Name</th>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Designation</th>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Status</th>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Role</th>
-                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #dee2e6' }}>Action</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Emp No</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Name</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Designation</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Status</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Role</th>
+                <th style={{ padding: '12px', textAlign: 'left', border: '1px solid #1e3a8a', color: '#ffffff' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -210,6 +194,7 @@ const SelectAssigner = () => {
         </div>
       </div>
       </div>
+      <Footer />
     </div>
   );
 };

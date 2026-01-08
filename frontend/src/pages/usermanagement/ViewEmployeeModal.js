@@ -3,34 +3,32 @@ import React from 'react';
 const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
   if (!isOpen) return null;
 
-  // Sample privileges data - in real app this would come from employee data
-  const hasPrivileges = employee?.privileges && Object.keys(employee.privileges).length > 0;
-  
-  const samplePrivileges = [
-    { section: 'Citizen Management', privileges: ['Add Citizen', 'Update Citizen', 'View Citizen'] },
-    { section: 'File Management', privileges: ['Upload File', 'Download File', 'View File'] }
-  ];
+  const handleUpdateClick = () => {
+    console.log('Update clicked for user', employee?.id);
+  };
 
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <div style={styles.modalHeader}>
-          <h2 style={styles.modalTitle}>Employee Details</h2>
+          <h2 style={styles.modalTitle}>User Details</h2>
           <button onClick={onClose} style={styles.closeButton}>×</button>
         </div>
-        
+
         <div style={styles.modalContent}>
-          {/* Personal Details Section */}
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Personal Details</h3>
             <div style={styles.detailsGrid}>
               <div style={styles.detailItem}>
-                <span style={styles.label}>Employee ID:</span>
+                <span style={styles.label}>User ID:</span>
                 <span style={styles.value}>{employee?.id || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
                 <span style={styles.label}>Employee Name:</span>
                 <span style={styles.value}>{employee?.name || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Calling Name:</span>
+                <span style={styles.value}>{employee?.callingName || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
                 <span style={styles.label}>Designation:</span>
@@ -41,50 +39,29 @@ const ViewEmployeeModal = ({ isOpen, onClose, employee }) => {
                 <span style={styles.value}>{employee?.contact || 'N/A'}</span>
               </div>
               <div style={styles.detailItem}>
-                <span style={styles.label}>Status:</span>
-                <span style={{
-                  ...styles.value,
-                  ...styles.statusBadge,
-                  backgroundColor: employee?.status === 'Active' ? '#dcfce7' : '#fef2f2',
-                  color: employee?.status === 'Active' ? '#166534' : '#dc2626'
-                }}>
-                  {employee?.status || 'N/A'}
-                </span>
+                <span style={styles.label}>Email Address:</span>
+                <span style={styles.value}>{employee?.email || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Location:</span>
+                <span style={styles.value}>{employee?.address || 'N/A'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.label}>Supervisor</span>
+                <select style={styles.dropdownSelect} defaultValue="">
+                  <option value="" disabled>Select Supervisor</option>
+                </select>
               </div>
             </div>
           </div>
-
-          {/* Privilege Details Section */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Privilege Details</h3>
-            {hasPrivileges ? (
-              <div style={styles.privilegesContainer}>
-                {samplePrivileges.map((section, index) => (
-                  <div key={index} style={styles.privilegeSection}>
-                    <h4 style={styles.privilegeSectionTitle}>{section.section}</h4>
-                    <div style={styles.privilegeList}>
-                      {section.privileges.map((privilege, privIndex) => (
-                        <div key={privIndex} style={styles.privilegeItem}>
-                          <span style={styles.privilegeBullet}>•</span>
-                          <span style={styles.privilegeText}>{privilege}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={styles.noPrivileges}>
-                <p style={styles.noPrivilegesText}>No Privileges Added</p>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Close Button */}
         <div style={styles.modalFooter}>
           <button onClick={onClose} style={styles.closeModalButton}>
             Close
+          </button>
+          <button onClick={handleUpdateClick} style={styles.updateButton}>
+            Update
           </button>
         </div>
       </div>
@@ -99,95 +76,98 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    background: 'rgba(2, 6, 23, 0.6)',
+    backdropFilter: 'blur(12px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
-    padding: '20px'
+    padding: '24px'
   },
   modal: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-    width: '95%',
-    maxWidth: '1167px',
-    height: '77vh',
-    maxHeight: '80vh',
+    backgroundColor: '#ffffff',
+    borderRadius: '0px',
+    boxShadow: '0 24px 48px rgba(2,6,23,0.18)',
+    width: '100%',
+    maxWidth: '960px',
+    maxHeight: '85vh',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
-    marginTop: '66px',
-    marginBottom: '25px'
+    overflow: 'hidden'
   },
   modalHeader: {
     padding: '20px 24px',
     borderBottom: '1px solid #e5e7eb',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8fafc'
+    backgroundColor: '#ffffff',
+    position: 'relative'
   },
   modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: '600',
-    color: '#1e40af',
+    fontSize: '1.6rem',
+    fontWeight: '700',
+    color: '#1e3a8a',
     margin: 0
   },
   closeButton: {
-    background: 'none',
+    position: 'absolute',
+    right: '16px',
+    backgroundColor: '#111827',
     border: 'none',
-    fontSize: '24px',
+    fontSize: '20px',
     cursor: 'pointer',
-    color: '#6b7280',
+    color: '#ffffff',
     padding: '0',
-    width: '32px',
-    height: '32px',
+    width: '34px',
+    height: '34px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '50%',
+    borderRadius: '9999px',
     transition: 'background-color 0.2s ease'
   },
   modalContent: {
     flex: 1,
     overflowY: 'auto',
-    padding: '24px'
+    padding: '16px 24px',
+    backgroundColor: '#eaebec'
   },
   section: {
     marginBottom: '32px'
   },
   sectionTitle: {
-    fontSize: '1.2rem',
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: '16px',
-    paddingBottom: '8px',
-    borderBottom: '2px solid #1e40af'
+    display: 'none'
   },
   detailsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
+    gridTemplateColumns: '1fr 1fr',
     gap: '16px'
   },
   detailItem: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px',
-    backgroundColor: '#f8fafc',
+    padding: '12px',
+    backgroundColor: '#ffffff',
     borderRadius: '8px',
-    border: '1px solid #e5e7eb'
+    border: '1px solid #e5e7eb',
+    boxShadow: '0 2px 8px rgba(2, 6, 23, 0.06)'
   },
   label: {
-    fontSize: '0.875rem',
+    fontSize: '0.85rem',
     fontWeight: '500',
     color: '#6b7280',
-    marginBottom: '4px'
+    marginBottom: '6px',
+    lineHeight: 1.2
   },
   value: {
-    fontSize: '1rem',
+    fontSize: '0.95rem',
     fontWeight: '500',
-    color: '#374151'
+    color: '#374151',
+    backgroundColor: '#f8fafc',
+    border: '1px solid #e5e7eb',
+    borderRadius: '10px',
+    padding: '10px 12px'
   },
   statusBadge: {
     padding: '4px 12px',
@@ -211,7 +191,7 @@ const styles = {
   privilegeSectionTitle: {
     fontSize: '1rem',
     fontWeight: '600',
-    color: '#1e40af',
+    color: '#1e3a8a',
     marginBottom: '12px',
     margin: 0
   },
@@ -250,22 +230,52 @@ const styles = {
     margin: 0
   },
   modalFooter: {
-    padding: '20px 24px',
+    padding: '12px 24px',
     borderTop: '1px solid #e5e7eb',
     display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: '#f8fafc'
+    justifyContent: 'flex-end',
+    gap: '12px',
+    backgroundColor: '#eaebec'
   },
   closeModalButton: {
-    padding: '10px 24px',
-    backgroundColor: '#1e40af',
-    color: 'white',
+    padding: '10px 20px',
+    backgroundColor: '#475569',
+    color: '#ffffff',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '9999px',
     cursor: 'pointer',
-    fontSize: '0.875rem',
+    fontSize: '0.85rem',
     fontWeight: '500',
     transition: 'background-color 0.2s ease'
+  },
+  updateButton: {
+    padding: '10px 20px',
+    backgroundColor: '#1e3a8a',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '9999px',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    fontWeight: '600',
+    boxShadow: '0 8px 16px rgba(2, 6, 23, 0.18)'
+  },
+  dropdownGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px'
+  },
+  dropdownLabel: {
+    color: '#6b7280',
+    fontSize: '0.85rem',
+    fontWeight: '500'
+  },
+  dropdownSelect: {
+    padding: '10px 12px',
+    border: '1px solid #e5e7eb',
+    borderRadius: '10px',
+    backgroundColor: '#f8fafc',
+    fontSize: '0.9rem',
+    color: '#111827'
   }
 };
 

@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTasks } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import backgroundVideo from '../assets/Background.mp4';
+import React, { useState, useEffect } from 'react';
+import { FaEye, FaEdit, FaTrash, FaTasks, FaSearch, FaChevronDown } from 'react-icons/fa';
+import Sidebar from '../components/Sidebar';
 import AssignmentView from './AllAssignments/AssignmentView';
 import UpdateStatusModal from './AllAssignments/UpdateStatusModal';
 import ProgressModal from './AllAssignments/ProgressModal';
+import './complaint/ComplaintForm.css';
+import HeaderBar from '../components/HeaderBar';
+import Footer from '../components/Footer';
 
 const AllAssignments = () => {
+  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:44354/api';
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   const [filters, setFilters] = useState({
     employee: '',
     status: '',
@@ -20,6 +24,53 @@ const AllAssignments = () => {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [statusAssignment, setStatusAssignment] = useState(null);
+  
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [userNames, setUserNames] = useState({});
+
+  const fetchAssignments = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_BASE}/assignments`);
+      if (!res.ok) throw new Error('Failed to fetch assignments');
+      const data = await res.json();
+      console.log('Fetched assignments:', data);
+      if (data.length > 0) {
+        console.log('First assignment assignedTo:', data[0].assignedTo);
+      }
+      setAssignments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error fetching assignments:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+    fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/user-management`);
+      if (!res.ok) throw new Error('Failed to fetch users');
+      const data = await res.json();
+      // Build quick lookup by id
+      const map = {};
+      data.forEach(u => {
+        if (u && u._id) map[u._id] = u.userName || u.name || 'Unknown';
+      });
+      setUserNames(map);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+    }
+  };
 
   const handleChange = (field, value) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -50,10 +101,32 @@ const AllAssignments = () => {
     setStatusAssignment(null);
   };
 
-  const handleStatusSubmit = (payload) => {
-    console.log('Status update payload:', payload);
-    // TODO: call API to submit status update
-    closeStatus();
+  const handleStatusSubmit = async (payload) => {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!payload.assignmentId) throw new Error('Missing assignment id');
+
+      const res = await fetch(`${API_BASE}/assignments/${payload.assignmentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: payload.status })
+      });
+
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to update assignment');
+      }
+
+      const updated = await res.json();
+      setAssignments(prev => prev.map(a => (a._id === updated._id ? updated : a)));
+      closeStatus();
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error updating assignment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [progressOpen, setProgressOpen] = useState(false);
@@ -68,373 +141,372 @@ const AllAssignments = () => {
     setProgressOpen(false);
     setProgressAssignment(null);
   };
-  const styles = {
-    page: {
-      position: 'relative',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowX: 'hidden',
-    },
-    videoBackground: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-      zIndex: -2,
-    },
-    gradientOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(5px)',
-      zIndex: -1,
-    },
-    contentWrapper: {
-      position: 'relative',
-      zIndex: 1,
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    container: {
-      position: 'relative',
-      zIndex: 1,
-      padding: '1.5rem',
-      marginTop: '1rem',
-      width: '95vw',
-      maxWidth: 'none',
-      margin: '1rem auto 0 auto'
-    },
-    headerCard: {
-      background: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e5e7eb',
-      padding: '1.25rem 1.5rem',
-      marginBottom: '1rem'
-    },
-    card: {
-      background: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-      border: '1px solid #e5e7eb',
-      overflow: 'hidden',
-      padding: '2rem'
-    },
-    pageTitle: {
-      textAlign: 'center',
-      margin: 0,
-      fontSize: '2rem',
-      fontWeight: 700,
-      color: '#1f2937'
-    },
-    formGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))',
-      gap: '1.25rem',
-      alignItems: 'end',
-      marginBottom: '0.75rem'
-    },
-    label: {
-      display: 'block',
-      marginBottom: '0.35rem',
-      color: '#374151',
-      fontWeight: 600,
-      fontSize: '0.95rem'
-    },
-    input: {
-      width: '100%',
-      padding: '0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem',
-      color: '#374151',
-      background: 'white'
-    },
-    select: {
-      width: '100%',
-      padding: '0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem',
-      color: '#374151',
-      background: 'white'
-    },
-    submitRow: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      marginBottom: '1rem'
-    },
-    submitBtn: {
-      backgroundColor: '#3b82f6',
-      color: 'white',
-      padding: '0.75rem 1.5rem',
-      borderRadius: '8px',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '1rem',
-      fontWeight: 600
-    },
-    tableHeaderRow: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(6, 1fr)',
-      gap: '0',
-      border: '1px solid #d1d5db',
-      backgroundColor: '#1a237e',
-      color: '#ffffff'
-    },
-    th: {
-      padding: '1rem',
-      borderRight: '1px solid #d1d5db',
-      fontWeight: 600,
-      fontSize: '0.95rem'
-    },
-    tableBody: {
-      border: '1px solid #d1d5db',
-      borderTop: 'none'
-    },
-    tableRow: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(6, 1fr)',
-      gap: '0',
-      borderTop: '1px solid #e5e7eb'
-    },
-    td: {
-      padding: '1rem',
-      borderRight: '1px solid #f3f4f6',
-      color: '#374151',
-      fontSize: '0.95rem'
-    },
-    tableTopBar: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      padding: '0.75rem 0'
-    },
-    searchInput: {
-      width: '360px',
-      padding: '0.6rem 0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '6px',
-      fontSize: '0.95rem'
-    },
-    pagination: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '0.75rem',
-      padding: '1rem 0'
-    },
-    pagerBtn: {
-      backgroundColor: '#3b82f6',
-      color: 'white',
-      border: 'none',
-      borderRadius: '4px',
-      padding: '0.5rem 0.9rem',
-      cursor: 'pointer',
-      fontWeight: 600
-    },
-    actionsCell: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '0.5rem'
-    },
-    actionBtn: {
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '6px 8px',
-      color: 'white'
-    },
-    submitRow: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      marginBottom: '1rem',
-      paddingRight: '1rem'
-    },
+
+  const handleDelete = async (assignmentId) => {
+    const confirmDelete = window.confirm('Delete this assignment?');
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(`${API_BASE}/assignments/${assignmentId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to delete assignment');
+      }
+
+      setAssignments(prev => prev.filter(a => a._id !== assignmentId));
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+      console.error('Error deleting assignment:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const AssigneesDropdown = ({ assignedTo }) => {
+    const [open, setOpen] = useState(false);
+    const list = Array.isArray(assignedTo) ? assignedTo : [];
+    const main = list.filter(a => (a.assignmentType || '').toLowerCase().includes('main'));
+    const sub = list.filter(a => (a.assignmentType || '').toLowerCase().includes('sub'));
+    const total = list.length;
+    const label = total > 0 ? `${total} assignee${total > 1 ? 's' : ''}` : 'Unassigned';
+    const toggle = () => setOpen(v => !v);
+    return (
+      <div style={{ position: 'relative', display: 'inline-block', maxWidth: '300px' }}>
+        <button
+          type="button"
+          onClick={toggle}
+          style={{
+            padding: '6px 10px',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb',
+            background: '#ffffff',
+            color: '#111827',
+            fontSize: '0.9rem',
+            cursor: total > 0 ? 'pointer' : 'default',
+            minWidth: '160px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '8px'
+          }}
+          disabled={total === 0}
+        >
+          <span style={{ flex: '1 1 auto' }}>{label}</span>
+          <FaChevronDown
+            style={{
+              flex: '0 0 auto',
+              transition: 'transform 0.2s ease',
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+              color: total === 0 ? '#9ca3af' : '#6b7280'
+            }}
+            size={14}
+          />
+        </button>
+        {open && total > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '110%',
+              left: 0,
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '10px',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
+              width: '320px',
+              zIndex: 20,
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ padding: '10px 12px', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', fontWeight: 600, color: '#374151' }}>
+              Main Assigners
+            </div>
+            <div style={{ maxHeight: '180px', overflowY: 'auto' }}>
+              {main.length === 0 && (
+                <div style={{ padding: '10px 12px', color: '#6b7280' }}>None</div>
+              )}
+              {main.map((a, i) => {
+                const name = a.user?.userName || a.user?.name || 'Unknown';
+                return (
+                  <div key={`m-${i}`} style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ display: 'inline-block', fontSize: '0.8rem', background: '#eef2ff', color: '#4f46e5', padding: '2px 8px', borderRadius: '12px' }}>Main</span>
+                    <span style={{ color: '#111827' }}>{name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: '10px 12px', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9', background: '#f8fafc', fontWeight: 600, color: '#374151' }}>
+              Sub Assigners
+            </div>
+            <div style={{ maxHeight: '180px', overflowY: 'auto' }}>
+              {sub.length === 0 && (
+                <div style={{ padding: '10px 12px', color: '#6b7280' }}>None</div>
+              )}
+              {sub.map((a, i) => {
+                const name = a.user?.userName || a.user?.name || 'Unknown';
+                return (
+                  <div key={`s-${i}`} style={{ padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ display: 'inline-block', fontSize: '0.8rem', background: '#ecfeff', color: '#0ea5e9', padding: '2px 8px', borderRadius: '12px' }}>Sub</span>
+                    <span style={{ color: '#111827' }}>{name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: '8px 12px', textAlign: 'right', background: '#f9fafb' }}>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                style={{
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #e5e7eb',
+                  background: '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div style={styles.page}>
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline
-        preload="auto"
-        style={styles.videoBackground}
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        <source src={backgroundVideo} type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
-      
-      <div style={styles.gradientOverlay}></div>
-
-      <div style={styles.contentWrapper}>
-        <Navbar />
-
-        <div style={styles.container}>
-          <div style={styles.headerCard}>
-            <h1 style={styles.pageTitle}>All Assignments</h1>
-          </div>
-
-          <div style={styles.card}>
-
-            <form onSubmit={handleSubmit}>
-              <div style={styles.formGrid}>
-                <div>
-                  <label style={styles.label}>Employee</label>
-                  <select
-                    value={filters.employee}
-                    onChange={(e) => handleChange('employee', e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">Select Employees</option>
-                    <option value="john.doe">John Doe</option>
-                    <option value="jane.smith">Jane Smith</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={styles.label}>Status</label>
-                  <select
-                    value={filters.status}
-                    onChange={(e) => handleChange('status', e.target.value)}
-                    style={styles.select}
-                  >
-                    <option value="">Select Status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={styles.label}>From Date</label>
-                  <input
-                    type="date"
-                    value={filters.fromDate}
-                    onChange={(e) => handleChange('fromDate', e.target.value)}
-                    style={styles.input}
-                  />
-                </div>
-                <div>
-                  <label style={styles.label}>To Date</label>
-                  <input
-                    type="date"
-                    value={filters.toDate}
-                    onChange={(e) => handleChange('toDate', e.target.value)}
-                    style={styles.input}
-                  />
-                </div>
-              </div>
-              <div style={styles.submitRow}>
-                <button type="submit" style={styles.submitBtn}>Submit</button>
-              </div>
-            </form>
-
-            <div style={styles.tableTopBar}>
-              <input
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                style={styles.searchInput}
-              />
-            </div>
-
-            <div style={styles.tableHeaderRow}>
-              <div style={styles.th}>Request Reference</div>
-              <div style={styles.th}>Entered Date</div>
-              <div style={styles.th}>Assigned By Name</div>
-              <div style={styles.th}>Assigned To Name</div>
-              <div style={styles.th}>Days Pending</div>
-              <div style={styles.th}>Actions</div>
-            </div>
-            <div style={styles.tableBody}>
-              <div style={styles.tableRow}>
-                <div style={styles.td}>REQ/—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={styles.td}>—</div>
-                <div style={{ ...styles.td, borderRight: 'none' }}>
-                  <div style={styles.actionsCell}>
-                    <button
-                      title="View"
-                      style={{ ...styles.actionBtn, backgroundColor: '#4CAF50' }}
-                      onClick={() => openView({
-                        requestRef: '25-10-23-0001',
-                        categoryType: 'INTERNAL',
-                        documentSubject: 'gdfgd gdfgf g',
-                        mediumSource: '657645374',
-                        projectType: 'Type 1',
-                        contactPerson: 'Chandima Dunuwila',
-                        criticality: 'MEDIUM',
-                        documentReference: 'SLT_Payslip_Report___Employee_310725.pdf',
-                        medium: 'Call Centre (Test)',
-                        organization: 'DEF',
-                        projectName: 'NCPA',
-                        remarks: 'd fd gdfg fd',
-                        mainAssignment: [
-                          { empNo: '015777', name: 'Romaine Murcott', designation: 'Software Developer-A8', remarks: 'd fd gdfg fd' }
-                        ],
-                        subAssignments: [
-                          { empNo: '011111', name: 'Amalya Dayaratne', designation: 'Software Developer' },
-                          { empNo: '015888', name: 'Piumi Kaushalya', designation: 'TTO' }
-                        ]
-                      })}
-                    >
-                      <FaEye />
-                    </button>
-                    <button title="Update" style={{ ...styles.actionBtn, backgroundColor: '#FFB300' }} onClick={() => {
-                      openStatus({
-                        id: '25-10-23-0001',
-                        requestRef: '25-10-23-0001',
-                        contactPerson: 'Chandima Dunuwila'
-                      });
-                    }}>
-                      <FaEdit />
-                    </button>
-                    <button title="Progress" style={{ ...styles.actionBtn, backgroundColor: '#2563eb' }} onClick={() => openProgress({ requestRef: '25-10-23-0001' })}>
-                      <FaTasks />
-                    </button>
-                    <button title="Delete" style={{ ...styles.actionBtn, backgroundColor: '#F44336' }}>
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div style={styles.pagination}>
-              <button type="button" style={styles.pagerBtn}>Previous</button>
-              <button type="button" style={styles.pagerBtn}>Next</button>
-              <span style={{ marginLeft: '0.5rem', color: '#374151' }}>Page 1 of 0</span>
-            </div>
-          </div>
+    <div className="ma-wrapper">
+      <Sidebar />
+      <div className="ma-content">
+        <HeaderBar />
+        <div className="ma-header">
+          <h1>All Assignments</h1>
         </div>
 
-        {modalOpen && (
-          <AssignmentView assignment={selectedAssignment} onClose={closeView} />
-        )}
+        <div className="ma-filter-card">
+          <div className="ma-filter-group">
+            <label className="ma-label">Employee</label>
+            <select
+              className="ma-select"
+              value={filters.employee}
+              onChange={(e) => handleChange('employee', e.target.value)}
+            >
+              <option value="">Select Employees</option>
+              <option value="john.doe">John Doe</option>
+              <option value="jane.smith">Jane Smith</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">Status</label>
+            <select
+              className="ma-select"
+              value={filters.status}
+              onChange={(e) => handleChange('status', e.target.value)}
+            >
+              <option value="">Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
+            </select>
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">From Date</label>
+            <input
+              type="date"
+              value={filters.fromDate}
+              onChange={(e) => handleChange('fromDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <div className="ma-filter-group">
+            <label className="ma-label">To Date</label>
+            <input
+              type="date"
+              value={filters.toDate}
+              onChange={(e) => handleChange('toDate', e.target.value)}
+              className="ma-input"
+            />
+          </div>
+          <button type="submit" className="ma-btn-submit" onClick={handleSubmit}>Submit</button>
+        </div>
 
-        {statusModalOpen && (
-          <UpdateStatusModal assignment={statusAssignment} onClose={closeStatus} onSubmit={handleStatusSubmit} />
-        )}
+        <div className="ma-table-card">
+          <div className="ma-search-bar">
+            <FaSearch className="ma-search-icon" />
+            <input
+              type="text"
+              placeholder="Search assignments"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="ma-search-input"
+            />
+          </div>
 
-        {progressOpen && (
-          <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
-        )}
+          <div className="ma-table-container">
+            {loading && (
+              <p style={{ textAlign: 'center', padding: '1rem' }}>Loading assignments...</p>
+            )}
+            {error && (
+              <p style={{ textAlign: 'center', padding: '1rem', color: 'red' }}>Error: {error}</p>
+            )}
+            {!loading && !error && (
+              <table className="ma-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Assigned To</th>
+                    <th>Assigned By</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(() => {
+                    const indexOfLast = currentPage * itemsPerPage;
+                    const indexOfFirst = indexOfLast - itemsPerPage;
+                    const visibleAssignments = assignments.slice(indexOfFirst, indexOfLast);
+                    return visibleAssignments.map((item) => {
+                      // Extract assigned users
+                      const assignedUsers = Array.isArray(item.assignedTo) && item.assignedTo.length > 0
+                        ? item.assignedTo.map(assignee => {
+                            // Handle both populated and unpopulated user references
+                            let userName = 'Unknown User';
+                            
+                            if (assignee.user) {
+                              if (typeof assignee.user === 'object' && assignee.user.userName) {
+                                // User is populated
+                                userName = assignee.user.userName;
+                              } else if (typeof assignee.user === 'string') {
+                                // User is just an ID reference
+                                userName = userNames[assignee.user] || assignee.user;
+                              } else if (assignee.user._id) {
+                                // User object without userName but with _id
+                                userName = userNames[assignee.user._id] || 'Unknown User';
+                              }
+                            }
+                            
+                            const assignType = assignee.assignmentType === 'Main Assignment' ? '(Main)' : '(Sub)';
+                            return `${userName} ${assignType}`;
+                          }).join(', ')
+                        : 'Unassigned';
 
-        <Footer />
+                      return (
+                        <tr key={item._id}>
+                          <td><strong>{item.title || 'N/A'}</strong></td>
+                          <td>
+                            <div style={{ maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {item.description || 'No description'}
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`ma-status-badge ma-status-${(item.status || '').toLowerCase().replace(' ', '-')}`}>
+                              {item.status || 'Pending'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`ma-priority-badge ma-priority-${(item.priority || '').toLowerCase()}`}>
+                              {item.priority || 'Medium'}
+                            </span>
+                          </td>
+                          <td>
+                            <AssigneesDropdown assignedTo={item.assignedTo} />
+                          </td>
+                          <td>{item.assignedBy || 'N/A'}</td>
+                          <td>{item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB') : 'N/A'}</td>
+                          <td>
+                        <div className="ma-actions">
+                          <button
+                            title="View"
+                            type="button"
+                            className="ma-btn-action ma-btn-view"
+                            onClick={() => openView(item)}
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            title="Update"
+                            type="button"
+                            className="ma-btn-action ma-btn-edit"
+                            onClick={() => openStatus(item)}
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            title="Progress"
+                            type="button"
+                            className="ma-btn-action ma-btn-progress"
+                            onClick={() => openProgress(item)}
+                          >
+                            <FaTasks />
+                          </button>
+                          <button
+                            title="Delete"
+                            type="button"
+                            className="ma-btn-action ma-btn-delete"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                      );
+                    });
+                  })()}
+                  {assignments.length === 0 && (
+                    <tr>
+                      <td colSpan="8" style={{ textAlign: 'center', padding: '1rem' }}>No assignments found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          <div className="ma-footer-row">
+            <button
+              type="button"
+              className="ma-pagination-btn"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              &lt; Previous
+            </button>
+            <span style={{ marginLeft: '0.5rem', color: '#6b7280' }}>
+              Page {currentPage} of {Math.max(1, Math.ceil(assignments.length / itemsPerPage))}
+            </span>
+            <button
+              type="button"
+              className="ma-pagination-btn next"
+              onClick={() => setCurrentPage(prev => Math.min(Math.ceil(assignments.length / itemsPerPage), prev + 1))}
+              disabled={currentPage === Math.ceil(assignments.length / itemsPerPage)}
+            >
+              Next &gt;
+            </button>
+          </div>
+        </div>
       </div>
+
+      {modalOpen && (
+        <AssignmentView assignment={selectedAssignment} onClose={closeView} />
+      )}
+
+      {statusModalOpen && (
+        <UpdateStatusModal assignment={statusAssignment} onClose={closeStatus} onSubmit={handleStatusSubmit} />
+      )}
+
+      {progressOpen && (
+        <ProgressModal assignment={progressAssignment} onClose={closeProgress} />
+      )}
+
+      <Footer />
     </div>
   );
 };

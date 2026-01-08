@@ -4,15 +4,10 @@ const OrganizationContactPerson = require("../models/OrganizationContactPerson")
 // Create Complaint
 const createComplaint = async (req, res) => {
   try {
-    console.log('=== Complaint Creation Request ===');
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
-    
     const complaintData = { ...req.body };
-    console.log('Received complaint data:', complaintData);
 
     // Handle contact person search/creation logic
     if (complaintData.contactName && complaintData.email && complaintData.mobile) {
-      console.log('Processing contact person search/creation...');
 
       // First, try to find existing contact by mobile number
       let contactPerson = await OrganizationContactPerson.findOne({
@@ -21,11 +16,9 @@ const createComplaint = async (req, res) => {
       });
 
       if (contactPerson) {
-        console.log('Found existing contact person:', contactPerson._id);
         complaintData.organizationContactPersonId = contactPerson._id;
       } else {
         // Contact doesn't exist, create new one
-        console.log('Creating new contact person...');
 
         // Find organization by name if provided
         let organizationId = null;
@@ -56,8 +49,6 @@ const createComplaint = async (req, res) => {
         });
 
         await newContactPerson.save();
-        console.log('Created new contact person:', newContactPerson._id);
-
         complaintData.organizationContactPersonId = newContactPerson._id;
       }
 
@@ -78,19 +69,19 @@ const createComplaint = async (req, res) => {
       }
     }
 
-    console.log('Creating complaint with data:', JSON.stringify(complaintData, null, 2));
     const complaint = await Complaint.create(complaintData);
-    console.log('Complaint created successfully:', complaint);
+    
+    // Populate assignments and contact person
+    const populatedComplaint = await Complaint.findById(complaint._id)
+      .populate('organizationContactPersonId', 'name organizationName email mobileNumber')
+      .populate('assignments', 'Assignment assignedBy assignedTo');
     
     res.status(201).json({
       success: true,
       message: "Complaint created successfully",
-      data: complaint
+      data: populatedComplaint
     });
   } catch (error) {
-    console.error("Error creating complaint:", error);
-    console.error("Error stack:", error.stack);
-    
     // Handle validation errors specifically
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
@@ -124,6 +115,7 @@ const getAllComplaints = async (req, res) => {
   try {
     const complaints = await Complaint.find()
       .populate('organizationContactPersonId', 'name organizationName email mobileNumber')
+      .populate('assignments', 'Assignment assignedBy assignedTo')
       .sort({ createdAt: -1 });
     res.json({
       success: true,
@@ -131,7 +123,6 @@ const getAllComplaints = async (req, res) => {
       data: complaints
     });
   } catch (error) {
-    console.error("Error fetching complaints:", error);
     res.status(500).json({ 
       success: false,
       message: "Error fetching complaints", 

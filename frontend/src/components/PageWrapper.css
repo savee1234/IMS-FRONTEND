@@ -1,0 +1,73 @@
+/* ============================================
+   Page Wrapper - Matching Image Design
+   ============================================ */
+
+.page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--white);
+}
+
+.page-main-content {
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .page-main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Page Container */
+.page-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-bottom: 90px; /* Space for footer bar if needed */
+  box-sizing: border-box;
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+/* Action Buttons */
+.page-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.page-actions .btn-primary {
+  margin-left: auto;
+}
+

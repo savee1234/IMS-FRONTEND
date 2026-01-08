@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FaEye, FaEdit, FaTrash, FaTimes, FaBuilding, FaIdCard, FaTag, FaUser, FaCalendarAlt } from 'react-icons/fa';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FaEye, FaEdit, FaTrash, FaTimes, FaBuilding, FaIdCard, FaTag, FaUser, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 
 const Organization = () => {
   const [orgFormData, setOrgFormData] = useState({
@@ -15,6 +15,10 @@ const Organization = () => {
   const [editingId, setEditingId] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({ organizationType: '', fromDate: '', toDate: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   
   // API Base URL
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
@@ -29,7 +33,7 @@ const Organization = () => {
     }));
   };
 
-  const fetchOrganizations = async () => {
+  const fetchOrganizations = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -51,11 +55,11 @@ const Organization = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_BASE_URL]);
 
   useEffect(() => {
     fetchOrganizations();
-  }, []);
+  }, [fetchOrganizations]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -508,86 +512,50 @@ const Organization = () => {
     );
   };
 
+  const filteredOrganizations = organizations.filter(org => {
+    const q = searchTerm.toLowerCase();
+    return (
+      (org.organization || '').toLowerCase().includes(q) ||
+      (org.organizationType || '').toLowerCase().includes(q) ||
+      (org.createdByName || '').toLowerCase().includes(q)
+    );
+  });
+  const pageCount = Math.max(1, Math.ceil(filteredOrganizations.length / itemsPerPage));
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentRows = filteredOrganizations.slice(indexOfFirst, indexOfLast);
+
   return (
-    <div style={{ padding: '1.5rem' }}>
-      {/* Form Section */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        marginBottom: '1.5rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e5e7eb'
-      }}>
-        <h3 style={{
-          margin: '0 0 1rem 0',
-          color: '#1f2937',
-          fontSize: '1.25rem',
-          fontWeight: '600'
-        }}>
-          {editMode ? 'Edit Organization' : 'Add New System Organization'}
-        </h3>
-        
+    <div className="onboard-medium-section">
+      <div className="ma-filter-card" style={{ marginBottom: '1.75rem' }}>
         {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            border: '1px solid #fecaca',
-            color: '#dc2626',
-            padding: '1rem',
-            borderRadius: '4px',
-            marginBottom: '1rem'
-          }}>
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem', borderRadius: '4px', marginBottom: '1rem' }}>
             {error}
           </div>
         )}
-        
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1rem' }}>
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-              color: '#374151'
-            }}>
-              Organization *
-            </label>
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: '100%', display: 'flex', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}
+        >
+          <div className="ma-filter-group" style={{ flex: '1 1 280px' }}>
+            <label className="ma-label">{editMode ? 'Edit Organization' : 'Add New System Organization'}</label>
             <input
               type="text"
               name="organization"
               value={orgFormData.organization}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '0.875rem'
-              }}
+              className="ma-input"
+              placeholder="Enter organization"
               required
             />
           </div>
-
-          <div>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-              color: '#374151'
-            }}>
-              Organization Type *
-            </label>
+          <div className="ma-filter-group" style={{ flex: '1 1 220px' }}>
+            <label className="ma-label">Organization Type *</label>
             <select
               name="organizationType"
               value={orgFormData.organizationType}
               onChange={handleInputChange}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                background: 'white'
-              }}
+              className="ma-select"
               required
             >
               <option value="">Select type</option>
@@ -596,236 +564,101 @@ const Organization = () => {
               <option value="Type 3">Type 3</option>
             </select>
           </div>
-
-          <div style={{
-            display: 'flex',
-            gap: '1rem',
-            justifyContent: 'flex-end',
-            marginTop: '1rem'
-          }}>
-            <button
-              type="button"
-              onClick={handleReset}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#6b7280',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'background-color 0.2s'
-              }}
-            >
-              Reset
-            </button>
-            <button
-              type="submit"
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                cursor: submitting ? 'not-allowed' : 'pointer',
-                opacity: submitting ? 0.7 : 1,
-                transition: 'background-color 0.2s'
-              }}
-              disabled={submitting}
-            >
-              {submitting ? 'Saving...' : (editMode ? 'Update Organization' : 'Save Organization')}
+          <div className="ma-actions" style={{ flex: '0 0 auto' }}>
+            <button type="button" onClick={handleReset} className="ma-pagination-btn">Reset</button>
+            <button type="submit" disabled={submitting} className="ma-btn-submit" style={{ marginLeft: 0, marginTop: 0 }}>
+              {submitting ? 'Saving...' : (editMode ? 'Update' : 'Submit')}
             </button>
           </div>
         </form>
       </div>
 
-      {/* Table Section */}
-      <div style={{
-        background: 'white',
-        borderRadius: '8px',
-        padding: '1.5rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e5e7eb'
-      }}>
-        <h3 style={{
-          margin: '0 0 1rem 0',
-          color: '#1f2937',
-          fontSize: '1.25rem',
-          fontWeight: '600'
-        }}>
-          System Organizations List
-        </h3>
-        
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontSize: '0.875rem'
-          }}>
-            <thead>
+      {/* Middle filter section removed */}
+
+      <div className="ma-table-card">
+        <div className="ma-search-bar">
+          <FaSearch className="ma-search-icon" />
+          <input
+            type="text"
+            className="ma-search-input"
+            placeholder="Search organizations"
+            value={searchTerm}
+            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          />
+        </div>
+        <div className="ma-table-container">
+        <table className="ma-table">
+          <thead>
+            <tr>
+              <th>Organization ID</th>
+              <th>Organization</th>
+              <th>Organization Type</th>
+              <th>Created By Name</th>
+              <th>Created Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
               <tr>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization ID
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Organization Type
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created By
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created By Name
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Created Date
-                </th>
-                <th style={{ padding: '1rem', textAlign: 'center', fontWeight: '600', color: '#ffffff', backgroundColor: '#1a237e', border: '1px solid #d1d5db' }}>
-                  Actions
-                </th>
+                <td colSpan="6" style={{ padding: '1rem', textAlign: 'center' }}>Loading...</td>
               </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="7" style={{
-                    padding: '2rem',
-                    textAlign: 'center',
-                    color: '#6b7280',
-                    border: '1px solid #d1d5db'
-                  }}>
-                    Loading...
-                  </td>
-                </tr>
-              ) : organizations.length === 0 ? (
-                <tr>
-                  <td colSpan="7" style={{
-                    padding: '2rem',
-                    textAlign: 'center',
-                    color: '#6b7280',
-                    border: '1px solid #d1d5db'
-                  }}>
-                    No organizations found. Add your first organization above.
-                  </td>
-                </tr>
-              ) : (
-                organizations.map(org => (
-                  <tr key={org._id}>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organizationId || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organization || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.organizationType || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdBy || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdByName || ''}
-                     </td>
-                     <td style={{
-                       padding: '1rem',
-                       border: '1px solid #d1d5db',
-                       color: '#374151'
-                     }}>
-                       {org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}
-                     </td>
-                    <td style={{
-                      padding: '1rem',
-                      border: '1px solid #d1d5db',
-                      textAlign: 'center'
-                    }}>
-                      <button
-                        onClick={() => handleView(org)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#10b981',
-                          color: 'white',
-                          border: '1px solid #10b981',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          marginRight: '0.25rem',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="View"
-                      >
+            ) : filteredOrganizations.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ padding: '1rem', textAlign: 'center' }}>
+                  No organization records found
+                </td>
+              </tr>
+            ) : (
+              currentRows.map(org => (
+                <tr key={org._id}>
+                  <td>{org.organizationId || ''}</td>
+                  <td>{org.organization || ''}</td>
+                  <td>{org.organizationType || ''}</td>
+                  <td>{org.createdByName || ''}</td>
+                  <td>{org.createdDtm ? new Date(org.createdDtm).toLocaleString() : ''}</td>
+                  <td>
+                    <div className="ma-actions">
+                      <button title="View" type="button" className="ma-btn-action ma-btn-view" onClick={() => handleView(org)}>
                         <FaEye />
                       </button>
-                      <button
-                        onClick={() => handleEdit(org)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#f59e0b',
-                          color: 'white',
-                          border: '1px solid #f59e0b',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          marginRight: '0.25rem',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="Edit"
-                      >
+                      <button title="Edit" type="button" className="ma-btn-action ma-btn-edit" onClick={() => handleEdit(org)}>
                         <FaEdit />
                       </button>
-                      <button
-                        onClick={() => handleDeleteOrganization(org._id)}
-                        style={{
-                          padding: '0.5rem 0.75rem',
-                          backgroundColor: '#ef4444',
-                          color: 'white',
-                          border: '1px solid #ef4444',
-                          borderRadius: '4px',
-                          fontSize: '0.8rem',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center'
-                        }}
-                        title="Delete"
-                      >
+                      <button title="Delete" type="button" className="ma-btn-action ma-btn-delete" onClick={() => handleDeleteOrganization(org._id)}>
                         <FaTrash />
                       </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+        </div>
+        <div className="ma-footer-row">
+          <button
+            type="button"
+            className="ma-pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
+            &lt; Previous
+          </button>
+          <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            type="button"
+            className="ma-pagination-btn next"
+            onClick={() => setCurrentPage(prev => Math.min(pageCount, prev + 1))}
+            disabled={currentPage === pageCount}
+          >
+            Next &gt;
+          </button>
         </div>
       </div>
-      
-      {/* Organization Details Modal */}
+
       <OrganizationDetailsModal />
     </div>
   );

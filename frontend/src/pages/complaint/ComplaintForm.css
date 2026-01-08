@@ -1054,6 +1054,21 @@ body {
   color: #374151;
 }
 
+.ma-status-open {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.ma-status-ongoing {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.ma-status-completed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
 /* Priority Badge Styles */
 .ma-priority-badge {
   display: inline-block;
